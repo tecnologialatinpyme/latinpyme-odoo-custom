@@ -1,0 +1,20 @@
+/* === LP: Compact forms (website frontend) === */
+
+/* Inputs/selects/textareas (frontend only) */
+#wrap .form-control,
+#wrapwrap .form-control,
+#wrap .form-select,
+#wrapwrap .form-select,
+#wrap textarea.form-control,
+#wrapwrap textarea.form-control {
+  padding: .5em .75em !important;
+  min-height: auto !important;
+}
+
+/* Labels: remove extra vertical padding */
+#wrap .col-form-label,
+#wrapwrap .col-form-label {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-bottom: .25rem;
+}
