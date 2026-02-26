@@ -1,0 +1,1 @@
+# latinpyme-odoo-custom
