@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="revista_section_page" name="Revista LatinPyme Section">
+    <t t-call="website.layout">
+      <t t-set="title" t-value="section_name + ' | Revista LatinPyme'"/>
+      <t t-set="website_meta_description" t-value="'Artículos de ' + section_name + ' para empresarios pyme en Revista LatinPyme.'"/>
+      <t t-set="seo_object" t-value="section_tag or blog"/>
+      <t t-set="head">
+        <meta t-if="lp_preproduction" name="robots" content="noindex,nofollow"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" t-att-content="title"/>
+        <meta property="og:description" t-att-content="website_meta_description"/>
+        <meta property="og:url" t-att-content="lp_production_url"/>
+      </t>
+      <div id="wrap" class="lp-revista lp-revista-section">
+        <t t-call="latinpyme_revista_theme.lp_masthead"/>
+        <main class="lp-revista-main">
+          <section class="lp-revista-container">
+            <div class="lp-revista-section-hero" t-att-style="featured_style">
+              <nav aria-label="Miga de pan" class="lp-revista-breadcrumb">
+                <a href="/revista">Inicio</a>
+                <span>/</span>
+                <span t-out="section_name"/>
+              </nav>
+              <h1 t-out="section_name"/>
+              <p>
+                <t t-if="section_tag">Artículos, análisis y recursos editoriales de <t t-out="section_name"/> para empresarios pyme.</t>
+                <t t-else="">Crea la etiqueta <t t-out="section_name"/> en Odoo Blog para activar esta sección editorial.</t>
+              </p>
+            </div>
+          </section>
+
+          <section class="lp-revista-container lp-revista-section-layout">
+            <div class="lp-revista-section-main">
+              <t t-call="latinpyme_revista_theme.lp_section_heading">
+                <t t-set="title" t-value="'Lo más reciente en ' + section_name"/>
+                <t t-set="eyebrow" t-value="False"/>
+                <t t-set="href" t-value="False"/>
+                <t t-set="link_label" t-value="False"/>
+              </t>
+              <t t-if="featured_post">
+                <t t-call="latinpyme_revista_theme.lp_post_card">
+                  <t t-set="post" t-value="featured_post"/>
+                  <t t-set="variant" t-value="'feature'"/>
+                </t>
+              </t>
+              <div class="lp-revista-list lp-revista-list--section">
+                <t t-foreach="posts" t-as="post">
+                  <t t-call="latinpyme_revista_theme.lp_post_card">
+                    <t t-set="variant" t-value="'horizontal'"/>
+                  </t>
+                </t>
+              </div>
+              <div t-if="not featured_post and not posts" class="lp-revista-empty">
+                <h2>Aún no hay artículos publicados en esta sección.</h2>
+                <p>Los editores pueden asignar la etiqueta <strong t-out="section_name"/> a las notas de Odoo Blog para que aparezcan aquí automáticamente.</p>
+              </div>
+            </div>
+            <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
+          </section>
+
+          <section class="lp-revista-container lp-revista-block">
+            <t t-call="latinpyme_revista_theme.lp_section_heading">
+              <t t-set="title">También puede interesarte</t>
+              <t t-set="eyebrow" t-value="False"/>
+              <t t-set="href">/blog</t>
+              <t t-set="link_label">Ver archivo</t>
+            </t>
+            <div class="lp-revista-card-grid lp-revista-card-grid--three">
+              <t t-foreach="latest_posts[:3]" t-as="post">
+                <t t-call="latinpyme_revista_theme.lp_post_card">
+                  <t t-set="variant" t-value="'default'"/>
+                </t>
+              </t>
+            </div>
+          </section>
+
+          <section class="lp-revista-container lp-revista-block">
+            <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
+          </section>
+
+          <section class="lp-revista-container lp-revista-block">
+            <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
+          </section>
+
+          <section class="lp-revista-container lp-revista-block">
+            <t t-call="latinpyme_revista_theme.lp_footer"/>
+          </section>
+        </main>
+      </div>
+    </t>
+  </template>
+</odoo>

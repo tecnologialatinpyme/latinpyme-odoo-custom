@@ -1,0 +1,1163 @@
+.lp-revista {
+  --lp-red: #b90012;
+  --lp-red-dark: #8f000d;
+  --lp-ink: #111318;
+  --lp-muted: #69707d;
+  --lp-soft: #f7f8fa;
+  --lp-border: #e7e9ee;
+  --lp-card: #ffffff;
+  --lp-shadow: 0 18px 48px rgba(17, 19, 24, .08);
+  --lp-radius: 8px;
+
+  background: #fff;
+  color: var(--lp-ink);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    margin-top: 0;
+  }
+}
+
+.lp-revista-container {
+  width: min(100% - 40px, 1180px);
+  margin-inline: auto;
+}
+
+.lp-revista-main {
+  padding-block: 22px 36px;
+}
+
+.lp-revista-masthead {
+  background: #fff;
+  border-bottom: 1px solid var(--lp-border);
+}
+
+.lp-revista-masthead__top {
+  display: grid;
+  grid-template-columns: auto minmax(170px, 1fr) minmax(260px, 390px) auto;
+  align-items: center;
+  gap: 28px;
+  padding-block: 26px 20px;
+}
+
+.lp-revista-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 210px;
+}
+
+.lp-revista-brand__mark,
+.lp-revista-footer__mark,
+.lp-revista-promo-banner__mark,
+.lp-revista-widget__lp {
+  display: inline-grid;
+  place-items: center;
+  background: var(--lp-red);
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lp-revista-brand__mark {
+  width: 54px;
+  height: 54px;
+  border-radius: 5px;
+  font-size: 30px;
+  letter-spacing: 0;
+}
+
+.lp-revista-brand__text {
+  display: grid;
+  gap: 1px;
+
+  span {
+    color: var(--lp-ink);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  strong {
+    display: block;
+    color: var(--lp-ink);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 31px;
+    font-weight: 600;
+    line-height: .98;
+  }
+}
+
+.lp-revista-anniversary {
+  display: grid;
+  gap: 2px;
+  padding-left: 20px;
+  border-left: 1px solid rgba(185, 0, 18, .35);
+
+  strong {
+    color: var(--lp-red);
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  span {
+    max-width: 190px;
+    color: #454b55;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+}
+
+.lp-revista-search {
+  display: grid;
+  grid-template-columns: 1fr 46px;
+  height: 42px;
+  border: 1px solid var(--lp-border);
+  border-radius: 7px;
+  overflow: hidden;
+  background: #fff;
+
+  input {
+    min-width: 0;
+    border: 0;
+    padding-inline: 16px;
+    color: var(--lp-ink);
+    font-size: 14px;
+    outline: 0;
+  }
+
+  button {
+    border: 0;
+    background: var(--lp-red);
+    color: #fff;
+    transition: background .2s ease;
+
+    &:hover {
+      background: var(--lp-red-dark);
+    }
+  }
+}
+
+.lp-revista-social {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  a {
+    display: inline-grid;
+    place-items: center;
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+    background: var(--lp-red);
+    color: #fff;
+    font-size: 14px;
+  }
+
+  .lp-revista-social__whatsapp,
+  a[aria-label="WhatsApp"] {
+    background: #24a865;
+  }
+}
+
+.lp-revista-nav {
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-revista-nav__inner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 66px;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.lp-revista-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 66px;
+  padding: 0 17px;
+  color: #111318;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 17px;
+    bottom: 0;
+    left: 17px;
+    height: 3px;
+    border-radius: 999px 999px 0 0;
+    background: transparent;
+  }
+
+  &:hover,
+  &.is-active {
+    color: var(--lp-red);
+
+    &::after {
+      background: var(--lp-red);
+    }
+  }
+}
+
+.lp-revista-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 20px;
+  border: 1px solid var(--lp-red);
+  border-radius: 6px;
+  background: var(--lp-red);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+
+  &:hover {
+    border-color: var(--lp-red-dark);
+    background: var(--lp-red-dark);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+}
+
+.lp-revista-button--small {
+  min-height: 34px;
+  padding-inline: 13px;
+  font-size: 12px;
+}
+
+.lp-revista-button--nav {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.lp-revista-home-ads {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 28px;
+  margin-bottom: 28px;
+}
+
+.lp-revista-promo-banner {
+  position: relative;
+  min-height: 176px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 18px;
+  overflow: hidden;
+  border-radius: var(--lp-radius);
+  padding: 30px;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgba(9, 13, 20, .96), rgba(9, 13, 20, .62)),
+    linear-gradient(135deg, #233041, #0e1118);
+  box-shadow: 0 10px 28px rgba(17, 19, 24, .14);
+
+  h2 {
+    max-width: 480px;
+    margin: 0;
+    color: #fff;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.18;
+  }
+}
+
+.lp-revista-promo-banner--green {
+  background:
+    linear-gradient(90deg, rgba(8, 44, 28, .9), rgba(8, 44, 28, .42)),
+    linear-gradient(135deg, #103d29, #648766);
+}
+
+.lp-revista-promo-banner__mark {
+  position: absolute;
+  right: 26px;
+  bottom: 22px;
+  width: 68px;
+  height: 68px;
+  border-radius: 4px;
+  font-size: 40px;
+}
+
+.lp-revista-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, .72fr) minmax(290px, .82fr);
+  gap: 26px;
+  align-items: start;
+}
+
+.lp-revista-hero-card {
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-radius: var(--lp-radius);
+  padding: 34px;
+  color: #fff;
+  background-position: center;
+  background-size: cover;
+  box-shadow: var(--lp-shadow);
+
+  h1 {
+    max-width: 680px;
+    margin: 12px 0 18px;
+    color: #fff;
+    font-size: clamp(34px, 4.2vw, 52px);
+    font-weight: 850;
+    line-height: 1.12;
+  }
+
+  p {
+    max-width: 580px;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, .92);
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  time {
+    color: rgba(255, 255, 255, .86);
+    font-size: 13px;
+    font-weight: 700;
+  }
+}
+
+.lp-revista-kicker {
+  display: inline-flex;
+  align-self: flex-start;
+  width: fit-content;
+  border-radius: 4px;
+  padding: 5px 8px;
+  background: var(--lp-red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.lp-revista-hero-rail,
+.lp-revista-list {
+  display: grid;
+  gap: 16px;
+}
+
+.lp-revista-sidebar {
+  display: grid;
+  gap: 20px;
+}
+
+.lp-revista-widget {
+  overflow: hidden;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  background: linear-gradient(135deg, #fff, #faf0f1);
+  box-shadow: 0 16px 42px rgba(17, 19, 24, .06);
+}
+
+.lp-revista-widget--event {
+  min-height: 300px;
+  padding: 28px;
+
+  h3 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 850;
+    line-height: 1.26;
+  }
+
+  ul {
+    display: grid;
+    gap: 12px;
+    margin: 0 0 22px;
+    padding: 0;
+    color: #4d5460;
+    font-size: 14px;
+    list-style: none;
+  }
+
+  i {
+    width: 20px;
+    color: var(--lp-red);
+  }
+}
+
+.lp-revista-widget--poll {
+  display: grid;
+  gap: 13px;
+  padding: 26px;
+
+  h3 {
+    margin-bottom: 4px;
+    font-size: 19px;
+    font-weight: 850;
+    line-height: 1.35;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #4d5460;
+    font-size: 14px;
+  }
+}
+
+.lp-revista-widget--ad {
+  position: relative;
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 28px;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgba(9, 13, 20, .96), rgba(9, 13, 20, .38)),
+    linear-gradient(135deg, #15202e, #39404a);
+
+  h3 {
+    max-width: 260px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 850;
+    line-height: 1.28;
+  }
+}
+
+.lp-revista-widget__lp {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
+  font-size: 33px;
+}
+
+.lp-revista-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 13px;
+  color: var(--lp-red);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+
+  &::after {
+    content: "";
+    width: 34px;
+    height: 2px;
+    background: var(--lp-red);
+  }
+}
+
+.lp-revista-block {
+  margin-top: 40px;
+}
+
+.lp-revista-block--split {
+  display: grid;
+  grid-template-columns: minmax(240px, .45fr) minmax(0, 1fr);
+  gap: 34px;
+  align-items: start;
+}
+
+.lp-revista-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 20px;
+
+  .lp-revista-eyebrow {
+    margin: 0;
+  }
+
+  h2 {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0;
+    font-size: 21px;
+    font-weight: 900;
+    text-transform: uppercase;
+
+    &::after {
+      content: "";
+      width: 36px;
+      height: 2px;
+      background: var(--lp-red);
+    }
+  }
+}
+
+.lp-revista-section-heading__link {
+  margin-left: auto;
+  color: var(--lp-red);
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.lp-revista-card-grid {
+  display: grid;
+  gap: 26px;
+}
+
+.lp-revista-card-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.lp-revista-card-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lp-revista-post-card {
+  overflow: hidden;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  background: var(--lp-card);
+  box-shadow: 0 12px 28px rgba(17, 19, 24, .05);
+  transition: transform .2s ease, box-shadow .2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--lp-shadow);
+  }
+}
+
+.lp-revista-post-card__media-link {
+  display: block;
+}
+
+.lp-revista-post-card__media {
+  min-height: 180px;
+  aspect-ratio: 16 / 9;
+  background-color: #dfe3e8;
+  background-position: center;
+  background-size: cover;
+}
+
+.lp-revista-post-card__body {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+
+.lp-revista-post-card__title {
+  margin: 0;
+  color: var(--lp-ink);
+  font-size: 20px;
+  font-weight: 850;
+  line-height: 1.28;
+}
+
+.lp-revista-post-card__teaser {
+  margin-bottom: 0;
+  color: #424954;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.lp-revista-date {
+  color: var(--lp-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.lp-revista-post-card--mini,
+.lp-revista-post-card--horizontal {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  align-items: stretch;
+
+  .lp-revista-post-card__media {
+    min-height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .lp-revista-post-card__body {
+    padding: 14px 16px;
+  }
+
+  .lp-revista-post-card__title {
+    font-size: 16px;
+  }
+}
+
+.lp-revista-post-card--mini {
+  border: 0;
+  border-bottom: 1px solid var(--lp-border);
+  border-radius: 0;
+  box-shadow: none;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.lp-revista-post-card--feature {
+  display: grid;
+  grid-template-columns: minmax(260px, .85fr) minmax(0, 1fr);
+  align-items: stretch;
+  margin-bottom: 22px;
+
+  .lp-revista-post-card__media {
+    min-height: 310px;
+    aspect-ratio: auto;
+  }
+
+  .lp-revista-post-card__body {
+    align-content: center;
+    padding: 30px;
+  }
+
+  .lp-revista-post-card__title {
+    font-size: 32px;
+    line-height: 1.16;
+  }
+}
+
+.lp-revista-post-card--wide {
+  position: relative;
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: #fff;
+  background: #111318;
+
+  .lp-revista-post-card__media-link {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lp-revista-post-card__media {
+    width: 100%;
+    height: 100%;
+    min-height: 230px;
+    opacity: .48;
+  }
+
+  .lp-revista-post-card__body {
+    position: relative;
+    z-index: 1;
+    padding: 24px;
+  }
+
+  .lp-revista-post-card__title,
+  .lp-revista-post-card__teaser {
+    color: #fff;
+  }
+}
+
+.lp-revista-post-card--video {
+  position: relative;
+
+  .lp-revista-post-card__media-link::after {
+    content: "\f04b";
+    position: absolute;
+    top: 28%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, .24);
+    color: #fff;
+    font-family: FontAwesome;
+    transform: translateX(-50%);
+  }
+}
+
+.lp-revista-section-list {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  padding: 16px;
+  background: #fff;
+
+  a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 34px;
+    border-bottom: 1px solid #f0f1f4;
+    color: #2c333d;
+    font-size: 14px;
+    font-weight: 750;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    &:hover {
+      color: var(--lp-red);
+    }
+  }
+}
+
+.lp-revista-interviews-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, .85fr) repeat(3, minmax(0, 1fr));
+  gap: 26px;
+}
+
+.lp-revista-interview-cta {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  border-radius: var(--lp-radius);
+  padding: 24px;
+  background: linear-gradient(135deg, #fff, #fff1f2);
+
+  > i {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid rgba(185, 0, 18, .22);
+    color: var(--lp-red);
+    font-size: 27px;
+  }
+
+  h3 {
+    margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: 850;
+    line-height: 1.35;
+  }
+
+  p {
+    color: #4d5460;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+}
+
+.lp-revista-ad-row {
+  .s_lp_revista_promo_banner {
+    background: transparent;
+  }
+
+  .lp-revista-container {
+    width: 100%;
+  }
+}
+
+.lp-revista-portfolio__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 26px;
+}
+
+.lp-revista-service-card {
+  overflow: hidden;
+  border: 1px solid rgba(185, 0, 18, .2);
+  border-radius: var(--lp-radius);
+  background: linear-gradient(135deg, #fff, #fff4f4);
+
+  h3 {
+    margin: 0 0 22px;
+    padding: 10px 16px;
+    background: var(--lp-red);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  > i {
+    margin: 0 20px 12px;
+    color: var(--lp-red);
+    font-size: 50px;
+  }
+
+  ul {
+    min-height: 78px;
+    margin: 0 20px 18px 90px;
+    padding: 0;
+    color: #2f3640;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  div {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 0 20px 20px;
+  }
+
+  a {
+    color: var(--lp-red);
+    font-size: 13px;
+    font-weight: 850;
+  }
+}
+
+.lp-revista-allies__logos {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(90px, 1fr));
+  gap: 18px;
+  align-items: center;
+  border-block: 1px solid var(--lp-border);
+  padding-block: 24px;
+
+  span {
+    color: #1d242e;
+    font-size: 18px;
+    font-weight: 850;
+    text-align: center;
+    filter: grayscale(1);
+  }
+}
+
+.lp-revista-footer {
+  display: grid;
+  grid-template-columns: 1.25fr repeat(4, minmax(120px, 1fr));
+  gap: 32px;
+  border-radius: 28px;
+  padding: 36px;
+  background: linear-gradient(135deg, #fff7f7, #fff);
+  box-shadow: 0 12px 36px rgba(17, 19, 24, .05);
+
+  h3 {
+    margin-bottom: 12px;
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  nav,
+  .lp-revista-footer__contact {
+    display: grid;
+    align-content: start;
+    gap: 7px;
+  }
+
+  a,
+  p {
+    margin: 0;
+    color: #3c434f;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+}
+
+.lp-revista-footer__brand {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+
+  p {
+    max-width: 190px;
+  }
+}
+
+.lp-revista-footer__mark {
+  width: 58px;
+  height: 58px;
+  border-radius: 5px;
+  font-size: 34px;
+}
+
+.lp-revista-section-hero {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--lp-radius);
+  padding: 38px 46px;
+  color: #fff;
+  background-position: center;
+  background-size: cover;
+  box-shadow: var(--lp-shadow);
+
+  h1 {
+    margin: 10px 0 14px;
+    color: #fff;
+    font-size: clamp(34px, 4vw, 52px);
+    font-weight: 850;
+    line-height: 1.08;
+  }
+
+  p {
+    max-width: 560px;
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, .92);
+    font-size: 18px;
+    line-height: 1.55;
+  }
+}
+
+.lp-revista-breadcrumb {
+  display: flex;
+  gap: 8px;
+  color: rgba(255, 255, 255, .82);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.lp-revista-section-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 42px;
+  align-items: start;
+  margin-top: 34px;
+}
+
+.lp-revista-list--section {
+  margin-top: 18px;
+}
+
+.lp-revista-empty {
+  border: 1px dashed rgba(185, 0, 18, .35);
+  border-radius: var(--lp-radius);
+  padding: 30px;
+  background: #fff8f8;
+
+  h2 {
+    font-size: 22px;
+  }
+
+  p {
+    margin-bottom: 0;
+    color: #4d5460;
+  }
+}
+
+.lp-revista--native-blog {
+  .o_wblog_post_page_cover {
+    border-radius: var(--lp-radius);
+    overflow: hidden;
+  }
+
+  .lp-revista-post-title {
+    h1,
+    .o_wblog_post_name {
+      font-weight: 850;
+      line-height: 1.08;
+    }
+
+    .o_wblog_post_subtitle {
+      max-width: 760px;
+      color: #4d5460;
+      font-size: 20px;
+      line-height: 1.55;
+    }
+  }
+
+  .lp-revista-post-main {
+    background: #fff;
+  }
+
+  .lp-revista-post-content {
+    border-radius: var(--lp-radius);
+  }
+
+  .lp-revista-article-body {
+    color: #222832;
+    font-size: 18px;
+    line-height: 1.82;
+
+    h2 {
+      margin-top: 34px;
+      color: var(--lp-ink);
+      font-size: 28px;
+      font-weight: 850;
+      line-height: 1.24;
+    }
+
+    h3 {
+      margin-top: 26px;
+      font-size: 22px;
+      font-weight: 850;
+    }
+
+    blockquote {
+      border-left: 4px solid var(--lp-red);
+      margin: 30px 0;
+      padding: 18px 22px;
+      border-radius: 0 var(--lp-radius) var(--lp-radius) 0;
+      background: #fff4f4;
+      color: #303640;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    img {
+      border-radius: var(--lp-radius);
+      box-shadow: 0 12px 32px rgba(17, 19, 24, .08);
+    }
+  }
+
+  #o_wblog_post_info,
+  .o_wblog_post_info {
+    color: var(--lp-muted);
+    font-weight: 700;
+  }
+
+  .o_wblog_post_title .badge,
+  .o_tag {
+    background: var(--lp-red) !important;
+    color: #fff !important;
+    border-radius: 4px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .lp-revista-masthead__top {
+    grid-template-columns: 1fr auto;
+  }
+
+  .lp-revista-anniversary,
+  .lp-revista-social {
+    display: none;
+  }
+
+  .lp-revista-search {
+    grid-column: 1 / -1;
+  }
+
+  .lp-revista-home-ads,
+  .lp-revista-hero-grid,
+  .lp-revista-section-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-revista-hero-rail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lp-revista-card-grid--three,
+  .lp-revista-interviews-grid,
+  .lp-revista-portfolio__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lp-revista-footer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .lp-revista-container {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .lp-revista-masthead__top {
+    gap: 18px;
+    padding-block: 18px 14px;
+  }
+
+  .lp-revista-brand {
+    min-width: 0;
+  }
+
+  .lp-revista-brand__mark {
+    width: 46px;
+    height: 46px;
+    font-size: 25px;
+  }
+
+  .lp-revista-brand__text strong {
+    font-size: 25px;
+  }
+
+  .lp-revista-nav__link {
+    padding-inline: 12px;
+    font-size: 13px;
+  }
+
+  .lp-revista-button--nav {
+    margin-left: 8px;
+  }
+
+  .lp-revista-home-ads,
+  .lp-revista-hero-grid,
+  .lp-revista-block--split,
+  .lp-revista-card-grid--three,
+  .lp-revista-card-grid--two,
+  .lp-revista-interviews-grid,
+  .lp-revista-portfolio__grid,
+  .lp-revista-allies__logos,
+  .lp-revista-footer,
+  .lp-revista-hero-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-revista-promo-banner,
+  .lp-revista-hero-card,
+  .lp-revista-section-hero {
+    padding: 24px;
+  }
+
+  .lp-revista-promo-banner h2 {
+    font-size: 23px;
+  }
+
+  .lp-revista-hero-card {
+    min-height: 390px;
+  }
+
+  .lp-revista-post-card--feature,
+  .lp-revista-post-card--horizontal,
+  .lp-revista-post-card--mini {
+    grid-template-columns: 1fr;
+
+    .lp-revista-post-card__media {
+      min-height: 190px;
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .lp-revista-service-card ul {
+    margin-left: 70px;
+  }
+
+  .lp-revista-footer {
+    border-radius: 18px;
+    padding: 26px;
+  }
+}

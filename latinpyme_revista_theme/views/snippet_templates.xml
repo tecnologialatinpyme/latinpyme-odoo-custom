@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="lp_masthead" name="Revista LatinPyme Masthead">
+    <header class="lp-revista-masthead" role="banner">
+      <div class="lp-revista-container lp-revista-masthead__top">
+        <a href="/revista" class="lp-revista-brand" aria-label="Revista LatinPyme">
+          <span class="lp-revista-brand__mark">LP</span>
+          <span class="lp-revista-brand__text">
+            <span>Revista</span>
+            <strong>LatinPyme</strong>
+          </span>
+        </a>
+        <div class="lp-revista-anniversary">
+          <strong>25 años</strong>
+          <span>Impulsando empresarios en Latinoamérica</span>
+        </div>
+        <form class="lp-revista-search" action="/website/search" method="get" role="search">
+          <input type="search" name="search" placeholder="Buscar noticias, artículos, recursos..." aria-label="Buscar en Revista LatinPyme"/>
+          <button type="submit" aria-label="Buscar">
+            <i class="fa fa-search"/>
+          </button>
+        </form>
+        <div class="lp-revista-social" aria-label="Redes sociales">
+          <a href="#" aria-label="Facebook"><i class="fa fa-facebook"/></a>
+          <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
+          <a href="#" aria-label="Instagram"><i class="fa fa-instagram"/></a>
+          <a href="#" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
+          <a href="#" class="lp-revista-social__whatsapp" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
+        </div>
+      </div>
+      <nav class="lp-revista-nav" aria-label="Secciones Revista LatinPyme">
+        <div class="lp-revista-container lp-revista-nav__inner">
+          <a href="/revista" t-attf-class="lp-revista-nav__link #{'is-active' if not section_slug else ''}">Inicio</a>
+          <t t-foreach="sections" t-as="section">
+            <a t-att-href="section['url']" t-attf-class="lp-revista-nav__link #{'is-active' if section.get('slug') == section_slug else ''}">
+              <t t-out="section['name']"/>
+            </a>
+          </t>
+          <a href="/suscribirse" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
+        </div>
+      </nav>
+    </header>
+  </template>
+
+  <template id="lp_section_heading" name="Revista LatinPyme Section Heading">
+    <header class="lp-revista-section-heading">
+      <p t-if="eyebrow" class="lp-revista-eyebrow" t-out="eyebrow"/>
+      <h2 t-out="title"/>
+      <a t-if="href" t-att-href="href" class="lp-revista-section-heading__link">
+        <span t-out="link_label or 'Ver más'"/>
+        <i class="fa fa-arrow-right"/>
+      </a>
+    </header>
+  </template>
+
+  <template id="lp_post_card" name="Revista LatinPyme Post Card">
+    <t t-set="variant" t-value="variant or 'card'"/>
+    <article t-if="post" t-attf-class="lp-revista-post-card lp-revista-post-card--#{variant}" itemscope="itemscope" itemtype="https://schema.org/Article">
+      <a class="lp-revista-post-card__media-link" t-att-href="post.website_url" t-att-title="post.name">
+        <t t-call="website.record_cover">
+          <t t-set="_record" t-value="post"/>
+          <t t-set="use_filters" t-value="True"/>
+          <t t-set="use_size" t-value="False"/>
+          <t t-set="additionnal_classes" t-value="'lp-revista-post-card__media'"/>
+        </t>
+      </a>
+      <div class="lp-revista-post-card__body">
+        <t t-set="primary_tag" t-value="post.tag_ids[:1]"/>
+        <span t-if="primary_tag" class="lp-revista-kicker" itemprop="articleSection">
+          <t t-out="primary_tag.name"/>
+        </span>
+        <h3 class="lp-revista-post-card__title" itemprop="headline">
+          <a t-att-href="post.website_url" t-out="post.name"/>
+        </h3>
+        <p t-if="variant in ('hero', 'feature', 'default', 'wide')" class="lp-revista-post-card__teaser" t-out="post.subtitle or post.teaser"/>
+        <time t-if="post.post_date" class="lp-revista-date" itemprop="datePublished" t-att-datetime="post.post_date.isoformat()">
+          <span t-field="post.post_date" t-options="{'widget': 'date'}"/>
+        </time>
+      </div>
+    </article>
+  </template>
+
+  <template id="lp_editorial_sidebar" name="Revista LatinPyme Sidebar">
+    <aside class="lp-revista-sidebar" aria-label="Contenido recomendado">
+      <section class="lp-revista-widget lp-revista-widget--event">
+        <div>
+          <p class="lp-revista-eyebrow">Próxima conferencia</p>
+          <h3>Liderazgo y cultura organizacional: claves para el futuro</h3>
+          <ul>
+            <li><i class="fa fa-calendar"/>25 de junio de 2024</li>
+            <li><i class="fa fa-map-marker"/>Bogotá, Colombia</li>
+            <li><i class="fa fa-clock-o"/>9:00 a.m. - 12:00 m.</li>
+          </ul>
+          <a href="/event" class="lp-revista-button">Más información <i class="fa fa-arrow-right"/></a>
+        </div>
+      </section>
+      <section class="lp-revista-widget lp-revista-widget--poll">
+        <p class="lp-revista-eyebrow">Encuesta</p>
+        <h3>¿Cuál es el mayor desafío de tu empresa este año?</h3>
+        <label><input type="radio" name="lp_poll"/> Acceso a financiamiento</label>
+        <label><input type="radio" name="lp_poll"/> Transformación digital</label>
+        <label><input type="radio" name="lp_poll"/> Atracción y retención de talento</label>
+        <label><input type="radio" name="lp_poll"/> Aumento de costos</label>
+        <button type="button" class="lp-revista-button">Votar</button>
+      </section>
+      <section class="lp-revista-widget lp-revista-widget--ad">
+        <h3>Automatiza procesos, optimiza recursos y crece sin límites.</h3>
+        <a href="/contactus" class="lp-revista-button lp-revista-button--small">Conoce más <i class="fa fa-arrow-right"/></a>
+        <span class="lp-revista-widget__lp">LP</span>
+      </section>
+    </aside>
+  </template>
+
+  <template id="s_lp_revista_promo_banner" name="Revista LatinPyme Promo Banner">
+    <section class="lp-revista s_lp_revista_promo_banner" data-snippet="s_lp_revista_promo_banner" data-name="Banner editorial">
+      <div class="lp-revista-container">
+        <div class="lp-revista-promo-banner">
+          <h2>Automatiza procesos, optimiza recursos y crece sin límites.</h2>
+          <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
+          <span class="lp-revista-promo-banner__mark">LP</span>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_sidebar" name="Revista LatinPyme Sidebar Snippet">
+    <section class="lp-revista s_lp_revista_sidebar" data-snippet="s_lp_revista_sidebar" data-name="Sidebar editorial">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_interviews" name="Revista LatinPyme Interviews">
+    <section class="lp-revista s_lp_revista_interviews" data-snippet="s_lp_revista_interviews" data-name="Bloque entrevistas">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_section_heading">
+          <t t-set="title">Entrevistas</t>
+          <t t-set="eyebrow" t-value="False"/>
+          <t t-set="href">/revista/seccion/entrevistas</t>
+          <t t-set="link_label">Ver más entrevistas</t>
+        </t>
+        <div class="lp-revista-interview-cta">
+          <i class="fa fa-microphone"/>
+          <div>
+            <h3>¿Quieres ser parte de nuestras entrevistas?</h3>
+            <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
+            <a href="/contactus" class="lp-revista-button">Postúlate aquí <i class="fa fa-arrow-right"/></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="lp_portfolio_strip" name="Revista LatinPyme Portfolio Strip">
+    <section class="lp-revista-portfolio" aria-label="Portafolio LatinPyme">
+      <t t-call="latinpyme_revista_theme.lp_section_heading">
+        <t t-set="title">Portafolio</t>
+        <t t-set="eyebrow" t-value="False"/>
+        <t t-set="href">/revista/seccion/portafolio</t>
+        <t t-set="link_label">Ver portafolio</t>
+      </t>
+      <div class="lp-revista-portfolio__grid">
+        <article class="lp-revista-service-card">
+          <h3>Aprendizaje empresarial</h3>
+          <i class="fa fa-graduation-cap"/>
+          <ul>
+            <li>Capacitación a la medida</li>
+            <li>Fidelización empresarial</li>
+            <li>Cursos de actualización</li>
+          </ul>
+          <div>
+            <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
+            <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
+          </div>
+        </article>
+        <article class="lp-revista-service-card">
+          <h3>Tecnología: salones y espacios</h3>
+          <i class="fa fa-calendar-o"/>
+          <ul>
+            <li>LMS - Aulas</li>
+            <li>Salón de Eventos</li>
+          </ul>
+          <div>
+            <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
+            <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
+          </div>
+        </article>
+        <article class="lp-revista-service-card">
+          <h3>Inteligencia artificial</h3>
+          <i class="fa fa-microchip"/>
+          <ul>
+            <li>Automatización de procesos con IA</li>
+          </ul>
+          <div>
+            <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
+            <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_portfolio" name="Revista LatinPyme Portfolio">
+    <section class="lp-revista s_lp_revista_portfolio" data-snippet="s_lp_revista_portfolio" data-name="Portafolio editorial">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
+      </div>
+    </section>
+  </template>
+
+  <template id="lp_allies_strip" name="Revista LatinPyme Allies Strip">
+    <section class="lp-revista-allies" aria-label="Aliados">
+      <t t-call="latinpyme_revista_theme.lp_section_heading">
+        <t t-set="title">Aliados</t>
+        <t t-set="eyebrow" t-value="False"/>
+        <t t-set="href" t-value="False"/>
+        <t t-set="link_label" t-value="False"/>
+      </t>
+      <div class="lp-revista-allies__logos">
+        <span>Bancolombia</span>
+        <span>Colsubsidio</span>
+        <span>Sura</span>
+        <span>Davivienda</span>
+        <span>Compensar</span>
+        <span>Bimbo</span>
+        <span>La Sabana</span>
+        <span>Cámara de Comercio</span>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_allies" name="Revista LatinPyme Allies">
+    <section class="lp-revista s_lp_revista_allies" data-snippet="s_lp_revista_allies" data-name="Aliados">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
+      </div>
+    </section>
+  </template>
+
+  <template id="lp_footer" name="Revista LatinPyme Footer">
+    <footer class="lp-revista-footer">
+      <div class="lp-revista-footer__brand">
+        <span class="lp-revista-footer__mark">LP</span>
+        <p>Revista especializada en pymes en Latinoamérica</p>
+        <div class="lp-revista-social">
+          <a href="#" aria-label="Facebook"><i class="fa fa-facebook"/></a>
+          <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
+          <a href="#" aria-label="Instagram"><i class="fa fa-instagram"/></a>
+          <a href="#" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
+          <a href="#" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
+        </div>
+      </div>
+      <nav aria-label="Footer secciones">
+        <h3>Secciones</h3>
+        <a href="/revista/seccion/gerencia">Gerencia</a>
+        <a href="/revista/seccion/negocios">Negocios</a>
+        <a href="/revista/seccion/ia">IA</a>
+        <a href="/revista/seccion/laboral">Laboral</a>
+        <a href="/revista/seccion/finanzas">Finanzas</a>
+        <a href="/revista/seccion/entrevistas">Entrevistas</a>
+        <a href="/revista/seccion/especiales">Especiales</a>
+        <a href="/revista/seccion/mujeres">Mujeres</a>
+      </nav>
+      <nav aria-label="Footer portafolio">
+        <h3>Portafolio</h3>
+        <a href="/revista/seccion/portafolio">Escuela</a>
+        <a href="/revista/seccion/portafolio">Consultoría</a>
+        <a href="/revista/seccion/portafolio">Eventos</a>
+        <a href="/revista/seccion/portafolio">Membresías</a>
+      </nav>
+      <nav aria-label="Footer legal">
+        <h3>Legal</h3>
+        <a href="/privacy">Tratamiento de datos personales</a>
+        <a href="/terms">Términos y condiciones</a>
+        <a href="/contactus">Derechos de autor</a>
+      </nav>
+      <div class="lp-revista-footer__contact">
+        <h3>Contacto</h3>
+        <p><i class="fa fa-whatsapp"/> +57 310 123 4567</p>
+        <p><i class="fa fa-map-marker"/> Bogotá, Colombia</p>
+      </div>
+    </footer>
+  </template>
+
+  <template id="s_lp_revista_footer" name="Revista LatinPyme Footer Snippet">
+    <section class="lp-revista s_lp_revista_footer" data-snippet="s_lp_revista_footer" data-name="Footer revista">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_footer"/>
+      </div>
+    </section>
+  </template>
+</odoo>

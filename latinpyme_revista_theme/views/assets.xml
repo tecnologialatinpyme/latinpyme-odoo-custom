@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="lp_revista_assets_frontend" inherit_id="website.assets_frontend" name="Revista LatinPyme Assets">
+    <xpath expr="." position="inside">
+      <link rel="stylesheet" type="text/scss" href="/latinpyme_revista_theme/static/src/scss/revista.scss"/>
+    </xpath>
+  </template>
+</odoo>

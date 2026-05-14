@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="lp_revista_blog_scope" inherit_id="website_blog.index" name="Revista LatinPyme Blog Scope">
+    <xpath expr="//div[@id='wrap']" position="attributes">
+      <attribute name="class" add="lp-revista lp-revista--native-blog" separator=" "/>
+    </xpath>
+  </template>
+
+  <template id="lp_revista_blog_list_preproduction_noindex" inherit_id="website_blog.blog_post_short" name="Revista LatinPyme Blog List Preproduction SEO">
+    <xpath expr="//t[@t-set='head']" position="inside">
+      <t t-set="lp_host" t-value="request.httprequest.host.split(':', 1)[0].lower()"/>
+      <meta t-if="lp_host == 'revista.latinpyme.com' or lp_host.endswith('.odoo.com') or lp_host.endswith('.odoo.sh')" name="robots" content="noindex,nofollow"/>
+    </xpath>
+  </template>
+
+  <template id="lp_revista_blog_post_preproduction_noindex" inherit_id="website_blog.blog_post_complete" name="Revista LatinPyme Blog Post Preproduction SEO">
+    <xpath expr="//t[@t-call='website_blog.index']/t[1]" position="before">
+      <t t-set="lp_host" t-value="request.httprequest.host.split(':', 1)[0].lower()"/>
+      <t t-if="lp_host == 'revista.latinpyme.com' or lp_host.endswith('.odoo.com') or lp_host.endswith('.odoo.sh')">
+        <t t-set="head">
+          <meta name="robots" content="noindex,nofollow"/>
+        </t>
+      </t>
+    </xpath>
+  </template>
+
+  <template id="lp_revista_blog_post_visual" inherit_id="website_blog.blog_post_complete" name="Revista LatinPyme Blog Post Visual Layer">
+    <xpath expr="//section[@id='o_wblog_post_top']" position="attributes">
+      <attribute name="class" add="lp-revista-post-top" separator=" "/>
+    </xpath>
+    <xpath expr="//div[@id='title']" position="attributes">
+      <attribute name="class" add="lp-revista-post-title" separator=" "/>
+    </xpath>
+    <xpath expr="//section[@id='o_wblog_post_main']" position="attributes">
+      <attribute name="t-attf-class" add="lp-revista-post-main" separator=" "/>
+    </xpath>
+    <xpath expr="//div[@id='o_wblog_post_content']" position="attributes">
+      <attribute name="t-attf-class" add="lp-revista-post-content" separator=" "/>
+    </xpath>
+    <xpath expr="//section[@id='o_wblog_post_footer']" position="attributes">
+      <attribute name="class" add="lp-revista-post-footer" separator=" "/>
+    </xpath>
+  </template>
+
+  <template id="lp_revista_blog_post_content_visual" inherit_id="website_blog.blog_post_content" name="Revista LatinPyme Blog Post Content Visual">
+    <xpath expr="//div[contains(@t-attf-class, 'o_wblog_post_content_field')]" position="attributes">
+      <attribute name="t-attf-class" add="lp-revista-article-body" separator=" "/>
+    </xpath>
+  </template>
+</odoo>
