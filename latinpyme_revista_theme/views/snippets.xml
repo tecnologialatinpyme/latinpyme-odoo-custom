@@ -5,6 +5,7 @@
       <t snippet-group="lp_revista" t-snippet="website.s_snippet_group" string="Revista LatinPyme" t-thumbnail="/website/static/src/img/snippets_thumbs/s_blog_posts.svg"/>
     </xpath>
     <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_header" string="Header editorial" group="lp_revista"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_promo_banner" string="Banner editorial" group="lp_revista"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_sidebar" string="Sidebar editorial" group="lp_revista"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_interviews" string="Bloque entrevistas" group="lp_revista"/>

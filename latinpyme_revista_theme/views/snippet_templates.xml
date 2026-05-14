@@ -42,6 +42,54 @@
     </header>
   </template>
 
+  <template id="s_lp_revista_header" name="Revista LatinPyme Header Snippet">
+    <section class="lp-revista s_lp_revista_header" data-snippet="s_lp_revista_header" data-name="Header editorial">
+      <header class="lp-revista-masthead" role="banner">
+        <div class="lp-revista-container lp-revista-masthead__top">
+          <a href="/revista" class="lp-revista-brand" aria-label="Revista LatinPyme">
+            <span class="lp-revista-brand__mark">LP</span>
+            <span class="lp-revista-brand__text">
+              <span>Revista</span>
+              <strong>LatinPyme</strong>
+            </span>
+          </a>
+          <div class="lp-revista-anniversary">
+            <strong>25 años</strong>
+            <span>Impulsando empresarios en Latinoamérica</span>
+          </div>
+          <form class="lp-revista-search" action="/website/search" method="get" role="search">
+            <input type="search" name="search" placeholder="Buscar noticias, artículos, recursos..." aria-label="Buscar en Revista LatinPyme"/>
+            <button type="submit" aria-label="Buscar">
+              <i class="fa fa-search"/>
+            </button>
+          </form>
+          <div class="lp-revista-social" aria-label="Redes sociales">
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook"/></a>
+            <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram"/></a>
+            <a href="#" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
+            <a href="#" class="lp-revista-social__whatsapp" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
+          </div>
+        </div>
+        <nav class="lp-revista-nav" aria-label="Secciones Revista LatinPyme">
+          <div class="lp-revista-container lp-revista-nav__inner">
+            <a href="/revista" class="lp-revista-nav__link is-active">Inicio</a>
+            <a href="/revista/seccion/gerencia" class="lp-revista-nav__link">Gerencia</a>
+            <a href="/revista/seccion/negocios" class="lp-revista-nav__link">Negocios</a>
+            <a href="/revista/seccion/ia" class="lp-revista-nav__link">IA</a>
+            <a href="/revista/seccion/laboral" class="lp-revista-nav__link">Laboral</a>
+            <a href="/revista/seccion/finanzas" class="lp-revista-nav__link">Finanzas</a>
+            <a href="/revista/seccion/entrevistas" class="lp-revista-nav__link">Entrevistas</a>
+            <a href="/revista/seccion/especiales" class="lp-revista-nav__link">Especiales</a>
+            <a href="/revista/seccion/mujeres" class="lp-revista-nav__link">Mujeres</a>
+            <a href="/revista/seccion/portafolio" class="lp-revista-nav__link">Portafolio</a>
+            <a href="/suscribirse" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
+          </div>
+        </nav>
+      </header>
+    </section>
+  </template>
+
   <template id="lp_section_heading" name="Revista LatinPyme Section Heading">
     <header class="lp-revista-section-heading">
       <p t-if="eyebrow" class="lp-revista-eyebrow" t-out="eyebrow"/>
