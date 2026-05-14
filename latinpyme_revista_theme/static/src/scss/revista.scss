@@ -32,7 +32,8 @@
 }
 
 .lp-revista-container {
-  width: min(100% - 40px, 1180px);
+  width: calc(100% - 40px);
+  max-width: 1180px;
   margin-inline: auto;
 }
 
@@ -334,7 +335,7 @@
     max-width: 680px;
     margin: 12px 0 18px;
     color: #fff;
-    font-size: clamp(34px, 4.2vw, 52px);
+    font-size: 52px;
     font-weight: 850;
     line-height: 1.12;
   }
@@ -848,7 +849,6 @@
     font-size: 18px;
     font-weight: 850;
     text-align: center;
-    filter: grayscale(1);
   }
 }
 
@@ -916,7 +916,7 @@
   h1 {
     margin: 10px 0 14px;
     color: #fff;
-    font-size: clamp(34px, 4vw, 52px);
+    font-size: 52px;
     font-weight: 850;
     line-height: 1.08;
   }
@@ -1083,7 +1083,7 @@
 
 @media (max-width: 760px) {
   .lp-revista-container {
-    width: min(100% - 28px, 1180px);
+    width: calc(100% - 28px);
   }
 
   .lp-revista-masthead__top {
@@ -1139,6 +1139,16 @@
 
   .lp-revista-hero-card {
     min-height: 390px;
+
+    h1 {
+      font-size: 36px;
+    }
+  }
+
+  .lp-revista-section-hero {
+    h1 {
+      font-size: 36px;
+    }
   }
 
   .lp-revista-post-card--feature,
