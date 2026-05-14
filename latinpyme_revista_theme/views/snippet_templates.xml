@@ -172,6 +172,183 @@
     </section>
   </template>
 
+  <template id="s_lp_revista_featured_current" name="LP Revista - Actualidad Destacada">
+    <section class="lp-revista s_lp_revista_featured_current lp-revista-block" data-snippet="s_lp_revista_featured_current" data-name="LP Revista - Actualidad Destacada">
+      <div class="lp-revista-container lp-revista-featured-editorial">
+        <article class="lp-revista-featured-editorial__main">
+          <span class="lp-revista-kicker">Gestión</span>
+          <h1>Estrategias financieras para fortalecer la resiliencia empresarial</h1>
+          <p>Las empresas que anticipan escenarios y optimizan sus recursos están mejor preparadas para liderar mañana.</p>
+          <a href="/blog" class="lp-revista-button">Leer nota <i class="fa fa-arrow-right"/></a>
+        </article>
+        <div class="lp-revista-featured-editorial__rail">
+          <article class="lp-revista-post-card lp-revista-post-card--horizontal">
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Artículo destacado"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">Liderazgo</span>
+              <h3 class="lp-revista-post-card__title">Liderazgo efectivo en tiempos de transformación</h3>
+              <time class="lp-revista-date">12 junio 2024</time>
+            </div>
+          </article>
+          <article class="lp-revista-post-card lp-revista-post-card--horizontal">
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Artículo destacado"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">Gestión</span>
+              <h3 class="lp-revista-post-card__title">Claves para una gestión empresarial ágil</h3>
+              <time class="lp-revista-date">10 junio 2024</time>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_articles_grid" name="LP Revista - Grid de Cards de Artículos">
+    <section class="lp-revista s_lp_revista_articles_grid lp-revista-block" data-snippet="s_lp_revista_articles_grid" data-name="LP Revista - Grid de Cards de Artículos">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_section_heading">
+          <t t-set="title">Actualidad empresarial</t>
+          <t t-set="eyebrow" t-value="False"/>
+          <t t-set="href">/blog</t>
+          <t t-set="link_label">Ver archivo</t>
+        </t>
+        <div class="lp-revista-card-grid lp-revista-card-grid--three">
+          <article class="lp-revista-post-card lp-revista-post-card--default">
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">Negocios</span>
+              <h3 class="lp-revista-post-card__title">Cómo escalar tu negocio en mercados competitivos</h3>
+              <p class="lp-revista-post-card__teaser">Análisis y recursos para empresarios pyme.</p>
+              <a href="/blog" class="lp-revista-inline-link">Leer más <i class="fa fa-arrow-right"/></a>
+            </div>
+          </article>
+          <article class="lp-revista-post-card lp-revista-post-card--default">
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">IA</span>
+              <h3 class="lp-revista-post-card__title">Herramientas que transforman empresas</h3>
+              <p class="lp-revista-post-card__teaser">Ideas aplicables para equipos y líderes.</p>
+              <a href="/blog" class="lp-revista-inline-link">Leer más <i class="fa fa-arrow-right"/></a>
+            </div>
+          </article>
+          <article class="lp-revista-post-card lp-revista-post-card--default">
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">Finanzas</span>
+              <h3 class="lp-revista-post-card__title">Tendencias económicas para pymes</h3>
+              <p class="lp-revista-post-card__teaser">Lectura clara del contexto empresarial.</p>
+              <a href="/blog" class="lp-revista-inline-link">Leer más <i class="fa fa-arrow-right"/></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_sections" name="LP Revista - Secciones Editoriales">
+    <section class="lp-revista s_lp_revista_sections lp-revista-block" data-snippet="s_lp_revista_sections" data-name="LP Revista - Secciones Editoriales">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_section_heading">
+          <t t-set="title">Secciones</t>
+          <t t-set="eyebrow" t-value="False"/>
+          <t t-set="href">/blog</t>
+          <t t-set="link_label">Ver más secciones</t>
+        </t>
+        <div class="lp-revista-sections-grid">
+          <a href="/revista/seccion/gerencia">Gerencia <i class="fa fa-angle-right"/></a>
+          <a href="/revista/seccion/negocios">Negocios <i class="fa fa-angle-right"/></a>
+          <a href="/revista/seccion/ia">IA <i class="fa fa-angle-right"/></a>
+          <a href="/revista/seccion/laboral">Laboral <i class="fa fa-angle-right"/></a>
+          <a href="/revista/seccion/finanzas">Finanzas <i class="fa fa-angle-right"/></a>
+          <a href="/revista/seccion/mujeres">Mujeres <i class="fa fa-angle-right"/></a>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_news" name="LP Revista - Novedades">
+    <section class="lp-revista s_lp_revista_news lp-revista-block" data-snippet="s_lp_revista_news" data-name="LP Revista - Novedades">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_section_heading">
+          <t t-set="title">Novedades</t>
+          <t t-set="eyebrow" t-value="False"/>
+          <t t-set="href" t-value="False"/>
+          <t t-set="link_label" t-value="False"/>
+        </t>
+        <div class="lp-revista-list">
+          <article class="lp-revista-post-card lp-revista-post-card--horizontal">
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Novedad"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">Mercadeo</span>
+              <h3 class="lp-revista-post-card__title">Estrategias de marketing digital que impulsan tu marca</h3>
+              <time class="lp-revista-date">12 junio 2024</time>
+            </div>
+          </article>
+          <article class="lp-revista-post-card lp-revista-post-card--horizontal">
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Novedad"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">Legal</span>
+              <h3 class="lp-revista-post-card__title">Cambios normativos que impactan a las empresas</h3>
+              <time class="lp-revista-date">10 junio 2024</time>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_section_hero" name="LP Revista - Hero Sección">
+    <section class="lp-revista s_lp_revista_section_hero" data-snippet="s_lp_revista_section_hero" data-name="LP Revista - Hero Sección">
+      <div class="lp-revista-container">
+        <div class="lp-revista-section-hero">
+          <nav aria-label="Miga de pan" class="lp-revista-breadcrumb">
+            <a href="/revista">Inicio</a><span>/</span><span>Gerencia</span>
+          </nav>
+          <h1>Gerencia</h1>
+          <p>Estrategias, liderazgo y mejores prácticas para la gestión empresarial.</p>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_section_article_list" name="LP Revista - Listado de Artículos por Sección">
+    <section class="lp-revista s_lp_revista_section_article_list lp-revista-block" data-snippet="s_lp_revista_section_article_list" data-name="LP Revista - Listado de Artículos por Sección">
+      <div class="lp-revista-container lp-revista-section-layout">
+        <div class="lp-revista-section-main">
+          <t t-call="latinpyme_revista_theme.lp_section_heading">
+            <t t-set="title">Lo más reciente en Gerencia</t>
+            <t t-set="eyebrow" t-value="False"/>
+            <t t-set="href" t-value="False"/>
+            <t t-set="link_label" t-value="False"/>
+          </t>
+          <div class="lp-revista-list lp-revista-list--section">
+            <t t-call="latinpyme_revista_theme.s_lp_revista_horizontal_article_card"/>
+            <t t-call="latinpyme_revista_theme.s_lp_revista_horizontal_article_card"/>
+            <t t-call="latinpyme_revista_theme.s_lp_revista_horizontal_article_card"/>
+          </div>
+        </div>
+        <aside class="lp-revista-sidebar">
+          <t t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
+          <t t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
+          <t t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
+        </aside>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_horizontal_article_card" name="LP Revista - Card Artículo Horizontal">
+    <section class="lp-revista s_lp_revista_horizontal_article_card lp-revista-post-card lp-revista-post-card--horizontal" data-snippet="s_lp_revista_horizontal_article_card" data-name="LP Revista - Card Artículo Horizontal">
+      <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Artículo"/>
+      <div class="lp-revista-post-card__body">
+        <span class="lp-revista-kicker">Gestión</span>
+        <h3 class="lp-revista-post-card__title">Claves para una gestión empresarial ágil y eficiente</h3>
+        <p class="lp-revista-post-card__teaser">Resumen breve del artículo para orientar al lector.</p>
+        <time class="lp-revista-date">12 junio 2024</time>
+        <a href="/blog" class="lp-revista-inline-link">Leer nota <i class="fa fa-arrow-right"/></a>
+      </div>
+    </section>
+  </template>
+
   <template id="lp_section_heading" name="Revista LatinPyme Section Heading">
     <header class="lp-revista-section-heading">
       <p t-if="eyebrow" class="lp-revista-eyebrow" t-out="eyebrow"/>
@@ -210,39 +387,91 @@
     </article>
   </template>
 
+  <template id="lp_sidebar_conference_card" name="Revista LatinPyme Conference Card">
+    <section class="lp-revista-widget lp-revista-widget--event">
+      <div>
+        <p class="lp-revista-eyebrow">Próxima conferencia</p>
+        <h3>Liderazgo y cultura organizacional: claves para el futuro</h3>
+        <ul>
+          <li><i class="fa fa-calendar"/>25 de junio de 2024</li>
+          <li><i class="fa fa-map-marker"/>Bogotá, Colombia</li>
+          <li><i class="fa fa-clock-o"/>9:00 a.m. - 12:00 m.</li>
+        </ul>
+        <a href="/event" class="lp-revista-button">Más información <i class="fa fa-arrow-right"/></a>
+      </div>
+    </section>
+  </template>
+
+  <template id="lp_sidebar_poll_card" name="Revista LatinPyme Poll Card">
+    <section class="lp-revista-widget lp-revista-widget--poll">
+      <p class="lp-revista-eyebrow">Encuesta</p>
+      <h3>¿Cuál es el mayor desafío de tu empresa este año?</h3>
+      <label><input type="radio" name="lp_poll"/> Acceso a financiamiento</label>
+      <label><input type="radio" name="lp_poll"/> Transformación digital</label>
+      <label><input type="radio" name="lp_poll"/> Atracción y retención de talento</label>
+      <label><input type="radio" name="lp_poll"/> Aumento de costos</label>
+      <button type="button" class="lp-revista-button">Votar</button>
+    </section>
+  </template>
+
+  <template id="lp_sidebar_ad_card" name="Revista LatinPyme Sidebar Ad Card">
+    <section class="lp-revista-widget lp-revista-widget--ad">
+      <h3>Automatiza procesos, optimiza recursos y crece sin límites.</h3>
+      <a href="/contactus" class="lp-revista-button lp-revista-button--small">Conoce más <i class="fa fa-arrow-right"/></a>
+      <span class="lp-revista-widget__lp">LP</span>
+    </section>
+  </template>
+
   <template id="lp_editorial_sidebar" name="Revista LatinPyme Sidebar">
     <aside class="lp-revista-sidebar" aria-label="Contenido recomendado">
-      <section class="lp-revista-widget lp-revista-widget--event">
-        <div>
-          <p class="lp-revista-eyebrow">Próxima conferencia</p>
-          <h3>Liderazgo y cultura organizacional: claves para el futuro</h3>
-          <ul>
-            <li><i class="fa fa-calendar"/>25 de junio de 2024</li>
-            <li><i class="fa fa-map-marker"/>Bogotá, Colombia</li>
-            <li><i class="fa fa-clock-o"/>9:00 a.m. - 12:00 m.</li>
-          </ul>
-          <a href="/event" class="lp-revista-button">Más información <i class="fa fa-arrow-right"/></a>
-        </div>
-      </section>
-      <section class="lp-revista-widget lp-revista-widget--poll">
-        <p class="lp-revista-eyebrow">Encuesta</p>
-        <h3>¿Cuál es el mayor desafío de tu empresa este año?</h3>
-        <label><input type="radio" name="lp_poll"/> Acceso a financiamiento</label>
-        <label><input type="radio" name="lp_poll"/> Transformación digital</label>
-        <label><input type="radio" name="lp_poll"/> Atracción y retención de talento</label>
-        <label><input type="radio" name="lp_poll"/> Aumento de costos</label>
-        <button type="button" class="lp-revista-button">Votar</button>
-      </section>
-      <section class="lp-revista-widget lp-revista-widget--ad">
-        <h3>Automatiza procesos, optimiza recursos y crece sin límites.</h3>
-        <a href="/contactus" class="lp-revista-button lp-revista-button--small">Conoce más <i class="fa fa-arrow-right"/></a>
-        <span class="lp-revista-widget__lp">LP</span>
-      </section>
+      <t t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
+      <t t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
+      <t t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
     </aside>
   </template>
 
+  <template id="s_lp_revista_sidebar_conference" name="LP Revista - Sidebar Conferencia">
+    <section class="lp-revista s_lp_revista_sidebar_conference" data-snippet="s_lp_revista_sidebar_conference" data-name="LP Revista - Sidebar Conferencia">
+      <div class="lp-revista-container lp-revista-sidebar-demo">
+        <t t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_sidebar_poll" name="LP Revista - Sidebar Encuesta">
+    <section class="lp-revista s_lp_revista_sidebar_poll" data-snippet="s_lp_revista_sidebar_poll" data-name="LP Revista - Sidebar Encuesta">
+      <div class="lp-revista-container lp-revista-sidebar-demo">
+        <t t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_sidebar_ad" name="LP Revista - Sidebar Publicidad">
+    <section class="lp-revista s_lp_revista_sidebar_ad" data-snippet="s_lp_revista_sidebar_ad" data-name="LP Revista - Sidebar Publicidad">
+      <div class="lp-revista-container lp-revista-sidebar-demo">
+        <t t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_pagination" name="LP Revista - Paginación Visual">
+    <section class="lp-revista s_lp_revista_pagination" data-snippet="s_lp_revista_pagination" data-name="LP Revista - Paginación Visual">
+      <div class="lp-revista-container">
+        <nav class="lp-revista-pagination" aria-label="Paginación">
+          <a href="#" aria-label="Anterior"><i class="fa fa-angle-left"/></a>
+          <a href="#" class="is-active">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <span>...</span>
+          <a href="#">10</a>
+          <a href="#" aria-label="Siguiente"><i class="fa fa-angle-right"/></a>
+        </nav>
+      </div>
+    </section>
+  </template>
+
   <template id="s_lp_revista_promo_banner" name="Revista LatinPyme Promo Banner">
-    <section class="lp-revista s_lp_revista_promo_banner" data-snippet="s_lp_revista_promo_banner" data-name="LP Revista - Banner Publicitario">
+    <section class="lp-revista s_lp_revista_promo_banner" data-snippet="s_lp_revista_promo_banner" data-name="LP Revista - Banner Publicitario Horizontal">
       <div class="lp-revista-container">
         <div class="lp-revista-promo-banner">
           <h2>Automatiza procesos, optimiza recursos y crece sin límites.</h2>
@@ -270,13 +499,77 @@
           <t t-set="href">/revista/seccion/entrevistas</t>
           <t t-set="link_label">Ver más entrevistas</t>
         </t>
-        <div class="lp-revista-interview-cta">
-          <i class="fa fa-microphone"/>
-          <div>
-            <h3>¿Quieres ser parte de nuestras entrevistas?</h3>
-            <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
-            <a href="/contactus" class="lp-revista-button">Postúlate aquí <i class="fa fa-arrow-right"/></a>
+        <p class="lp-revista-block-intro">Conversaciones con líderes que están transformando negocios y comunidades.</p>
+        <div class="lp-revista-interviews-grid">
+          <div class="lp-revista-interview-cta">
+            <i class="fa fa-microphone"/>
+            <div>
+              <h3>¿Quieres ser parte de nuestras entrevistas?</h3>
+              <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
+              <a href="/contactus" class="lp-revista-button">Postúlate aquí <i class="fa fa-arrow-right"/></a>
+            </div>
           </div>
+          <article class="lp-revista-interview-card">
+            <a href="/blog">
+              <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="María Claudia Lacouture"/>
+              <span class="lp-revista-play"><i class="fa fa-play"/></span>
+            </a>
+            <div>
+              <h3>María Claudia Lacouture</h3>
+              <p>Presidenta Ejecutiva</p>
+              <span>AmCham Colombia</span>
+            </div>
+          </article>
+          <article class="lp-revista-interview-card">
+            <a href="/blog">
+              <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="Ricardo Leyva"/>
+              <span class="lp-revista-play"><i class="fa fa-play"/></span>
+            </a>
+            <div>
+              <h3>Ricardo Leyva</h3>
+              <p>CEO</p>
+              <span>Grupo Nutresa</span>
+            </div>
+          </article>
+          <article class="lp-revista-interview-card">
+            <a href="/blog">
+              <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="Juan Carlos Mora"/>
+              <span class="lp-revista-play"><i class="fa fa-play"/></span>
+            </a>
+            <div>
+              <h3>Juan Carlos Mora</h3>
+              <p>Presidente</p>
+              <span>Bancolombia</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_related_interviews" name="LP Revista - Entrevistas Relacionadas">
+    <section class="lp-revista s_lp_revista_related_interviews lp-revista-block" data-snippet="s_lp_revista_related_interviews" data-name="LP Revista - Entrevistas Relacionadas">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_section_heading">
+          <t t-set="title">Entrevistas relacionadas</t>
+          <t t-set="eyebrow" t-value="False"/>
+          <t t-set="href">/revista/seccion/entrevistas</t>
+          <t t-set="link_label">Ver más entrevistas</t>
+        </t>
+        <p class="lp-revista-block-intro">Historias y criterios de líderes empresariales para ampliar la conversación.</p>
+        <div class="lp-revista-interviews-grid lp-revista-interviews-grid--compact">
+          <article class="lp-revista-interview-card">
+            <a href="/blog"><img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="Entrevistado"/><span class="lp-revista-play"><i class="fa fa-play"/></span></a>
+            <div><h3>María Claudia Lacouture</h3><p>Presidenta Ejecutiva</p><span>AmCham Colombia</span></div>
+          </article>
+          <article class="lp-revista-interview-card">
+            <a href="/blog"><img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="Entrevistado"/><span class="lp-revista-play"><i class="fa fa-play"/></span></a>
+            <div><h3>Ricardo Leyva</h3><p>CEO</p><span>Grupo Nutresa</span></div>
+          </article>
+          <article class="lp-revista-interview-card">
+            <a href="/blog"><img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="Entrevistado"/><span class="lp-revista-play"><i class="fa fa-play"/></span></a>
+            <div><h3>Juan Carlos Mora</h3><p>Presidente</p><span>Bancolombia</span></div>
+          </article>
         </div>
       </div>
     </section>
@@ -308,6 +601,137 @@
               <time class="lp-revista-date">11 junio 2024</time>
             </div>
           </article>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_note_header" name="LP Revista - Cabecera de Nota">
+    <section class="lp-revista s_lp_revista_note_header" data-snippet="s_lp_revista_note_header" data-name="LP Revista - Cabecera de Nota">
+      <div class="lp-revista-container lp-revista-note-head">
+        <nav class="lp-revista-breadcrumb lp-revista-breadcrumb--dark" aria-label="Miga de pan">
+          <a href="/revista">Inicio</a><span>/</span><a href="/revista/seccion/finanzas">Finanzas</a>
+        </nav>
+        <span class="lp-revista-kicker">Gestión</span>
+        <h1>Estrategias financieras para fortalecer la resiliencia empresarial en tiempos de cambio</h1>
+        <p>Las empresas que anticipan escenarios y optimizan sus recursos están mejor preparadas para liderar mañana.</p>
+        <div class="lp-revista-note-meta">
+          <span><i class="fa fa-calendar"/>12 de junio de 2024</span>
+          <span><i class="fa fa-clock-o"/>8 min de lectura</span>
+        </div>
+        <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Imagen principal de la nota"/>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_note_author" name="LP Revista - Autor de Nota">
+    <section class="lp-revista s_lp_revista_note_author" data-snippet="s_lp_revista_note_author" data-name="LP Revista - Autor de Nota">
+      <div class="lp-revista-container">
+        <div class="lp-revista-author-box">
+          <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Autor"/>
+          <div>
+            <strong>Por Alejandro Muñoz</strong>
+            <p>Especialista en Finanzas Corporativas</p>
+            <span>12 de junio de 2024</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_share_buttons" name="LP Revista - Botones Compartir">
+    <section class="lp-revista s_lp_revista_share_buttons" data-snippet="s_lp_revista_share_buttons" data-name="LP Revista - Botones Compartir">
+      <div class="lp-revista-container">
+        <div class="lp-revista-share">
+          <strong>Compartir:</strong>
+          <a href="#" aria-label="Compartir en Facebook"><i class="fa fa-facebook"/></a>
+          <a href="#" aria-label="Compartir en LinkedIn"><i class="fa fa-linkedin"/></a>
+          <a href="#" aria-label="Compartir en X"><i class="fa fa-twitter"/></a>
+          <a href="#" aria-label="Compartir por correo"><i class="fa fa-envelope"/></a>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_article_body" name="LP Revista - Cuerpo Editorial">
+    <section class="lp-revista s_lp_revista_article_body" data-snippet="s_lp_revista_article_body" data-name="LP Revista - Cuerpo Editorial">
+      <div class="lp-revista-container lp-revista-article-body lp-revista-article-body--snippet">
+        <p>En un entorno empresarial cada vez más dinámico e incierto, la resiliencia financiera se ha convertido en un factor determinante para la sostenibilidad y el crecimiento de las organizaciones.</p>
+        <h2>1. Diversificación de ingresos</h2>
+        <p>Depender de una única fuente de ingresos puede ser riesgoso. Diversificar productos, servicios, mercados y canales ayuda a enfrentar mejor las volatilidades económicas.</p>
+        <h2>2. Control y optimización de costos</h2>
+        <p>Revisar periódicamente los costos operativos permite identificar gastos innecesarios y liberar recursos para invertir en áreas estratégicas.</p>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_quote" name="LP Revista - Cita Destacada">
+    <section class="lp-revista s_lp_revista_quote" data-snippet="s_lp_revista_quote" data-name="LP Revista - Cita Destacada">
+      <div class="lp-revista-container">
+        <blockquote class="lp-revista-quote">
+          La resiliencia financiera no se trata solo de sobrevivir a la crisis, sino de estar preparados para aprovechar las oportunidades que surgen de ella.
+        </blockquote>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_article_image" name="LP Revista - Imagen dentro del Artículo">
+    <section class="lp-revista s_lp_revista_article_image" data-snippet="s_lp_revista_article_image" data-name="LP Revista - Imagen dentro del Artículo">
+      <div class="lp-revista-container">
+        <figure class="lp-revista-article-figure">
+          <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Imagen editorial"/>
+          <figcaption>Imagen de apoyo editorial para contextualizar la nota.</figcaption>
+        </figure>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_note_sidebar" name="LP Revista - Sidebar Nota">
+    <section class="lp-revista s_lp_revista_note_sidebar" data-snippet="s_lp_revista_note_sidebar" data-name="LP Revista - Sidebar Nota">
+      <div class="lp-revista-container lp-revista-sidebar-demo">
+        <aside class="lp-revista-sidebar">
+          <t t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
+          <t t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
+          <t t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
+        </aside>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_related_articles" name="LP Revista - Artículos Relacionados">
+    <section class="lp-revista s_lp_revista_related_articles lp-revista-block" data-snippet="s_lp_revista_related_articles" data-name="LP Revista - Artículos Relacionados">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_section_heading">
+          <t t-set="title">Artículos relacionados</t>
+          <t t-set="eyebrow" t-value="False"/>
+          <t t-set="href">/blog</t>
+          <t t-set="link_label">Ver archivo</t>
+        </t>
+        <div class="lp-revista-card-grid lp-revista-card-grid--three">
+          <article class="lp-revista-post-card lp-revista-post-card--default">
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo relacionado"/>
+            <div class="lp-revista-post-card__body"><span class="lp-revista-kicker">Gestión</span><h3 class="lp-revista-post-card__title">Indicadores clave para medir la eficiencia empresarial</h3></div>
+          </article>
+          <article class="lp-revista-post-card lp-revista-post-card--default">
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo relacionado"/>
+            <div class="lp-revista-post-card__body"><span class="lp-revista-kicker">Estrategia</span><h3 class="lp-revista-post-card__title">Planeación estratégica: guía para pymes</h3></div>
+          </article>
+          <article class="lp-revista-post-card lp-revista-post-card--default">
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo relacionado"/>
+            <div class="lp-revista-post-card__body"><span class="lp-revista-kicker">Innovación</span><h3 class="lp-revista-post-card__title">Innovación en la gestión: adaptarse para crecer</h3></div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_portfolio_compact" name="LP Revista - Portafolio Compacto">
+    <section class="lp-revista s_lp_revista_portfolio_compact lp-revista-block" data-snippet="s_lp_revista_portfolio_compact" data-name="LP Revista - Portafolio Compacto">
+      <div class="lp-revista-container">
+        <div class="lp-revista-portfolio-compact">
+          <article><i class="fa fa-graduation-cap"/><h3>Aprendizaje empresarial</h3><a href="/contactus">Contáctanos</a></article>
+          <article><i class="fa fa-calendar-o"/><h3>Tecnología: salones y espacios</h3><a href="/appointment">Agenda una cita</a></article>
+          <article><i class="fa fa-microchip"/><h3>Inteligencia artificial</h3><a href="/contactus">Conoce más</a></article>
         </div>
       </div>
     </section>

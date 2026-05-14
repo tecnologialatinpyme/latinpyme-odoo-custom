@@ -7,14 +7,34 @@
     <xpath expr="//snippets[@id='snippet_structure']" position="inside">
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_header" string="LP Revista - Header Editorial" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_header.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_hero_home_double" string="LP Revista - Hero Home Doble" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_hero_home_double.svg"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_latest_block" string="LP Revista - Bloque Lo Más Reciente" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_article_cards" string="LP Revista - Card Artículo Vertical / Horizontal" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_featured_current" string="LP Revista - Actualidad Destacada" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_latest_block" string="LP Revista - Lo Más Reciente" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_articles_grid" string="LP Revista - Grid de Cards de Artículos" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_sections" string="LP Revista - Secciones Editoriales" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_allies.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_interviews" string="LP Revista - Entrevistas" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_specials" string="LP Revista - Especiales" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_specials.svg"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_promo_banner" string="LP Revista - Banner Publicitario" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_banner_ad.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_promo_banner" string="LP Revista - Banner Publicitario Horizontal" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_banner_ad.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_news" string="LP Revista - Novedades" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_portfolio" string="LP Revista - Portafolio" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_portfolio.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_allies" string="LP Revista - Aliados" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_allies.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_footer" string="LP Revista - Footer Editorial" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_footer.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_section_hero" string="LP Revista - Hero Sección" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_hero_home_double.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_section_article_list" string="LP Revista - Listado de Artículos por Sección" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_horizontal_article_card" string="LP Revista - Card Artículo Horizontal" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_sidebar_conference" string="LP Revista - Sidebar Conferencia" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_banner_ad.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_sidebar_poll" string="LP Revista - Sidebar Encuesta" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_banner_ad.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_sidebar_ad" string="LP Revista - Sidebar Publicidad" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_banner_ad.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_pagination" string="LP Revista - Paginación Visual" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_related_interviews" string="LP Revista - Entrevistas Relacionadas" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_portfolio_compact" string="LP Revista - Portafolio Compacto" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_portfolio.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_note_header" string="LP Revista - Cabecera de Nota" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_header.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_note_author" string="LP Revista - Autor de Nota" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_share_buttons" string="LP Revista - Botones Compartir" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_allies.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_article_body" string="LP Revista - Cuerpo Editorial" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_quote" string="LP Revista - Cita Destacada" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_specials.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_article_image" string="LP Revista - Imagen dentro del Artículo" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_note_sidebar" string="LP Revista - Sidebar Nota" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_banner_ad.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_related_articles" string="LP Revista - Artículos Relacionados" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg"/>
     </xpath>
   </template>
 </odoo>

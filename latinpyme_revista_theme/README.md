@@ -20,8 +20,8 @@ El módulo trabaja únicamente dentro de `latinpyme_revista_theme` y no depende 
 - `__manifest__.py`: declara dependencias `website` y `website_blog`, assets y vistas QWeb.
 - `controllers/main.py`: crea rutas públicas para la Home y las secciones editoriales.
 - `views/assets.xml`: placeholder documental; en Odoo 19 los assets se cargan desde `__manifest__.py`.
-- `views/snippet_templates.xml`: contiene masthead, cards, sidebar, banners, portafolio, aliados y footer editorial.
-- `views/snippets.xml`: registra los 10 snippets reutilizables del grupo `LP Revista`.
+- `views/snippet_templates.xml`: contiene masthead, cards, sidebar, banners, bloques de Home, sección, nota, portafolio, aliados y footer editorial.
+- `views/snippets.xml`: registra los snippets reutilizables del grupo `LP Revista`.
 - `static/src/img/snippets/*.svg`: miniaturas propias para el selector visual de bloques de Odoo Website.
 - `views/home_templates.xml`: template visual dinámico para `/revista`.
 - `views/section_templates.xml`: template visual dinámico para `/revista/seccion/<seccion>`.
@@ -60,7 +60,7 @@ Las publicaciones individuales siguen usando las URLs nativas de Odoo Blog. Esto
 Nota Odoo 19:
 
 - El SCSS se declara en `__manifest__.py` dentro de `web.assets_frontend`.
-- No se hereda `website.assets_frontend` desde XML porque ese XML ID no existe en Odoo 19.
+- No se heredan bundles de assets desde XML; Odoo 19 usa el manifest.
 
 ## Uso editorial
 
@@ -72,14 +72,45 @@ Snippets disponibles:
 
 1. `LP Revista - Header Editorial`
 2. `LP Revista - Hero Home Doble`
-3. `LP Revista - Bloque Lo Más Reciente`
-4. `LP Revista - Card Artículo Vertical / Horizontal`
-5. `LP Revista - Entrevistas`
-6. `LP Revista - Especiales`
-7. `LP Revista - Banner Publicitario`
-8. `LP Revista - Portafolio`
-9. `LP Revista - Aliados`
-10. `LP Revista - Footer Editorial`
+3. `LP Revista - Actualidad Destacada`
+4. `LP Revista - Lo Más Reciente`
+5. `LP Revista - Grid de Cards de Artículos`
+6. `LP Revista - Secciones Editoriales`
+7. `LP Revista - Entrevistas`
+8. `LP Revista - Especiales`
+9. `LP Revista - Banner Publicitario Horizontal`
+10. `LP Revista - Novedades`
+11. `LP Revista - Portafolio`
+12. `LP Revista - Aliados`
+13. `LP Revista - Footer Editorial`
+14. `LP Revista - Hero Sección`
+15. `LP Revista - Listado de Artículos por Sección`
+16. `LP Revista - Card Artículo Horizontal`
+17. `LP Revista - Sidebar Conferencia`
+18. `LP Revista - Sidebar Encuesta`
+19. `LP Revista - Sidebar Publicidad`
+20. `LP Revista - Paginación Visual`
+21. `LP Revista - Entrevistas Relacionadas`
+22. `LP Revista - Portafolio Compacto`
+23. `LP Revista - Cabecera de Nota`
+24. `LP Revista - Autor de Nota`
+25. `LP Revista - Botones Compartir`
+26. `LP Revista - Cuerpo Editorial`
+27. `LP Revista - Cita Destacada`
+28. `LP Revista - Imagen dentro del Artículo`
+29. `LP Revista - Sidebar Nota`
+30. `LP Revista - Artículos Relacionados`
+
+## Auditoría técnica actual
+
+| Área | Estado | Implementación |
+| --- | --- | --- |
+| Home editorial `/revista` | Dinámica parcial | Toma destacados, recientes, novedades, entrevistas y especiales desde Odoo Blog. Los banners y portafolio siguen como bloques editables. |
+| Secciones `/revista/seccion/<slug>` | Dinámica | Filtra `blog.post` por `blog.tag` editorial y añade paginación por `?page=2`. |
+| Nota individual de Blog | Parcial | Se mantiene `website_blog` como fuente y se añade capa visual segura; la reconstrucción completa del layout de nota queda para Fase 3. |
+| Snippets Home | Completo base | Bloques reutilizables y editables desde Website Builder. |
+| Snippets Sección | Completo base | Hero, listado visual, card horizontal, sidebars, paginación y relacionados. |
+| Snippets Nota | Completo base | Cabecera, autor, compartir, cuerpo, cita, imagen, sidebar, relacionados. |
 
 Flujo recomendado:
 
@@ -155,7 +186,7 @@ Pendiente hasta tener inventario. Ejemplos de mapeo esperado:
 
 La estructura final de posts debe definirse con base en inventario SEO. Si se necesita replicar exactamente el patrón WordPress, eso debe hacerse en Fase 2 con rutas y redirecciones controladas.
 
-## Fase 2 recomendada
+## Fase 3 recomendada
 
 - Definir si la Home final de `latinpyme.com` será `/revista` o la raíz `/`.
 - Mapear URLs WordPress contra URLs Odoo reales.
@@ -165,4 +196,5 @@ La estructura final de posts debe definirse con base en inventario SEO. Si se ne
 - Crear modelo ligero de banners/editorial promos si los banners deben ser administrables sin Website Editor.
 - Integrar encuesta real.
 - Integrar buscador editorial avanzado por sección, fecha y etiqueta.
+- Rehacer la plantilla completa de nota individual solo después de confirmar los XML IDs y estructura final de `website_blog` en Odoo.sh.
 - Revisar y ajustar visualmente en Odoo.sh con datos reales, mobile y desktop.

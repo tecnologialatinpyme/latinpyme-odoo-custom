@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <!--
-    Odoo 19 no expone el XML ID website.assets_frontend.
-    El SCSS de la revista se declara en __manifest__.py bajo web.assets_frontend.
+    El SCSS de la revista se declara en __manifest__.py.
     Este archivo queda como referencia estructural del módulo.
   -->
 </odoo>

@@ -117,7 +117,7 @@ class LatinpymeRevistaController(http.Controller):
         domain += self._website_domain(Post)
         return domain
 
-    def _posts(self, blog=None, tag=None, extra_tags=None, limit=6, exclude_ids=None):
+    def _posts_domain(self, blog=None, tag=None, extra_tags=None, exclude_ids=None):
         Post = request.env["blog.post"].sudo()
         domain = self._published_domain(Post)
         if blog:
@@ -128,7 +128,17 @@ class LatinpymeRevistaController(http.Controller):
             domain.append(("tag_ids", "in", extra_tags.ids))
         if exclude_ids:
             domain.append(("id", "not in", exclude_ids))
-        return Post.search(domain, order="post_date desc, id desc", limit=limit)
+        return domain
+
+    def _posts(self, blog=None, tag=None, extra_tags=None, limit=6, exclude_ids=None, offset=0):
+        Post = request.env["blog.post"].sudo()
+        domain = self._posts_domain(blog=blog, tag=tag, extra_tags=extra_tags, exclude_ids=exclude_ids)
+        return Post.search(domain, order="post_date desc, id desc", limit=limit, offset=offset)
+
+    def _posts_count(self, blog=None, tag=None, extra_tags=None, exclude_ids=None):
+        Post = request.env["blog.post"].sudo()
+        domain = self._posts_domain(blog=blog, tag=tag, extra_tags=extra_tags, exclude_ids=exclude_ids)
+        return Post.search_count(domain)
 
     def _featured_post(self, blog=None, section_tag=None):
         feature_tags = self._tags_by_names(SECTION_FEATURE_TAGS if section_tag else HOME_FEATURE_TAGS)
@@ -177,7 +187,7 @@ class LatinpymeRevistaController(http.Controller):
         website=True,
         sitemap=sitemap_revista_sections,
     )
-    def revista_section(self, section_slug, **kwargs):
+    def revista_section(self, section_slug, page=1, **kwargs):
         if section_slug not in SECTION_LABELS:
             raise NotFound()
         blog = self._revista_blog()
@@ -185,7 +195,18 @@ class LatinpymeRevistaController(http.Controller):
         empty_posts = request.env["blog.post"].sudo().browse()
         featured_post = self._featured_post(blog=blog, section_tag=section_tag) if section_tag else empty_posts
         exclude_ids = featured_post.ids if featured_post else []
-        posts = self._posts(blog=blog, tag=section_tag, limit=12, exclude_ids=exclude_ids) if section_tag else empty_posts
+        try:
+            current_page = max(int(page or kwargs.get("page", 1) or 1), 1)
+        except (TypeError, ValueError):
+            current_page = 1
+        per_page = 9
+        total_posts = self._posts_count(blog=blog, tag=section_tag, exclude_ids=exclude_ids) if section_tag else 0
+        page_count = max((total_posts + per_page - 1) // per_page, 1)
+        if current_page > page_count:
+            current_page = page_count
+        offset = (current_page - 1) * per_page
+        posts = self._posts(blog=blog, tag=section_tag, limit=per_page, exclude_ids=exclude_ids, offset=offset) if section_tag else empty_posts
+        section_url = "/revista/seccion/%s" % section_slug
         values = {
             "blog": blog,
             "section_slug": section_slug,
@@ -195,5 +216,10 @@ class LatinpymeRevistaController(http.Controller):
             "featured_style": self._cover_style(featured_post or blog),
             "posts": posts,
             "latest_posts": self._posts(blog=blog, limit=6, exclude_ids=exclude_ids),
+            "current_page": current_page,
+            "page_count": page_count,
+            "total_posts": total_posts,
+            "prev_page_url": "%s?page=%s" % (section_url, current_page - 1) if current_page > 1 else False,
+            "next_page_url": "%s?page=%s" % (section_url, current_page + 1) if current_page < page_count else False,
         }
         return self._render("latinpyme_revista_theme.revista_section_page", values)

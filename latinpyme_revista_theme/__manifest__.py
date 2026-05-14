@@ -20,8 +20,7 @@ de publicaciones de Blog.
         "website_blog",
     ],
     "data": [
-        # Odoo 19 loads frontend assets from the manifest, not by inheriting
-        # the removed website.assets_frontend QWeb template.
+        # Odoo 19 loads frontend assets from the manifest.
         "views/snippet_templates.xml",
         "views/snippets.xml",
         "views/home_templates.xml",

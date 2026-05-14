@@ -51,6 +51,15 @@
                   </t>
                 </t>
               </div>
+              <nav t-if="page_count &gt; 1" class="lp-revista-pagination" aria-label="Paginación">
+                <a t-if="prev_page_url" t-att-href="prev_page_url" aria-label="Página anterior"><i class="fa fa-angle-left"/></a>
+                <span t-if="not prev_page_url" class="is-disabled"><i class="fa fa-angle-left"/></span>
+                <span class="is-active" t-out="current_page"/>
+                <span>de</span>
+                <a t-att-href="'/revista/seccion/%s?page=%s' % (section_slug, page_count)" t-out="page_count"/>
+                <a t-if="next_page_url" t-att-href="next_page_url" aria-label="Página siguiente"><i class="fa fa-angle-right"/></a>
+                <span t-if="not next_page_url" class="is-disabled"><i class="fa fa-angle-right"/></span>
+              </nav>
               <div t-if="not featured_post and not posts" class="lp-revista-empty">
                 <h2>Aún no hay artículos publicados en esta sección.</h2>
                 <p>Los editores pueden asignar la etiqueta <strong t-out="section_name"/> a las notas de Odoo Blog para que aparezcan aquí automáticamente.</p>
