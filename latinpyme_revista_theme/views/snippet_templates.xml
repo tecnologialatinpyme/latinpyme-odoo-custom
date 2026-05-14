@@ -43,7 +43,7 @@
   </template>
 
   <template id="s_lp_revista_header" name="Revista LatinPyme Header Snippet">
-    <section class="lp-revista s_lp_revista_header" data-snippet="s_lp_revista_header" data-name="Header editorial">
+    <section class="lp-revista s_lp_revista_header" data-snippet="s_lp_revista_header" data-name="LP Revista - Header Editorial">
       <header class="lp-revista-masthead" role="banner">
         <div class="lp-revista-container lp-revista-masthead__top">
           <a href="/revista" class="lp-revista-brand" aria-label="Revista LatinPyme">
@@ -87,6 +87,88 @@
           </div>
         </nav>
       </header>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_hero_home_double" name="LP Revista - Hero Home Doble">
+    <section class="lp-revista s_lp_revista_hero_home_double" data-snippet="s_lp_revista_hero_home_double" data-name="LP Revista - Hero Home Doble">
+      <div class="lp-revista-container lp-revista-home-ads">
+        <div class="lp-revista-promo-banner lp-revista-promo-banner--green">
+          <h2>Lideramos conversaciones que impulsan un futuro sostenible y competitivo.</h2>
+          <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
+        </div>
+        <div class="lp-revista-promo-banner">
+          <h2>Automatiza procesos, optimiza recursos y crece sin límites.</h2>
+          <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
+          <span class="lp-revista-promo-banner__mark">LP</span>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_latest_block" name="LP Revista - Bloque Lo Más Reciente">
+    <section class="lp-revista s_lp_revista_latest_block lp-revista-block" data-snippet="s_lp_revista_latest_block" data-name="LP Revista - Bloque Lo Más Reciente">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_section_heading">
+          <t t-set="title">Lo más reciente</t>
+          <t t-set="eyebrow" t-value="False"/>
+          <t t-set="href">/blog</t>
+          <t t-set="link_label">Ver archivo</t>
+        </t>
+        <div class="lp-revista-card-grid lp-revista-card-grid--three">
+          <article class="lp-revista-post-card lp-revista-post-card--default">
+            <div class="lp-revista-post-card__media"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">Negocios</span>
+              <h3 class="lp-revista-post-card__title">Cómo escalar tu negocio en mercados competitivos</h3>
+              <p class="lp-revista-post-card__teaser">Análisis y recursos para empresarios pyme.</p>
+              <time class="lp-revista-date">12 junio 2024</time>
+            </div>
+          </article>
+          <article class="lp-revista-post-card lp-revista-post-card--default">
+            <div class="lp-revista-post-card__media"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">IA</span>
+              <h3 class="lp-revista-post-card__title">Herramientas que transforman empresas</h3>
+              <p class="lp-revista-post-card__teaser">Ideas aplicables para equipos y líderes.</p>
+              <time class="lp-revista-date">11 junio 2024</time>
+            </div>
+          </article>
+          <article class="lp-revista-post-card lp-revista-post-card--default">
+            <div class="lp-revista-post-card__media"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">Finanzas</span>
+              <h3 class="lp-revista-post-card__title">Tendencias económicas para pymes</h3>
+              <p class="lp-revista-post-card__teaser">Lectura clara del contexto empresarial.</p>
+              <time class="lp-revista-date">10 junio 2024</time>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_article_cards" name="LP Revista - Card Artículo Vertical / Horizontal">
+    <section class="lp-revista s_lp_revista_article_cards lp-revista-block" data-snippet="s_lp_revista_article_cards" data-name="LP Revista - Card Artículo Vertical / Horizontal">
+      <div class="lp-revista-container lp-revista-card-demo">
+        <article class="lp-revista-post-card lp-revista-post-card--default">
+          <div class="lp-revista-post-card__media"/>
+          <div class="lp-revista-post-card__body">
+            <span class="lp-revista-kicker">Gestión</span>
+            <h3 class="lp-revista-post-card__title">Claves para una gestión empresarial ágil y eficiente</h3>
+            <p class="lp-revista-post-card__teaser">Una card vertical para destacar notas editoriales.</p>
+            <time class="lp-revista-date">12 junio 2024</time>
+          </div>
+        </article>
+        <article class="lp-revista-post-card lp-revista-post-card--horizontal">
+          <div class="lp-revista-post-card__media"/>
+          <div class="lp-revista-post-card__body">
+            <span class="lp-revista-kicker">Liderazgo</span>
+            <h3 class="lp-revista-post-card__title">Liderazgo efectivo en tiempos de transformación</h3>
+            <time class="lp-revista-date">11 junio 2024</time>
+          </div>
+        </article>
+      </div>
     </section>
   </template>
 
@@ -160,7 +242,7 @@
   </template>
 
   <template id="s_lp_revista_promo_banner" name="Revista LatinPyme Promo Banner">
-    <section class="lp-revista s_lp_revista_promo_banner" data-snippet="s_lp_revista_promo_banner" data-name="Banner editorial">
+    <section class="lp-revista s_lp_revista_promo_banner" data-snippet="s_lp_revista_promo_banner" data-name="LP Revista - Banner Publicitario">
       <div class="lp-revista-container">
         <div class="lp-revista-promo-banner">
           <h2>Automatiza procesos, optimiza recursos y crece sin límites.</h2>
@@ -180,7 +262,7 @@
   </template>
 
   <template id="s_lp_revista_interviews" name="Revista LatinPyme Interviews">
-    <section class="lp-revista s_lp_revista_interviews" data-snippet="s_lp_revista_interviews" data-name="Bloque entrevistas">
+    <section class="lp-revista s_lp_revista_interviews" data-snippet="s_lp_revista_interviews" data-name="LP Revista - Entrevistas">
       <div class="lp-revista-container">
         <t t-call="latinpyme_revista_theme.lp_section_heading">
           <t t-set="title">Entrevistas</t>
@@ -195,6 +277,37 @@
             <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
             <a href="/contactus" class="lp-revista-button">Postúlate aquí <i class="fa fa-arrow-right"/></a>
           </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="s_lp_revista_specials" name="LP Revista - Especiales">
+    <section class="lp-revista s_lp_revista_specials lp-revista-block" data-snippet="s_lp_revista_specials" data-name="LP Revista - Especiales">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_section_heading">
+          <t t-set="title">Especiales</t>
+          <t t-set="eyebrow" t-value="False"/>
+          <t t-set="href">/revista/seccion/especiales</t>
+          <t t-set="link_label">Ver otros especiales</t>
+        </t>
+        <div class="lp-revista-card-grid lp-revista-card-grid--two">
+          <article class="lp-revista-post-card lp-revista-post-card--wide">
+            <div class="lp-revista-post-card__media"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">Especial</span>
+              <h3 class="lp-revista-post-card__title">Innovación que transforma: empresas que lideran el cambio</h3>
+              <time class="lp-revista-date">12 junio 2024</time>
+            </div>
+          </article>
+          <article class="lp-revista-post-card lp-revista-post-card--wide">
+            <div class="lp-revista-post-card__media"/>
+            <div class="lp-revista-post-card__body">
+              <span class="lp-revista-kicker">Especial</span>
+              <h3 class="lp-revista-post-card__title">Sostenibilidad empresarial: estrategias que generan impacto</h3>
+              <time class="lp-revista-date">11 junio 2024</time>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -250,7 +363,7 @@
   </template>
 
   <template id="s_lp_revista_portfolio" name="Revista LatinPyme Portfolio">
-    <section class="lp-revista s_lp_revista_portfolio" data-snippet="s_lp_revista_portfolio" data-name="Portafolio editorial">
+    <section class="lp-revista s_lp_revista_portfolio" data-snippet="s_lp_revista_portfolio" data-name="LP Revista - Portafolio">
       <div class="lp-revista-container">
         <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
       </div>
@@ -279,7 +392,7 @@
   </template>
 
   <template id="s_lp_revista_allies" name="Revista LatinPyme Allies">
-    <section class="lp-revista s_lp_revista_allies" data-snippet="s_lp_revista_allies" data-name="Aliados">
+    <section class="lp-revista s_lp_revista_allies" data-snippet="s_lp_revista_allies" data-name="LP Revista - Aliados">
       <div class="lp-revista-container">
         <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
       </div>
@@ -332,7 +445,7 @@
   </template>
 
   <template id="s_lp_revista_footer" name="Revista LatinPyme Footer Snippet">
-    <section class="lp-revista s_lp_revista_footer" data-snippet="s_lp_revista_footer" data-name="Footer revista">
+    <section class="lp-revista s_lp_revista_footer" data-snippet="s_lp_revista_footer" data-name="LP Revista - Footer Editorial">
       <div class="lp-revista-container">
         <t t-call="latinpyme_revista_theme.lp_footer"/>
       </div>

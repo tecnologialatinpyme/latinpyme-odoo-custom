@@ -21,7 +21,7 @@ El módulo trabaja únicamente dentro de `latinpyme_revista_theme` y no depende 
 - `controllers/main.py`: crea rutas públicas para la Home y las secciones editoriales.
 - `views/assets.xml`: placeholder documental; en Odoo 19 los assets se cargan desde `__manifest__.py`.
 - `views/snippet_templates.xml`: contiene masthead, cards, sidebar, banners, portafolio, aliados y footer editorial.
-- `views/snippets.xml`: registra snippets reutilizables en el editor de Website, incluido el Header editorial.
+- `views/snippets.xml`: registra los 10 snippets reutilizables del grupo `LP Revista`.
 - `views/home_templates.xml`: template visual dinámico para `/revista`.
 - `views/section_templates.xml`: template visual dinámico para `/revista/seccion/<seccion>`.
 - `views/blog_post_templates.xml`: capa visual segura sobre templates nativos de `website_blog`.
@@ -66,6 +66,19 @@ Nota Odoo 19:
 Los editores no deben modificar HTML ni CSS.
 
 El header editorial ya está incluido automáticamente en `/revista` y en las páginas de sección. También queda disponible como snippet `Header editorial` para páginas complementarias, pero no debe usarse para duplicar el encabezado en la Home dinámica.
+
+Snippets disponibles:
+
+1. `LP Revista - Header Editorial`
+2. `LP Revista - Hero Home Doble`
+3. `LP Revista - Bloque Lo Más Reciente`
+4. `LP Revista - Card Artículo Vertical / Horizontal`
+5. `LP Revista - Entrevistas`
+6. `LP Revista - Especiales`
+7. `LP Revista - Banner Publicitario`
+8. `LP Revista - Portafolio`
+9. `LP Revista - Aliados`
+10. `LP Revista - Footer Editorial`
 
 Flujo recomendado:
 
