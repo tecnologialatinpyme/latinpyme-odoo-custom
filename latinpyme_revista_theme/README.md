@@ -19,7 +19,7 @@ El módulo trabaja únicamente dentro de `latinpyme_revista_theme` y no depende 
 - `__init__.py`: carga los controladores del módulo.
 - `__manifest__.py`: declara dependencias `website` y `website_blog`, assets y vistas QWeb.
 - `controllers/main.py`: crea rutas públicas para la Home y las secciones editoriales.
-- `views/assets.xml`: carga `static/src/scss/revista.scss` en `website.assets_frontend`.
+- `views/assets.xml`: placeholder documental; en Odoo 19 los assets se cargan desde `__manifest__.py`.
 - `views/snippet_templates.xml`: contiene masthead, cards, sidebar, banners, portafolio, aliados y footer editorial.
 - `views/snippets.xml`: registra snippets reutilizables en el editor de Website.
 - `views/home_templates.xml`: template visual dinámico para `/revista`.
@@ -55,6 +55,11 @@ Las publicaciones individuales siguen usando las URLs nativas de Odoo Blog. Esto
 8. Instalar.
 9. Verificar `/revista`.
 10. Actualizar los menús existentes para que apunten a las rutas de sección.
+
+Nota Odoo 19:
+
+- El SCSS se declara en `__manifest__.py` dentro de `web.assets_frontend`.
+- No se hereda `website.assets_frontend` desde XML porque ese XML ID no existe en Odoo 19.
 
 ## Uso editorial
 

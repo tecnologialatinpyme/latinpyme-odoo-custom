@@ -20,13 +20,19 @@ de publicaciones de Blog.
         "website_blog",
     ],
     "data": [
-        "views/assets.xml",
+        # Odoo 19 loads frontend assets from the manifest, not by inheriting
+        # the removed website.assets_frontend QWeb template.
         "views/snippet_templates.xml",
         "views/snippets.xml",
         "views/home_templates.xml",
         "views/section_templates.xml",
         "views/blog_post_templates.xml",
     ],
+    "assets": {
+        "web.assets_frontend": [
+            "latinpyme_revista_theme/static/src/scss/revista.scss",
+        ],
+    },
     "installable": True,
     "application": False,
 }

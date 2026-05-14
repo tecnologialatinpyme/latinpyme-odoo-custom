@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <template id="lp_revista_assets_frontend" inherit_id="website.assets_frontend" name="Revista LatinPyme Assets">
-    <xpath expr="." position="inside">
-      <link rel="stylesheet" type="text/scss" href="/latinpyme_revista_theme/static/src/scss/revista.scss"/>
-    </xpath>
-  </template>
+  <!--
+    Odoo 19 no expone el XML ID website.assets_frontend.
+    El SCSS de la revista se declara en __manifest__.py bajo web.assets_frontend.
+    Este archivo queda como referencia estructural del módulo.
+  -->
 </odoo>
