@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
+  <rect width="360" height="200" rx="12" fill="#ffffff"/>
+  <rect x="24" y="28" width="42" height="42" rx="5" fill="#b90012"/>
+  <text x="45" y="55" text-anchor="middle" font-family="Georgia,serif" font-size="23" font-weight="700" fill="#fff">LP</text>
+  <text x="82" y="44" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="#111318">REVISTA</text>
+  <text x="82" y="64" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#111318">LatinPyme</text>
+  <rect x="214" y="34" width="116" height="24" rx="4" fill="#f2f3f5" stroke="#dfe2e7"/>
+  <circle cx="320" cy="46" r="7" fill="#b90012"/>
+  <line x1="24" y1="94" x2="336" y2="94" stroke="#e7e9ee"/>
+  <rect x="24" y="116" width="44" height="8" rx="4" fill="#b90012"/>
+  <rect x="82" y="116" width="44" height="8" rx="4" fill="#111318"/>
+  <rect x="140" y="116" width="28" height="8" rx="4" fill="#111318"/>
+  <rect x="184" y="116" width="48" height="8" rx="4" fill="#111318"/>
+  <rect x="250" y="108" width="70" height="24" rx="5" fill="#b90012"/>
+  <text x="180" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#69707d">Header Editorial</text>
+</svg>

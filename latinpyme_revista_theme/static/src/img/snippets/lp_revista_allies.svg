@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
+  <rect width="360" height="200" rx="12" fill="#ffffff"/>
+  <text x="24" y="34" font-family="Arial,sans-serif" font-size="14" font-weight="800" fill="#111318">ALIADOS</text>
+  <line x1="94" y1="29" x2="136" y2="29" stroke="#b90012" stroke-width="3"/>
+  <line x1="24" y1="64" x2="336" y2="64" stroke="#e7e9ee"/>
+  <line x1="24" y1="128" x2="336" y2="128" stroke="#e7e9ee"/>
+  <rect x="34" y="86" width="54" height="16" rx="8" fill="#111318" opacity=".82"/>
+  <rect x="102" y="86" width="54" height="16" rx="8" fill="#111318" opacity=".82"/>
+  <rect x="170" y="86" width="54" height="16" rx="8" fill="#111318" opacity=".82"/>
+  <rect x="238" y="86" width="54" height="16" rx="8" fill="#111318" opacity=".82"/>
+  <text x="180" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#69707d">Aliados</text>
+</svg>

@@ -22,6 +22,7 @@ El módulo trabaja únicamente dentro de `latinpyme_revista_theme` y no depende 
 - `views/assets.xml`: placeholder documental; en Odoo 19 los assets se cargan desde `__manifest__.py`.
 - `views/snippet_templates.xml`: contiene masthead, cards, sidebar, banners, portafolio, aliados y footer editorial.
 - `views/snippets.xml`: registra los 10 snippets reutilizables del grupo `LP Revista`.
+- `static/src/img/snippets/*.svg`: miniaturas propias para el selector visual de bloques de Odoo Website.
 - `views/home_templates.xml`: template visual dinámico para `/revista`.
 - `views/section_templates.xml`: template visual dinámico para `/revista/seccion/<seccion>`.
 - `views/blog_post_templates.xml`: capa visual segura sobre templates nativos de `website_blog`.

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
+  <rect width="360" height="200" rx="12" fill="#fff7f7"/>
+  <rect x="24" y="36" width="312" height="104" rx="18" fill="#ffffff"/>
+  <rect x="44" y="58" width="34" height="34" rx="5" fill="#b90012"/>
+  <text x="61" y="81" text-anchor="middle" font-family="Georgia,serif" font-size="18" font-weight="700" fill="#fff">LP</text>
+  <rect x="44" y="106" width="18" height="18" rx="9" fill="#b90012"/>
+  <rect x="70" y="106" width="18" height="18" rx="9" fill="#b90012"/>
+  <rect x="96" y="106" width="18" height="18" rx="9" fill="#b90012"/>
+  <rect x="146" y="60" width="46" height="7" rx="4" fill="#111318"/>
+  <rect x="146" y="80" width="34" height="6" rx="3" fill="#69707d"/>
+  <rect x="146" y="96" width="34" height="6" rx="3" fill="#69707d"/>
+  <rect x="220" y="60" width="44" height="7" rx="4" fill="#111318"/>
+  <rect x="220" y="80" width="36" height="6" rx="3" fill="#69707d"/>
+  <rect x="220" y="96" width="36" height="6" rx="3" fill="#69707d"/>
+  <rect x="286" y="60" width="28" height="7" rx="4" fill="#111318"/>
+  <rect x="286" y="80" width="32" height="6" rx="3" fill="#69707d"/>
+  <text x="180" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#69707d">Footer Editorial</text>
+</svg>

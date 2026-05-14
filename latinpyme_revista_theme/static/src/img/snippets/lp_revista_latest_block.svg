@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
+  <rect width="360" height="200" rx="12" fill="#ffffff"/>
+  <text x="24" y="34" font-family="Arial,sans-serif" font-size="14" font-weight="800" fill="#111318">LO MAS RECIENTE</text>
+  <line x1="150" y1="29" x2="192" y2="29" stroke="#b90012" stroke-width="3"/>
+  <g transform="translate(24 54)">
+    <rect width="92" height="86" rx="7" fill="#fff" stroke="#e7e9ee"/>
+    <rect width="92" height="42" rx="7" fill="#dfe3e8"/>
+    <rect x="10" y="52" width="34" height="8" rx="4" fill="#b90012"/>
+    <rect x="10" y="68" width="68" height="6" rx="3" fill="#111318"/>
+  </g>
+  <g transform="translate(134 54)">
+    <rect width="92" height="86" rx="7" fill="#fff" stroke="#e7e9ee"/>
+    <rect width="92" height="42" rx="7" fill="#dfe3e8"/>
+    <rect x="10" y="52" width="24" height="8" rx="4" fill="#b90012"/>
+    <rect x="10" y="68" width="70" height="6" rx="3" fill="#111318"/>
+  </g>
+  <g transform="translate(244 54)">
+    <rect width="92" height="86" rx="7" fill="#fff" stroke="#e7e9ee"/>
+    <rect width="92" height="42" rx="7" fill="#dfe3e8"/>
+    <rect x="10" y="52" width="46" height="8" rx="4" fill="#b90012"/>
+    <rect x="10" y="68" width="64" height="6" rx="3" fill="#111318"/>
+  </g>
+  <text x="180" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#69707d">Bloque Lo Mas Reciente</text>
+</svg>

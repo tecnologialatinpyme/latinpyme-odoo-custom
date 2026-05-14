@@ -2,19 +2,19 @@
 <odoo>
   <template id="lp_revista_snippets" inherit_id="website.snippets" name="Revista LatinPyme Snippets">
     <xpath expr="//snippets[@id='snippet_groups']/t[@id='installed_snippets_hook']" position="before">
-      <t snippet-group="lp_revista" t-snippet="website.s_snippet_group" string="LP Revista" t-thumbnail="/website/static/src/img/snippets_thumbs/s_blog_posts.svg"/>
+      <t snippet-group="lp_revista" t-snippet="website.s_snippet_group" string="LP Revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_header.svg"/>
     </xpath>
     <xpath expr="//snippets[@id='snippet_structure']" position="inside">
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_header" string="LP Revista - Header Editorial" group="lp_revista"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_hero_home_double" string="LP Revista - Hero Home Doble" group="lp_revista"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_latest_block" string="LP Revista - Bloque Lo Más Reciente" group="lp_revista"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_article_cards" string="LP Revista - Card Artículo Vertical / Horizontal" group="lp_revista"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_interviews" string="LP Revista - Entrevistas" group="lp_revista"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_specials" string="LP Revista - Especiales" group="lp_revista"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_promo_banner" string="LP Revista - Banner Publicitario" group="lp_revista"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_portfolio" string="LP Revista - Portafolio" group="lp_revista"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_allies" string="LP Revista - Aliados" group="lp_revista"/>
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_footer" string="LP Revista - Footer Editorial" group="lp_revista"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_header" string="LP Revista - Header Editorial" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_header.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_hero_home_double" string="LP Revista - Hero Home Doble" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_hero_home_double.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_latest_block" string="LP Revista - Bloque Lo Más Reciente" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_article_cards" string="LP Revista - Card Artículo Vertical / Horizontal" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_interviews" string="LP Revista - Entrevistas" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_specials" string="LP Revista - Especiales" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_specials.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_promo_banner" string="LP Revista - Banner Publicitario" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_banner_ad.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_portfolio" string="LP Revista - Portafolio" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_portfolio.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_allies" string="LP Revista - Aliados" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_allies.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_footer" string="LP Revista - Footer Editorial" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_footer.svg"/>
     </xpath>
   </template>
 </odoo>

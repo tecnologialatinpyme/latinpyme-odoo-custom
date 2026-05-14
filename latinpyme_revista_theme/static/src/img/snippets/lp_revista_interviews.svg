@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
+  <rect width="360" height="200" rx="12" fill="#ffffff"/>
+  <text x="24" y="34" font-family="Arial,sans-serif" font-size="14" font-weight="800" fill="#111318">ENTREVISTAS</text>
+  <line x1="122" y1="29" x2="164" y2="29" stroke="#b90012" stroke-width="3"/>
+  <rect x="24" y="56" width="92" height="78" rx="8" fill="#fff4f4"/>
+  <circle cx="48" cy="80" r="14" fill="#fff" stroke="#b90012"/>
+  <rect x="72" y="74" width="28" height="7" rx="4" fill="#111318"/>
+  <rect x="72" y="90" width="34" height="6" rx="3" fill="#69707d"/>
+  <g transform="translate(136 56)">
+    <rect width="86" height="78" rx="8" fill="#111318"/>
+    <circle cx="43" cy="34" r="16" fill="none" stroke="#fff" stroke-width="3"/>
+    <polygon points="39,25 39,43 54,34" fill="#fff"/>
+  </g>
+  <g transform="translate(242 56)">
+    <rect width="86" height="78" rx="8" fill="#111318"/>
+    <circle cx="43" cy="34" r="16" fill="none" stroke="#fff" stroke-width="3"/>
+    <polygon points="39,25 39,43 54,34" fill="#fff"/>
+  </g>
+  <text x="180" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#69707d">Entrevistas</text>
+</svg>

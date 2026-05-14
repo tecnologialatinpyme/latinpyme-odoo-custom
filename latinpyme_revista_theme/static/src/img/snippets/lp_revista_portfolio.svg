@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
+  <rect width="360" height="200" rx="12" fill="#fff7f7"/>
+  <text x="24" y="34" font-family="Arial,sans-serif" font-size="14" font-weight="800" fill="#111318">PORTAFOLIO</text>
+  <line x1="124" y1="29" x2="166" y2="29" stroke="#b90012" stroke-width="3"/>
+  <g transform="translate(24 56)">
+    <rect width="96" height="78" rx="7" fill="#fff" stroke="#f1c8cc"/>
+    <rect width="96" height="18" rx="7" fill="#b90012"/>
+    <rect x="18" y="36" width="26" height="26" rx="4" fill="none" stroke="#b90012" stroke-width="4"/>
+    <rect x="58" y="44" width="24" height="6" rx="3" fill="#111318"/>
+  </g>
+  <g transform="translate(132 56)">
+    <rect width="96" height="78" rx="7" fill="#fff" stroke="#f1c8cc"/>
+    <rect width="96" height="18" rx="7" fill="#b90012"/>
+    <rect x="18" y="36" width="26" height="26" rx="4" fill="none" stroke="#b90012" stroke-width="4"/>
+    <rect x="58" y="44" width="24" height="6" rx="3" fill="#111318"/>
+  </g>
+  <g transform="translate(240 56)">
+    <rect width="96" height="78" rx="7" fill="#fff" stroke="#f1c8cc"/>
+    <rect width="96" height="18" rx="7" fill="#b90012"/>
+    <rect x="18" y="36" width="26" height="26" rx="4" fill="none" stroke="#b90012" stroke-width="4"/>
+    <rect x="58" y="44" width="24" height="6" rx="3" fill="#111318"/>
+  </g>
+  <text x="180" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#69707d">Portafolio</text>
+</svg>

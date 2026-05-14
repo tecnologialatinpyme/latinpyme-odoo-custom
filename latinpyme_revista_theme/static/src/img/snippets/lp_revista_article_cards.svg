@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
+  <rect width="360" height="200" rx="12" fill="#f7f8fa"/>
+  <rect x="30" y="34" width="110" height="108" rx="8" fill="#fff" stroke="#e7e9ee"/>
+  <rect x="30" y="34" width="110" height="54" rx="8" fill="#dfe3e8"/>
+  <rect x="44" y="100" width="42" height="8" rx="4" fill="#b90012"/>
+  <rect x="44" y="118" width="76" height="7" rx="4" fill="#111318"/>
+  <rect x="174" y="52" width="150" height="72" rx="8" fill="#fff" stroke="#e7e9ee"/>
+  <rect x="174" y="52" width="62" height="72" rx="8" fill="#dfe3e8"/>
+  <rect x="250" y="68" width="42" height="8" rx="4" fill="#b90012"/>
+  <rect x="250" y="88" width="56" height="7" rx="4" fill="#111318"/>
+  <rect x="250" y="104" width="44" height="6" rx="3" fill="#69707d"/>
+  <text x="180" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#69707d">Card Vertical / Horizontal</text>
+</svg>
