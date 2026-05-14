@@ -1098,6 +1098,9 @@
   border-radius: var(--lp-radius);
   padding: 38px 46px;
   color: #fff;
+  background:
+    linear-gradient(90deg, rgba(5, 7, 12, .88), rgba(5, 7, 12, .38)),
+    url("/latinpyme_revista_theme/static/src/img/editorial/section-placeholder.svg");
   background-position: center;
   background-size: cover;
   box-shadow: var(--lp-shadow);

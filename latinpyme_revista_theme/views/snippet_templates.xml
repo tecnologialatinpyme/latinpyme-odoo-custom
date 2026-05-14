@@ -117,7 +117,7 @@
         </t>
         <div class="lp-revista-card-grid lp-revista-card-grid--three">
           <article class="lp-revista-post-card lp-revista-post-card--default">
-            <div class="lp-revista-post-card__media"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Especial"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">Negocios</span>
               <h3 class="lp-revista-post-card__title">Cómo escalar tu negocio en mercados competitivos</h3>
@@ -126,7 +126,7 @@
             </div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--default">
-            <div class="lp-revista-post-card__media"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Especial"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">IA</span>
               <h3 class="lp-revista-post-card__title">Herramientas que transforman empresas</h3>
@@ -183,7 +183,7 @@
         </article>
         <div class="lp-revista-featured-editorial__rail">
           <article class="lp-revista-post-card lp-revista-post-card--horizontal">
-            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Artículo destacado"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo destacado"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">Liderazgo</span>
               <h3 class="lp-revista-post-card__title">Liderazgo efectivo en tiempos de transformación</h3>
@@ -191,7 +191,7 @@
             </div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--horizontal">
-            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Artículo destacado"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo destacado"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">Gestión</span>
               <h3 class="lp-revista-post-card__title">Claves para una gestión empresarial ágil</h3>
@@ -214,7 +214,7 @@
         </t>
         <div class="lp-revista-card-grid lp-revista-card-grid--three">
           <article class="lp-revista-post-card lp-revista-post-card--default">
-            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">Negocios</span>
               <h3 class="lp-revista-post-card__title">Cómo escalar tu negocio en mercados competitivos</h3>
@@ -223,7 +223,7 @@
             </div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--default">
-            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">IA</span>
               <h3 class="lp-revista-post-card__title">Herramientas que transforman empresas</h3>
@@ -232,7 +232,7 @@
             </div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--default">
-            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">Finanzas</span>
               <h3 class="lp-revista-post-card__title">Tendencias económicas para pymes</h3>
@@ -277,7 +277,7 @@
         </t>
         <div class="lp-revista-list">
           <article class="lp-revista-post-card lp-revista-post-card--horizontal">
-            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Novedad"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Novedad"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">Mercadeo</span>
               <h3 class="lp-revista-post-card__title">Estrategias de marketing digital que impulsan tu marca</h3>
@@ -285,7 +285,7 @@
             </div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--horizontal">
-            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Novedad"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Novedad"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">Legal</span>
               <h3 class="lp-revista-post-card__title">Cambios normativos que impactan a las empresas</h3>
@@ -338,7 +338,7 @@
 
   <template id="s_lp_revista_horizontal_article_card" name="LP Revista - Card Artículo Horizontal">
     <section class="lp-revista s_lp_revista_horizontal_article_card lp-revista-post-card lp-revista-post-card--horizontal" data-snippet="s_lp_revista_horizontal_article_card" data-name="LP Revista - Card Artículo Horizontal">
-      <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Artículo"/>
+      <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo"/>
       <div class="lp-revista-post-card__body">
         <span class="lp-revista-kicker">Gestión</span>
         <h3 class="lp-revista-post-card__title">Claves para una gestión empresarial ágil y eficiente</h3>
@@ -511,7 +511,7 @@
           </div>
           <article class="lp-revista-interview-card">
             <a href="/blog">
-              <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="María Claudia Lacouture"/>
+              <img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="María Claudia Lacouture"/>
               <span class="lp-revista-play"><i class="fa fa-play"/></span>
             </a>
             <div>
@@ -522,7 +522,7 @@
           </article>
           <article class="lp-revista-interview-card">
             <a href="/blog">
-              <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="Ricardo Leyva"/>
+              <img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="Ricardo Leyva"/>
               <span class="lp-revista-play"><i class="fa fa-play"/></span>
             </a>
             <div>
@@ -533,7 +533,7 @@
           </article>
           <article class="lp-revista-interview-card">
             <a href="/blog">
-              <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="Juan Carlos Mora"/>
+              <img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="Juan Carlos Mora"/>
               <span class="lp-revista-play"><i class="fa fa-play"/></span>
             </a>
             <div>
@@ -559,15 +559,15 @@
         <p class="lp-revista-block-intro">Historias y criterios de líderes empresariales para ampliar la conversación.</p>
         <div class="lp-revista-interviews-grid lp-revista-interviews-grid--compact">
           <article class="lp-revista-interview-card">
-            <a href="/blog"><img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="Entrevistado"/><span class="lp-revista-play"><i class="fa fa-play"/></span></a>
+            <a href="/blog"><img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="Entrevistado"/><span class="lp-revista-play"><i class="fa fa-play"/></span></a>
             <div><h3>María Claudia Lacouture</h3><p>Presidenta Ejecutiva</p><span>AmCham Colombia</span></div>
           </article>
           <article class="lp-revista-interview-card">
-            <a href="/blog"><img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="Entrevistado"/><span class="lp-revista-play"><i class="fa fa-play"/></span></a>
+            <a href="/blog"><img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="Entrevistado"/><span class="lp-revista-play"><i class="fa fa-play"/></span></a>
             <div><h3>Ricardo Leyva</h3><p>CEO</p><span>Grupo Nutresa</span></div>
           </article>
           <article class="lp-revista-interview-card">
-            <a href="/blog"><img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg" alt="Entrevistado"/><span class="lp-revista-play"><i class="fa fa-play"/></span></a>
+            <a href="/blog"><img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="Entrevistado"/><span class="lp-revista-play"><i class="fa fa-play"/></span></a>
             <div><h3>Juan Carlos Mora</h3><p>Presidente</p><span>Bancolombia</span></div>
           </article>
         </div>
@@ -619,7 +619,7 @@
           <span><i class="fa fa-calendar"/>12 de junio de 2024</span>
           <span><i class="fa fa-clock-o"/>8 min de lectura</span>
         </div>
-        <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Imagen principal de la nota"/>
+        <img src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Imagen principal de la nota"/>
       </div>
     </section>
   </template>
@@ -628,7 +628,7 @@
     <section class="lp-revista s_lp_revista_note_author" data-snippet="s_lp_revista_note_author" data-name="LP Revista - Autor de Nota">
       <div class="lp-revista-container">
         <div class="lp-revista-author-box">
-          <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Autor"/>
+          <img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="Autor"/>
           <div>
             <strong>Por Alejandro Muñoz</strong>
             <p>Especialista en Finanzas Corporativas</p>
@@ -679,7 +679,7 @@
     <section class="lp-revista s_lp_revista_article_image" data-snippet="s_lp_revista_article_image" data-name="LP Revista - Imagen dentro del Artículo">
       <div class="lp-revista-container">
         <figure class="lp-revista-article-figure">
-          <img src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg" alt="Imagen editorial"/>
+          <img src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Imagen editorial"/>
           <figcaption>Imagen de apoyo editorial para contextualizar la nota.</figcaption>
         </figure>
       </div>
@@ -709,15 +709,15 @@
         </t>
         <div class="lp-revista-card-grid lp-revista-card-grid--three">
           <article class="lp-revista-post-card lp-revista-post-card--default">
-            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo relacionado"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo relacionado"/>
             <div class="lp-revista-post-card__body"><span class="lp-revista-kicker">Gestión</span><h3 class="lp-revista-post-card__title">Indicadores clave para medir la eficiencia empresarial</h3></div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--default">
-            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo relacionado"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo relacionado"/>
             <div class="lp-revista-post-card__body"><span class="lp-revista-kicker">Estrategia</span><h3 class="lp-revista-post-card__title">Planeación estratégica: guía para pymes</h3></div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--default">
-            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg" alt="Artículo relacionado"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo relacionado"/>
             <div class="lp-revista-post-card__body"><span class="lp-revista-kicker">Innovación</span><h3 class="lp-revista-post-card__title">Innovación en la gestión: adaptarse para crecer</h3></div>
           </article>
         </div>

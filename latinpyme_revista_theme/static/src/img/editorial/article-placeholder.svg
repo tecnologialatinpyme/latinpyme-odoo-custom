@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#151922"/>
+      <stop offset="0.55" stop-color="#2f3946"/>
+      <stop offset="1" stop-color="#b90012"/>
+    </linearGradient>
+    <linearGradient id="soft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="url(#bg)"/>
+  <circle cx="770" cy="90" r="120" fill="#ffffff" opacity=".08"/>
+  <circle cx="145" cy="445" r="180" fill="#ffffff" opacity=".08"/>
+  <rect x="98" y="102" width="764" height="336" rx="26" fill="url(#soft)" stroke="#ffffff" stroke-opacity=".18"/>
+  <rect x="150" y="156" width="270" height="42" rx="21" fill="#b90012"/>
+  <rect x="150" y="226" width="520" height="34" rx="17" fill="#ffffff" opacity=".88"/>
+  <rect x="150" y="286" width="420" height="28" rx="14" fill="#ffffff" opacity=".62"/>
+  <rect x="150" y="342" width="240" height="28" rx="14" fill="#ffffff" opacity=".34"/>
+  <rect x="704" y="326" width="94" height="94" rx="10" fill="#b90012"/>
+  <text x="751" y="390" text-anchor="middle" font-family="Georgia,serif" font-size="52" font-weight="700" fill="#fff">LP</text>
+</svg>
