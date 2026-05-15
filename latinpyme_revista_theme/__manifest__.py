@@ -21,6 +21,9 @@ de publicaciones de Blog.
     ],
     "data": [
         # Odoo 19 loads frontend assets from the manifest.
+        "security/ir.model.access.csv",
+        "data/revista_defaults.xml",
+        "views/backend_views.xml",
         "views/snippet_templates.xml",
         "views/snippets.xml",
         "views/home_templates.xml",

@@ -7,8 +7,8 @@
   </template>
 
   <template id="lp_revista_blog_sections_context" name="Revista LatinPyme Blog Sections Context">
-    <t t-set="lp_enabled_section_slugs" t-value="[section.strip().lower() for section in request.env['ir.config_parameter'].sudo().get_param('latinpyme_revista_theme.enabled_sections', '').split(',') if section.strip()]"/>
-    <t t-set="sections" t-value="[section for section in [{'slug': 'gerencia', 'name': 'Gerencia', 'url': '/revista/seccion/gerencia'}, {'slug': 'negocios', 'name': 'Negocios', 'url': '/revista/seccion/negocios'}, {'slug': 'ia', 'name': 'IA', 'url': '/revista/seccion/ia'}, {'slug': 'laboral', 'name': 'Laboral', 'url': '/revista/seccion/laboral'}, {'slug': 'finanzas', 'name': 'Finanzas', 'url': '/revista/seccion/finanzas'}, {'slug': 'entrevistas', 'name': 'Entrevistas', 'url': '/revista/seccion/entrevistas'}, {'slug': 'especiales', 'name': 'Especiales', 'url': '/revista/seccion/especiales'}, {'slug': 'mujeres', 'name': 'Mujeres', 'url': '/revista/seccion/mujeres'}, {'slug': 'portafolio', 'name': 'Portafolio', 'url': '/revista/seccion/portafolio'}] if not lp_enabled_section_slugs or section['slug'] in lp_enabled_section_slugs]"/>
+    <t t-set="lp_section_records" t-value="request.env['latinpyme.revista.section'].sudo().get_active_sections(request.website)"/>
+    <t t-set="sections" t-value="[{'slug': section.slug, 'name': section.name, 'url': '/revista/seccion/%s' % section.slug} for section in lp_section_records] or [{'slug': 'gerencia', 'name': 'Gerencia', 'url': '/revista/seccion/gerencia'}, {'slug': 'negocios', 'name': 'Negocios', 'url': '/revista/seccion/negocios'}, {'slug': 'ia', 'name': 'IA', 'url': '/revista/seccion/ia'}, {'slug': 'laboral', 'name': 'Laboral', 'url': '/revista/seccion/laboral'}, {'slug': 'finanzas', 'name': 'Finanzas', 'url': '/revista/seccion/finanzas'}, {'slug': 'entrevistas', 'name': 'Entrevistas', 'url': '/revista/seccion/entrevistas'}, {'slug': 'especiales', 'name': 'Especiales', 'url': '/revista/seccion/especiales'}, {'slug': 'mujeres', 'name': 'Mujeres', 'url': '/revista/seccion/mujeres'}, {'slug': 'portafolio', 'name': 'Portafolio', 'url': '/revista/seccion/portafolio'}]"/>
     <t t-set="section_slug" t-value="False"/>
   </template>
 
@@ -21,13 +21,15 @@
 
   <template id="lp_revista_blog_post_seo" inherit_id="website_blog.blog_post_complete" name="Revista LatinPyme Blog Post SEO">
     <xpath expr="//t[@t-call='website_blog.index']/t[1]" position="before">
+      <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
       <t t-set="lp_host" t-value="request.httprequest.host.split(':', 1)[0].lower()"/>
       <t t-set="lp_current_url" t-value="'%s%s' % (request.httprequest.url_root.rstrip('/'), blog_post.website_url)"/>
-      <t t-set="lp_final_url" t-value="'https://latinpyme.com%s' % blog_post.website_url"/>
-      <t t-set="lp_og_url" t-value="lp_final_url if lp_host == 'latinpyme.com' else lp_current_url"/>
-      <t t-set="lp_media_base_url" t-value="'https://latinpyme.com' if lp_host == 'latinpyme.com' else request.httprequest.url_root.rstrip('/')"/>
+      <t t-set="lp_final_host" t-value="lp_config.domain_to_host(lp_config.production_domain) if lp_config else 'latinpyme.com'"/>
+      <t t-set="lp_final_url" t-value="'%s%s' % ((lp_config.production_base_url() if lp_config else 'https://latinpyme.com'), blog_post.website_url)"/>
+      <t t-set="lp_og_url" t-value="lp_final_url if lp_host == lp_final_host else lp_current_url"/>
+      <t t-set="lp_media_base_url" t-value="(lp_config.production_base_url() if lp_config else 'https://latinpyme.com') if lp_host == lp_final_host else request.httprequest.url_root.rstrip('/')"/>
       <t t-set="head">
-        <meta t-if="lp_host == 'revista.latinpyme.com' or lp_host.endswith('.odoo.com') or lp_host.endswith('.odoo.sh')" name="robots" content="noindex,nofollow"/>
+        <meta t-if="lp_config and lp_config.is_preproduction_host(lp_host)" name="robots" content="noindex,nofollow"/>
         <meta property="og:type" content="article"/>
         <meta property="og:title" t-att-content="blog_post.name"/>
         <meta property="og:description" t-att-content="blog_post.subtitle or blog_post.teaser or ''"/>
@@ -40,6 +42,7 @@
 
   <template id="lp_revista_blog_post_visual" inherit_id="website_blog.blog_post_complete" name="Revista LatinPyme Blog Post Editorial Layout">
     <xpath expr="//section[@id='o_wblog_post_top']" position="before">
+      <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
       <t t-call="latinpyme_revista_theme.lp_revista_blog_sections_context"/>
       <div class="lp-revista-blog-masthead">
         <t t-call="latinpyme_revista_theme.lp_masthead"/>
@@ -49,19 +52,20 @@
     <xpath expr="//section[@id='o_wblog_post_top']" position="replace">
       <section id="o_wblog_post_top" class="lp-revista-blog-hero">
         <t t-set="lp_primary_tag" t-value="blog_post.tag_ids[:1]"/>
-        <t t-set="lp_section_slug_map" t-value="{'Gerencia': 'gerencia', 'Negocios': 'negocios', 'IA': 'ia', 'Laboral': 'laboral', 'Finanzas': 'finanzas', 'Entrevistas': 'entrevistas', 'Especiales': 'especiales', 'Mujeres': 'mujeres', 'Portafolio': 'portafolio'}"/>
+        <t t-set="lp_section_model" t-value="request.env['latinpyme.revista.section'].sudo()"/>
+        <t t-set="lp_primary_section" t-value="lp_section_model.get_by_tag(lp_primary_tag, request.website) if lp_primary_tag else False"/>
         <t t-set="lp_primary_tag_name" t-value="lp_primary_tag.name if lp_primary_tag else 'Revista'"/>
-        <t t-set="lp_primary_section_url" t-value="'/revista/seccion/%s' % lp_section_slug_map.get(lp_primary_tag_name, 'gerencia')"/>
+        <t t-set="lp_primary_section_url" t-value="'/revista/seccion/%s' % lp_primary_section.slug if lp_primary_section else '/revista'"/>
         <t t-set="lp_read_minutes" t-value="((blog_post.content and len(blog_post.content) or 0) // 1200) + 1"/>
         <t t-set="lp_share_host" t-value="request.httprequest.host.split(':', 1)[0].lower()"/>
-        <t t-set="lp_share_url" t-value="'https://latinpyme.com%s' % blog_post.website_url if lp_share_host == 'latinpyme.com' else '%s%s' % (request.httprequest.url_root.rstrip('/'), blog_post.website_url)"/>
+        <t t-set="lp_share_url" t-value="'%s%s' % ((lp_config.production_base_url() if lp_config else 'https://latinpyme.com'), blog_post.website_url) if lp_config and lp_share_host == lp_config.domain_to_host(lp_config.production_domain) else '%s%s' % (request.httprequest.url_root.rstrip('/'), blog_post.website_url)"/>
 
         <div class="lp-revista-container lp-revista-note-head lp-revista-blog-hero__inner">
           <nav class="lp-revista-breadcrumb lp-revista-breadcrumb--dark" aria-label="Miga de pan">
             <a href="/revista">Inicio</a>
             <span>/</span>
-            <a t-if="lp_primary_tag and lp_primary_tag_name in lp_section_slug_map" t-att-href="lp_primary_section_url" t-out="lp_primary_tag_name"/>
-            <span t-if="not lp_primary_tag or lp_primary_tag_name not in lp_section_slug_map" t-out="lp_primary_tag_name"/>
+            <a t-if="lp_primary_section" t-att-href="lp_primary_section_url" t-out="lp_primary_section.name"/>
+            <span t-if="not lp_primary_section" t-out="lp_primary_tag_name"/>
           </nav>
 
           <div class="lp-revista-blog-hero__grid">
@@ -118,23 +122,29 @@
       <attribute name="t-attf-class" add="lp-revista-post-content" separator=" "/>
     </xpath>
     <xpath expr="//div[@id='o_wblog_post_content']" position="after">
-      <aside t-if="not opt_blog_post_sidebar" class="lp-revista-sidebar lp-revista-blog-post-sidebar" aria-label="Sidebar editorial">
-        <t t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
-        <t t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
-        <t t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
-      </aside>
+      <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
+      <div t-if="not opt_blog_post_sidebar and (not lp_config or lp_config.show_note_sidebar)" class="lp-revista-blog-post-sidebar">
+        <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
+      </div>
     </xpath>
     <xpath expr="//section[@id='o_wblog_post_footer']" position="attributes">
       <attribute name="class" add="lp-revista-post-footer" separator=" "/>
     </xpath>
     <xpath expr="//section[@id='o_wblog_post_footer']" position="inside">
+      <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
       <div class="lp-revista-container lp-revista-blog-post-addons">
         <t t-call="latinpyme_revista_theme.lp_blog_related_posts"/>
-        <t t-call="latinpyme_revista_theme.lp_blog_related_interviews"/>
-        <section class="lp-revista-block">
+        <t t-if="not lp_config or lp_config.show_note_interviews" t-call="latinpyme_revista_theme.lp_blog_related_interviews"/>
+        <t t-set="lp_note_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('note', request.website)"/>
+        <section t-if="lp_note_banner" class="lp-revista-block lp-revista-ad-row">
+          <t t-call="latinpyme_revista_theme.lp_dynamic_banner">
+            <t t-set="banner" t-value="lp_note_banner"/>
+          </t>
+        </section>
+        <section t-if="not lp_config or lp_config.show_note_portfolio" class="lp-revista-block">
           <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
         </section>
-        <section class="lp-revista-block">
+        <section t-if="not lp_config or lp_config.show_note_allies" class="lp-revista-block">
           <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
         </section>
         <section class="lp-revista-block">

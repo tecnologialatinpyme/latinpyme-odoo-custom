@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_latinpyme_revista_config_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.config.list</field>
+    <field name="model">latinpyme.revista.config</field>
+    <field name="arch" type="xml">
+      <list string="Configuracion Revista">
+        <field name="name"/>
+        <field name="website_id"/>
+        <field name="production_domain"/>
+        <field name="preproduction_domain"/>
+        <field name="preproduction_noindex"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_config_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.config.form</field>
+    <field name="model">latinpyme.revista.config</field>
+    <field name="arch" type="xml">
+      <form string="Configuracion Revista LatinPyme">
+        <sheet>
+          <group>
+            <group string="General">
+              <field name="name"/>
+              <field name="website_id"/>
+              <field name="footer_text"/>
+              <field name="phone"/>
+              <field name="city"/>
+              <field name="email"/>
+            </group>
+            <group string="SEO y preproduccion">
+              <field name="production_domain"/>
+              <field name="preproduction_domain"/>
+              <field name="preproduction_noindex"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Redes sociales">
+              <group>
+                <field name="facebook_url"/>
+                <field name="linkedin_url"/>
+                <field name="instagram_url"/>
+                <field name="youtube_url"/>
+                <field name="whatsapp_url"/>
+              </group>
+            </page>
+            <page string="Home">
+              <group>
+                <group string="Bloques visibles">
+                  <field name="show_home_banners"/>
+                  <field name="show_home_interviews"/>
+                  <field name="show_home_specials"/>
+                  <field name="show_home_portfolio"/>
+                  <field name="show_home_allies"/>
+                </group>
+                <group string="Cantidades">
+                  <field name="home_highlight_limit"/>
+                  <field name="home_latest_limit"/>
+                  <field name="home_new_limit"/>
+                </group>
+              </group>
+            </page>
+            <page string="Secciones">
+              <group>
+                <field name="section_posts_per_page"/>
+              </group>
+            </page>
+            <page string="Nota individual">
+              <group>
+                <field name="show_note_sidebar"/>
+                <field name="show_note_interviews"/>
+                <field name="show_note_portfolio"/>
+                <field name="show_note_allies"/>
+              </group>
+            </page>
+            <page string="Sidebar editorial">
+              <group>
+                <group string="Bloques visibles">
+                  <field name="show_sidebar_conference"/>
+                  <field name="show_sidebar_poll"/>
+                  <field name="show_sidebar_ad"/>
+                </group>
+                <group string="Conferencia">
+                  <field name="conference_label"/>
+                  <field name="conference_title"/>
+                  <field name="conference_date_text"/>
+                  <field name="conference_location"/>
+                  <field name="conference_time"/>
+                  <field name="conference_button_label"/>
+                  <field name="conference_url"/>
+                </group>
+              </group>
+              <group string="Encuesta">
+                <field name="poll_label"/>
+                <field name="poll_question"/>
+                <field name="poll_option_1"/>
+                <field name="poll_option_2"/>
+                <field name="poll_option_3"/>
+                <field name="poll_option_4"/>
+                <field name="poll_button_label"/>
+              </group>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_section_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.section.list</field>
+    <field name="model">latinpyme.revista.section</field>
+    <field name="arch" type="xml">
+      <list string="Secciones editoriales" default_order="sequence,name">
+        <field name="sequence" widget="handle"/>
+        <field name="name"/>
+        <field name="slug"/>
+        <field name="tag_id"/>
+        <field name="website_id"/>
+        <field name="active"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_section_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.section.form</field>
+    <field name="model">latinpyme.revista.section</field>
+    <field name="arch" type="xml">
+      <form string="Seccion editorial">
+        <sheet>
+          <group>
+            <group>
+              <field name="active"/>
+              <field name="sequence"/>
+              <field name="name"/>
+              <field name="slug"/>
+              <field name="tag_id"/>
+              <field name="website_id"/>
+            </group>
+            <group>
+              <field name="cover_image" widget="image"/>
+            </group>
+          </group>
+          <group string="Contenido">
+            <field name="description"/>
+          </group>
+          <group string="SEO">
+            <field name="seo_title"/>
+            <field name="seo_description"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_section_search" model="ir.ui.view">
+    <field name="name">latinpyme.revista.section.search</field>
+    <field name="model">latinpyme.revista.section</field>
+    <field name="arch" type="xml">
+      <search string="Buscar secciones">
+        <field name="name"/>
+        <field name="slug"/>
+        <field name="tag_id"/>
+        <filter name="active" string="Activas" domain="[('active', '=', True)]"/>
+        <filter name="inactive" string="Inactivas" domain="[('active', '=', False)]"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_ally_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.ally.list</field>
+    <field name="model">latinpyme.revista.ally</field>
+    <field name="arch" type="xml">
+      <list string="Aliados" default_order="sequence,name">
+        <field name="sequence" widget="handle"/>
+        <field name="name"/>
+        <field name="url"/>
+        <field name="website_id"/>
+        <field name="active"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_ally_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.ally.form</field>
+    <field name="model">latinpyme.revista.ally</field>
+    <field name="arch" type="xml">
+      <form string="Aliado">
+        <sheet>
+          <group>
+            <group>
+              <field name="active"/>
+              <field name="sequence"/>
+              <field name="name"/>
+              <field name="url"/>
+              <field name="website_id"/>
+            </group>
+            <group>
+              <field name="logo" widget="image"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_banner_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.banner.list</field>
+    <field name="model">latinpyme.revista.banner</field>
+    <field name="arch" type="xml">
+      <list string="Publicidad Revista" default_order="sequence,name">
+        <field name="sequence" widget="handle"/>
+        <field name="name"/>
+        <field name="placement"/>
+        <field name="date_start"/>
+        <field name="date_end"/>
+        <field name="website_id"/>
+        <field name="active"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_banner_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.banner.form</field>
+    <field name="model">latinpyme.revista.banner</field>
+    <field name="arch" type="xml">
+      <form string="Publicidad Revista">
+        <sheet>
+          <group>
+            <group>
+              <field name="active"/>
+              <field name="sequence"/>
+              <field name="name"/>
+              <field name="placement"/>
+              <field name="website_id"/>
+              <field name="date_start"/>
+              <field name="date_end"/>
+            </group>
+            <group>
+              <field name="image" widget="image"/>
+            </group>
+          </group>
+          <group string="Contenido">
+            <field name="title"/>
+            <field name="text"/>
+            <field name="button_label"/>
+            <field name="url"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_banner_search" model="ir.ui.view">
+    <field name="name">latinpyme.revista.banner.search</field>
+    <field name="model">latinpyme.revista.banner</field>
+    <field name="arch" type="xml">
+      <search string="Buscar publicidad">
+        <field name="name"/>
+        <field name="placement"/>
+        <filter name="active" string="Activa" domain="[('active', '=', True)]"/>
+        <group expand="0" string="Agrupar por">
+          <filter name="group_placement" string="Ubicacion" context="{'group_by': 'placement'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_latinpyme_revista_config" model="ir.actions.act_window">
+    <field name="name">Configuracion</field>
+    <field name="res_model">latinpyme.revista.config</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <record id="action_latinpyme_revista_section" model="ir.actions.act_window">
+    <field name="name">Secciones</field>
+    <field name="res_model">latinpyme.revista.section</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_section_search"/>
+  </record>
+
+  <record id="action_latinpyme_revista_ally" model="ir.actions.act_window">
+    <field name="name">Aliados</field>
+    <field name="res_model">latinpyme.revista.ally</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <record id="action_latinpyme_revista_banner" model="ir.actions.act_window">
+    <field name="name">Publicidad</field>
+    <field name="res_model">latinpyme.revista.banner</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_banner_search"/>
+  </record>
+
+  <menuitem id="menu_latinpyme_revista_root" name="Revista LatinPyme" sequence="80" groups="website.group_website_designer"/>
+  <menuitem id="menu_latinpyme_revista_config" name="Configuracion" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_config" sequence="10"/>
+  <menuitem id="menu_latinpyme_revista_sections" name="Secciones" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_section" sequence="20"/>
+  <menuitem id="menu_latinpyme_revista_allies" name="Aliados" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_ally" sequence="30"/>
+  <menuitem id="menu_latinpyme_revista_banners" name="Publicidad" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_banner" sequence="40"/>
+</odoo>

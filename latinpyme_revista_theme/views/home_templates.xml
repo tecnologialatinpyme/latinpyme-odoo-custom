@@ -2,7 +2,7 @@
 <odoo>
   <template id="revista_home_page" name="Revista LatinPyme Home">
     <t t-call="website.layout">
-      <t t-set="title">Revista LatinPyme | Gerencia, negocios e innovación para pymes</t>
+      <t t-set="title" t-value="'%s | Gerencia, negocios e innovación para pymes' % (lp_config.name if lp_config else 'Revista LatinPyme')"/>
       <t t-set="website_meta_description">Revista LatinPyme: contenidos de gerencia, negocios, inteligencia artificial, finanzas y actualidad para empresarios pyme.</t>
       <t t-set="seo_object" t-value="blog"/>
       <t t-set="section_slug" t-value="False"/>
@@ -16,18 +16,25 @@
       <div id="wrap" class="lp-revista lp-revista-home">
         <t t-call="latinpyme_revista_theme.lp_masthead"/>
         <main class="lp-revista-main" itemscope="itemscope" itemtype="https://schema.org/Periodical">
-          <meta itemprop="name" content="Revista LatinPyme"/>
+          <meta itemprop="name" t-att-content="lp_config.name if lp_config else 'Revista LatinPyme'"/>
 
-          <section class="lp-revista-container lp-revista-home-ads" aria-label="Destacados comerciales">
-            <div class="lp-revista-promo-banner lp-revista-promo-banner--green">
-              <h2>Lideramos conversaciones que impulsan un futuro sostenible y competitivo.</h2>
-              <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
-            </div>
-            <div class="lp-revista-promo-banner">
-              <h2>Automatiza procesos, optimiza recursos y crece sin límites.</h2>
-              <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
-              <span class="lp-revista-promo-banner__mark">LP</span>
-            </div>
+          <section t-if="not lp_config or lp_config.show_home_banners" class="lp-revista-container lp-revista-home-ads" aria-label="Destacados comerciales">
+            <t t-if="home_banners">
+              <t t-foreach="home_banners" t-as="banner">
+                <t t-call="latinpyme_revista_theme.lp_dynamic_banner"/>
+              </t>
+            </t>
+            <t t-else="">
+              <div class="lp-revista-promo-banner lp-revista-promo-banner--green">
+                <h2>Lideramos conversaciones que impulsan un futuro sostenible y competitivo.</h2>
+                <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
+              </div>
+              <div class="lp-revista-promo-banner">
+                <h2>Automatiza procesos, optimiza recursos y crece sin límites.</h2>
+                <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
+                <span class="lp-revista-promo-banner__mark">LP</span>
+              </div>
+            </t>
           </section>
 
           <section class="lp-revista-container lp-revista-hero-grid" aria-labelledby="lp-home-title">
@@ -110,7 +117,7 @@
             </div>
           </section>
 
-          <section class="lp-revista-container lp-revista-block" aria-labelledby="lp-interviews-title">
+          <section t-if="not lp_config or lp_config.show_home_interviews" class="lp-revista-container lp-revista-block" aria-labelledby="lp-interviews-title">
             <t t-call="latinpyme_revista_theme.lp_section_heading">
               <t t-set="title">Entrevistas</t>
               <t t-set="eyebrow" t-value="False"/>
@@ -134,7 +141,7 @@
             </div>
           </section>
 
-          <section class="lp-revista-container lp-revista-block" aria-labelledby="lp-specials-title">
+          <section t-if="not lp_config or lp_config.show_home_specials" class="lp-revista-container lp-revista-block" aria-labelledby="lp-specials-title">
             <t t-call="latinpyme_revista_theme.lp_section_heading">
               <t t-set="title">Especiales</t>
               <t t-set="eyebrow" t-value="False"/>
@@ -150,20 +157,22 @@
             </div>
           </section>
 
-          <section class="lp-revista-container lp-revista-block lp-revista-ad-row" aria-label="Publicidad">
+          <section t-if="not lp_config or lp_config.show_home_banners" class="lp-revista-container lp-revista-block lp-revista-ad-row" aria-label="Publicidad">
             <t t-call="latinpyme_revista_theme.s_lp_revista_promo_banner"/>
           </section>
 
-          <section class="lp-revista-container lp-revista-block">
+          <section t-if="not lp_config or lp_config.show_home_portfolio" class="lp-revista-container lp-revista-block">
             <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
           </section>
 
-          <section class="lp-revista-container lp-revista-block">
+          <section t-if="not lp_config or lp_config.show_home_allies" class="lp-revista-container lp-revista-block">
             <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
           </section>
 
           <section class="lp-revista-container lp-revista-block">
-            <t t-call="latinpyme_revista_theme.lp_footer"/>
+            <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer', request.website)"/>
+            <t t-if="lp_footer_banner" t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
+            <t t-else="" t-call="latinpyme_revista_theme.lp_footer"/>
           </section>
         </main>
       </div>

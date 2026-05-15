@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <template id="lp_masthead" name="Revista LatinPyme Masthead">
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
     <header class="lp-revista-masthead" role="banner">
       <div class="lp-revista-container lp-revista-masthead__top">
-        <a href="/revista" class="lp-revista-brand" aria-label="Revista LatinPyme">
+        <a href="/revista" class="lp-revista-brand" t-att-aria-label="lp_config.name if lp_config else 'Revista LatinPyme'">
           <span class="lp-revista-brand__mark">LP</span>
           <span class="lp-revista-brand__text">
             <span>Revista</span>
@@ -21,11 +22,11 @@
           </button>
         </form>
         <div class="lp-revista-social" aria-label="Redes sociales">
-          <a href="#" aria-label="Facebook"><i class="fa fa-facebook"/></a>
-          <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
-          <a href="#" aria-label="Instagram"><i class="fa fa-instagram"/></a>
-          <a href="#" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
-          <a href="#" class="lp-revista-social__whatsapp" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
+          <a t-att-href="lp_config.facebook_url if lp_config and lp_config.facebook_url else '#'" aria-label="Facebook"><i class="fa fa-facebook"/></a>
+          <a t-att-href="lp_config.linkedin_url if lp_config and lp_config.linkedin_url else '#'" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
+          <a t-att-href="lp_config.instagram_url if lp_config and lp_config.instagram_url else '#'" aria-label="Instagram"><i class="fa fa-instagram"/></a>
+          <a t-att-href="lp_config.youtube_url if lp_config and lp_config.youtube_url else '#'" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
+          <a t-att-href="lp_config.whatsapp_url if lp_config and lp_config.whatsapp_url else '#'" class="lp-revista-social__whatsapp" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
         </div>
       </div>
       <nav class="lp-revista-nav" aria-label="Secciones Revista LatinPyme">
@@ -104,6 +105,19 @@
         </div>
       </div>
     </section>
+  </template>
+
+  <template id="lp_dynamic_banner" name="Revista LatinPyme Dynamic Banner">
+    <a t-if="banner" t-att-href="banner.url or '/contactus'" class="lp-revista-promo-banner lp-revista-promo-banner--dynamic">
+      <img t-if="banner.image" class="lp-revista-promo-banner__image" t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % banner.id" t-att-alt="banner.name" loading="lazy"/>
+      <span class="lp-revista-promo-banner__shade"/>
+      <h2 t-out="banner.title or banner.name"/>
+      <p t-if="banner.text" t-out="banner.text"/>
+      <span class="lp-revista-button">
+        <t t-out="banner.button_label or 'Conoce más'"/> <i class="fa fa-arrow-right"/>
+      </span>
+      <span class="lp-revista-promo-banner__mark">LP</span>
+    </a>
   </template>
 
   <template id="s_lp_revista_latest_block" name="LP Revista - Bloque Lo Más Reciente">
@@ -388,45 +402,56 @@
   </template>
 
   <template id="lp_sidebar_conference_card" name="Revista LatinPyme Conference Card">
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
     <section class="lp-revista-widget lp-revista-widget--event">
       <div>
-        <p class="lp-revista-eyebrow">Próxima conferencia</p>
-        <h3>Liderazgo y cultura organizacional: claves para el futuro</h3>
+        <p class="lp-revista-eyebrow" t-out="lp_config.conference_label if lp_config and lp_config.conference_label else 'Próxima conferencia'"/>
+        <h3 t-out="lp_config.conference_title if lp_config and lp_config.conference_title else 'Liderazgo y cultura organizacional: claves para el futuro'"/>
         <ul>
-          <li><i class="fa fa-calendar"/>25 de junio de 2024</li>
-          <li><i class="fa fa-map-marker"/>Bogotá, Colombia</li>
-          <li><i class="fa fa-clock-o"/>9:00 a.m. - 12:00 m.</li>
+          <li t-if="not lp_config or lp_config.conference_date_text"><i class="fa fa-calendar"/><t t-out="lp_config.conference_date_text if lp_config else '25 de junio de 2024'"/></li>
+          <li t-if="not lp_config or lp_config.conference_location"><i class="fa fa-map-marker"/><t t-out="lp_config.conference_location if lp_config else 'Bogotá, Colombia'"/></li>
+          <li t-if="not lp_config or lp_config.conference_time"><i class="fa fa-clock-o"/><t t-out="lp_config.conference_time if lp_config else '9:00 a.m. - 12:00 m.'"/></li>
         </ul>
-        <a href="/event" class="lp-revista-button">Más información <i class="fa fa-arrow-right"/></a>
+        <a t-att-href="lp_config.conference_url if lp_config and lp_config.conference_url else '/event'" class="lp-revista-button">
+          <t t-out="lp_config.conference_button_label if lp_config and lp_config.conference_button_label else 'Más información'"/> <i class="fa fa-arrow-right"/>
+        </a>
       </div>
     </section>
   </template>
 
   <template id="lp_sidebar_poll_card" name="Revista LatinPyme Poll Card">
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
     <section class="lp-revista-widget lp-revista-widget--poll">
-      <p class="lp-revista-eyebrow">Encuesta</p>
-      <h3>¿Cuál es el mayor desafío de tu empresa este año?</h3>
-      <label><input type="radio" name="lp_poll"/> Acceso a financiamiento</label>
-      <label><input type="radio" name="lp_poll"/> Transformación digital</label>
-      <label><input type="radio" name="lp_poll"/> Atracción y retención de talento</label>
-      <label><input type="radio" name="lp_poll"/> Aumento de costos</label>
-      <button type="button" class="lp-revista-button">Votar</button>
+      <p class="lp-revista-eyebrow" t-out="lp_config.poll_label if lp_config and lp_config.poll_label else 'Encuesta'"/>
+      <h3 t-out="lp_config.poll_question if lp_config and lp_config.poll_question else '¿Cuál es el mayor desafío de tu empresa este año?'"/>
+      <label t-if="not lp_config or lp_config.poll_option_1"><input type="radio" name="lp_poll"/> <t t-out="lp_config.poll_option_1 if lp_config else 'Acceso a financiamiento'"/></label>
+      <label t-if="not lp_config or lp_config.poll_option_2"><input type="radio" name="lp_poll"/> <t t-out="lp_config.poll_option_2 if lp_config else 'Transformación digital'"/></label>
+      <label t-if="not lp_config or lp_config.poll_option_3"><input type="radio" name="lp_poll"/> <t t-out="lp_config.poll_option_3 if lp_config else 'Atracción y retención de talento'"/></label>
+      <label t-if="not lp_config or lp_config.poll_option_4"><input type="radio" name="lp_poll"/> <t t-out="lp_config.poll_option_4 if lp_config else 'Aumento de costos'"/></label>
+      <button type="button" class="lp-revista-button" t-out="lp_config.poll_button_label if lp_config and lp_config.poll_button_label else 'Votar'"/>
     </section>
   </template>
 
   <template id="lp_sidebar_ad_card" name="Revista LatinPyme Sidebar Ad Card">
+    <t t-set="lp_sidebar_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('sidebar', request.website)"/>
     <section class="lp-revista-widget lp-revista-widget--ad">
-      <h3>Automatiza procesos, optimiza recursos y crece sin límites.</h3>
-      <a href="/contactus" class="lp-revista-button lp-revista-button--small">Conoce más <i class="fa fa-arrow-right"/></a>
+      <img t-if="lp_sidebar_banner and lp_sidebar_banner.image" class="lp-revista-widget__image" t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % lp_sidebar_banner.id" t-att-alt="lp_sidebar_banner.name" loading="lazy"/>
+      <span class="lp-revista-widget__shade"/>
+      <h3 t-out="lp_sidebar_banner.title if lp_sidebar_banner and lp_sidebar_banner.title else 'Automatiza procesos, optimiza recursos y crece sin límites.'"/>
+      <p t-if="lp_sidebar_banner and lp_sidebar_banner.text" t-out="lp_sidebar_banner.text"/>
+      <a t-att-href="lp_sidebar_banner.url if lp_sidebar_banner and lp_sidebar_banner.url else '/contactus'" class="lp-revista-button lp-revista-button--small">
+        <t t-out="lp_sidebar_banner.button_label if lp_sidebar_banner and lp_sidebar_banner.button_label else 'Conoce más'"/> <i class="fa fa-arrow-right"/>
+      </a>
       <span class="lp-revista-widget__lp">LP</span>
     </section>
   </template>
 
   <template id="lp_editorial_sidebar" name="Revista LatinPyme Sidebar">
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
     <aside class="lp-revista-sidebar" aria-label="Contenido recomendado">
-      <t t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
-      <t t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
-      <t t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
+      <t t-if="not lp_config or lp_config.show_sidebar_conference" t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
+      <t t-if="not lp_config or lp_config.show_sidebar_poll" t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
+      <t t-if="not lp_config or lp_config.show_sidebar_ad" t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
     </aside>
   </template>
 
@@ -473,7 +498,11 @@
   <template id="s_lp_revista_promo_banner" name="Revista LatinPyme Promo Banner">
     <section class="lp-revista s_lp_revista_promo_banner" data-snippet="s_lp_revista_promo_banner" data-name="LP Revista - Banner Publicitario Horizontal">
       <div class="lp-revista-container">
-        <div class="lp-revista-promo-banner">
+        <t t-set="lp_home_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('home_horizontal', request.website)"/>
+        <t t-if="lp_home_banner" t-call="latinpyme_revista_theme.lp_dynamic_banner">
+          <t t-set="banner" t-value="lp_home_banner"/>
+        </t>
+        <div t-else="" class="lp-revista-promo-banner">
           <h2>Automatiza procesos, optimiza recursos y crece sin límites.</h2>
           <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
           <span class="lp-revista-promo-banner__mark">LP</span>
@@ -802,7 +831,41 @@
         <t t-set="href" t-value="False"/>
         <t t-set="link_label" t-value="False"/>
       </t>
-      <div id="lpRevistaAlliesCarousel" class="lp-revista-allies__carousel carousel slide" data-bs-ride="false" data-bs-interval="false">
+      <t t-set="lp_ally_slides" t-value="request.env['latinpyme.revista.ally'].sudo().get_active_ally_slides(request.website, 8)"/>
+      <div t-if="lp_ally_slides" id="lpRevistaAlliesCarousel" class="lp-revista-allies__carousel carousel slide" data-bs-ride="false" data-bs-interval="false">
+        <div class="carousel-inner">
+          <t t-foreach="lp_ally_slides" t-as="ally_slide">
+            <div t-attf-class="carousel-item #{'active' if ally_slide_index == 0 else ''}">
+              <div class="lp-revista-allies__track">
+                <t t-foreach="ally_slide" t-as="ally">
+                  <figure class="lp-revista-ally-logo">
+                    <a t-if="ally.url" t-att-href="ally.url" target="_blank" rel="noopener" t-att-aria-label="ally.name">
+                      <img t-if="ally.logo" t-att-src="'/web/image/latinpyme.revista.ally/%s/logo' % ally.id" t-att-alt="ally.name" loading="lazy"/>
+                      <span t-else="" t-out="ally.name"/>
+                    </a>
+                    <t t-else="">
+                      <img t-if="ally.logo" t-att-src="'/web/image/latinpyme.revista.ally/%s/logo' % ally.id" t-att-alt="ally.name" loading="lazy"/>
+                      <span t-else="" t-out="ally.name"/>
+                    </t>
+                  </figure>
+                </t>
+              </div>
+            </div>
+          </t>
+        </div>
+        <button t-if="len(lp_ally_slides) &gt; 1" class="carousel-control-prev" type="button" data-bs-target="#lpRevistaAlliesCarousel" data-bs-slide="prev" aria-label="Aliado anterior">
+          <i class="fa fa-angle-left"/>
+        </button>
+        <button t-if="len(lp_ally_slides) &gt; 1" class="carousel-control-next" type="button" data-bs-target="#lpRevistaAlliesCarousel" data-bs-slide="next" aria-label="Aliado siguiente">
+          <i class="fa fa-angle-right"/>
+        </button>
+        <div t-if="len(lp_ally_slides) &gt; 1" class="carousel-indicators">
+          <t t-foreach="lp_ally_slides" t-as="ally_slide">
+            <button type="button" data-bs-target="#lpRevistaAlliesCarousel" t-att-data-bs-slide-to="ally_slide_index" t-attf-class="#{'active' if ally_slide_index == 0 else ''}" t-att-aria-current="'true' if ally_slide_index == 0 else None" t-att-aria-label="'Aliados %s' % (ally_slide_index + 1)"/>
+          </t>
+        </div>
+      </div>
+      <div t-else="" id="lpRevistaAlliesCarousel" class="lp-revista-allies__carousel carousel slide" data-bs-ride="false" data-bs-interval="false">
         <div class="carousel-inner">
           <div class="carousel-item active">
             <div class="lp-revista-allies__track">
@@ -872,16 +935,17 @@
   </template>
 
   <template id="lp_footer" name="Revista LatinPyme Footer">
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
     <footer class="lp-revista-footer">
       <div class="lp-revista-footer__brand">
         <span class="lp-revista-footer__mark">LP</span>
         <p>Revista especializada en pymes en Latinoamérica</p>
         <div class="lp-revista-social">
-          <a href="#" aria-label="Facebook"><i class="fa fa-facebook"/></a>
-          <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
-          <a href="#" aria-label="Instagram"><i class="fa fa-instagram"/></a>
-          <a href="#" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
-          <a href="#" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
+          <a t-att-href="lp_config.facebook_url if lp_config and lp_config.facebook_url else '#'" aria-label="Facebook"><i class="fa fa-facebook"/></a>
+          <a t-att-href="lp_config.linkedin_url if lp_config and lp_config.linkedin_url else '#'" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
+          <a t-att-href="lp_config.instagram_url if lp_config and lp_config.instagram_url else '#'" aria-label="Instagram"><i class="fa fa-instagram"/></a>
+          <a t-att-href="lp_config.youtube_url if lp_config and lp_config.youtube_url else '#'" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
+          <a t-att-href="lp_config.whatsapp_url if lp_config and lp_config.whatsapp_url else '#'" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
         </div>
       </div>
       <nav aria-label="Footer secciones">
@@ -910,10 +974,11 @@
       </nav>
       <div class="lp-revista-footer__contact">
         <h3>Contacto</h3>
-        <p><i class="fa fa-whatsapp"/> +57 310 123 4567</p>
-        <p><i class="fa fa-map-marker"/> Bogotá, Colombia</p>
+        <p t-if="lp_config and lp_config.phone"><i class="fa fa-whatsapp"/> <t t-out="lp_config.phone"/></p>
+        <p t-if="lp_config and lp_config.city"><i class="fa fa-map-marker"/> <t t-out="lp_config.city"/></p>
+        <p t-if="lp_config and lp_config.email"><i class="fa fa-envelope"/> <t t-out="lp_config.email"/></p>
       </div>
-      <p class="lp-revista-footer__copyright">© 2026 Revista LatinPyme - Todos los derechos reservados</p>
+      <p class="lp-revista-footer__copyright" t-out="lp_config.footer_text if lp_config and lp_config.footer_text else '© 2026 Revista LatinPyme - Todos los derechos reservados'"/>
     </footer>
   </template>
 
@@ -926,16 +991,18 @@
   </template>
 
   <template id="lp_footer_with_ad" name="Revista LatinPyme Footer With Ad">
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
+    <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer', request.website)"/>
     <footer class="lp-revista-footer lp-revista-footer--with-ad">
       <div class="lp-revista-footer__brand">
         <span class="lp-revista-footer__mark">LP</span>
         <p>Revista especializada en pymes en Latinoamérica</p>
         <div class="lp-revista-social">
-          <a href="#" aria-label="Facebook"><i class="fa fa-facebook"/></a>
-          <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
-          <a href="#" aria-label="Instagram"><i class="fa fa-instagram"/></a>
-          <a href="#" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
-          <a href="#" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
+          <a t-att-href="lp_config.facebook_url if lp_config and lp_config.facebook_url else '#'" aria-label="Facebook"><i class="fa fa-facebook"/></a>
+          <a t-att-href="lp_config.linkedin_url if lp_config and lp_config.linkedin_url else '#'" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
+          <a t-att-href="lp_config.instagram_url if lp_config and lp_config.instagram_url else '#'" aria-label="Instagram"><i class="fa fa-instagram"/></a>
+          <a t-att-href="lp_config.youtube_url if lp_config and lp_config.youtube_url else '#'" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
+          <a t-att-href="lp_config.whatsapp_url if lp_config and lp_config.whatsapp_url else '#'" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
         </div>
       </div>
       <nav aria-label="Footer secciones">
@@ -966,13 +1033,15 @@
       </nav>
       <div class="lp-revista-footer__contact">
         <h3>Contacto</h3>
-        <p><i class="fa fa-whatsapp"/> +57 310 123 4567</p>
-        <p><i class="fa fa-map-marker"/> Bogotá, Colombia</p>
+        <p t-if="lp_config and lp_config.phone"><i class="fa fa-whatsapp"/> <t t-out="lp_config.phone"/></p>
+        <p t-if="lp_config and lp_config.city"><i class="fa fa-map-marker"/> <t t-out="lp_config.city"/></p>
+        <p t-if="lp_config and lp_config.email"><i class="fa fa-envelope"/> <t t-out="lp_config.email"/></p>
       </div>
-      <a class="lp-revista-footer__ad" href="/contactus" aria-label="Publicidad Revista LatinPyme">
-        <img src="/latinpyme_revista_theme/static/src/img/editorial/footer-ad-placeholder.svg" alt="Publicidad Revista LatinPyme" loading="lazy"/>
+      <a class="lp-revista-footer__ad" t-att-href="lp_footer_banner.url if lp_footer_banner and lp_footer_banner.url else '/contactus'" aria-label="Publicidad Revista LatinPyme">
+        <img t-if="lp_footer_banner and lp_footer_banner.image" t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % lp_footer_banner.id" t-att-alt="lp_footer_banner.name" loading="lazy"/>
+        <img t-else="" src="/latinpyme_revista_theme/static/src/img/editorial/footer-ad-placeholder.svg" alt="Publicidad Revista LatinPyme" loading="lazy"/>
       </a>
-      <p class="lp-revista-footer__copyright">© 2026 Revista LatinPyme - Todos los derechos reservados</p>
+      <p class="lp-revista-footer__copyright" t-out="lp_config.footer_text if lp_config and lp_config.footer_text else '© 2026 Revista LatinPyme - Todos los derechos reservados'"/>
     </footer>
   </template>
 

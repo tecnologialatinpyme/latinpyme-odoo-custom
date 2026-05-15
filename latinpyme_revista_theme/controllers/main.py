@@ -44,6 +44,9 @@ PREPRODUCTION_HOSTS = {
 
 
 def enabled_section_slugs(env):
+    sections = env["latinpyme.revista.section"].sudo().search([("active", "=", True)], order="sequence, name")
+    if sections:
+        return [section.slug for section in sections if section.slug]
     configured = env["ir.config_parameter"].sudo().get_param(ENABLED_SECTIONS_PARAM, "")
     slugs = [slug.strip().lower() for slug in configured.split(",") if slug.strip()]
     valid_slugs = [slug for slug in slugs if slug in SECTION_LABELS]
@@ -56,8 +59,18 @@ def sitemap_revista_sections(env, rule, qs):
 
 
 class LatinpymeRevistaController(http.Controller):
+    def _config(self):
+        return request.env["latinpyme.revista.config"].sudo().get_active_config(request.website)
+
+    def _production_base_url(self):
+        config = self._config()
+        return config.production_base_url() if config else "https://latinpyme.com"
+
     def _preproduction_host(self):
+        config = self._config()
         host = request.httprequest.host.split(":", 1)[0].lower()
+        if config:
+            return config.is_preproduction_host(host)
         return (
             host in PREPRODUCTION_HOSTS
             or host.endswith(".odoo.com")
@@ -65,9 +78,11 @@ class LatinpymeRevistaController(http.Controller):
         )
 
     def _render(self, template, values):
+        config = self._config()
         values.setdefault("sections", self._sections())
+        values["lp_config"] = config
         values["lp_preproduction"] = self._preproduction_host()
-        values["lp_production_url"] = "https://latinpyme.com%s" % request.httprequest.path
+        values["lp_production_url"] = "%s%s" % (self._production_base_url(), request.httprequest.path)
         response = request.render(template, values)
         if values["lp_preproduction"]:
             response.headers["X-Robots-Tag"] = "noindex, nofollow"
@@ -99,16 +114,51 @@ class LatinpymeRevistaController(http.Controller):
         return tags
 
     def _section_tag(self, section_slug):
+        section = self._section_record(section_slug)
+        if section:
+            return section.blog_tag()
         label = SECTION_LABELS.get(section_slug)
         return self._tag_by_name(label) if label else request.env["blog.tag"].sudo().browse()
 
+    def _section_record(self, section_slug):
+        return request.env["latinpyme.revista.section"].sudo().get_by_slug(section_slug, website=request.website)
+
     def _sections(self):
+        Section = request.env["latinpyme.revista.section"].sudo()
+        records = Section.get_active_sections(request.website)
+        if records:
+            website_id = request.website.id if request.website else False
+            ordered = sorted(
+                records,
+                key=lambda record: (
+                    0 if website_id and record.website_id.id == website_id else 1,
+                    record.sequence,
+                    record.name,
+                ),
+            )
+            seen = set()
+            sections = []
+            for record in ordered:
+                if not record.slug or record.slug in seen:
+                    continue
+                seen.add(record.slug)
+                sections.append(
+                    {
+                        "slug": record.slug,
+                        "name": record.name,
+                        "url": "/revista/seccion/%s" % record.slug,
+                        "tag": record.blog_tag(),
+                        "record": record,
+                    }
+                )
+            return sections
         return [
             {
                 "slug": slug,
                 "name": name,
                 "url": "/revista/seccion/%s" % slug,
                 "tag": self._tag_by_name(name),
+                "record": False,
             }
             for slug, name in SECTION_LABELS.items()
             if slug in enabled_section_slugs(request.env)
@@ -171,22 +221,41 @@ class LatinpymeRevistaController(http.Controller):
         overlay = "linear-gradient(90deg, rgba(5, 7, 12, .88), rgba(5, 7, 12, .46) 58%, rgba(5, 7, 12, .18))"
         return "background-image: %s, %s;" % (overlay, background)
 
+    def _section_cover_style(self, section, fallback_record):
+        if section and section.cover_image:
+            overlay = "linear-gradient(90deg, rgba(5, 7, 12, .88), rgba(5, 7, 12, .44) 58%, rgba(5, 7, 12, .14))"
+            image_url = "/web/image/latinpyme.revista.section/%s/cover_image" % section.id
+            return "background-image: %s, url('%s');" % (overlay, image_url)
+        return self._cover_style(fallback_record)
+
+    def _banners(self, placement, limit=1):
+        return request.env["latinpyme.revista.banner"].sudo().get_active_banners(
+            placement,
+            website=request.website,
+            limit=limit,
+        )
+
     @http.route("/revista", type="http", auth="public", website=True, sitemap=True)
     def revista_home(self, **kwargs):
+        config = self._config()
         blog = self._revista_blog()
         featured_post = self._featured_post(blog=blog)
         exclude_ids = featured_post.ids if featured_post else []
         interview_tag = self._tag_by_name("Entrevistas")
         special_tag = self._tag_by_name("Especiales")
+        highlight_limit = config.home_highlight_limit if config else 3
+        latest_limit = config.home_latest_limit if config else 6
+        new_limit = config.home_new_limit if config else 5
         values = {
             "blog": blog,
             "featured_post": featured_post,
             "featured_style": self._cover_style(featured_post),
-            "highlight_posts": self._posts(blog=blog, limit=3, exclude_ids=exclude_ids),
-            "latest_posts": self._posts(blog=blog, limit=6, exclude_ids=exclude_ids),
-            "new_posts": self._posts(blog=blog, limit=5, exclude_ids=exclude_ids),
+            "highlight_posts": self._posts(blog=blog, limit=highlight_limit, exclude_ids=exclude_ids),
+            "latest_posts": self._posts(blog=blog, limit=latest_limit, exclude_ids=exclude_ids),
+            "new_posts": self._posts(blog=blog, limit=new_limit, exclude_ids=exclude_ids),
             "interview_posts": self._posts(blog=blog, tag=interview_tag, limit=3),
             "special_posts": self._posts(blog=blog, tag=special_tag, limit=2),
+            "home_banners": self._banners("home_horizontal", limit=2),
         }
         return self._render("latinpyme_revista_theme.revista_home_page", values)
 
@@ -198,8 +267,14 @@ class LatinpymeRevistaController(http.Controller):
         sitemap=sitemap_revista_sections,
     )
     def revista_section(self, section_slug, page=1, **kwargs):
-        if section_slug not in SECTION_LABELS or section_slug not in enabled_section_slugs(request.env):
+        section_slug = (section_slug or "").strip().lower()
+        section_record = self._section_record(section_slug)
+        if section_slug not in enabled_section_slugs(request.env):
             raise NotFound()
+        section_name = section_record.name if section_record else SECTION_LABELS.get(section_slug)
+        if not section_name:
+            raise NotFound()
+        config = self._config()
         blog = self._revista_blog()
         section_tag = self._section_tag(section_slug)
         empty_posts = request.env["blog.post"].sudo().browse()
@@ -209,7 +284,7 @@ class LatinpymeRevistaController(http.Controller):
             current_page = max(int(page or kwargs.get("page", 1) or 1), 1)
         except (TypeError, ValueError):
             current_page = 1
-        per_page = 9
+        per_page = config.section_posts_per_page if config else 9
         total_posts = self._posts_count(blog=blog, tag=section_tag, exclude_ids=exclude_ids) if section_tag else 0
         page_count = max((total_posts + per_page - 1) // per_page, 1)
         if current_page > page_count:
@@ -220,10 +295,14 @@ class LatinpymeRevistaController(http.Controller):
         values = {
             "blog": blog,
             "section_slug": section_slug,
-            "section_name": SECTION_LABELS[section_slug],
+            "section_name": section_name,
+            "section_record": section_record,
+            "section_description": section_record.description if section_record else False,
+            "section_seo_title": section_record.seo_title if section_record else False,
+            "section_seo_description": section_record.seo_description if section_record else False,
             "section_tag": section_tag,
             "featured_post": featured_post,
-            "featured_style": self._cover_style(featured_post or blog),
+            "featured_style": self._section_cover_style(section_record, featured_post or blog),
             "posts": posts,
             "latest_posts": self._posts(blog=blog, limit=6, exclude_ids=exclude_ids),
             "current_page": current_page,
@@ -231,5 +310,6 @@ class LatinpymeRevistaController(http.Controller):
             "total_posts": total_posts,
             "prev_page_url": "%s?page=%s" % (section_url, current_page - 1) if current_page > 1 else False,
             "next_page_url": "%s?page=%s" % (section_url, current_page + 1) if current_page < page_count else False,
+            "section_banners": self._banners("section", limit=1),
         }
         return self._render("latinpyme_revista_theme.revista_section_page", values)

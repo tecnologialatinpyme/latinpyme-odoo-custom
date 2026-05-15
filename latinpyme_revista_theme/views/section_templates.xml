@@ -2,8 +2,8 @@
 <odoo>
   <template id="revista_section_page" name="Revista LatinPyme Section">
     <t t-call="website.layout">
-      <t t-set="title" t-value="section_name + ' | Revista LatinPyme'"/>
-      <t t-set="website_meta_description" t-value="'Artículos de ' + section_name + ' para empresarios pyme en Revista LatinPyme.'"/>
+      <t t-set="title" t-value="section_seo_title or (section_name + ' | Revista LatinPyme')"/>
+      <t t-set="website_meta_description" t-value="section_seo_description or ('Artículos de ' + section_name + ' para empresarios pyme en Revista LatinPyme.')"/>
       <t t-set="seo_object" t-value="section_tag or blog"/>
       <t t-set="head">
         <meta t-if="lp_preproduction" name="robots" content="noindex,nofollow"/>
@@ -24,7 +24,8 @@
               </nav>
               <h1 t-out="section_name"/>
               <p>
-                <t t-if="section_tag">Artículos, análisis y recursos editoriales de <t t-out="section_name"/> para empresarios pyme.</t>
+                <t t-if="section_description" t-out="section_description"/>
+                <t t-elif="section_tag">Artículos, análisis y recursos editoriales de <t t-out="section_name"/> para empresarios pyme.</t>
                 <t t-else="">Crea la etiqueta <t t-out="section_name"/> en Odoo Blog para activar esta sección editorial.</t>
               </p>
             </div>
@@ -68,6 +69,12 @@
             <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
           </section>
 
+          <section t-if="section_banners" class="lp-revista-container lp-revista-block lp-revista-ad-row" aria-label="Publicidad de sección">
+            <t t-foreach="section_banners" t-as="banner">
+              <t t-call="latinpyme_revista_theme.lp_dynamic_banner"/>
+            </t>
+          </section>
+
           <section class="lp-revista-container lp-revista-block">
             <t t-call="latinpyme_revista_theme.lp_section_heading">
               <t t-set="title">También puede interesarte</t>
@@ -93,7 +100,9 @@
           </section>
 
           <section class="lp-revista-container lp-revista-block">
-            <t t-call="latinpyme_revista_theme.lp_footer"/>
+            <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer', request.website)"/>
+            <t t-if="lp_footer_banner" t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
+            <t t-else="" t-call="latinpyme_revista_theme.lp_footer"/>
           </section>
         </main>
       </div>

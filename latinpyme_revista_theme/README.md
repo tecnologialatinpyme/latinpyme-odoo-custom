@@ -16,9 +16,13 @@ El módulo trabaja únicamente dentro de `latinpyme_revista_theme` y no depende 
 
 ## Archivos
 
-- `__init__.py`: carga los controladores del módulo.
+- `__init__.py`: carga modelos y controladores del módulo.
 - `__manifest__.py`: declara dependencias `website` y `website_blog`, assets y vistas QWeb.
+- `models/revista_models.py`: modelos backend para configuración, secciones, aliados y publicidad.
 - `controllers/main.py`: crea rutas públicas para la Home y las secciones editoriales.
+- `security/ir.model.access.csv`: permisos para administradores de Website y sistema.
+- `data/revista_defaults.xml`: configuración y secciones editoriales iniciales.
+- `views/backend_views.xml`: menús, acciones y vistas backend de Revista LatinPyme.
 - `views/assets.xml`: placeholder documental; en Odoo 19 los assets se cargan desde `__manifest__.py`.
 - `views/snippet_templates.xml`: contiene masthead, cards, sidebar, banners, bloques de Home, sección, nota, portafolio, aliados y footer editorial.
 - `views/snippets.xml`: registra los snippets reutilizables del grupo `LP Revista`.
@@ -46,22 +50,99 @@ Las publicaciones individuales siguen usando las URLs nativas de Odoo Blog. Esto
 
 ### Activar o desactivar secciones
 
-Por defecto están activas todas las secciones editoriales. Si el administrador quiere mostrar solo algunas, puede crear el parámetro de sistema:
+Por defecto están activas todas las secciones editoriales creadas por el módulo. Desde backend:
 
-`latinpyme_revista_theme.enabled_sections`
+`Revista LatinPyme > Secciones`
 
-Valor ejemplo:
+El administrador puede:
 
-`gerencia,ia,finanzas,entrevistas`
+- activar o desactivar secciones,
+- ordenar el menú editorial,
+- cambiar nombre y slug,
+- asociar la etiqueta real de Odoo Blog,
+- configurar descripción, cover y SEO básico.
 
-Este parámetro afecta:
+El parámetro técnico anterior `latinpyme_revista_theme.enabled_sections` queda solo como compatibilidad si no existen registros en el modelo de secciones.
 
-- menú editorial de `/revista`,
-- rutas `/revista/seccion/<slug>`,
-- sitemap de secciones,
-- header editorial en notas individuales.
+Las rutas `/revista/seccion/<slug>` respetan los registros activos del backend.
 
-Si el parámetro está vacío o no existe, el módulo conserva todas las secciones activas.
+## Administración backend
+
+La Fase 4 agrega el menú:
+
+`Revista LatinPyme`
+
+Submenús:
+
+- `Configuración`
+- `Secciones`
+- `Aliados`
+- `Publicidad`
+
+### Configuración
+
+Permite administrar:
+
+- nombre de la revista,
+- dominio final SEO,
+- dominio temporal/preproducción,
+- `noindex` en preproducción,
+- texto de copyright/footer,
+- teléfono, ciudad y email,
+- enlaces sociales,
+- visibilidad de bloques en Home,
+- cantidades de posts en Home,
+- cantidad de posts por página en secciones,
+- visibilidad de sidebar, entrevistas, portafolio y aliados en notas individuales.
+- visibilidad y textos de conferencia, encuesta y publicidad del sidebar.
+
+### Secciones
+
+Cada sección controla:
+
+- nombre,
+- slug,
+- etiqueta de Blog asociada,
+- estado activo/inactivo,
+- orden,
+- descripción,
+- imagen/cover,
+- SEO title,
+- SEO description,
+- sitio web si aplica.
+
+Si `tag_id` está vacío, el módulo intenta encontrar una etiqueta de Blog con el mismo nombre de la sección.
+
+### Aliados
+
+Cada aliado controla:
+
+- nombre,
+- logo,
+- enlace,
+- estado activo/inactivo,
+- orden,
+- sitio web si aplica.
+
+El carrusel `Aliados` primero usa estos registros. Si no hay aliados activos, mantiene los placeholders visuales del snippet.
+
+### Publicidad
+
+Cada banner controla:
+
+- nombre interno,
+- ubicación: `home_horizontal`, `sidebar`, `footer`, `note`, `section`,
+- imagen,
+- título,
+- texto,
+- botón,
+- enlace,
+- estado activo/inactivo,
+- orden,
+- fecha de inicio y fin,
+- sitio web si aplica.
+
+Los templates usan banners dinámicos cuando existen y conservan fallback visual cuando no hay registros.
 
 ## Cómo instalar en Odoo.sh
 
@@ -73,9 +154,11 @@ Si el parámetro está vacío o no existe, el módulo conserva todas las seccion
 5. Ir a Apps.
 6. Actualizar lista de aplicaciones.
 7. Buscar `Revista LatinPyme Theme`.
-8. Instalar.
+8. Instalar o actualizar.
 9. Verificar `/revista`.
 10. Actualizar los menús existentes para que apunten a las rutas de sección.
+11. Abrir `Revista LatinPyme > Configuración` y revisar dominios, noindex, footer y redes.
+12. Abrir `Revista LatinPyme > Secciones` y asociar cada sección con su etiqueta de Blog.
 
 Nota Odoo 19:
 
@@ -125,16 +208,22 @@ Snippets disponibles:
 Notas de edición de bloques:
 
 - `LP Revista - Aliados` es un carrusel visual. Cada aliado es una imagen editable desde Website Builder; el editor puede reemplazar logos, borrar aliados no usados o duplicar logos/slides para mostrar la cantidad necesaria.
+- En Fase 4, `LP Revista - Aliados` también se alimenta desde `Revista LatinPyme > Aliados` cuando existan aliados activos.
 - `LP Revista - Footer Editorial` incluye el texto `© 2026 Revista LatinPyme - Todos los derechos reservados`.
 - `LP Revista - Footer con Publicidad` replica el footer editorial y agrega un banner editable a la derecha para pauta o campañas.
+- En Fase 4, los banners de Home, sidebar, footer, nota y sección pueden venir de `Revista LatinPyme > Publicidad`.
 
 ## Auditoría técnica actual
 
 | Área | Estado | Implementación |
 | --- | --- | --- |
-| Home editorial `/revista` | Dinámica parcial | Toma destacados, recientes, novedades, entrevistas y especiales desde Odoo Blog. Los banners y portafolio siguen como bloques editables. |
-| Secciones `/revista/seccion/<slug>` | Dinámica y configurable | Filtra `blog.post` por `blog.tag` editorial, añade paginación por `?page=2` y permite limitar secciones activas por parámetro de sistema. |
-| Nota individual de Blog | Fase 3 implementada | Mantiene la publicación estándar de `website_blog`, pero añade header editorial, cabecera de nota, cover, autor, compartir, sidebar, relacionados, entrevistas, portafolio compacto y footer. |
+| Configuración backend | Fase 4 implementada | Modelo `latinpyme.revista.config` con dominios, noindex, contacto, redes, footer, cantidades y visibilidad de bloques. |
+| Home editorial `/revista` | Dinámica y configurable | Toma destacados, recientes, novedades, entrevistas y especiales desde Odoo Blog; banners y visibilidad de bloques se controlan desde backend. |
+| Secciones `/revista/seccion/<slug>` | Dinámica y administrable | Filtra `blog.post` por `blog.tag`, usa registros `latinpyme.revista.section`, cover, descripción, SEO y activación por backend. |
+| Nota individual de Blog | Fase 4 ajustada | Mantiene `website_blog`; añade toggles backend para sidebar, entrevistas, portafolio y aliados. |
+| Aliados | Fase 4 implementada | Modelo `latinpyme.revista.ally` alimenta el carrusel; si no hay registros activos, se usan placeholders. |
+| Publicidad | Fase 4 implementada | Modelo `latinpyme.revista.banner` alimenta Home, sidebar, footer, nota y sección con fallback visual. |
+| Sidebar editorial | Fase 4 implementada | Conferencia, encuesta y visibilidad de bloques se configuran desde `Revista LatinPyme > Configuración`. |
 | Snippets Home | Completo base | Bloques reutilizables y editables desde Website Builder. |
 | Snippets Sección | Completo base | Hero, listado visual, card horizontal, sidebars, paginación y relacionados. |
 | Snippets Nota | Completo base | Cabecera, autor, compartir, cuerpo, cita, imagen, sidebar, relacionados. |
@@ -193,6 +282,8 @@ El módulo añade automáticamente:
 - entrevistas relacionadas si existe la etiqueta `Entrevistas`,
 - portafolio, aliados y footer editorial.
 
+Desde `Revista LatinPyme > Configuración`, el administrador puede mostrar u ocultar sidebar, entrevistas relacionadas, portafolio y aliados para todas las notas.
+
 Para que una nota quede asociada a una sección, el editor debe asignar una etiqueta editorial:
 
 `Gerencia`, `Negocios`, `IA`, `Laboral`, `Finanzas`, `Entrevistas`, `Especiales`, `Mujeres` o `Portafolio`.
@@ -209,7 +300,7 @@ El dominio temporal de trabajo es:
 
 Este módulo no asume que `revista.latinpyme.com` sea el dominio final. Las rutas generadas quedan listas para producción en `latinpyme.com`.
 
-Mientras se navegue desde `revista.latinpyme.com`, `.odoo.com` u `.odoo.sh`, el módulo añade:
+Mientras se navegue desde el dominio temporal configurado, `.odoo.com` u `.odoo.sh`, el módulo añade si `noindex` está activo:
 
 - `meta name="robots" content="noindex,nofollow"` en las páginas controladas por el módulo.
 - `X-Robots-Tag: noindex, nofollow` en las respuestas de `/revista` y secciones.
@@ -217,11 +308,11 @@ Mientras se navegue desde `revista.latinpyme.com`, `.odoo.com` u `.odoo.sh`, el 
 
 Canonical:
 
-- La Home y secciones usan las rutas preparadas para `latinpyme.com`.
+- La Home y secciones usan el dominio final configurado en `Revista LatinPyme > Configuración`.
 - La nota individual no fuerza canonical hacia `latinpyme.com` mientras el dominio histórico siga en WordPress.
 - Se mantiene el canonical nativo de Odoo Website para evitar duplicados o señales cruzadas en preproducción.
 - En preproducción la defensa principal es `noindex,nofollow`; cuando `latinpyme.com` migre a Odoo se debe validar el dominio principal del Website y Search Console.
-- Antes de producción, el dominio principal de Website debe quedar configurado como `latinpyme.com`.
+- Antes de producción, el dominio principal de Website debe quedar configurado como `latinpyme.com` y el dominio final SEO debe revisarse en la configuración de Revista.
 
 ## Estrategia de migración SEO desde WordPress
 
@@ -253,16 +344,14 @@ Pendiente hasta tener inventario. Ejemplos de mapeo esperado:
 
 La estructura final de posts debe definirse con base en inventario SEO. Si se necesita replicar exactamente el patrón WordPress, eso debe hacerse en Fase 2 con rutas y redirecciones controladas.
 
-## Fase 4 recomendada
+## Fase 5 recomendada
 
 - Definir si la Home final de `latinpyme.com` será `/revista` o la raíz `/`.
 - Mapear URLs WordPress contra URLs Odoo reales.
 - Implementar redirecciones 301.
 - Evaluar rutas personalizadas para posts si se necesita una estructura más parecida a WordPress.
-- Crear una pantalla administrativa propia para activar/desactivar secciones, ordenar secciones y configurar contenido editorial por sección sin usar parámetros técnicos.
-- Reemplazar datos placeholder de redes, contacto, aliados y eventos por configuraciones administrables desde backend.
-- Crear modelo ligero de banners/editorial promos si los banners deben ser administrables sin Website Editor.
 - Integrar encuesta real.
+- Administrar conferencia/evento del sidebar desde un modelo propio o desde Eventos si se instala ese módulo.
 - Integrar buscador editorial avanzado por sección, fecha y etiqueta.
 - Alimentar relacionados por coincidencia de etiquetas, no solo por publicaciones recientes del mismo blog.
 - Revisar y ajustar visualmente en Odoo.sh con datos reales, mobile y desktop.
