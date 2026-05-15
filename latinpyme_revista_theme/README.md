@@ -23,9 +23,10 @@ El módulo trabaja únicamente dentro de `latinpyme_revista_theme` y no depende 
 - `views/snippet_templates.xml`: contiene masthead, cards, sidebar, banners, bloques de Home, sección, nota, portafolio, aliados y footer editorial.
 - `views/snippets.xml`: registra los snippets reutilizables del grupo `LP Revista`.
 - `static/src/img/snippets/*.svg`: miniaturas propias para el selector visual de bloques de Odoo Website.
+- `static/src/img/editorial/*.svg`: placeholders editoriales para snippets insertados y estados sin imagen.
 - `views/home_templates.xml`: template visual dinámico para `/revista`.
 - `views/section_templates.xml`: template visual dinámico para `/revista/seccion/<seccion>`.
-- `views/blog_post_templates.xml`: capa visual segura sobre templates nativos de `website_blog`.
+- `views/blog_post_templates.xml`: plantilla editorial segura para nota individual, heredando `website_blog` sin crear páginas manuales.
 - `static/src/scss/revista.scss`: estilos scoped bajo `.lp-revista`.
 
 ## Rutas disponibles
@@ -42,6 +43,25 @@ El módulo trabaja únicamente dentro de `latinpyme_revista_theme` y no depende 
 - `/revista/seccion/portafolio`
 
 Las publicaciones individuales siguen usando las URLs nativas de Odoo Blog. Esto evita romper funcionalidades internas de Blog, SEO metadata, publicación/despublicación, edición visual, tags, autores y sitemap nativo.
+
+### Activar o desactivar secciones
+
+Por defecto están activas todas las secciones editoriales. Si el administrador quiere mostrar solo algunas, puede crear el parámetro de sistema:
+
+`latinpyme_revista_theme.enabled_sections`
+
+Valor ejemplo:
+
+`gerencia,ia,finanzas,entrevistas`
+
+Este parámetro afecta:
+
+- menú editorial de `/revista`,
+- rutas `/revista/seccion/<slug>`,
+- sitemap de secciones,
+- header editorial en notas individuales.
+
+Si el parámetro está vacío o no existe, el módulo conserva todas las secciones activas.
 
 ## Cómo instalar en Odoo.sh
 
@@ -106,8 +126,8 @@ Snippets disponibles:
 | Área | Estado | Implementación |
 | --- | --- | --- |
 | Home editorial `/revista` | Dinámica parcial | Toma destacados, recientes, novedades, entrevistas y especiales desde Odoo Blog. Los banners y portafolio siguen como bloques editables. |
-| Secciones `/revista/seccion/<slug>` | Dinámica | Filtra `blog.post` por `blog.tag` editorial y añade paginación por `?page=2`. |
-| Nota individual de Blog | Parcial | Se mantiene `website_blog` como fuente y se añade capa visual segura; la reconstrucción completa del layout de nota queda para Fase 3. |
+| Secciones `/revista/seccion/<slug>` | Dinámica y configurable | Filtra `blog.post` por `blog.tag` editorial, añade paginación por `?page=2` y permite limitar secciones activas por parámetro de sistema. |
+| Nota individual de Blog | Fase 3 implementada | Mantiene la publicación estándar de `website_blog`, pero añade header editorial, cabecera de nota, cover, autor, compartir, sidebar, relacionados, entrevistas, portafolio compacto y footer. |
 | Snippets Home | Completo base | Bloques reutilizables y editables desde Website Builder. |
 | Snippets Sección | Completo base | Hero, listado visual, card horizontal, sidebars, paginación y relacionados. |
 | Snippets Nota | Completo base | Cabecera, autor, compartir, cuerpo, cita, imagen, sidebar, relacionados. |
@@ -132,6 +152,42 @@ Para destacar contenido en una sección:
 - Opcionalmente añadir `Destacado Sección`, `Principal` o `Destacado`.
 - Si no hay destacado, la sección usa la nota más reciente de esa etiqueta.
 
+## Nota individual administrable
+
+La nota individual no se construye como página manual. Sigue siendo una publicación estándar de Odoo Blog.
+
+El editor administra desde Odoo Blog:
+
+- título de la nota,
+- subtítulo o resumen,
+- imagen principal mediante el cover de Blog,
+- contenido del artículo con el editor visual,
+- autor,
+- fecha,
+- etiquetas editoriales,
+- publicación/despublicación,
+- slug y SEO nativo.
+
+El módulo añade automáticamente:
+
+- header editorial LatinPyme,
+- miga de pan hacia `/revista` y la sección principal,
+- etiqueta principal como kicker,
+- título grande,
+- metadatos de autor y fecha,
+- imagen principal con el sistema `website.record_cover`,
+- caja de autor,
+- botones de compartir,
+- cuerpo editorial estilizado,
+- sidebar con conferencia, encuesta y publicidad,
+- artículos relacionados del mismo blog,
+- entrevistas relacionadas si existe la etiqueta `Entrevistas`,
+- portafolio y footer editorial.
+
+Para que una nota quede asociada a una sección, el editor debe asignar una etiqueta editorial:
+
+`Gerencia`, `Negocios`, `IA`, `Laboral`, `Finanzas`, `Entrevistas`, `Especiales`, `Mujeres` o `Portafolio`.
+
 ## SEO y preproducción
 
 El dominio histórico SEO es:
@@ -152,8 +208,8 @@ Mientras se navegue desde `revista.latinpyme.com`, `.odoo.com` u `.odoo.sh`, el 
 
 Canonical:
 
-- No se genera un canonical adicional para evitar duplicados.
-- Se usa el canonical nativo de Odoo Website.
+- La Home y secciones usan las rutas preparadas para `latinpyme.com`.
+- La nota individual añade canonical hacia `https://latinpyme.com` usando la URL nativa del post.
 - Antes de producción, el dominio principal de Website debe quedar configurado como `latinpyme.com`.
 
 ## Estrategia de migración SEO desde WordPress
@@ -186,15 +242,16 @@ Pendiente hasta tener inventario. Ejemplos de mapeo esperado:
 
 La estructura final de posts debe definirse con base en inventario SEO. Si se necesita replicar exactamente el patrón WordPress, eso debe hacerse en Fase 2 con rutas y redirecciones controladas.
 
-## Fase 3 recomendada
+## Fase 4 recomendada
 
 - Definir si la Home final de `latinpyme.com` será `/revista` o la raíz `/`.
 - Mapear URLs WordPress contra URLs Odoo reales.
 - Implementar redirecciones 301.
 - Evaluar rutas personalizadas para posts si se necesita una estructura más parecida a WordPress.
-- Reemplazar datos placeholder de redes, contacto, aliados y eventos por configuraciones administrables.
+- Crear una pantalla administrativa propia para activar/desactivar secciones, ordenar secciones y configurar contenido editorial por sección sin usar parámetros técnicos.
+- Reemplazar datos placeholder de redes, contacto, aliados y eventos por configuraciones administrables desde backend.
 - Crear modelo ligero de banners/editorial promos si los banners deben ser administrables sin Website Editor.
 - Integrar encuesta real.
 - Integrar buscador editorial avanzado por sección, fecha y etiqueta.
-- Rehacer la plantilla completa de nota individual solo después de confirmar los XML IDs y estructura final de `website_blog` en Odoo.sh.
+- Alimentar relacionados por coincidencia de etiquetas, no solo por publicaciones recientes del mismo blog.
 - Revisar y ajustar visualmente en Odoo.sh con datos reales, mobile y desktop.

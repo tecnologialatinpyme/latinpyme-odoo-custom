@@ -21,6 +21,8 @@ SECTION_LABELS = {
     "portafolio": "Portafolio",
 }
 
+ENABLED_SECTIONS_PARAM = "latinpyme_revista_theme.enabled_sections"
+
 HOME_FEATURE_TAGS = (
     "Destacado Home",
     "Destacado Portada",
@@ -41,8 +43,15 @@ PREPRODUCTION_HOSTS = {
 }
 
 
+def enabled_section_slugs(env):
+    configured = env["ir.config_parameter"].sudo().get_param(ENABLED_SECTIONS_PARAM, "")
+    slugs = [slug.strip().lower() for slug in configured.split(",") if slug.strip()]
+    valid_slugs = [slug for slug in slugs if slug in SECTION_LABELS]
+    return valid_slugs or list(SECTION_LABELS)
+
+
 def sitemap_revista_sections(env, rule, qs):
-    for slug in SECTION_LABELS:
+    for slug in enabled_section_slugs(env):
         yield {"loc": "/revista/seccion/%s" % slug}
 
 
@@ -102,6 +111,7 @@ class LatinpymeRevistaController(http.Controller):
                 "tag": self._tag_by_name(name),
             }
             for slug, name in SECTION_LABELS.items()
+            if slug in enabled_section_slugs(request.env)
         ]
 
     def _published_domain(self, Post):
@@ -188,7 +198,7 @@ class LatinpymeRevistaController(http.Controller):
         sitemap=sitemap_revista_sections,
     )
     def revista_section(self, section_slug, page=1, **kwargs):
-        if section_slug not in SECTION_LABELS:
+        if section_slug not in SECTION_LABELS or section_slug not in enabled_section_slugs(request.env):
             raise NotFound()
         blog = self._revista_blog()
         section_tag = self._section_tag(section_slug)

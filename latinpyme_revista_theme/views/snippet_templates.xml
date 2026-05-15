@@ -135,7 +135,7 @@
             </div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--default">
-            <div class="lp-revista-post-card__media"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Especial"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">Finanzas</span>
               <h3 class="lp-revista-post-card__title">Tendencias económicas para pymes</h3>
@@ -152,7 +152,7 @@
     <section class="lp-revista s_lp_revista_article_cards lp-revista-block" data-snippet="s_lp_revista_article_cards" data-name="LP Revista - Card Artículo Vertical / Horizontal">
       <div class="lp-revista-container lp-revista-card-demo">
         <article class="lp-revista-post-card lp-revista-post-card--default">
-          <div class="lp-revista-post-card__media"/>
+          <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo vertical"/>
           <div class="lp-revista-post-card__body">
             <span class="lp-revista-kicker">Gestión</span>
             <h3 class="lp-revista-post-card__title">Claves para una gestión empresarial ágil y eficiente</h3>
@@ -161,7 +161,7 @@
           </div>
         </article>
         <article class="lp-revista-post-card lp-revista-post-card--horizontal">
-          <div class="lp-revista-post-card__media"/>
+          <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Artículo horizontal"/>
           <div class="lp-revista-post-card__body">
             <span class="lp-revista-kicker">Liderazgo</span>
             <h3 class="lp-revista-post-card__title">Liderazgo efectivo en tiempos de transformación</h3>
@@ -586,7 +586,7 @@
         </t>
         <div class="lp-revista-card-grid lp-revista-card-grid--two">
           <article class="lp-revista-post-card lp-revista-post-card--wide">
-            <div class="lp-revista-post-card__media"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Especial"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">Especial</span>
               <h3 class="lp-revista-post-card__title">Innovación que transforma: empresas que lideran el cambio</h3>
@@ -594,7 +594,7 @@
             </div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--wide">
-            <div class="lp-revista-post-card__media"/>
+            <img class="lp-revista-post-card__media" src="/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg" alt="Especial"/>
             <div class="lp-revista-post-card__body">
               <span class="lp-revista-kicker">Especial</span>
               <h3 class="lp-revista-post-card__title">Sostenibilidad empresarial: estrategias que generan impacto</h3>
