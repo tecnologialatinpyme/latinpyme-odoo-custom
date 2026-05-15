@@ -1300,10 +1300,6 @@
   }
 }
 
-.lp-revista-breadcrumb--dark {
-  color: #69707d;
-}
-
 .lp-revista-note-head {
   display: grid;
   gap: 18px;
@@ -1474,10 +1470,34 @@
 
 .lp-revista-breadcrumb {
   display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
   gap: 8px;
+  max-width: 100%;
   color: rgba(255, 255, 255, .82);
   font-size: 13px;
   font-weight: 750;
+
+  a {
+    flex: 0 0 auto;
+    color: inherit;
+  }
+}
+
+.lp-revista-breadcrumb--dark {
+  color: #69707d;
+
+  a {
+    color: #151922;
+  }
+}
+
+.lp-revista-breadcrumb__current {
+  min-width: 0;
+  overflow: hidden;
+  color: #151922;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .lp-revista-section-layout {

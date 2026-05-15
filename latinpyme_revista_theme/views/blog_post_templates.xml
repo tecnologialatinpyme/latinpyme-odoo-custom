@@ -63,9 +63,11 @@
         <div class="lp-revista-container lp-revista-note-head lp-revista-blog-hero__inner">
           <nav class="lp-revista-breadcrumb lp-revista-breadcrumb--dark" aria-label="Miga de pan">
             <a href="/revista">Inicio</a>
-            <span>/</span>
+            <span aria-hidden="true">&gt;</span>
             <a t-if="lp_primary_section" t-att-href="lp_primary_section_url" t-out="lp_primary_section.name"/>
             <span t-if="not lp_primary_section" t-out="lp_primary_tag_name"/>
+            <span aria-hidden="true">&gt;</span>
+            <span class="lp-revista-breadcrumb__current" t-out="blog_post.name"/>
           </nav>
 
           <div class="lp-revista-blog-hero__grid">
