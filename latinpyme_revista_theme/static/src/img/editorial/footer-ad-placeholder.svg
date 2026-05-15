@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="260" viewBox="0 0 560 260" role="img" aria-label="Publicidad Revista LatinPyme">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#09111c"/>
+      <stop offset=".58" stop-color="#161d27"/>
+      <stop offset="1" stop-color="#3d1116"/>
+    </linearGradient>
+  </defs>
+  <rect width="560" height="260" rx="34" fill="url(#bg)"/>
+  <g opacity=".3" fill="#ffffff">
+    <rect x="335" y="110" width="22" height="82"/>
+    <rect x="370" y="78" width="25" height="114"/>
+    <rect x="410" y="40" width="30" height="152"/>
+    <rect x="455" y="94" width="24" height="98"/>
+    <rect x="495" y="130" width="20" height="62"/>
+  </g>
+  <text x="45" y="74" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="800">Automatiza procesos,</text>
+  <text x="45" y="113" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="800">optimiza recursos y</text>
+  <text x="45" y="152" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="800">crece sin limites.</text>
+  <rect x="45" y="177" width="166" height="46" rx="6" fill="#c80016"/>
+  <text x="72" y="207" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="800">Mas informacion</text>
+  <rect x="405" y="130" width="92" height="92" rx="6" fill="#c80016"/>
+  <text x="422" y="193" fill="#ffffff" font-family="Georgia, serif" font-size="52" font-weight="700">LP</text>
+</svg>

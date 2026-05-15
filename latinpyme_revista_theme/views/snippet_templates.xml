@@ -802,15 +802,63 @@
         <t t-set="href" t-value="False"/>
         <t t-set="link_label" t-value="False"/>
       </t>
-      <div class="lp-revista-allies__logos">
-        <span>Bancolombia</span>
-        <span>Colsubsidio</span>
-        <span>Sura</span>
-        <span>Davivienda</span>
-        <span>Compensar</span>
-        <span>Bimbo</span>
-        <span>La Sabana</span>
-        <span>Cámara de Comercio</span>
+      <div id="lpRevistaAlliesCarousel" class="lp-revista-allies__carousel carousel slide" data-bs-ride="false" data-bs-interval="false">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="lp-revista-allies__track">
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-bancolombia.svg" alt="Bancolombia" loading="lazy"/>
+              </figure>
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-colsubsidio.svg" alt="Colsubsidio" loading="lazy"/>
+              </figure>
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-sura.svg" alt="Sura" loading="lazy"/>
+              </figure>
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-davivienda.svg" alt="Davivienda" loading="lazy"/>
+              </figure>
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-compensar.svg" alt="Compensar" loading="lazy"/>
+              </figure>
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-bimbo.svg" alt="Bimbo" loading="lazy"/>
+              </figure>
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-lasabana.svg" alt="Universidad de La Sabana" loading="lazy"/>
+              </figure>
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-camara.svg" alt="Cámara de Comercio" loading="lazy"/>
+              </figure>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="lp-revista-allies__track">
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-bancolombia.svg" alt="Aliado editorial 1" loading="lazy"/>
+              </figure>
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-colsubsidio.svg" alt="Aliado editorial 2" loading="lazy"/>
+              </figure>
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-sura.svg" alt="Aliado editorial 3" loading="lazy"/>
+              </figure>
+              <figure class="lp-revista-ally-logo">
+                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-davivienda.svg" alt="Aliado editorial 4" loading="lazy"/>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#lpRevistaAlliesCarousel" data-bs-slide="prev" aria-label="Aliado anterior">
+          <i class="fa fa-angle-left"/>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#lpRevistaAlliesCarousel" data-bs-slide="next" aria-label="Aliado siguiente">
+          <i class="fa fa-angle-right"/>
+        </button>
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#lpRevistaAlliesCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Aliados 1"/>
+          <button type="button" data-bs-target="#lpRevistaAlliesCarousel" data-bs-slide-to="1" aria-label="Aliados 2"/>
+        </div>
       </div>
     </section>
   </template>
@@ -865,6 +913,7 @@
         <p><i class="fa fa-whatsapp"/> +57 310 123 4567</p>
         <p><i class="fa fa-map-marker"/> Bogotá, Colombia</p>
       </div>
+      <p class="lp-revista-footer__copyright">© 2026 Revista LatinPyme - Todos los derechos reservados</p>
     </footer>
   </template>
 
@@ -872,6 +921,65 @@
     <section class="lp-revista s_lp_revista_footer" data-snippet="s_lp_revista_footer" data-name="LP Revista - Footer Editorial">
       <div class="lp-revista-container">
         <t t-call="latinpyme_revista_theme.lp_footer"/>
+      </div>
+    </section>
+  </template>
+
+  <template id="lp_footer_with_ad" name="Revista LatinPyme Footer With Ad">
+    <footer class="lp-revista-footer lp-revista-footer--with-ad">
+      <div class="lp-revista-footer__brand">
+        <span class="lp-revista-footer__mark">LP</span>
+        <p>Revista especializada en pymes en Latinoamérica</p>
+        <div class="lp-revista-social">
+          <a href="#" aria-label="Facebook"><i class="fa fa-facebook"/></a>
+          <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
+          <a href="#" aria-label="Instagram"><i class="fa fa-instagram"/></a>
+          <a href="#" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
+          <a href="#" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
+        </div>
+      </div>
+      <nav aria-label="Footer secciones">
+        <h3>Secciones</h3>
+        <a href="/revista/seccion/gerencia">Gerencia</a>
+        <a href="/revista/seccion/negocios">Negocios</a>
+        <a href="/revista/seccion/ia">IA</a>
+        <a href="/revista/seccion/laboral">Laboral</a>
+        <a href="/revista/seccion/finanzas">Finanzas</a>
+        <a href="/revista/seccion/entrevistas">Entrevistas</a>
+        <a href="/revista/seccion/especiales">Especiales</a>
+        <a href="/revista/seccion/mujeres">Mujeres</a>
+      </nav>
+      <nav aria-label="Footer portafolio">
+        <h3>Portafolio</h3>
+        <a href="/revista/seccion/portafolio">Escuela</a>
+        <a href="/revista/seccion/portafolio">Consultoría</a>
+        <a href="/revista/seccion/portafolio">Eventos</a>
+        <a href="/revista/seccion/portafolio">Membresías</a>
+        <a href="/revista/seccion/portafolio">Portafolio</a>
+      </nav>
+      <nav aria-label="Footer legal">
+        <h3>Legal</h3>
+        <a href="/privacy">Tratamiento de datos personales</a>
+        <a href="/terms">Términos y condiciones</a>
+        <a href="/contactus">Derechos de autor</a>
+        <a href="/contactus">Curso 50 y 20 horas SG-SST</a>
+      </nav>
+      <div class="lp-revista-footer__contact">
+        <h3>Contacto</h3>
+        <p><i class="fa fa-whatsapp"/> +57 310 123 4567</p>
+        <p><i class="fa fa-map-marker"/> Bogotá, Colombia</p>
+      </div>
+      <a class="lp-revista-footer__ad" href="/contactus" aria-label="Publicidad Revista LatinPyme">
+        <img src="/latinpyme_revista_theme/static/src/img/editorial/footer-ad-placeholder.svg" alt="Publicidad Revista LatinPyme" loading="lazy"/>
+      </a>
+      <p class="lp-revista-footer__copyright">© 2026 Revista LatinPyme - Todos los derechos reservados</p>
+    </footer>
+  </template>
+
+  <template id="s_lp_revista_footer_ad" name="Revista LatinPyme Footer With Ad Snippet">
+    <section class="lp-revista s_lp_revista_footer_ad" data-snippet="s_lp_revista_footer_ad" data-name="LP Revista - Footer con Publicidad">
+      <div class="lp-revista-container">
+        <t t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
       </div>
     </section>
   </template>

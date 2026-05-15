@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="80" viewBox="0 0 220 80" role="img" aria-label="Davivienda">
+  <rect width="220" height="80" fill="none"/>
+  <path d="M27 44 45 25l18 19v18H27z" fill="none" stroke="#111318" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M35 62V47h20v15" fill="none" stroke="#111318" stroke-width="5"/>
+  <text x="76" y="50" fill="#111318" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="800">Davivienda</text>
+</svg>

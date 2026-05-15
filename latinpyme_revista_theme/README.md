@@ -103,23 +103,30 @@ Snippets disponibles:
 11. `LP Revista - Portafolio`
 12. `LP Revista - Aliados`
 13. `LP Revista - Footer Editorial`
-14. `LP Revista - Hero Sección`
-15. `LP Revista - Listado de Artículos por Sección`
-16. `LP Revista - Card Artículo Horizontal`
-17. `LP Revista - Sidebar Conferencia`
-18. `LP Revista - Sidebar Encuesta`
-19. `LP Revista - Sidebar Publicidad`
-20. `LP Revista - Paginación Visual`
-21. `LP Revista - Entrevistas Relacionadas`
-22. `LP Revista - Portafolio Compacto`
-23. `LP Revista - Cabecera de Nota`
-24. `LP Revista - Autor de Nota`
-25. `LP Revista - Botones Compartir`
-26. `LP Revista - Cuerpo Editorial`
-27. `LP Revista - Cita Destacada`
-28. `LP Revista - Imagen dentro del Artículo`
-29. `LP Revista - Sidebar Nota`
-30. `LP Revista - Artículos Relacionados`
+14. `LP Revista - Footer con Publicidad`
+15. `LP Revista - Hero Sección`
+16. `LP Revista - Listado de Artículos por Sección`
+17. `LP Revista - Card Artículo Horizontal`
+18. `LP Revista - Sidebar Conferencia`
+19. `LP Revista - Sidebar Encuesta`
+20. `LP Revista - Sidebar Publicidad`
+21. `LP Revista - Paginación Visual`
+22. `LP Revista - Entrevistas Relacionadas`
+23. `LP Revista - Portafolio Compacto`
+24. `LP Revista - Cabecera de Nota`
+25. `LP Revista - Autor de Nota`
+26. `LP Revista - Botones Compartir`
+27. `LP Revista - Cuerpo Editorial`
+28. `LP Revista - Cita Destacada`
+29. `LP Revista - Imagen dentro del Artículo`
+30. `LP Revista - Sidebar Nota`
+31. `LP Revista - Artículos Relacionados`
+
+Notas de edición de bloques:
+
+- `LP Revista - Aliados` es un carrusel visual. Cada aliado es una imagen editable desde Website Builder; el editor puede reemplazar logos, borrar aliados no usados o duplicar logos/slides para mostrar la cantidad necesaria.
+- `LP Revista - Footer Editorial` incluye el texto `© 2026 Revista LatinPyme - Todos los derechos reservados`.
+- `LP Revista - Footer con Publicidad` replica el footer editorial y agrega un banner editable a la derecha para pauta o campañas.
 
 ## Auditoría técnica actual
 

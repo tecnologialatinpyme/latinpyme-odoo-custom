@@ -1025,19 +1025,83 @@
   }
 }
 
-.lp-revista-allies__logos {
-  display: grid;
-  grid-template-columns: repeat(8, minmax(90px, 1fr));
-  gap: 18px;
-  align-items: center;
+.lp-revista-allies__carousel {
+  position: relative;
   border-block: 1px solid var(--lp-border);
-  padding-block: 24px;
+  padding: 18px 58px 42px;
 
-  span {
-    color: #1d242e;
-    font-size: 18px;
-    font-weight: 850;
-    text-align: center;
+  .carousel-inner {
+    overflow: hidden;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    top: 45%;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--lp-border);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--lp-red);
+    opacity: 1;
+    transform: translateY(-50%);
+    box-shadow: 0 8px 20px rgba(17, 19, 24, .08);
+
+    i {
+      font-size: 26px;
+      font-weight: 900;
+    }
+  }
+
+  .carousel-control-prev {
+    left: 0;
+  }
+
+  .carousel-control-next {
+    right: 0;
+  }
+
+  .carousel-indicators {
+    right: 0;
+    bottom: 6px;
+    left: 0;
+    margin: 0;
+    gap: 14px;
+
+    [data-bs-target] {
+      width: 12px;
+      height: 12px;
+      border: 0;
+      border-radius: 50%;
+      margin: 0;
+      background: #dfe3e8;
+      opacity: 1;
+    }
+
+    .active {
+      background: var(--lp-red);
+    }
+  }
+}
+
+.lp-revista-allies__track {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(105px, 1fr));
+  gap: 24px;
+  align-items: center;
+}
+
+.lp-revista-ally-logo {
+  display: grid;
+  min-height: 82px;
+  margin: 0;
+  place-items: center;
+
+  img {
+    width: 100%;
+    max-width: 176px;
+    max-height: 64px;
+    object-fit: contain;
   }
 }
 
@@ -1087,6 +1151,38 @@
   height: 58px;
   border-radius: 5px;
   font-size: 34px;
+}
+
+.lp-revista-footer__copyright {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: -4px;
+  color: #5d6470;
+  font-size: 14px;
+  font-weight: 750;
+  text-align: center;
+}
+
+.lp-revista-footer--with-ad {
+  grid-template-columns: 1.05fr .75fr .75fr .95fr .85fr minmax(250px, .95fr);
+  align-items: start;
+}
+
+.lp-revista-footer__ad {
+  display: block;
+  overflow: hidden;
+  min-height: 150px;
+  border-radius: 24px;
+  background: #0b111b;
+  box-shadow: 0 12px 28px rgba(17, 19, 24, .12);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 150px;
+    object-fit: cover;
+  }
 }
 
 .lp-revista-section-hero {
@@ -1563,6 +1659,10 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .lp-revista-allies__track {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .lp-revista-card-demo {
     grid-template-columns: 1fr;
   }
@@ -1625,7 +1725,7 @@
   .lp-revista-card-grid--two,
   .lp-revista-interviews-grid,
   .lp-revista-portfolio__grid,
-  .lp-revista-allies__logos,
+  .lp-revista-allies__track,
   .lp-revista-footer,
   .lp-revista-hero-rail,
   .lp-revista-featured-editorial,
@@ -1633,6 +1733,14 @@
   .lp-revista-interviews-grid--compact,
   .lp-revista-portfolio-compact {
     grid-template-columns: 1fr;
+  }
+
+  .lp-revista-allies__carousel {
+    padding-inline: 46px;
+  }
+
+  .lp-revista-allies__track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .lp-revista-promo-banner,
@@ -1712,5 +1820,10 @@
   .lp-revista-footer {
     border-radius: 18px;
     padding: 26px;
+  }
+
+  .lp-revista-footer__ad,
+  .lp-revista-footer__ad img {
+    min-height: 190px;
   }
 }
