@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <template id="lp_masthead" name="Revista LatinPyme Masthead">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <header class="lp-revista-masthead" role="banner">
       <div class="lp-revista-container lp-revista-masthead__top">
         <a href="/revista" class="lp-revista-brand" t-att-aria-label="lp_config.name if lp_config else 'Revista LatinPyme'">
@@ -402,7 +402,7 @@
   </template>
 
   <template id="lp_sidebar_conference_card" name="Revista LatinPyme Conference Card">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <section class="lp-revista-widget lp-revista-widget--event">
       <div>
         <p class="lp-revista-eyebrow" t-out="lp_config.conference_label if lp_config and lp_config.conference_label else 'Próxima conferencia'"/>
@@ -420,7 +420,7 @@
   </template>
 
   <template id="lp_sidebar_poll_card" name="Revista LatinPyme Poll Card">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <section class="lp-revista-widget lp-revista-widget--poll">
       <p class="lp-revista-eyebrow" t-out="lp_config.poll_label if lp_config and lp_config.poll_label else 'Encuesta'"/>
       <h3 t-out="lp_config.poll_question if lp_config and lp_config.poll_question else '¿Cuál es el mayor desafío de tu empresa este año?'"/>
@@ -433,7 +433,7 @@
   </template>
 
   <template id="lp_sidebar_ad_card" name="Revista LatinPyme Sidebar Ad Card">
-    <t t-set="lp_sidebar_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('sidebar', request.website)"/>
+    <t t-set="lp_sidebar_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('sidebar')"/>
     <section class="lp-revista-widget lp-revista-widget--ad">
       <img t-if="lp_sidebar_banner and lp_sidebar_banner.image" class="lp-revista-widget__image" t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % lp_sidebar_banner.id" t-att-alt="lp_sidebar_banner.name" loading="lazy"/>
       <span class="lp-revista-widget__shade"/>
@@ -447,7 +447,7 @@
   </template>
 
   <template id="lp_editorial_sidebar" name="Revista LatinPyme Sidebar">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <aside class="lp-revista-sidebar" aria-label="Contenido recomendado">
       <t t-if="not lp_config or lp_config.show_sidebar_conference" t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
       <t t-if="not lp_config or lp_config.show_sidebar_poll" t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
@@ -498,7 +498,7 @@
   <template id="s_lp_revista_promo_banner" name="Revista LatinPyme Promo Banner">
     <section class="lp-revista s_lp_revista_promo_banner" data-snippet="s_lp_revista_promo_banner" data-name="LP Revista - Banner Publicitario Horizontal">
       <div class="lp-revista-container">
-        <t t-set="lp_home_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('home_horizontal', request.website)"/>
+        <t t-set="lp_home_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('home_horizontal')"/>
         <t t-if="lp_home_banner" t-call="latinpyme_revista_theme.lp_dynamic_banner">
           <t t-set="banner" t-value="lp_home_banner"/>
         </t>
@@ -831,7 +831,7 @@
         <t t-set="href" t-value="False"/>
         <t t-set="link_label" t-value="False"/>
       </t>
-      <t t-set="lp_ally_slides" t-value="request.env['latinpyme.revista.ally'].sudo().get_active_ally_slides(request.website, 8)"/>
+      <t t-set="lp_ally_slides" t-value="request.env['latinpyme.revista.ally'].sudo().get_active_ally_slides(False, 8)"/>
       <div t-if="lp_ally_slides" id="lpRevistaAlliesCarousel" class="lp-revista-allies__carousel carousel slide" data-bs-ride="false" data-bs-interval="false">
         <div class="carousel-inner">
           <t t-foreach="lp_ally_slides" t-as="ally_slide">
@@ -935,7 +935,7 @@
   </template>
 
   <template id="lp_footer" name="Revista LatinPyme Footer">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <footer class="lp-revista-footer">
       <div class="lp-revista-footer__brand">
         <span class="lp-revista-footer__mark">LP</span>
@@ -991,8 +991,8 @@
   </template>
 
   <template id="lp_footer_with_ad" name="Revista LatinPyme Footer With Ad">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(request.website)"/>
-    <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer', request.website)"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+    <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer')"/>
     <footer class="lp-revista-footer lp-revista-footer--with-ad">
       <div class="lp-revista-footer__brand">
         <span class="lp-revista-footer__mark">LP</span>

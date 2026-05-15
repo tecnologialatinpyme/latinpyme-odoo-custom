@@ -170,7 +170,7 @@
           </section>
 
           <section class="lp-revista-container lp-revista-block">
-            <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer', request.website)"/>
+            <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer')"/>
             <t t-if="lp_footer_banner" t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
             <t t-else="" t-call="latinpyme_revista_theme.lp_footer"/>
           </section>
