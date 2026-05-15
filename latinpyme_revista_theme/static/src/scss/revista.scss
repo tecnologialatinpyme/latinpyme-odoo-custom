@@ -1345,6 +1345,19 @@
     gap: 20px;
   }
 
+  .lp-revista-blog-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(320px, .78fr);
+    gap: 46px;
+    align-items: center;
+  }
+
+  .lp-revista-blog-hero__copy {
+    display: grid;
+    align-content: center;
+    gap: 18px;
+  }
+
   .lp-revista-blog-hero__title {
     display: grid;
     gap: 14px;
@@ -1353,7 +1366,7 @@
       max-width: 980px;
       margin: 0;
       color: var(--lp-ink);
-      font-size: 50px;
+      font-size: 45px;
       font-weight: 850;
       line-height: 1.08;
     }
@@ -1370,17 +1383,32 @@
   .lp-revista-blog-hero__cover {
     overflow: hidden;
     width: 100%;
-    min-height: 430px;
+    min-height: 360px;
     border-radius: var(--lp-radius);
-    background: #dfe3e8;
+    background:
+      linear-gradient(90deg, rgba(5, 7, 12, .12), rgba(5, 7, 12, .02)),
+      url("/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg");
+    background-position: center;
+    background-size: cover;
     box-shadow: var(--lp-shadow);
   }
 
   .lp-revista-blog-hero__image {
     width: 100%;
-    min-height: 430px;
+    min-height: 360px;
+    background:
+      linear-gradient(90deg, rgba(5, 7, 12, .12), rgba(5, 7, 12, .02)),
+      url("/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg");
     background-position: center;
     background-size: cover;
+  }
+
+  .lp-revista-blog-hero__image[style*="background-image: none"] {
+    background:
+      linear-gradient(90deg, rgba(5, 7, 12, .12), rgba(5, 7, 12, .02)),
+      url("/latinpyme_revista_theme/static/src/img/editorial/article-placeholder.svg") !important;
+    background-position: center !important;
+    background-size: cover !important;
   }
 
   .o_wblog_post_page_cover {
@@ -1408,9 +1436,13 @@
     padding-top: 26px !important;
   }
 
+  .lp-revista-post-main .d-flex.flex-column.flex-lg-row {
+    align-items: flex-start;
+    gap: 42px;
+  }
+
   .lp-revista-post-content {
     max-width: 790px;
-    margin-right: 34px;
     border-radius: var(--lp-radius);
   }
 
@@ -1483,8 +1515,7 @@
 
   #o_wblog_post_info,
   .o_wblog_post_info {
-    color: var(--lp-muted);
-    font-weight: 700;
+    display: none;
   }
 
   .o_wblog_post_title .badge,
@@ -1537,6 +1568,11 @@
   }
 
   .lp-revista--native-blog {
+    .lp-revista-blog-hero__grid {
+      grid-template-columns: 1fr;
+      gap: 26px;
+    }
+
     .lp-revista-post-content {
       max-width: none;
       margin-right: 0;

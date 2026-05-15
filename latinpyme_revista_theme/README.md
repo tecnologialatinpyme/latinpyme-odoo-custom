@@ -176,13 +176,15 @@ El módulo añade automáticamente:
 - título grande,
 - metadatos de autor y fecha,
 - imagen principal con el sistema `website.record_cover`,
+- fallback editorial limpio si la nota aún no tiene cover configurado,
+- tiempo de lectura aproximado calculado desde el contenido,
 - caja de autor,
 - botones de compartir,
 - cuerpo editorial estilizado,
 - sidebar con conferencia, encuesta y publicidad,
 - artículos relacionados del mismo blog,
 - entrevistas relacionadas si existe la etiqueta `Entrevistas`,
-- portafolio y footer editorial.
+- portafolio, aliados y footer editorial.
 
 Para que una nota quede asociada a una sección, el editor debe asignar una etiqueta editorial:
 
@@ -209,7 +211,9 @@ Mientras se navegue desde `revista.latinpyme.com`, `.odoo.com` u `.odoo.sh`, el 
 Canonical:
 
 - La Home y secciones usan las rutas preparadas para `latinpyme.com`.
-- La nota individual añade canonical hacia `https://latinpyme.com` usando la URL nativa del post.
+- La nota individual no fuerza canonical hacia `latinpyme.com` mientras el dominio histórico siga en WordPress.
+- Se mantiene el canonical nativo de Odoo Website para evitar duplicados o señales cruzadas en preproducción.
+- En preproducción la defensa principal es `noindex,nofollow`; cuando `latinpyme.com` migre a Odoo se debe validar el dominio principal del Website y Search Console.
 - Antes de producción, el dominio principal de Website debe quedar configurado como `latinpyme.com`.
 
 ## Estrategia de migración SEO desde WordPress

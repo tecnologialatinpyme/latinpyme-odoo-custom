@@ -38,13 +38,13 @@
                 <t t-set="href" t-value="False"/>
                 <t t-set="link_label" t-value="False"/>
               </t>
-              <t t-if="featured_post">
-                <t t-call="latinpyme_revista_theme.lp_post_card">
-                  <t t-set="post" t-value="featured_post"/>
-                  <t t-set="variant" t-value="'feature'"/>
-                </t>
-              </t>
               <div class="lp-revista-list lp-revista-list--section">
+                <t t-if="featured_post">
+                  <t t-call="latinpyme_revista_theme.lp_post_card">
+                    <t t-set="post" t-value="featured_post"/>
+                    <t t-set="variant" t-value="'horizontal'"/>
+                  </t>
+                </t>
                 <t t-foreach="posts" t-as="post">
                   <t t-call="latinpyme_revista_theme.lp_post_card">
                     <t t-set="variant" t-value="'horizontal'"/>

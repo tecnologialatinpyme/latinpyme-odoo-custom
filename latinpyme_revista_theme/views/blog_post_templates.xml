@@ -22,15 +22,17 @@
   <template id="lp_revista_blog_post_seo" inherit_id="website_blog.blog_post_complete" name="Revista LatinPyme Blog Post SEO">
     <xpath expr="//t[@t-call='website_blog.index']/t[1]" position="before">
       <t t-set="lp_host" t-value="request.httprequest.host.split(':', 1)[0].lower()"/>
-      <t t-set="lp_canonical_url" t-value="'https://latinpyme.com%s' % blog_post.website_url"/>
+      <t t-set="lp_current_url" t-value="'%s%s' % (request.httprequest.url_root.rstrip('/'), blog_post.website_url)"/>
+      <t t-set="lp_final_url" t-value="'https://latinpyme.com%s' % blog_post.website_url"/>
+      <t t-set="lp_og_url" t-value="lp_final_url if lp_host == 'latinpyme.com' else lp_current_url"/>
+      <t t-set="lp_media_base_url" t-value="'https://latinpyme.com' if lp_host == 'latinpyme.com' else request.httprequest.url_root.rstrip('/')"/>
       <t t-set="head">
-        <link rel="canonical" t-att-href="lp_canonical_url"/>
         <meta t-if="lp_host == 'revista.latinpyme.com' or lp_host.endswith('.odoo.com') or lp_host.endswith('.odoo.sh')" name="robots" content="noindex,nofollow"/>
         <meta property="og:type" content="article"/>
         <meta property="og:title" t-att-content="blog_post.name"/>
         <meta property="og:description" t-att-content="blog_post.subtitle or blog_post.teaser or ''"/>
-        <meta property="og:url" t-att-content="lp_canonical_url"/>
-        <meta t-if="'image_1920' in blog_post._fields" property="og:image" t-att-content="'https://latinpyme.com/web/image/blog.post/%s/image_1920' % blog_post.id"/>
+        <meta property="og:url" t-att-content="lp_og_url"/>
+        <meta t-if="'image_1920' in blog_post._fields" property="og:image" t-att-content="'%s/web/image/blog.post/%s/image_1920' % (lp_media_base_url, blog_post.id)"/>
         <meta t-if="blog_post.post_date" property="article:published_time" t-att-content="blog_post.post_date.isoformat()"/>
       </t>
     </xpath>
@@ -50,6 +52,9 @@
         <t t-set="lp_section_slug_map" t-value="{'Gerencia': 'gerencia', 'Negocios': 'negocios', 'IA': 'ia', 'Laboral': 'laboral', 'Finanzas': 'finanzas', 'Entrevistas': 'entrevistas', 'Especiales': 'especiales', 'Mujeres': 'mujeres', 'Portafolio': 'portafolio'}"/>
         <t t-set="lp_primary_tag_name" t-value="lp_primary_tag.name if lp_primary_tag else 'Revista'"/>
         <t t-set="lp_primary_section_url" t-value="'/revista/seccion/%s' % lp_section_slug_map.get(lp_primary_tag_name, 'gerencia')"/>
+        <t t-set="lp_read_minutes" t-value="((blog_post.content and len(blog_post.content) or 0) // 1200) + 1"/>
+        <t t-set="lp_share_host" t-value="request.httprequest.host.split(':', 1)[0].lower()"/>
+        <t t-set="lp_share_url" t-value="'https://latinpyme.com%s' % blog_post.website_url if lp_share_host == 'latinpyme.com' else '%s%s' % (request.httprequest.url_root.rstrip('/'), blog_post.website_url)"/>
 
         <div class="lp-revista-container lp-revista-note-head lp-revista-blog-hero__inner">
           <nav class="lp-revista-breadcrumb lp-revista-breadcrumb--dark" aria-label="Miga de pan">
@@ -59,32 +64,48 @@
             <span t-if="not lp_primary_tag or lp_primary_tag_name not in lp_section_slug_map" t-out="lp_primary_tag_name"/>
           </nav>
 
-          <span t-if="lp_primary_tag" class="lp-revista-kicker" itemprop="articleSection" t-out="lp_primary_tag_name"/>
+          <div class="lp-revista-blog-hero__grid">
+            <div class="lp-revista-blog-hero__copy">
+              <span t-if="lp_primary_tag" class="lp-revista-kicker" itemprop="articleSection" t-out="lp_primary_tag_name"/>
 
-          <div id="title" class="blog_header lp-revista-blog-hero__title" t-ignore="True">
-            <h1 t-field="blog_post.name" class="o_wblog_post_name"/>
-            <p t-if="blog_post.subtitle or blog_post.teaser" class="o_wblog_post_subtitle" t-out="blog_post.subtitle or blog_post.teaser"/>
-            <div class="lp-revista-note-meta">
-              <span t-if="blog_post.author_id">
-                <i class="fa fa-user"/>
-                <t t-out="blog_post.author_id.name"/>
-              </span>
-              <span t-if="blog_post.post_date">
-                <i class="fa fa-calendar"/>
-                <span t-field="blog_post.post_date" t-options="{'widget': 'date'}"/>
-              </span>
+              <div id="title" class="blog_header lp-revista-blog-hero__title" t-ignore="False">
+                <h1 t-field="blog_post.name" class="o_wblog_post_name"/>
+                <p t-if="blog_post.subtitle or blog_post.teaser" class="o_wblog_post_subtitle" t-out="blog_post.subtitle or blog_post.teaser"/>
+                <div class="lp-revista-note-meta">
+                  <span t-if="blog_post.author_id">
+                    <i class="fa fa-user"/>
+                    <t t-out="blog_post.author_id.name"/>
+                  </span>
+                  <span t-if="blog_post.post_date">
+                    <i class="fa fa-calendar"/>
+                    <span t-field="blog_post.post_date" t-options="{'widget': 'date'}"/>
+                  </span>
+                  <span>
+                    <i class="fa fa-clock-o"/>
+                    <t t-out="lp_read_minutes"/> min de lectura
+                  </span>
+                </div>
+              </div>
+
+              <div class="lp-revista-share lp-revista-share--hero" aria-label="Compartir nota">
+                <strong>Compartir:</strong>
+                <a t-att-href="'https://www.facebook.com/sharer/sharer.php?u=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en Facebook"><i class="fa fa-facebook"/></a>
+                <a t-att-href="'https://www.linkedin.com/sharing/share-offsite/?url=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en LinkedIn"><i class="fa fa-linkedin"/></a>
+                <a t-att-href="'https://twitter.com/intent/tweet?url=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en X"><i class="fa fa-twitter"/></a>
+                <a t-att-href="'mailto:?subject=%s&amp;body=%s' % (blog_post.name, lp_share_url)" aria-label="Compartir por correo"><i class="fa fa-envelope"/></a>
+              </div>
             </div>
-          </div>
 
-          <div class="lp-revista-blog-hero__cover" aria-label="Imagen principal">
-            <t t-call="website.record_cover">
-              <t t-set="_record" t-value="blog_post"/>
-              <t t-set="snippet_autofocus" t-value="True"/>
-              <t t-set="use_filters" t-value="True"/>
-              <t t-set="use_size" t-value="True"/>
-              <t t-set="display_opt_name">Blog Post Cover</t>
-              <t t-set="additionnal_classes" t-value="'lp-revista-blog-hero__image o_wblog_post_page_cover'"/>
-            </t>
+            <div class="lp-revista-blog-hero__cover" aria-label="Imagen principal">
+              <t t-call="website.record_cover">
+                <t t-set="_record" t-value="blog_post"/>
+                <t t-set="snippet_autofocus" t-value="True"/>
+                <t t-set="use_filters" t-value="True"/>
+                <t t-set="use_size" t-value="True"/>
+                <t t-set="display_opt_name">Blog Post Cover</t>
+                <t t-set="additionnal_classes" t-value="'lp-revista-blog-hero__image o_wblog_post_page_cover'"/>
+              </t>
+            </div>
           </div>
         </div>
       </section>
@@ -114,6 +135,9 @@
           <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
         </section>
         <section class="lp-revista-block">
+          <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
+        </section>
+        <section class="lp-revista-block">
           <t t-call="latinpyme_revista_theme.lp_footer"/>
         </section>
       </div>
@@ -136,15 +160,6 @@
             <p>Revista LatinPyme</p>
             <span t-if="blog_post.post_date" t-field="blog_post.post_date" t-options="{'widget': 'date'}"/>
           </div>
-        </div>
-
-        <t t-set="lp_share_url" t-value="'https://latinpyme.com%s' % blog_post.website_url"/>
-        <div class="lp-revista-share" aria-label="Compartir nota">
-          <strong>Compartir:</strong>
-          <a t-att-href="'https://www.facebook.com/sharer/sharer.php?u=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en Facebook"><i class="fa fa-facebook"/></a>
-          <a t-att-href="'https://www.linkedin.com/sharing/share-offsite/?url=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en LinkedIn"><i class="fa fa-linkedin"/></a>
-          <a t-att-href="'https://twitter.com/intent/tweet?url=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en X"><i class="fa fa-twitter"/></a>
-          <a t-att-href="'mailto:?subject=%s' % blog_post.name" aria-label="Compartir por correo"><i class="fa fa-envelope"/></a>
         </div>
       </div>
     </xpath>
