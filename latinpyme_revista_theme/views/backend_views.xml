@@ -251,21 +251,6 @@
     </field>
   </record>
 
-  <record id="view_latinpyme_revista_banner_search" model="ir.ui.view">
-    <field name="name">latinpyme.revista.banner.search</field>
-    <field name="model">latinpyme.revista.banner</field>
-    <field name="arch" type="xml">
-      <search string="Buscar publicidad">
-        <field name="name"/>
-        <field name="placement"/>
-        <filter name="active" string="Activa" domain="[('active', '=', True)]"/>
-        <group expand="0" string="Agrupar por">
-          <filter name="group_placement" string="Ubicacion" context="{'group_by': 'placement'}"/>
-        </group>
-      </search>
-    </field>
-  </record>
-
   <record id="action_latinpyme_revista_config" model="ir.actions.act_window">
     <field name="name">Configuracion</field>
     <field name="res_model">latinpyme.revista.config</field>
@@ -289,7 +274,6 @@
     <field name="name">Publicidad</field>
     <field name="res_model">latinpyme.revista.banner</field>
     <field name="view_mode">list,form</field>
-    <field name="search_view_id" ref="view_latinpyme_revista_banner_search"/>
   </record>
 
   <menuitem id="menu_latinpyme_revista_root" name="Revista LatinPyme" sequence="80" groups="website.group_website_designer"/>
