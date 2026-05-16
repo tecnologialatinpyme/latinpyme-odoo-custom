@@ -127,9 +127,9 @@
           <section class="lp-revista-container">
             <div t-if="program_hero_banner and program_hero_banner.image" class="lp-revista-program-hero-banner">
               <a t-if="program_hero_banner.url" t-att-href="program_hero_banner.url" class="lp-revista-program-hero-banner__link" target="_blank" rel="noopener" aria-label="Abrir publicidad">
-                <img t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
+                <img t-att-src="'/revista/media/banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
               </a>
-              <img t-else="" t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
+              <img t-else="" t-att-src="'/revista/media/banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
             </div>
             <div t-else="" class="lp-revista-section-hero lp-revista-program-hero" t-att-style="featured_style">
               <div class="lp-revista-program-hero__content">
@@ -226,7 +226,7 @@
                           </header>
                           <div class="lp-revista-program-day-detail__events">
                             <article t-foreach="day['events']" t-as="event" class="lp-revista-program-detail-card" t-att-data-event-type="event.event_type" t-att-data-event-modality="event.modality">
-                              <img t-if="event.image" t-att-src="'/web/image/latinpyme.revista.program.event/%s/image' % event.id" t-att-alt="event.name" loading="lazy"/>
+                              <img t-if="event.image" t-att-src="'/revista/media/program-event/%s/image' % event.id" t-att-alt="event.name" loading="lazy"/>
                               <div>
                                 <div class="lp-revista-program-card__tags">
                                   <span class="lp-revista-kicker" t-out="event.event_type_label()"/>

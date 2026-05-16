@@ -157,7 +157,7 @@
 
   <template id="lp_dynamic_banner" name="Revista LatinPyme Dynamic Banner">
     <a t-if="banner" t-att-href="banner.url or '/contactus'" class="lp-revista-promo-banner lp-revista-promo-banner--dynamic">
-      <img t-if="banner.image" class="lp-revista-promo-banner__image" t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % banner.id" t-att-alt="banner.name" loading="lazy"/>
+      <img t-if="banner.image" class="lp-revista-promo-banner__image" t-att-src="'/revista/media/banner/%s/image' % banner.id" t-att-alt="banner.name" loading="lazy"/>
       <span class="lp-revista-promo-banner__shade"/>
       <h2 t-out="banner.title or banner.name"/>
       <p t-if="banner.text" t-out="banner.text"/>
@@ -483,7 +483,7 @@
   <template id="lp_sidebar_ad_card" name="Revista LatinPyme Sidebar Ad Card">
     <t t-set="lp_sidebar_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('sidebar')"/>
     <section class="lp-revista-widget lp-revista-widget--ad">
-      <img t-if="lp_sidebar_banner and lp_sidebar_banner.image" class="lp-revista-widget__image" t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % lp_sidebar_banner.id" t-att-alt="lp_sidebar_banner.name" loading="lazy"/>
+      <img t-if="lp_sidebar_banner and lp_sidebar_banner.image" class="lp-revista-widget__image" t-att-src="'/revista/media/banner/%s/image' % lp_sidebar_banner.id" t-att-alt="lp_sidebar_banner.name" loading="lazy"/>
       <span class="lp-revista-widget__shade"/>
       <h3 t-out="lp_sidebar_banner.title if lp_sidebar_banner and lp_sidebar_banner.title else 'Automatiza procesos, optimiza recursos y crece sin límites.'"/>
       <p t-if="lp_sidebar_banner and lp_sidebar_banner.text" t-out="lp_sidebar_banner.text"/>
@@ -888,11 +888,11 @@
                 <t t-foreach="ally_slide" t-as="ally">
                   <figure class="lp-revista-ally-logo">
                     <a t-if="ally.url" t-att-href="ally.url" target="_blank" rel="noopener" t-att-aria-label="ally.name">
-                      <img t-if="ally.logo" t-att-src="'/web/image/latinpyme.revista.ally/%s/logo' % ally.id" t-att-alt="ally.name" loading="lazy"/>
+                      <img t-if="ally.logo" t-att-src="'/revista/media/ally/%s/logo' % ally.id" t-att-alt="ally.name" loading="lazy"/>
                       <span t-else="" t-out="ally.name"/>
                     </a>
                     <t t-else="">
-                      <img t-if="ally.logo" t-att-src="'/web/image/latinpyme.revista.ally/%s/logo' % ally.id" t-att-alt="ally.name" loading="lazy"/>
+                      <img t-if="ally.logo" t-att-src="'/revista/media/ally/%s/logo' % ally.id" t-att-alt="ally.name" loading="lazy"/>
                       <span t-else="" t-out="ally.name"/>
                     </t>
                   </figure>
@@ -1078,7 +1078,7 @@
         <p t-if="lp_config and lp_config.email"><i class="fa fa-envelope"/> <t t-out="lp_config.email"/></p>
       </div>
       <a class="lp-revista-footer__ad" t-att-href="lp_footer_banner.url if lp_footer_banner and lp_footer_banner.url else '/contactus'" aria-label="Publicidad Revista LatinPyme">
-        <img t-if="lp_footer_banner and lp_footer_banner.image" t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % lp_footer_banner.id" t-att-alt="lp_footer_banner.name" loading="lazy"/>
+        <img t-if="lp_footer_banner and lp_footer_banner.image" t-att-src="'/revista/media/banner/%s/image' % lp_footer_banner.id" t-att-alt="lp_footer_banner.name" loading="lazy"/>
         <img t-else="" src="/latinpyme_revista_theme/static/src/img/editorial/footer-ad-placeholder.svg" alt="Publicidad Revista LatinPyme" loading="lazy"/>
       </a>
       <p class="lp-revista-footer__copyright" t-out="lp_config.footer_text if lp_config and lp_config.footer_text else '© 2026 Revista LatinPyme - Todos los derechos reservados'"/>

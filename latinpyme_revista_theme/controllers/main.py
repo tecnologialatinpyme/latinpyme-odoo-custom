@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import base64
 import calendar as pycalendar
 import json
 from datetime import date, timedelta
@@ -78,6 +79,29 @@ def sitemap_revista_sections(env, rule, qs):
 
 
 class LatinpymeRevistaController(http.Controller):
+    def _image_response(self, image):
+        if not image:
+            raise NotFound()
+        content = base64.b64decode(image)
+        mimetype = "image/png"
+        if content.startswith(b"\xff\xd8"):
+            mimetype = "image/jpeg"
+        elif content.startswith(b"\x89PNG\r\n\x1a\n"):
+            mimetype = "image/png"
+        elif content.startswith(b"GIF"):
+            mimetype = "image/gif"
+        elif content.startswith(b"RIFF") and content[8:12] == b"WEBP":
+            mimetype = "image/webp"
+        headers = [
+            ("Content-Type", mimetype),
+            ("Cache-Control", "public, max-age=86400"),
+        ]
+        return request.make_response(content, headers=headers)
+
+    def _website_matches(self, record):
+        website = getattr(request, "website", False)
+        return not record.website_id or not website or record.website_id == website
+
     def _config(self):
         return request.env["latinpyme.revista.config"].sudo().get_active_config(request.website)
 
@@ -106,6 +130,63 @@ class LatinpymeRevistaController(http.Controller):
         if values["lp_preproduction"]:
             response.headers["X-Robots-Tag"] = "noindex, nofollow"
         return response
+
+    @http.route(
+        "/revista/media/banner/<int:banner_id>/image",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def revista_banner_image(self, banner_id, **kwargs):
+        banner = request.env["latinpyme.revista.banner"].sudo().browse(banner_id).exists()
+        if not banner or not banner.active or not banner.image or not self._website_matches(banner):
+            raise NotFound()
+        today = fields.Date.context_today(banner)
+        if banner.date_end and banner.date_end < today:
+            raise NotFound()
+        if banner.placement != "program_hero" and banner.date_start and banner.date_start > today:
+            raise NotFound()
+        return self._image_response(banner.image)
+
+    @http.route(
+        "/revista/media/ally/<int:ally_id>/logo",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def revista_ally_logo(self, ally_id, **kwargs):
+        ally = request.env["latinpyme.revista.ally"].sudo().browse(ally_id).exists()
+        if not ally or not ally.active or not ally.logo or not self._website_matches(ally):
+            raise NotFound()
+        return self._image_response(ally.logo)
+
+    @http.route(
+        "/revista/media/section/<int:section_id>/cover",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def revista_section_cover(self, section_id, **kwargs):
+        section = request.env["latinpyme.revista.section"].sudo().browse(section_id).exists()
+        if not section or not section.active or not section.cover_image or not self._website_matches(section):
+            raise NotFound()
+        return self._image_response(section.cover_image)
+
+    @http.route(
+        "/revista/media/program-event/<int:event_id>/image",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def revista_program_event_image(self, event_id, **kwargs):
+        event = request.env["latinpyme.revista.program.event"].sudo().browse(event_id).exists()
+        if not event or not event.active or not event.image or not self._website_matches(event):
+            raise NotFound()
+        return self._image_response(event.image)
 
     def _website_domain(self, model):
         if request.website and "website_id" in model._fields:
@@ -247,7 +328,7 @@ class LatinpymeRevistaController(http.Controller):
     def _section_cover_style(self, section, fallback_record):
         if section and section.cover_image:
             overlay = "linear-gradient(90deg, rgba(5, 7, 12, .88), rgba(5, 7, 12, .44) 58%, rgba(5, 7, 12, .14))"
-            image_url = "/web/image/latinpyme.revista.section/%s/cover_image" % section.id
+            image_url = "/revista/media/section/%s/cover" % section.id
             return "background-image: %s, url('%s');" % (overlay, image_url)
         return self._cover_style(fallback_record)
 
