@@ -54,6 +54,25 @@
   padding-block: 26px 20px;
 }
 
+.lp-revista-mobile-toggle,
+.lp-revista-mobile-backdrop,
+.lp-revista-mobile-panel-head {
+  display: none;
+}
+
+.lp-revista-mobile-toggle,
+.lp-revista-mobile-close {
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid rgba(185, 0, 18, .16);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--lp-red);
+  font-weight: 900;
+}
+
 .lp-revista-brand {
   display: inline-flex;
   align-items: center;
@@ -2828,12 +2847,89 @@
     font-size: 25px;
   }
 
+  .lp-revista-mobile-toggle {
+    display: inline-flex;
+    justify-self: end;
+    padding-inline: 15px;
+    box-shadow: 0 8px 22px rgba(185, 0, 18, .08);
+  }
+
+  .lp-revista-mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1030;
+    border: 0;
+    background: rgba(17, 19, 24, .42);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease, visibility .2s ease;
+  }
+
+  .lp-revista-masthead.is-mobile-nav-open .lp-revista-mobile-backdrop {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .lp-revista-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1040;
+    width: calc(100vw - 28px);
+    max-width: 390px;
+    border-top: 0;
+    border-left: 1px solid var(--lp-border);
+    background: #fff;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(105%);
+    overflow-y: auto;
+    box-shadow: -20px 0 54px rgba(17, 19, 24, .18);
+    transition: opacity .22s ease, transform .22s ease, visibility .22s ease;
+  }
+
+  .lp-revista-masthead.is-mobile-nav-open .lp-revista-nav {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  .lp-revista-mobile-panel-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--lp-border);
+    padding: 16px;
+    background: rgba(255, 255, 255, .96);
+    backdrop-filter: blur(12px);
+
+    span {
+      color: #111318;
+      font-size: 18px;
+      font-weight: 900;
+    }
+  }
+
+  .lp-revista-mobile-close {
+    display: inline-flex;
+    width: 40px;
+    min-height: 40px;
+    padding: 0;
+  }
+
   .lp-revista-nav__inner {
+    display: grid;
     align-items: stretch;
-    flex-wrap: wrap;
-    gap: 4px;
+    gap: 7px;
+    width: 100%;
     min-height: auto;
-    padding-block: 8px;
+    padding: 12px 16px 22px;
     overflow-x: visible;
     overflow-y: visible;
   }
@@ -2843,20 +2939,44 @@
   }
 
   .lp-revista-nav__item--dropdown {
-    flex: 1 1 100%;
+    width: 100%;
   }
 
   .lp-revista-nav__link {
+    justify-content: space-between;
+    width: 100%;
     min-height: 46px;
-    padding-inline: 12px;
+    border-radius: 10px;
+    padding: 0 13px;
     font-size: 13px;
     line-height: 1.15;
     white-space: normal;
+
+    &::after {
+      right: auto;
+      bottom: 5px;
+      left: 13px;
+      width: 34px;
+      height: 2px;
+    }
+
+    &:hover,
+    &.is-active {
+      background: #fff7f8;
+    }
   }
 
   .lp-revista-nav__item--dropdown > .lp-revista-nav__toggle {
-    justify-content: space-between;
-    width: 100%;
+    box-shadow: inset 0 0 0 1px rgba(185, 0, 18, .08);
+  }
+
+  .lp-revista-nav__item--dropdown.is-open > .lp-revista-nav__toggle {
+    background: #fff3f4;
+    color: var(--lp-red);
+
+    i {
+      transform: rotate(180deg);
+    }
   }
 
   .lp-revista-nav__dropdown {
@@ -2865,17 +2985,30 @@
     width: 100%;
     min-width: 0;
     max-width: 100%;
-    margin: 0 0 6px;
+    margin: 4px 0 8px;
+    border: 0;
+    border-left: 2px solid rgba(185, 0, 18, .18);
     border-radius: 8px;
+    padding: 6px 0 6px 10px;
+    background: #fff;
     opacity: 1;
     visibility: visible;
     transform: none;
-    box-shadow: 0 10px 24px rgba(17, 19, 24, .08);
+    box-shadow: none;
   }
 
   .lp-revista-nav__item--dropdown:hover > .lp-revista-nav__dropdown,
   .lp-revista-nav__item--dropdown:focus-within > .lp-revista-nav__dropdown {
+    display: none;
+  }
+
+  .lp-revista-nav__item--dropdown.is-open > .lp-revista-nav__dropdown {
     display: grid;
+  }
+
+  .lp-revista-nav__dropdown-link {
+    min-height: 42px;
+    padding: 9px 11px;
   }
 
   .lp-revista-nav__subdropdown {
@@ -2894,16 +3027,24 @@
 
   .lp-revista-nav__subitem:hover > .lp-revista-nav__subdropdown,
   .lp-revista-nav__subitem:focus-within > .lp-revista-nav__subdropdown {
+    display: none;
+  }
+
+  .lp-revista-nav__subitem.is-open > .lp-revista-nav__subdropdown {
     display: grid;
   }
 
   .lp-revista-nav__subtoggle i {
+    transform: rotate(0deg);
+  }
+
+  .lp-revista-nav__subitem.is-open > .lp-revista-nav__subtoggle i {
     transform: rotate(90deg);
   }
 
   .lp-revista-button--nav {
-    flex: 1 1 100%;
     margin-left: 0;
+    margin-top: 8px;
   }
 
   .lp-revista-home-ads,

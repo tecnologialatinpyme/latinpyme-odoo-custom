@@ -21,6 +21,10 @@
             <strong>LatinPyme</strong>
           </span>
         </a>
+        <button type="button" class="lp-revista-mobile-toggle" aria-controls="lpRevistaMobileNav" aria-expanded="false" aria-label="Abrir menú">
+          <span>Menú</span>
+          <i class="fa fa-bars" aria-hidden="true"/>
+        </button>
         <div class="lp-revista-anniversary">
           <strong>25 años</strong>
           <span>Impulsando empresarios en Latinoamérica</span>
@@ -35,25 +39,32 @@
           <t t-call="latinpyme_revista_theme.lp_social_links"/>
         </div>
       </div>
-      <nav class="lp-revista-nav" aria-label="Secciones Revista LatinPyme">
+      <button type="button" class="lp-revista-mobile-backdrop" aria-label="Cerrar menú"></button>
+      <nav id="lpRevistaMobileNav" class="lp-revista-nav" aria-label="Secciones Revista LatinPyme">
+        <div class="lp-revista-mobile-panel-head">
+          <span>Secciones</span>
+          <button type="button" class="lp-revista-mobile-close" aria-label="Cerrar menú">
+            <i class="fa fa-times" aria-hidden="true"/>
+          </button>
+        </div>
         <div class="lp-revista-container lp-revista-nav__inner">
           <a href="/revista" t-attf-class="lp-revista-nav__link #{'is-active' if not section_slug else ''}">Inicio</a>
           <t t-foreach="lp_masthead_sections" t-as="section">
             <t t-if="section.get('children')">
               <div t-attf-class="lp-revista-nav__item lp-revista-nav__item--dropdown #{'lp-revista-nav__item--align-end' if section.get('slug') == 'portafolio' else ''} #{'is-active' if section_slug in section.get('active_slugs', []) else ''}">
-                <button type="button" t-attf-class="lp-revista-nav__link lp-revista-nav__toggle #{'is-active' if section_slug in section.get('active_slugs', []) else ''}">
+                <button type="button" t-att-aria-controls="'lpRevistaMenu-%s' % section.get('slug')" aria-expanded="false" t-attf-class="lp-revista-nav__link lp-revista-nav__toggle #{'is-active' if section_slug in section.get('active_slugs', []) else ''}">
                   <span t-out="section['name']"/>
                   <i class="fa fa-angle-down" aria-hidden="true"/>
                 </button>
-                <div class="lp-revista-nav__dropdown">
+                <div class="lp-revista-nav__dropdown" t-att-id="'lpRevistaMenu-%s' % section.get('slug')">
                   <t t-foreach="section.get('children')" t-as="child">
                     <t t-if="child.get('children')">
                       <div t-attf-class="lp-revista-nav__subitem #{'is-active' if section_slug in child.get('active_slugs', []) else ''}">
-                        <button type="button" t-attf-class="lp-revista-nav__dropdown-link lp-revista-nav__subtoggle #{'is-active' if section_slug in child.get('active_slugs', []) else ''}">
+                        <button type="button" t-att-aria-controls="'lpRevistaSubMenu-%s' % child.get('slug')" aria-expanded="false" t-attf-class="lp-revista-nav__dropdown-link lp-revista-nav__subtoggle #{'is-active' if section_slug in child.get('active_slugs', []) else ''}">
                           <span t-out="child['name']"/>
                           <i class="fa fa-angle-right" aria-hidden="true"/>
                         </button>
-                        <div class="lp-revista-nav__subdropdown">
+                        <div class="lp-revista-nav__subdropdown" t-att-id="'lpRevistaSubMenu-%s' % child.get('slug')">
                           <t t-foreach="child.get('children')" t-as="grandchild">
                             <a t-att-href="grandchild.get('url') or '#'" t-attf-class="lp-revista-nav__dropdown-link lp-revista-nav__dropdown-link--child #{'is-active' if section_slug in grandchild.get('active_slugs', [grandchild.get('slug')]) else ''}">
                               <t t-out="grandchild['name']"/>
