@@ -280,6 +280,88 @@
     </field>
   </record>
 
+  <record id="view_latinpyme_revista_program_event_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.program.event.list</field>
+    <field name="model">latinpyme.revista.program.event</field>
+    <field name="arch" type="xml">
+      <list string="Programacion anual" default_order="date_start,time_start,sequence,name">
+        <field name="sequence" widget="handle"/>
+        <field name="date_start"/>
+        <field name="time_start" widget="float_time"/>
+        <field name="name"/>
+        <field name="event_type"/>
+        <field name="modality"/>
+        <field name="location"/>
+        <field name="featured"/>
+        <field name="website_id"/>
+        <field name="active"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_program_event_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.program.event.form</field>
+    <field name="model">latinpyme.revista.program.event</field>
+    <field name="arch" type="xml">
+      <form string="Evento de programacion anual">
+        <sheet>
+          <group>
+            <group string="General">
+              <field name="active"/>
+              <field name="featured"/>
+              <field name="sequence"/>
+              <field name="name"/>
+              <field name="event_type"/>
+              <field name="modality"/>
+              <field name="website_id"/>
+            </group>
+            <group string="Imagen">
+              <field name="image" widget="image"/>
+            </group>
+          </group>
+          <group>
+            <group string="Fecha y hora">
+              <field name="date_start"/>
+              <field name="date_end"/>
+              <field name="time_start" widget="float_time"/>
+              <field name="time_end" widget="float_time"/>
+              <field name="timezone"/>
+            </group>
+            <group string="Ubicacion e inscripcion">
+              <field name="location"/>
+              <field name="registration_url"/>
+              <field name="button_label"/>
+            </group>
+          </group>
+          <group string="Descripcion">
+            <field name="description"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_program_event_search" model="ir.ui.view">
+    <field name="name">latinpyme.revista.program.event.search</field>
+    <field name="model">latinpyme.revista.program.event</field>
+    <field name="arch" type="xml">
+      <search string="Buscar eventos">
+        <field name="name"/>
+        <field name="event_type"/>
+        <field name="modality"/>
+        <field name="location"/>
+        <filter name="active" string="Activos" domain="[('active', '=', True)]"/>
+        <filter name="inactive" string="Inactivos" domain="[('active', '=', False)]"/>
+        <filter name="featured" string="Destacados" domain="[('featured', '=', True)]"/>
+        <group expand="0" string="Agrupar por">
+          <filter name="group_event_type" string="Tipo" context="{'group_by': 'event_type'}"/>
+          <filter name="group_modality" string="Modalidad" context="{'group_by': 'modality'}"/>
+          <filter name="group_date_start" string="Fecha" context="{'group_by': 'date_start'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
   <record id="action_latinpyme_revista_config" model="ir.actions.act_window">
     <field name="name">Configuracion</field>
     <field name="res_model">latinpyme.revista.config</field>
@@ -305,9 +387,17 @@
     <field name="view_mode">list,form</field>
   </record>
 
+  <record id="action_latinpyme_revista_program_event" model="ir.actions.act_window">
+    <field name="name">Programacion anual</field>
+    <field name="res_model">latinpyme.revista.program.event</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_program_event_search"/>
+  </record>
+
   <menuitem id="menu_latinpyme_revista_root" name="Revista LatinPyme" sequence="80" groups="website.group_website_designer"/>
   <menuitem id="menu_latinpyme_revista_config" name="Configuracion" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_config" sequence="10"/>
   <menuitem id="menu_latinpyme_revista_sections" name="Secciones" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_section" sequence="20"/>
+  <menuitem id="menu_latinpyme_revista_program_event" name="Programacion anual" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_program_event" sequence="25"/>
   <menuitem id="menu_latinpyme_revista_allies" name="Aliados" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_ally" sequence="30"/>
   <menuitem id="menu_latinpyme_revista_banners" name="Publicidad" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_banner" sequence="40"/>
 </odoo>

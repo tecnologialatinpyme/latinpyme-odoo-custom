@@ -108,4 +108,125 @@
       </div>
     </t>
   </template>
+
+  <template id="revista_program_page" name="Revista LatinPyme Programacion Anual">
+    <t t-call="website.layout">
+      <t t-set="title" t-value="section_seo_title or (section_name + ' | Revista LatinPyme')"/>
+      <t t-set="website_meta_description" t-value="section_seo_description or 'Programación anual de capacitaciones, charlas y diplomados de Revista LatinPyme.'"/>
+      <t t-set="seo_object" t-value="section_record or blog"/>
+      <t t-set="head">
+        <meta t-if="lp_preproduction" name="robots" content="noindex,nofollow"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" t-att-content="title"/>
+        <meta property="og:description" t-att-content="website_meta_description"/>
+        <meta property="og:url" t-att-content="lp_production_url"/>
+      </t>
+      <div id="wrap" class="lp-revista lp-revista-section lp-revista-program">
+        <t t-call="latinpyme_revista_theme.lp_masthead"/>
+        <main class="lp-revista-main">
+          <section class="lp-revista-container">
+            <div class="lp-revista-section-hero lp-revista-program-hero" t-att-style="featured_style">
+              <nav aria-label="Miga de pan" class="lp-revista-breadcrumb">
+                <a href="/revista">Inicio</a>
+                <span>/</span>
+                <span>Capacitación</span>
+                <span>/</span>
+                <span t-out="section_name"/>
+              </nav>
+              <h1 t-out="section_name"/>
+              <p>
+                <t t-if="section_description" t-out="section_description"/>
+                <t t-else="">Consulta la programación anual de capacitaciones, charlas, diplomados y flashtrainings de LatinPyme.</t>
+              </p>
+            </div>
+          </section>
+
+          <section class="lp-revista-container lp-revista-program-layout">
+            <div class="lp-revista-program-main">
+              <t t-call="latinpyme_revista_theme.lp_section_heading">
+                <t t-set="title">Eventos programados</t>
+                <t t-set="eyebrow" t-value="False"/>
+                <t t-set="href" t-value="False"/>
+                <t t-set="link_label" t-value="False"/>
+              </t>
+
+              <div t-if="program_groups" class="lp-revista-program-months">
+                <section t-foreach="program_groups" t-as="program_group" class="lp-revista-program-month">
+                  <h2 t-out="program_group['label']"/>
+                  <div class="lp-revista-program-list">
+                    <article t-foreach="program_group['events']" t-as="event" t-attf-class="lp-revista-program-card #{'is-featured' if event.featured else ''} #{'lp-revista-program-card--no-media' if not event.image else ''}">
+                      <div class="lp-revista-program-card__date">
+                        <strong t-out="event.day_label()"/>
+                        <span t-out="event.month_short_label()"/>
+                      </div>
+                      <a t-if="event.image" class="lp-revista-program-card__media" t-att-href="event.registration_url or '#'" t-att-aria-label="event.name">
+                        <img t-att-src="'/web/image/latinpyme.revista.program.event/%s/image' % event.id" t-att-alt="event.name" loading="lazy"/>
+                      </a>
+                      <div class="lp-revista-program-card__body">
+                        <div class="lp-revista-program-card__tags">
+                          <span class="lp-revista-kicker" t-out="event.event_type_label()"/>
+                          <span class="lp-revista-program-card__mode" t-out="event.modality_label()"/>
+                        </div>
+                        <h3 t-out="event.name"/>
+                        <p t-if="event.description" t-out="event.description"/>
+                        <ul class="lp-revista-program-card__meta">
+                          <li><i class="fa fa-calendar-o"/> <span t-out="event.date_label()"/></li>
+                          <li><i class="fa fa-clock-o"/> <span t-out="event.time_label()"/></li>
+                          <li t-if="event.location">
+                            <i class="fa fa-map-marker"/>
+                            <a t-if="event.location_url()" t-att-href="event.location_url()" target="_blank" rel="noopener" t-out="event.location"/>
+                            <span t-else="" t-out="event.location"/>
+                          </li>
+                        </ul>
+                        <div class="lp-revista-program-card__actions">
+                          <a t-if="event.registration_url" class="lp-revista-button lp-revista-button--small" t-att-href="event.registration_url" target="_blank" rel="noopener">
+                            <t t-out="event.button_label or 'Inscribirme'"/> <i class="fa fa-arrow-right"/>
+                          </a>
+                          <t t-set="calendar_links" t-value="event.calendar_links()"/>
+                          <details class="lp-revista-calendar-picker">
+                            <summary>Agregar a calendario <i class="fa fa-angle-down"/></summary>
+                            <div>
+                              <a t-att-href="calendar_links['google']" target="_blank" rel="noopener"><i class="fa fa-google"/> Google Calendar</a>
+                              <a t-att-href="calendar_links['outlook']" target="_blank" rel="noopener"><i class="fa fa-windows"/> Outlook / Microsoft 365</a>
+                              <a t-att-href="calendar_links['ics']"><i class="fa fa-download"/> Descargar .ics</a>
+                            </div>
+                          </details>
+                        </div>
+                      </div>
+                    </article>
+                  </div>
+                </section>
+              </div>
+
+              <div t-if="not program_groups" class="lp-revista-empty">
+                <h2>Aún no hay eventos programados.</h2>
+                <p>Los administradores pueden crear eventos desde <strong>Revista LatinPyme &gt; Programación anual</strong>. Al publicarlos, aparecerán aquí automáticamente.</p>
+              </div>
+            </div>
+            <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
+          </section>
+
+          <section t-if="section_banners" class="lp-revista-container lp-revista-block lp-revista-ad-row" aria-label="Publicidad de programación">
+            <t t-foreach="section_banners" t-as="banner">
+              <t t-call="latinpyme_revista_theme.lp_dynamic_banner"/>
+            </t>
+          </section>
+
+          <section class="lp-revista-container lp-revista-block">
+            <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
+          </section>
+
+          <section class="lp-revista-container lp-revista-block">
+            <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
+          </section>
+
+          <section class="lp-revista-container lp-revista-block">
+            <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer')"/>
+            <t t-if="lp_footer_banner" t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
+            <t t-else="" t-call="latinpyme_revista_theme.lp_footer"/>
+          </section>
+        </main>
+      </div>
+    </t>
+  </template>
 </odoo>

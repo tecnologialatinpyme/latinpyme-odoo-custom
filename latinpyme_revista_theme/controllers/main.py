@@ -42,6 +42,8 @@ PREPRODUCTION_HOSTS = {
     "revista.latinpyme.com",
 }
 
+PROGRAM_SECTION_SLUG = "programacion-anual"
+
 
 def enabled_section_slugs(env):
     sections = env["latinpyme.revista.section"].sudo().get_route_sections()
@@ -239,6 +241,43 @@ class LatinpymeRevistaController(http.Controller):
             limit=limit,
         )
 
+    def _program_event_groups(self, events):
+        groups = []
+        current_key = False
+        for event in events:
+            month_key = event.month_group_key()
+            if month_key != current_key:
+                groups.append(
+                    {
+                        "key": month_key,
+                        "label": event.month_group_label(),
+                        "events": [],
+                    }
+                )
+                current_key = month_key
+            groups[-1]["events"].append(event)
+        return groups
+
+    def _revista_program_section(self, section_slug, section_record):
+        blog = self._revista_blog()
+        section_name = section_record.name if section_record else "Programacion anual"
+        Event = request.env["latinpyme.revista.program.event"].sudo()
+        events = Event.get_active_events(request.website)
+        values = {
+            "blog": blog,
+            "section_slug": section_slug,
+            "section_name": section_name,
+            "section_record": section_record,
+            "section_description": section_record.description if section_record else False,
+            "section_seo_title": section_record.seo_title if section_record else False,
+            "section_seo_description": section_record.seo_description if section_record else False,
+            "featured_style": self._section_cover_style(section_record, blog),
+            "program_events": events,
+            "program_groups": self._program_event_groups(events),
+            "section_banners": self._banners("section", limit=1),
+        }
+        return self._render("latinpyme_revista_theme.revista_program_page", values)
+
     @http.route("/revista", type="http", auth="public", website=True, sitemap=True)
     def revista_home(self, **kwargs):
         config = self._config()
@@ -275,6 +314,8 @@ class LatinpymeRevistaController(http.Controller):
         section_record = self._section_record(section_slug)
         if section_slug not in enabled_section_slugs(request.env):
             raise NotFound()
+        if section_slug == PROGRAM_SECTION_SLUG:
+            return self._revista_program_section(section_slug, section_record)
         section_name = section_record.name if section_record else SECTION_LABELS.get(section_slug)
         if not section_name:
             raise NotFound()
@@ -317,3 +358,23 @@ class LatinpymeRevistaController(http.Controller):
             "section_banners": self._banners("section", limit=1),
         }
         return self._render("latinpyme_revista_theme.revista_section_page", values)
+
+    @http.route(
+        "/revista/programacion/<int:event_id>/ics",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def revista_program_event_ics(self, event_id, **kwargs):
+        event = request.env["latinpyme.revista.program.event"].sudo().get_public_event(
+            event_id,
+            website=request.website,
+        )
+        if not event:
+            raise NotFound()
+        headers = [
+            ("Content-Type", "text/calendar; charset=utf-8"),
+            ("Content-Disposition", 'attachment; filename="%s"' % event.ics_filename()),
+        ]
+        return request.make_response(event.ics_content(), headers=headers)

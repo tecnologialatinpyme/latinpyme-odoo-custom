@@ -3,7 +3,9 @@ access_latinpyme_revista_config_designer,latinpyme.revista.config designer,model
 access_latinpyme_revista_section_designer,latinpyme.revista.section designer,model_latinpyme_revista_section,website.group_website_designer,1,1,1,1
 access_latinpyme_revista_ally_designer,latinpyme.revista.ally designer,model_latinpyme_revista_ally,website.group_website_designer,1,1,1,1
 access_latinpyme_revista_banner_designer,latinpyme.revista.banner designer,model_latinpyme_revista_banner,website.group_website_designer,1,1,1,1
+access_latinpyme_revista_program_event_designer,latinpyme.revista.program.event designer,model_latinpyme_revista_program_event,website.group_website_designer,1,1,1,1
 access_latinpyme_revista_config_system,latinpyme.revista.config system,model_latinpyme_revista_config,base.group_system,1,1,1,1
 access_latinpyme_revista_section_system,latinpyme.revista.section system,model_latinpyme_revista_section,base.group_system,1,1,1,1
 access_latinpyme_revista_ally_system,latinpyme.revista.ally system,model_latinpyme_revista_ally,base.group_system,1,1,1,1
 access_latinpyme_revista_banner_system,latinpyme.revista.banner system,model_latinpyme_revista_banner,base.group_system,1,1,1,1
+access_latinpyme_revista_program_event_system,latinpyme.revista.program.event system,model_latinpyme_revista_program_event,base.group_system,1,1,1,1

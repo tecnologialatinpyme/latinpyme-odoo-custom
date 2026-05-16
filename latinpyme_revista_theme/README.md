@@ -134,6 +134,40 @@ El módulo deja preparado el menú `Capacitación` con estos submenús si no exi
 
 La URL `/revista/seccion/capacitacion` no debe usarse como sección pública cuando `Capacitación` está marcada como `Solo menu desplegable`. Los submenús sí pueden tener página pública, por ejemplo `/revista/seccion/programacion-anual`, siempre que estén activos y no sean `Solo menu desplegable`.
 
+### Programación anual
+
+`/revista/seccion/programacion-anual` usa una plantilla especial. No muestra el listado genérico de notas de Blog; muestra eventos administrables desde backend.
+
+Menú backend:
+
+`Revista LatinPyme > Programación anual`
+
+Cada evento controla:
+
+- nombre,
+- tipo de evento,
+- fecha de inicio y fin,
+- hora de inicio y fin,
+- zona horaria,
+- modalidad,
+- lugar o enlace virtual,
+- descripción,
+- imagen,
+- enlace y texto de inscripción,
+- estado activo/inactivo,
+- destacado,
+- orden,
+- sitio web si aplica.
+
+En la página pública, los eventos se agrupan por mes y cada card ofrece:
+
+- botón de inscripción,
+- enlace para Google Calendar,
+- enlace para Outlook / Microsoft 365,
+- descarga `.ics`.
+
+Si no hay eventos activos, la página muestra un fallback editorial indicando que aún no hay programación publicada.
+
 ### Aliados
 
 Cada aliado controla:
