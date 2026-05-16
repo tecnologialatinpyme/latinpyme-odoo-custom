@@ -181,6 +181,8 @@ El hero superior de esta página puede administrarse desde:
 
 Crear un banner con ubicación `Programacion anual hero`. Si hay banner activo, reemplaza el bloque de título/descripcion de Programación anual. Si no hay banner activo, se conserva el fallback editorial.
 
+En la página pública este banner se renderiza como imagen limpia: no muestra breadcrumb, título, texto, botón, overlay ni estadísticas sobre la imagen. Debajo del banner aparece el título editorial `Programación Anual` y luego los controles/calendario anual.
+
 En la página pública, la sección usa una vista anual tipo calendario editorial:
 
 - selector de año anterior/siguiente,

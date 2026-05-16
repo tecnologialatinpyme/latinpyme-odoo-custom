@@ -125,9 +125,10 @@
         <t t-call="latinpyme_revista_theme.lp_masthead"/>
         <main class="lp-revista-main">
           <section class="lp-revista-container">
-            <div t-attf-class="lp-revista-section-hero lp-revista-program-hero #{'lp-revista-program-hero--banner' if program_hero_banner else ''}" t-att-style="False if program_hero_banner else featured_style">
-              <img t-if="program_hero_banner and program_hero_banner.image" class="lp-revista-program-hero__image" t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
-              <span t-if="program_hero_banner" class="lp-revista-program-hero__shade"/>
+            <div t-if="program_hero_banner and program_hero_banner.image" class="lp-revista-program-hero-banner">
+              <img t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
+            </div>
+            <div t-else="" class="lp-revista-section-hero lp-revista-program-hero" t-att-style="featured_style">
               <div class="lp-revista-program-hero__content">
                 <nav aria-label="Miga de pan" class="lp-revista-breadcrumb">
                   <a href="/revista">Inicio</a>
@@ -136,34 +137,17 @@
                   <span>/</span>
                   <span t-out="section_name"/>
                 </nav>
-                <h1>
-                  <t t-if="program_hero_banner" t-out="program_hero_banner.title or program_hero_banner.name"/>
-                  <t t-else="" t-out="section_name"/>
-                </h1>
+                <h1 t-out="section_name"/>
                 <p>
-                  <t t-if="program_hero_banner and program_hero_banner.text" t-out="program_hero_banner.text"/>
-                  <t t-elif="section_description" t-out="section_description"/>
+                  <t t-if="section_description" t-out="section_description"/>
                   <t t-else="">Consulta la programación anual de charlas, diplomados, flashtraining, foros y cursos de LatinPyme.</t>
                 </p>
-                <a t-if="program_hero_banner and program_hero_banner.url" class="lp-revista-button" t-att-href="program_hero_banner.url">
-                  <t t-out="program_hero_banner.button_label or 'Conoce más'"/> <i class="fa fa-arrow-right"/>
-                </a>
-                <div class="lp-revista-program-stats" aria-label="Resumen de programación">
-                  <article>
-                    <span>Eventos del año</span>
-                    <strong t-out="len(program_events)"/>
-                  </article>
-                  <article>
-                    <span>Próximos</span>
-                    <strong t-out="len(program_upcoming_events)"/>
-                  </article>
-                  <article>
-                    <span>Tipos activos</span>
-                    <strong t-out="len(program_type_summary)"/>
-                  </article>
-                </div>
               </div>
             </div>
+          </section>
+
+          <section class="lp-revista-container lp-revista-program-title">
+            <h1>Programación Anual</h1>
           </section>
 
           <section class="lp-revista-container lp-revista-program-toolbar" aria-label="Controles de programación anual">
@@ -205,12 +189,6 @@
           </section>
 
           <section class="lp-revista-container lp-revista-program-annual" data-lp-program-calendar="true">
-            <t t-call="latinpyme_revista_theme.lp_section_heading">
-              <t t-set="title">Calendario anual</t>
-              <t t-set="eyebrow" t-value="False"/>
-              <t t-set="href" t-value="False"/>
-              <t t-set="link_label" t-value="False"/>
-            </t>
             <div t-if="not program_events" class="lp-revista-empty lp-revista-program-empty">
               <h2>No hay eventos publicados para <t t-out="program_year"/>.</h2>
               <p>Los administradores pueden crear eventos desde <strong>Revista LatinPyme &gt; Programación anual</strong>. Al publicarlos, aparecerán aquí automáticamente.</p>

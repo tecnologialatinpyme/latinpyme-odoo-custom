@@ -385,7 +385,7 @@ class LatinpymeRevistaController(http.Controller):
             "program_upcoming_events": upcoming_events,
             "program_type_summary": self._program_type_summary(events),
             "program_filter_options": self._program_filter_options(),
-            "program_hero_banner": self._banners("program_hero", limit=1),
+            "program_hero_banner": request.env["latinpyme.revista.banner"].sudo().get_program_hero_banner(request.website),
         }
         return self._render("latinpyme_revista_theme.revista_program_page", values)
 

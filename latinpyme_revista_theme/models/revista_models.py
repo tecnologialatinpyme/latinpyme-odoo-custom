@@ -434,12 +434,33 @@ class LatinpymeRevistaBanner(models.Model):
         return domain
 
     @api.model
+    def _available_until_domain(self, placement, website=None):
+        today = fields.Date.context_today(self)
+        domain = [
+            ("active", "=", True),
+            ("placement", "=", placement),
+            "|",
+            ("date_end", "=", False),
+            ("date_end", ">=", today),
+        ]
+        if website:
+            domain.append(("website_id", "in", [False, website.id]))
+        return domain
+
+    @api.model
     def get_active_banners(self, placement, website=None, limit=1):
         return self.search(self._active_domain(placement, website=website), order="sequence, id", limit=limit)
 
     @api.model
     def get_active_banner(self, placement, website=None):
         return self.get_active_banners(placement, website=website, limit=1)
+
+    @api.model
+    def get_program_hero_banner(self, website=None):
+        banner = self.get_active_banner("program_hero", website=website)
+        if banner:
+            return banner
+        return self.search(self._available_until_domain("program_hero", website=website), order="sequence, id", limit=1)
 
 
 class LatinpymeRevistaProgramEvent(models.Model):
