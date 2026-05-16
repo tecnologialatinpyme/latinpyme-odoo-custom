@@ -43,6 +43,41 @@
     var upcomingCards = document.querySelectorAll(".lp-revista-program-upcoming-card");
     var noFilter = calendar.querySelector(".lp-revista-program-no-filter");
 
+    function getDayCards(day) {
+      var template = day.querySelector(".lp-revista-program-day-template");
+      if (!template) {
+        return [];
+      }
+      return Array.prototype.slice.call(template.querySelectorAll(".lp-revista-program-detail-card"));
+    }
+
+    function getFilteredDayCount(day, filter) {
+      return getDayCards(day).filter(function (card) {
+        return matchesFilter(card, filter);
+      }).length;
+    }
+
+    function setDayCount(day, count) {
+      var button = day.querySelector(".lp-revista-year-day__button");
+      if (!button) {
+        return;
+      }
+      var badge = button.querySelector("em");
+      button.dataset.eventCount = String(count);
+      day.dataset.filteredEventCount = String(count);
+      if (badge) {
+        badge.textContent = String(count);
+        badge.hidden = count < 1 || (activeFilter === "all" && count < 2);
+      }
+    }
+
+    function setMonthCount(month, count) {
+      var label = month.querySelector(".lp-revista-year-month__header span");
+      if (label) {
+        label.textContent = count + (count === 1 ? " evento" : " eventos");
+      }
+    }
+
     function setDrawer(open) {
       if (!drawer) {
         return;
@@ -65,9 +100,17 @@
         return;
       }
       drawerContent.innerHTML = template.innerHTML;
+      var visibleCards = 0;
       Array.prototype.forEach.call(drawerContent.querySelectorAll(".lp-revista-program-detail-card"), function (card) {
-        card.hidden = !matchesFilter(card, activeFilter);
+        if (!matchesFilter(card, activeFilter)) {
+          card.remove();
+          return;
+        }
+        visibleCards += 1;
       });
+      if (!visibleCards) {
+        return;
+      }
       setDrawer(true);
     }
 
@@ -80,16 +123,23 @@
       });
 
       Array.prototype.forEach.call(days, function (day) {
-        var isMatch = matchesFilter(day, activeFilter);
+        var filteredCount = getFilteredDayCount(day, activeFilter);
+        var isMatch = filteredCount > 0;
         if (isMatch) {
           visibleDayCount += 1;
         }
+        setDayCount(day, filteredCount);
         day.classList.toggle("is-filter-muted", !isMatch);
         day.classList.toggle("is-filter-hit", isMatch && activeFilter !== "all");
       });
 
       Array.prototype.forEach.call(months, function (month) {
-        var hasMatch = !!month.querySelector(".lp-revista-year-day.has-events:not(.is-filter-muted)");
+        var monthEventCount = 0;
+        Array.prototype.forEach.call(month.querySelectorAll(".lp-revista-year-day.has-events"), function (day) {
+          monthEventCount += parseInt(day.dataset.filteredEventCount || "0", 10);
+        });
+        var hasMatch = monthEventCount > 0;
+        setMonthCount(month, monthEventCount);
         month.classList.toggle("is-filter-empty", !hasMatch && activeFilter !== "all");
       });
 
