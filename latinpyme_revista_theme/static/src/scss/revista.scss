@@ -296,7 +296,7 @@
   border: 1px solid var(--lp-red);
   border-radius: 6px;
   background: var(--lp-red);
-  color: #fff;
+  color: #fff !important;
   font-size: 14px;
   font-weight: 800;
   line-height: 1;
@@ -306,8 +306,14 @@
   &:hover {
     border-color: var(--lp-red-dark);
     background: var(--lp-red-dark);
-    color: #fff;
+    color: #fff !important;
     transform: translateY(-1px);
+  }
+
+  i,
+  span,
+  strong {
+    color: inherit;
   }
 }
 
