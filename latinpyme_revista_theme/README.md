@@ -159,12 +159,28 @@ Cada evento controla:
 - orden,
 - sitio web si aplica.
 
-En la página pública, los eventos se agrupan por mes y cada card ofrece:
+En la página pública, la sección usa una vista anual tipo calendario editorial:
+
+- selector de año anterior/siguiente,
+- resumen del año,
+- filtros por tipo y modalidad,
+- 12 tarjetas mensuales en grilla responsive,
+- días con eventos marcados en rojo,
+- panel lateral/drawer con el detalle del día seleccionado,
+- bloque de próximos eventos.
+
+Cada evento conserva:
 
 - botón de inscripción,
 - enlace para Google Calendar,
 - enlace para Outlook / Microsoft 365,
 - descarga `.ics`.
+
+Esta vista no usa el sidebar editorial de conferencia, encuesta ni publicidad lateral. Por eso no muestra:
+
+- `Próxima conferencia`,
+- `Encuesta`,
+- banner lateral `Automatiza procesos, optimiza recursos y crece sin límites`.
 
 Si no hay eventos activos, la página muestra un fallback editorial indicando que aún no hay programación publicada.
 

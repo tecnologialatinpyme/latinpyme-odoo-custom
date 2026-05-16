@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import calendar as pycalendar
 import json
+from datetime import date, timedelta
 
 from odoo import fields, http
 from odoo.http import request
@@ -43,6 +45,21 @@ PREPRODUCTION_HOSTS = {
 }
 
 PROGRAM_SECTION_SLUG = "programacion-anual"
+PROGRAM_WEEKDAYS = ("L", "M", "M", "J", "V", "S", "D")
+PROGRAM_MONTHS = {
+    1: "enero",
+    2: "febrero",
+    3: "marzo",
+    4: "abril",
+    5: "mayo",
+    6: "junio",
+    7: "julio",
+    8: "agosto",
+    9: "septiembre",
+    10: "octubre",
+    11: "noviembre",
+    12: "diciembre",
+}
 
 
 def enabled_section_slugs(env):
@@ -258,11 +275,105 @@ class LatinpymeRevistaController(http.Controller):
             groups[-1]["events"].append(event)
         return groups
 
-    def _revista_program_section(self, section_slug, section_record):
+    def _program_year(self, kwargs):
+        Event = request.env["latinpyme.revista.program.event"].sudo()
+        today = fields.Date.context_today(Event)
+        try:
+            year = int(kwargs.get("year") or today.year)
+        except (TypeError, ValueError):
+            year = today.year
+        return max(min(year, 2100), 2000)
+
+    def _event_intersects_year(self, event, year):
+        start = fields.Date.to_date(event.date_start)
+        end = fields.Date.to_date(event.date_end or event.date_start)
+        return start <= date(year, 12, 31) and end >= date(year, 1, 1)
+
+    def _program_events_by_day(self, events, year):
+        grouped = {}
+        year_start = date(year, 1, 1)
+        year_end = date(year, 12, 31)
+        for event in events:
+            current = max(fields.Date.to_date(event.date_start), year_start)
+            end = min(fields.Date.to_date(event.date_end or event.date_start), year_end)
+            while current <= end:
+                grouped.setdefault(current.isoformat(), []).append(event)
+                current += timedelta(days=1)
+        return grouped
+
+    def _program_day_label(self, day):
+        return "%s de %s de %s" % (day.day, PROGRAM_MONTHS.get(day.month, ""), day.year)
+
+    def _program_calendar_months(self, year, events, today):
+        grouped = self._program_events_by_day(events, year)
+        calendar = pycalendar.Calendar(firstweekday=0)
+        months = []
+        for month_number in range(1, 13):
+            weeks = []
+            for week in calendar.monthdatescalendar(year, month_number):
+                days = []
+                for day in week:
+                    day_events = grouped.get(day.isoformat(), [])
+                    days.append(
+                        {
+                            "date": day.isoformat(),
+                            "label": self._program_day_label(day),
+                            "number": day.day,
+                            "in_month": day.month == month_number,
+                            "is_today": day == today,
+                            "events": day_events,
+                            "event_count": len(day_events),
+                            "featured": any(event.featured for event in day_events),
+                            "event_types": " ".join(sorted(set(event.event_type for event in day_events))),
+                            "modalities": " ".join(sorted(set(event.modality for event in day_events))),
+                        }
+                    )
+                weeks.append(days)
+            months.append(
+                {
+                    "number": month_number,
+                    "name": PROGRAM_MONTHS[month_number],
+                    "weeks": weeks,
+                    "event_count": sum(1 for event in events if fields.Date.to_date(event.date_start).month == month_number),
+                }
+            )
+        return months
+
+    def _program_type_summary(self, events):
+        Event = request.env["latinpyme.revista.program.event"].sudo()
+        selection = dict(Event._fields["event_type"].selection)
+        summary = []
+        for key, label in selection.items():
+            count = len(events.filtered(lambda event: event.event_type == key))
+            if count:
+                summary.append({"key": key, "label": label, "count": count})
+        return summary
+
+    def _program_filter_options(self):
+        return [
+            {"key": "all", "label": "Todos"},
+            {"key": "type:capacitacion", "label": "Capacitación"},
+            {"key": "type:charla", "label": "Charlas"},
+            {"key": "type:diplomado", "label": "Diplomados"},
+            {"key": "type:flashtraining", "label": "Flashtraining"},
+            {"key": "modality:virtual", "label": "Virtual"},
+            {"key": "modality:presencial", "label": "Presencial"},
+            {"key": "modality:hibrida", "label": "Híbrida"},
+        ]
+
+    def _revista_program_section(self, section_slug, section_record, kwargs=None):
+        kwargs = kwargs or {}
         blog = self._revista_blog()
         section_name = section_record.name if section_record else "Programacion anual"
         Event = request.env["latinpyme.revista.program.event"].sudo()
-        events = Event.get_active_events(request.website)
+        program_year = self._program_year(kwargs)
+        today = fields.Date.context_today(Event)
+        events = Event.get_active_events(request.website).filtered(
+            lambda event: self._event_intersects_year(event, program_year)
+        )
+        upcoming_events = events.filtered(
+            lambda event: fields.Date.to_date(event.date_end or event.date_start) >= today
+        )[:5]
         values = {
             "blog": blog,
             "section_slug": section_slug,
@@ -274,7 +385,14 @@ class LatinpymeRevistaController(http.Controller):
             "featured_style": self._section_cover_style(section_record, blog),
             "program_events": events,
             "program_groups": self._program_event_groups(events),
-            "section_banners": self._banners("section", limit=1),
+            "program_calendar_months": self._program_calendar_months(program_year, events, today),
+            "program_weekdays": PROGRAM_WEEKDAYS,
+            "program_year": program_year,
+            "program_prev_year_url": "/revista/seccion/%s?year=%s" % (section_slug, program_year - 1),
+            "program_next_year_url": "/revista/seccion/%s?year=%s" % (section_slug, program_year + 1),
+            "program_upcoming_events": upcoming_events,
+            "program_type_summary": self._program_type_summary(events),
+            "program_filter_options": self._program_filter_options(),
         }
         return self._render("latinpyme_revista_theme.revista_program_page", values)
 
@@ -315,7 +433,7 @@ class LatinpymeRevistaController(http.Controller):
         if section_slug not in enabled_section_slugs(request.env):
             raise NotFound()
         if section_slug == PROGRAM_SECTION_SLUG:
-            return self._revista_program_section(section_slug, section_record)
+            return self._revista_program_section(section_slug, section_record, kwargs)
         section_name = section_record.name if section_record else SECTION_LABELS.get(section_slug)
         if not section_name:
             raise NotFound()

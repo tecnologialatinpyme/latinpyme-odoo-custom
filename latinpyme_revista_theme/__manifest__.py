@@ -33,6 +33,7 @@ de publicaciones de Blog.
     "assets": {
         "web.assets_frontend": [
             "latinpyme_revista_theme/static/src/scss/revista.scss",
+            "latinpyme_revista_theme/static/src/js/program_calendar.js",
         ],
     },
     "installable": True,

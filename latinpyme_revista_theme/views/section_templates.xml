@@ -138,78 +138,156 @@
                 <t t-if="section_description" t-out="section_description"/>
                 <t t-else="">Consulta la programación anual de capacitaciones, charlas, diplomados y flashtrainings de LatinPyme.</t>
               </p>
+              <div class="lp-revista-program-stats" aria-label="Resumen de programación">
+                <article>
+                  <span>Eventos del año</span>
+                  <strong t-out="len(program_events)"/>
+                </article>
+                <article>
+                  <span>Próximos</span>
+                  <strong t-out="len(program_upcoming_events)"/>
+                </article>
+                <article>
+                  <span>Tipos activos</span>
+                  <strong t-out="len(program_type_summary)"/>
+                </article>
+              </div>
             </div>
           </section>
 
-          <section class="lp-revista-container lp-revista-program-layout">
-            <div class="lp-revista-program-main">
-              <t t-call="latinpyme_revista_theme.lp_section_heading">
-                <t t-set="title">Eventos programados</t>
-                <t t-set="eyebrow" t-value="False"/>
-                <t t-set="href" t-value="False"/>
-                <t t-set="link_label" t-value="False"/>
-              </t>
-
-              <div t-if="program_groups" class="lp-revista-program-months">
-                <section t-foreach="program_groups" t-as="program_group" class="lp-revista-program-month">
-                  <h2 t-out="program_group['label']"/>
-                  <div class="lp-revista-program-list">
-                    <article t-foreach="program_group['events']" t-as="event" t-attf-class="lp-revista-program-card #{'is-featured' if event.featured else ''} #{'lp-revista-program-card--no-media' if not event.image else ''}">
-                      <div class="lp-revista-program-card__date">
-                        <strong t-out="event.day_label()"/>
-                        <span t-out="event.month_short_label()"/>
-                      </div>
-                      <a t-if="event.image" class="lp-revista-program-card__media" t-att-href="event.registration_url or '#'" t-att-aria-label="event.name">
-                        <img t-att-src="'/web/image/latinpyme.revista.program.event/%s/image' % event.id" t-att-alt="event.name" loading="lazy"/>
-                      </a>
-                      <div class="lp-revista-program-card__body">
-                        <div class="lp-revista-program-card__tags">
-                          <span class="lp-revista-kicker" t-out="event.event_type_label()"/>
-                          <span class="lp-revista-program-card__mode" t-out="event.modality_label()"/>
-                        </div>
-                        <h3 t-out="event.name"/>
-                        <p t-if="event.description" t-out="event.description"/>
-                        <ul class="lp-revista-program-card__meta">
-                          <li><i class="fa fa-calendar-o"/> <span t-out="event.date_label()"/></li>
-                          <li><i class="fa fa-clock-o"/> <span t-out="event.time_label()"/></li>
-                          <li t-if="event.location">
-                            <i class="fa fa-map-marker"/>
-                            <a t-if="event.location_url()" t-att-href="event.location_url()" target="_blank" rel="noopener" t-out="event.location"/>
-                            <span t-else="" t-out="event.location"/>
-                          </li>
-                        </ul>
-                        <div class="lp-revista-program-card__actions">
-                          <a t-if="event.registration_url" class="lp-revista-button lp-revista-button--small" t-att-href="event.registration_url" target="_blank" rel="noopener">
-                            <t t-out="event.button_label or 'Inscribirme'"/> <i class="fa fa-arrow-right"/>
-                          </a>
-                          <t t-set="calendar_links" t-value="event.calendar_links()"/>
-                          <details class="lp-revista-calendar-picker">
-                            <summary>Agregar a calendario <i class="fa fa-angle-down"/></summary>
-                            <div>
-                              <a t-att-href="calendar_links['google']" target="_blank" rel="noopener"><i class="fa fa-google"/> Google Calendar</a>
-                              <a t-att-href="calendar_links['outlook']" target="_blank" rel="noopener"><i class="fa fa-windows"/> Outlook / Microsoft 365</a>
-                              <a t-att-href="calendar_links['ics']"><i class="fa fa-download"/> Descargar .ics</a>
-                            </div>
-                          </details>
-                        </div>
-                      </div>
-                    </article>
-                  </div>
-                </section>
-              </div>
-
-              <div t-if="not program_groups" class="lp-revista-empty">
-                <h2>Aún no hay eventos programados.</h2>
-                <p>Los administradores pueden crear eventos desde <strong>Revista LatinPyme &gt; Programación anual</strong>. Al publicarlos, aparecerán aquí automáticamente.</p>
-              </div>
+          <section class="lp-revista-container lp-revista-program-toolbar" aria-label="Controles de programación anual">
+            <div class="lp-revista-program-year">
+              <a t-att-href="program_prev_year_url" aria-label="Año anterior"><i class="fa fa-angle-left"/></a>
+              <strong t-out="program_year"/>
+              <a t-att-href="program_next_year_url" aria-label="Año siguiente"><i class="fa fa-angle-right"/></a>
             </div>
-            <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
+            <div class="lp-revista-program-filters" aria-label="Filtros de eventos">
+              <button t-foreach="program_filter_options" t-as="filter_option" type="button" t-att-data-program-filter="filter_option['key']" t-attf-class="lp-revista-program-filter #{'is-active' if filter_option['key'] == 'all' else ''}">
+                <t t-out="filter_option['label']"/>
+              </button>
+            </div>
           </section>
 
-          <section t-if="section_banners" class="lp-revista-container lp-revista-block lp-revista-ad-row" aria-label="Publicidad de programación">
-            <t t-foreach="section_banners" t-as="banner">
-              <t t-call="latinpyme_revista_theme.lp_dynamic_banner"/>
+          <section t-if="program_type_summary" class="lp-revista-container lp-revista-program-type-strip" aria-label="Eventos por tipo">
+            <article t-foreach="program_type_summary" t-as="type_summary">
+              <span t-out="type_summary['label']"/>
+              <strong t-out="type_summary['count']"/>
+            </article>
+          </section>
+
+          <section t-if="program_upcoming_events" class="lp-revista-container lp-revista-program-upcoming" aria-label="Próximos eventos">
+            <t t-call="latinpyme_revista_theme.lp_section_heading">
+              <t t-set="title">Próximos eventos</t>
+              <t t-set="eyebrow" t-value="False"/>
+              <t t-set="href" t-value="False"/>
+              <t t-set="link_label" t-value="False"/>
             </t>
+            <div class="lp-revista-program-upcoming__grid">
+              <article t-foreach="program_upcoming_events" t-as="event" class="lp-revista-program-upcoming-card" t-att-data-event-type="event.event_type" t-att-data-event-modality="event.modality">
+                <span class="lp-revista-kicker" t-out="event.event_type_label()"/>
+                <h3 t-out="event.name"/>
+                <p><i class="fa fa-calendar-o"/> <span t-out="event.date_label()"/></p>
+                <p><i class="fa fa-clock-o"/> <span t-out="event.time_label()"/></p>
+                <a t-if="event.registration_url" t-att-href="event.registration_url" target="_blank" rel="noopener">Inscribirme <i class="fa fa-arrow-right"/></a>
+              </article>
+            </div>
+          </section>
+
+          <section class="lp-revista-container lp-revista-program-annual" data-lp-program-calendar="true">
+            <t t-call="latinpyme_revista_theme.lp_section_heading">
+              <t t-set="title">Calendario anual</t>
+              <t t-set="eyebrow" t-value="False"/>
+              <t t-set="href" t-value="False"/>
+              <t t-set="link_label" t-value="False"/>
+            </t>
+            <div t-if="not program_events" class="lp-revista-empty lp-revista-program-empty">
+              <h2>No hay eventos publicados para <t t-out="program_year"/>.</h2>
+              <p>Los administradores pueden crear eventos desde <strong>Revista LatinPyme &gt; Programación anual</strong>. Al publicarlos, aparecerán aquí automáticamente.</p>
+            </div>
+            <div class="lp-revista-program-no-filter" hidden="hidden">
+              <strong>No hay eventos con este filtro.</strong>
+              <span>Prueba con otra categoría o modalidad.</span>
+            </div>
+            <div class="lp-revista-year-grid">
+              <section t-foreach="program_calendar_months" t-as="month" class="lp-revista-year-month" t-att-data-month="month['number']">
+                <header class="lp-revista-year-month__header">
+                  <h2 t-out="month['name']"/>
+                  <span><t t-out="month['event_count']"/> eventos</span>
+                </header>
+                <div class="lp-revista-year-weekdays" aria-hidden="true">
+                  <span t-foreach="program_weekdays" t-as="weekday" t-out="weekday"/>
+                </div>
+                <div class="lp-revista-year-days">
+                  <t t-foreach="month['weeks']" t-as="week">
+                    <t t-foreach="week" t-as="day">
+                      <div t-attf-class="lp-revista-year-day #{'is-outside' if not day['in_month'] else ''} #{'is-today' if day['is_today'] else ''} #{'has-events' if day['event_count'] else ''} #{'has-featured' if day['featured'] else ''}" t-att-data-event-types="day['event_types']" t-att-data-event-modalities="day['modalities']">
+                        <button t-if="day['event_count']" type="button" class="lp-revista-year-day__button" t-att-data-date="day['date']" t-att-data-date-label="day['label']" t-att-data-event-count="day['event_count']">
+                          <span t-out="day['number']"/>
+                          <i t-if="day['featured']" class="fa fa-star" aria-label="Evento destacado"/>
+                          <em t-if="day['event_count'] &gt; 1" t-out="day['event_count']"/>
+                        </button>
+                        <span t-else="" class="lp-revista-year-day__empty" t-out="day['number']"/>
+                        <div t-if="day['event_count']" class="lp-revista-program-day-template" hidden="hidden">
+                          <header class="lp-revista-program-day-detail__header">
+                            <span>Eventos del día</span>
+                            <h2 t-out="day['label']"/>
+                          </header>
+                          <div class="lp-revista-program-day-detail__events">
+                            <article t-foreach="day['events']" t-as="event" class="lp-revista-program-detail-card" t-att-data-event-type="event.event_type" t-att-data-event-modality="event.modality">
+                              <img t-if="event.image" t-att-src="'/web/image/latinpyme.revista.program.event/%s/image' % event.id" t-att-alt="event.name" loading="lazy"/>
+                              <div>
+                                <div class="lp-revista-program-card__tags">
+                                  <span class="lp-revista-kicker" t-out="event.event_type_label()"/>
+                                  <span class="lp-revista-program-card__mode" t-out="event.modality_label()"/>
+                                </div>
+                                <h3 t-out="event.name"/>
+                                <p t-if="event.description" t-out="event.description"/>
+                                <ul class="lp-revista-program-card__meta">
+                                  <li><i class="fa fa-calendar-o"/> <span t-out="event.date_label()"/></li>
+                                  <li><i class="fa fa-clock-o"/> <span t-out="event.time_label()"/></li>
+                                  <li t-if="event.location">
+                                    <i class="fa fa-map-marker"/>
+                                    <a t-if="event.location_url()" t-att-href="event.location_url()" target="_blank" rel="noopener" t-out="event.location"/>
+                                    <span t-else="" t-out="event.location"/>
+                                  </li>
+                                </ul>
+                                <div class="lp-revista-program-card__actions">
+                                  <a t-if="event.registration_url" class="lp-revista-button lp-revista-button--small" t-att-href="event.registration_url" target="_blank" rel="noopener">
+                                    <t t-out="event.button_label or 'Inscribirme'"/> <i class="fa fa-arrow-right"/>
+                                  </a>
+                                  <t t-set="calendar_links" t-value="event.calendar_links()"/>
+                                  <details class="lp-revista-calendar-picker">
+                                    <summary>Agregar a calendario <i class="fa fa-angle-down"/></summary>
+                                    <div>
+                                      <a t-att-href="calendar_links['google']" target="_blank" rel="noopener"><i class="fa fa-google"/> Google Calendar</a>
+                                      <a t-att-href="calendar_links['outlook']" target="_blank" rel="noopener"><i class="fa fa-windows"/> Outlook / Microsoft 365</a>
+                                      <a t-att-href="calendar_links['ics']"><i class="fa fa-download"/> Descargar .ics</a>
+                                    </div>
+                                  </details>
+                                </div>
+                              </div>
+                            </article>
+                          </div>
+                        </div>
+                      </div>
+                    </t>
+                  </t>
+                </div>
+              </section>
+            </div>
+            <aside class="lp-revista-program-drawer" aria-hidden="true">
+              <button type="button" class="lp-revista-program-drawer__overlay" data-program-drawer-close="true" aria-label="Cerrar detalle"/>
+              <div class="lp-revista-program-drawer__panel" role="dialog" aria-modal="true" aria-label="Detalle de eventos">
+                <button type="button" class="lp-revista-program-drawer__close" data-program-drawer-close="true" aria-label="Cerrar">
+                  <i class="fa fa-times"/>
+                </button>
+                <div class="lp-revista-program-drawer__content" data-program-drawer-content="true">
+                  <span>Selecciona una fecha marcada</span>
+                  <h2>Detalle de eventos</h2>
+                  <p>Haz clic en un día con indicador rojo para ver horarios, inscripción y opciones de calendario.</p>
+                </div>
+              </div>
+            </aside>
           </section>
 
           <section class="lp-revista-container lp-revista-block">
