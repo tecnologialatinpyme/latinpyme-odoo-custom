@@ -1289,6 +1289,35 @@
   }
 }
 
+.lp-revista-footer .lp-revista-social {
+  gap: 12px;
+
+  a {
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+    background: var(--lp-red);
+    color: #fff;
+    font-size: 14px;
+    line-height: 1;
+    text-decoration: none;
+
+    &:hover {
+      background: var(--lp-red-dark);
+      color: #fff;
+    }
+  }
+
+  .lp-revista-social__whatsapp,
+  a[aria-label="WhatsApp"] {
+    background: #24a865;
+
+    &:hover {
+      background: #1e965a;
+    }
+  }
+}
+
 .lp-revista-footer__mark {
   width: 58px;
   height: 58px;
