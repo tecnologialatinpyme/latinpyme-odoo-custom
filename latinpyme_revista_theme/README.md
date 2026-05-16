@@ -118,6 +118,12 @@ Si `tag_id` está vacío, el módulo intenta encontrar una etiqueta de Blog con 
 
 #### Menús con submenús
 
+El menú editorial soporta hasta 3 niveles:
+
+1. Menú principal.
+2. Submenú.
+3. Submenú final con enlace.
+
 Para crear un menú padre sin página pública, como `Capacitación`:
 
 1. Abrir `Revista LatinPyme > Secciones`.
@@ -134,6 +140,20 @@ El módulo deja preparado el menú `Capacitación` con estos submenús si no exi
 - `Flashtraining`
 
 La URL `/revista/seccion/capacitacion` no debe usarse como sección pública cuando `Capacitación` está marcada como `Solo menu desplegable`. Los submenús sí pueden tener página pública, por ejemplo `/revista/seccion/programacion-anual`, siempre que estén activos y no sean `Solo menu desplegable`.
+
+Para menús de 3 niveles, los niveles con hijos se comportan como desplegables sin URL. El módulo prepara `Portafolio` como menú desplegable con esta estructura:
+
+- `Aprendizaje empresarial`
+  - `Capacitación a la medida`
+  - `Fidelización empresarial`
+  - `Cursos de actualización`
+- `Tecnología: Salones y Espacios`
+  - `LMS - Aulas`
+  - `Salón de Eventos`
+- `Inteligencia Artificial`
+  - `Automatización de procesos con IA`
+
+`Portafolio` y sus submenús de segundo nivel quedan como `Solo menu desplegable`; solo los elementos de tercer nivel enlazan a `/revista/seccion/<slug>` o a la `URL personalizada` que se configure.
 
 ### Programación anual
 

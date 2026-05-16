@@ -226,9 +226,13 @@ class LatinpymeRevistaSection(models.Model):
     def _check_parent_id(self):
         for record in self:
             current = record.parent_id
+            depth = 1
             while current:
                 if current == record:
                     raise ValidationError("Una seccion no puede ser submenu de si misma.")
+                depth += 1
+                if depth > 3:
+                    raise ValidationError("El menu editorial solo permite hasta 3 niveles.")
                 current = current.parent_id
 
     @api.model
@@ -255,14 +259,29 @@ class LatinpymeRevistaSection(models.Model):
         return section.menu_url or "/revista/seccion/%s" % section.slug
 
     @api.model
-    def _nav_item(self, section):
+    def _nav_item(self, section, children=None):
+        children = children or []
+        active_slugs = [section.slug]
+        for child in children:
+            active_slugs += child.get("active_slugs") or [child.get("slug")]
         return {
             "slug": section.slug,
             "name": section.name,
-            "url": self._nav_url(section),
-            "menu_only": section.menu_only,
-            "children": [],
+            "url": False if children else self._nav_url(section),
+            "menu_only": section.menu_only or bool(children),
+            "children": children,
+            "active_slugs": active_slugs,
         }
+
+    @api.model
+    def _nav_tree_item(self, section, records, depth=1, max_depth=3):
+        children = []
+        if depth < max_depth:
+            children = [
+                self._nav_tree_item(child, records, depth=depth + 1, max_depth=max_depth)
+                for child in records.filtered(lambda child: child.parent_id == section)
+            ]
+        return self._nav_item(section, children=children)
 
     @api.model
     def get_nav_sections(self, website=None):
@@ -270,13 +289,7 @@ class LatinpymeRevistaSection(models.Model):
         if not records:
             return []
         top_sections = records.filtered(lambda section: not section.parent_id)
-        nav_sections = []
-        for section in top_sections:
-            item = self._nav_item(section)
-            children = records.filtered(lambda child: child.parent_id == section)
-            item["children"] = [self._nav_item(child) for child in children]
-            nav_sections.append(item)
-        return nav_sections
+        return [self._nav_tree_item(section, records) for section in top_sections]
 
     @api.model
     def get_by_slug(self, slug, website=None, active=True, routable=False):
@@ -360,6 +373,94 @@ class LatinpymeRevistaSection(models.Model):
                     "description": "%s de Revista LatinPyme." % name,
                 }
             )
+        return True
+
+    @api.model
+    def ensure_portfolio_menu(self):
+        parent = self.search([("slug", "=", "portafolio"), ("website_id", "=", False)], limit=1)
+        if not parent:
+            parent = self.create(
+                {
+                    "name": "Portafolio",
+                    "slug": "portafolio",
+                    "sequence": 90,
+                    "menu_only": True,
+                    "description": "Servicios, formacion, eventos y soluciones de LatinPyme.",
+                }
+            )
+        else:
+            values = {"menu_only": True}
+            if not parent.sequence:
+                values["sequence"] = 90
+            parent.write(values)
+
+        groups = [
+            (
+                "Aprendizaje empresarial",
+                "aprendizaje-empresarial",
+                91,
+                [
+                    ("Capacitación a la medida", "capacitacion-a-la-medida", 911),
+                    ("Fidelización empresarial", "fidelizacion-empresarial", 912),
+                    ("Cursos de actualización", "cursos-de-actualizacion", 913),
+                ],
+            ),
+            (
+                "Tecnología: Salones y Espacios",
+                "tecnologia-salones-y-espacios",
+                92,
+                [
+                    ("LMS - Aulas", "lms-aulas", 921),
+                    ("Salón de Eventos", "salon-de-eventos", 922),
+                ],
+            ),
+            (
+                "Inteligencia Artificial",
+                "inteligencia-artificial",
+                93,
+                [
+                    ("Automatización de procesos con IA", "automatizacion-de-procesos-con-ia", 931),
+                ],
+            ),
+        ]
+
+        for group_name, group_slug, group_sequence, children in groups:
+            group = self.search([("slug", "=", group_slug), ("website_id", "=", False)], limit=1)
+            group_values = {
+                "name": group_name,
+                "sequence": group_sequence,
+                "parent_id": parent.id,
+                "menu_only": True,
+            }
+            if group:
+                group.write(group_values)
+            else:
+                group = self.create(
+                    dict(
+                        group_values,
+                        slug=group_slug,
+                        description="%s de Portafolio LatinPyme." % group_name,
+                    )
+                )
+
+            for child_name, child_slug, child_sequence in children:
+                child = self.search([("slug", "=", child_slug), ("website_id", "=", False)], limit=1)
+                child_values = {
+                    "name": child_name,
+                    "sequence": child_sequence,
+                    "parent_id": group.id,
+                    "menu_only": False,
+                }
+                if child:
+                    child.write(child_values)
+                    continue
+                self.create(
+                    dict(
+                        child_values,
+                        slug=child_slug,
+                        description="%s de Revista LatinPyme." % child_name,
+                    )
+                )
         return True
 
 

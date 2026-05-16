@@ -40,22 +40,39 @@
           <a href="/revista" t-attf-class="lp-revista-nav__link #{'is-active' if not section_slug else ''}">Inicio</a>
           <t t-foreach="lp_masthead_sections" t-as="section">
             <t t-if="section.get('children')">
-              <div class="lp-revista-nav__item lp-revista-nav__item--dropdown">
-                <button type="button" class="lp-revista-nav__link lp-revista-nav__toggle">
+              <div t-attf-class="lp-revista-nav__item lp-revista-nav__item--dropdown #{'is-active' if section_slug in section.get('active_slugs', []) else ''}">
+                <button type="button" t-attf-class="lp-revista-nav__link lp-revista-nav__toggle #{'is-active' if section_slug in section.get('active_slugs', []) else ''}">
                   <span t-out="section['name']"/>
                   <i class="fa fa-angle-down" aria-hidden="true"/>
                 </button>
                 <div class="lp-revista-nav__dropdown">
                   <t t-foreach="section.get('children')" t-as="child">
-                    <a t-att-href="child.get('url') or '#'" t-attf-class="lp-revista-nav__dropdown-link #{'is-active' if child.get('slug') == section_slug else ''}">
-                      <t t-out="child['name']"/>
-                    </a>
+                    <t t-if="child.get('children')">
+                      <div t-attf-class="lp-revista-nav__subitem #{'is-active' if section_slug in child.get('active_slugs', []) else ''}">
+                        <button type="button" t-attf-class="lp-revista-nav__dropdown-link lp-revista-nav__subtoggle #{'is-active' if section_slug in child.get('active_slugs', []) else ''}">
+                          <span t-out="child['name']"/>
+                          <i class="fa fa-angle-right" aria-hidden="true"/>
+                        </button>
+                        <div class="lp-revista-nav__subdropdown">
+                          <t t-foreach="child.get('children')" t-as="grandchild">
+                            <a t-att-href="grandchild.get('url') or '#'" t-attf-class="lp-revista-nav__dropdown-link lp-revista-nav__dropdown-link--child #{'is-active' if section_slug in grandchild.get('active_slugs', [grandchild.get('slug')]) else ''}">
+                              <t t-out="grandchild['name']"/>
+                            </a>
+                          </t>
+                        </div>
+                      </div>
+                    </t>
+                    <t t-else="">
+                      <a t-att-href="child.get('url') or '#'" t-attf-class="lp-revista-nav__dropdown-link #{'is-active' if section_slug in child.get('active_slugs', [child.get('slug')]) else ''}">
+                        <t t-out="child['name']"/>
+                      </a>
+                    </t>
                   </t>
                 </div>
               </div>
             </t>
             <t t-else="">
-              <a t-att-href="section.get('url') or '#'" t-attf-class="lp-revista-nav__link #{'is-active' if section.get('slug') == section_slug else ''}">
+              <a t-att-href="section.get('url') or '#'" t-attf-class="lp-revista-nav__link #{'is-active' if section_slug in section.get('active_slugs', [section.get('slug')]) else ''}">
                 <t t-out="section['name']"/>
               </a>
             </t>

@@ -286,6 +286,60 @@
   }
 }
 
+.lp-revista-nav__subitem {
+  position: relative;
+}
+
+.lp-revista-nav__subtoggle {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  justify-content: space-between;
+  text-align: left;
+
+  i {
+    margin-left: 18px;
+    color: currentColor;
+    font-size: 12px;
+  }
+}
+
+.lp-revista-nav__subdropdown {
+  position: absolute;
+  top: -8px;
+  left: calc(100% + 8px);
+  z-index: 21;
+  display: grid;
+  min-width: 260px;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  padding: 8px;
+  background: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(8px);
+  box-shadow: 0 18px 42px rgba(17, 19, 24, .14);
+  transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+}
+
+.lp-revista-nav__subitem:hover > .lp-revista-nav__subdropdown,
+.lp-revista-nav__subitem:focus-within > .lp-revista-nav__subdropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.lp-revista-nav__subitem.is-active > .lp-revista-nav__subtoggle {
+  background: #fff3f4;
+  color: var(--lp-red);
+}
+
+.lp-revista-nav__dropdown-link--child {
+  padding-inline: 14px;
+}
+
 .lp-revista-button {
   display: inline-flex;
   align-items: center;
@@ -2764,6 +2818,21 @@
   .lp-revista-nav__dropdown {
     left: 0;
     min-width: 210px;
+  }
+
+  .lp-revista-nav__subdropdown {
+    position: static;
+    min-width: 0;
+    margin: 4px 0 4px 10px;
+    border-radius: 8px;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .lp-revista-nav__subtoggle i {
+    transform: rotate(90deg);
   }
 
   .lp-revista-button--nav {
