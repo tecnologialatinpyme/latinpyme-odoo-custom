@@ -111,8 +111,9 @@ class LatinpymeRevistaConfig(models.Model):
 
     @api.model
     def get_active_config(self, website=None):
-        if website:
-            config = self.search([("website_id", "=", website.id)], limit=1)
+        website_id = website.id if website else self.env.context.get("website_id")
+        if website_id:
+            config = self.search([("website_id", "=", website_id)], limit=1)
             if config:
                 return config
         return self.search([("website_id", "=", False)], limit=1)
