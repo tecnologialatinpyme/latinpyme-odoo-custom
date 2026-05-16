@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <template id="lp_social_links" name="Revista LatinPyme Social Links">
-    <t t-set="lp_social_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(getattr(request, 'website', False))"/>
+    <t t-set="lp_social_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <a t-if="lp_social_config and lp_social_config.facebook_url and lp_social_config.facebook_url != '#'" t-att-href="lp_social_config.facebook_url" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa fa-facebook"/></a>
     <a t-if="lp_social_config and lp_social_config.linkedin_url and lp_social_config.linkedin_url != '#'" t-att-href="lp_social_config.linkedin_url" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
     <a t-if="lp_social_config and lp_social_config.instagram_url and lp_social_config.instagram_url != '#'" t-att-href="lp_social_config.instagram_url" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa fa-instagram"/></a>
@@ -10,7 +10,7 @@
   </template>
 
   <template id="lp_masthead" name="Revista LatinPyme Masthead">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(getattr(request, 'website', False))"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <t t-set="lp_masthead_sections" t-value="request.env['latinpyme.revista.section'].sudo().get_nav_sections() or [{'slug': 'gerencia', 'name': 'Gerencia', 'url': '/revista/seccion/gerencia', 'children': []}, {'slug': 'negocios', 'name': 'Negocios', 'url': '/revista/seccion/negocios', 'children': []}, {'slug': 'ia', 'name': 'IA', 'url': '/revista/seccion/ia', 'children': []}, {'slug': 'laboral', 'name': 'Laboral', 'url': '/revista/seccion/laboral', 'children': []}, {'slug': 'finanzas', 'name': 'Finanzas', 'url': '/revista/seccion/finanzas', 'children': []}, {'slug': 'entrevistas', 'name': 'Entrevistas', 'url': '/revista/seccion/entrevistas', 'children': []}, {'slug': 'especiales', 'name': 'Especiales', 'url': '/revista/seccion/especiales', 'children': []}, {'slug': 'mujeres', 'name': 'Mujeres', 'url': '/revista/seccion/mujeres', 'children': []}, {'slug': 'portafolio', 'name': 'Portafolio', 'url': '/revista/seccion/portafolio', 'children': []}, {'slug': 'capacitacion', 'name': 'Capacitación', 'url': False, 'menu_only': True, 'children': [{'slug': 'programacion-anual', 'name': 'Programación anual', 'url': '/revista/seccion/programacion-anual', 'children': []}, {'slug': 'charlas', 'name': 'Charlas', 'url': '/revista/seccion/charlas', 'children': []}, {'slug': 'diplomados', 'name': 'Diplomados', 'url': '/revista/seccion/diplomados', 'children': []}, {'slug': 'flashtraining', 'name': 'Flashtraining', 'url': '/revista/seccion/flashtraining', 'children': []}]}]"/>
     <header class="lp-revista-masthead" role="banner">
       <div class="lp-revista-container lp-revista-masthead__top">
@@ -433,7 +433,7 @@
   </template>
 
   <template id="lp_sidebar_conference_card" name="Revista LatinPyme Conference Card">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(getattr(request, 'website', False))"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <section class="lp-revista-widget lp-revista-widget--event">
       <div>
         <p class="lp-revista-eyebrow" t-out="lp_config.conference_label if lp_config and lp_config.conference_label else 'Próxima conferencia'"/>
@@ -451,7 +451,7 @@
   </template>
 
   <template id="lp_sidebar_poll_card" name="Revista LatinPyme Poll Card">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(getattr(request, 'website', False))"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <section class="lp-revista-widget lp-revista-widget--poll">
       <p class="lp-revista-eyebrow" t-out="lp_config.poll_label if lp_config and lp_config.poll_label else 'Encuesta'"/>
       <h3 t-out="lp_config.poll_question if lp_config and lp_config.poll_question else '¿Cuál es el mayor desafío de tu empresa este año?'"/>
@@ -478,7 +478,7 @@
   </template>
 
   <template id="lp_editorial_sidebar" name="Revista LatinPyme Sidebar">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(getattr(request, 'website', False))"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <aside class="lp-revista-sidebar" aria-label="Contenido recomendado">
       <t t-if="not lp_config or lp_config.show_sidebar_conference" t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
       <t t-if="not lp_config or lp_config.show_sidebar_poll" t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
@@ -966,7 +966,7 @@
   </template>
 
   <template id="lp_footer" name="Revista LatinPyme Footer">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(getattr(request, 'website', False))"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <footer class="lp-revista-footer">
       <div class="lp-revista-footer__brand">
         <span class="lp-revista-footer__mark">LP</span>
@@ -1018,7 +1018,7 @@
   </template>
 
   <template id="lp_footer_with_ad" name="Revista LatinPyme Footer With Ad">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config(getattr(request, 'website', False))"/>
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer')"/>
     <footer class="lp-revista-footer lp-revista-footer--with-ad">
       <div class="lp-revista-footer__brand">

@@ -6,6 +6,7 @@ from urllib.parse import urlencode
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.http import request as http_request
 
 
 SLUG_RE = re.compile(r"^[a-z0-9-]+$")
@@ -112,6 +113,12 @@ class LatinpymeRevistaConfig(models.Model):
     @api.model
     def get_active_config(self, website=None):
         website_id = website.id if website else self.env.context.get("website_id")
+        if not website_id:
+            try:
+                request_website = getattr(http_request, "website", False)
+            except Exception:
+                request_website = False
+            website_id = request_website.id if request_website else False
         if website_id:
             config = self.search([("website_id", "=", website_id)], limit=1)
             if config:
