@@ -44,7 +44,7 @@ PREPRODUCTION_HOSTS = {
 
 
 def enabled_section_slugs(env):
-    sections = env["latinpyme.revista.section"].sudo().search([("active", "=", True)], order="sequence, name")
+    sections = env["latinpyme.revista.section"].sudo().get_route_sections()
     if sections:
         return [section.slug for section in sections if section.slug]
     configured = env["ir.config_parameter"].sudo().get_param(ENABLED_SECTIONS_PARAM, "")
@@ -121,11 +121,15 @@ class LatinpymeRevistaController(http.Controller):
         return self._tag_by_name(label) if label else request.env["blog.tag"].sudo().browse()
 
     def _section_record(self, section_slug):
-        return request.env["latinpyme.revista.section"].sudo().get_by_slug(section_slug, website=request.website)
+        return request.env["latinpyme.revista.section"].sudo().get_by_slug(
+            section_slug,
+            website=request.website,
+            routable=True,
+        )
 
     def _sections(self):
         Section = request.env["latinpyme.revista.section"].sudo()
-        records = Section.get_active_sections(request.website)
+        records = Section.get_route_sections(request.website)
         if records:
             website_id = request.website.id if request.website else False
             ordered = sorted(

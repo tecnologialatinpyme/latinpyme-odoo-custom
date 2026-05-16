@@ -185,7 +185,7 @@
   align-items: center;
   gap: 4px;
   min-height: 66px;
-  overflow-x: auto;
+  overflow: visible;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
@@ -222,6 +222,67 @@
     &::after {
       background: var(--lp-red);
     }
+  }
+}
+
+.lp-revista-nav__item {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.lp-revista-nav__toggle {
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+
+  i {
+    color: currentColor;
+    font-size: 13px;
+  }
+}
+
+.lp-revista-nav__dropdown {
+  position: absolute;
+  top: calc(100% - 6px);
+  left: 10px;
+  z-index: 20;
+  display: grid;
+  min-width: 230px;
+  border: 1px solid var(--lp-border);
+  border-radius: var(--lp-radius);
+  padding: 8px;
+  background: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  box-shadow: 0 18px 42px rgba(17, 19, 24, .14);
+  transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+}
+
+.lp-revista-nav__item--dropdown:hover .lp-revista-nav__dropdown,
+.lp-revista-nav__item--dropdown:focus-within .lp-revista-nav__dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.lp-revista-nav__dropdown-link {
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+  border-radius: 6px;
+  padding: 0 12px;
+  color: #242b35;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+
+  &:hover,
+  &.is-active {
+    background: #fff3f4;
+    color: var(--lp-red);
   }
 }
 
@@ -1811,9 +1872,19 @@
     font-size: 25px;
   }
 
+  .lp-revista-nav__inner {
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
   .lp-revista-nav__link {
     padding-inline: 12px;
     font-size: 13px;
+  }
+
+  .lp-revista-nav__dropdown {
+    left: 0;
+    min-width: 210px;
   }
 
   .lp-revista-button--nav {

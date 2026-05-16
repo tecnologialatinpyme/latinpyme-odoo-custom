@@ -61,6 +61,8 @@ El administrador puede:
 - cambiar nombre y slug,
 - asociar la etiqueta real de Odoo Blog,
 - configurar descripción, cover y SEO básico.
+- crear submenús usando el campo `Menu padre`,
+- marcar una sección como `Solo menu desplegable` para que aparezca en el header sin enlazar a una página.
 
 El parámetro técnico anterior `latinpyme_revista_theme.enabled_sections` queda solo como compatibilidad si no existen registros en el modelo de secciones.
 
@@ -112,6 +114,25 @@ Cada sección controla:
 - sitio web si aplica.
 
 Si `tag_id` está vacío, el módulo intenta encontrar una etiqueta de Blog con el mismo nombre de la sección.
+
+#### Menús con submenús
+
+Para crear un menú padre sin página pública, como `Capacitación`:
+
+1. Abrir `Revista LatinPyme > Secciones`.
+2. Crear o editar la sección `Capacitación`.
+3. Activar `Solo menu desplegable`.
+4. Crear submenús desde la pestaña `Submenus` o creando secciones independientes con `Menu padre = Capacitación`.
+5. Cada submenu puede usar una etiqueta de Blog propia o una `URL personalizada`.
+
+El módulo deja preparado el menú `Capacitación` con estos submenús si no existen:
+
+- `Programación anual`
+- `Charlas`
+- `Diplomados`
+- `Flashtraining`
+
+La URL `/revista/seccion/capacitacion` no debe usarse como sección pública cuando `Capacitación` está marcada como `Solo menu desplegable`. Los submenús sí pueden tener página pública, por ejemplo `/revista/seccion/programacion-anual`, siempre que estén activos y no sean `Solo menu desplegable`.
 
 ### Aliados
 

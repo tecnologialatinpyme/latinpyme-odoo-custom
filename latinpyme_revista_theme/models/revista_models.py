@@ -112,6 +112,16 @@ class LatinpymeRevistaSection(models.Model):
     name = fields.Char(required=True)
     slug = fields.Char(required=True, index=True)
     tag_id = fields.Many2one("blog.tag", string="Etiqueta de Blog")
+    parent_id = fields.Many2one("latinpyme.revista.section", string="Menu padre", ondelete="cascade")
+    child_ids = fields.One2many("latinpyme.revista.section", "parent_id", string="Submenus")
+    menu_only = fields.Boolean(
+        string="Solo menu desplegable",
+        help="Activa esta opcion para que la seccion aparezca como menu padre sin pagina propia.",
+    )
+    menu_url = fields.Char(
+        string="URL personalizada",
+        help="Opcional. Si se deja vacia, el enlace apunta a /revista/seccion/<slug>.",
+    )
     active = fields.Boolean(default=True)
     sequence = fields.Integer(default=10)
     description = fields.Text()
@@ -161,6 +171,15 @@ class LatinpymeRevistaSection(models.Model):
             if self.search_count(domain):
                 raise ValidationError("Ya existe una seccion con este slug para el mismo sitio web.")
 
+    @api.constrains("parent_id")
+    def _check_parent_id(self):
+        for record in self:
+            current = record.parent_id
+            while current:
+                if current == record:
+                    raise ValidationError("Una seccion no puede ser submenu de si misma.")
+                current = current.parent_id
+
     @api.model
     def _slugify(self, value):
         value = (value or "").strip().lower()
@@ -175,11 +194,47 @@ class LatinpymeRevistaSection(models.Model):
         return self.search(domain, order="sequence, name")
 
     @api.model
-    def get_by_slug(self, slug, website=None, active=True):
+    def get_route_sections(self, website=None):
+        return self.get_active_sections(website).filtered(lambda section: not section.menu_only)
+
+    @api.model
+    def _nav_url(self, section):
+        if section.menu_only:
+            return False
+        return section.menu_url or "/revista/seccion/%s" % section.slug
+
+    @api.model
+    def _nav_item(self, section):
+        return {
+            "slug": section.slug,
+            "name": section.name,
+            "url": self._nav_url(section),
+            "menu_only": section.menu_only,
+            "children": [],
+        }
+
+    @api.model
+    def get_nav_sections(self, website=None):
+        records = self.get_active_sections(website)
+        if not records:
+            return []
+        top_sections = records.filtered(lambda section: not section.parent_id)
+        nav_sections = []
+        for section in top_sections:
+            item = self._nav_item(section)
+            children = records.filtered(lambda child: child.parent_id == section)
+            item["children"] = [self._nav_item(child) for child in children]
+            nav_sections.append(item)
+        return nav_sections
+
+    @api.model
+    def get_by_slug(self, slug, website=None, active=True, routable=False):
         slug = (slug or "").strip().lower()
         domain = [("slug", "=", slug)]
         if active:
             domain.append(("active", "=", True))
+        if routable:
+            domain.append(("menu_only", "=", False))
         if website:
             website_record = self.search(domain + [("website_id", "=", website.id)], limit=1)
             if website_record:
@@ -190,7 +245,7 @@ class LatinpymeRevistaSection(models.Model):
     def get_by_tag(self, tag, website=None):
         if not tag:
             return self.browse()
-        domain = [("active", "=", True), ("tag_id", "=", tag.id)]
+        domain = [("active", "=", True), ("menu_only", "=", False), ("tag_id", "=", tag.id)]
         if website:
             website_record = self.search(domain + [("website_id", "=", website.id)], limit=1)
             if website_record:
@@ -198,7 +253,7 @@ class LatinpymeRevistaSection(models.Model):
         record = self.search(domain + [("website_id", "=", False)], limit=1)
         if record:
             return record
-        fallback_domain = [("active", "=", True), ("name", "=ilike", tag.name)]
+        fallback_domain = [("active", "=", True), ("menu_only", "=", False), ("name", "=ilike", tag.name)]
         if website:
             website_record = self.search(fallback_domain + [("website_id", "=", website.id)], limit=1)
             if website_record:
@@ -210,6 +265,51 @@ class LatinpymeRevistaSection(models.Model):
         if self.tag_id:
             return self.tag_id
         return self.env["blog.tag"].sudo().search([("name", "=ilike", self.name)], limit=1)
+
+    @api.model
+    def ensure_training_menu(self):
+        parent = self.search([("slug", "=", "capacitacion"), ("website_id", "=", False)], limit=1)
+        if not parent:
+            parent = self.create(
+                {
+                    "name": "Capacitación",
+                    "slug": "capacitacion",
+                    "sequence": 95,
+                    "menu_only": True,
+                    "description": "Capacitaciones, charlas y programas formativos de LatinPyme.",
+                }
+            )
+        elif not parent.menu_only:
+            parent.write({"menu_only": True})
+
+        children = [
+            ("Programación anual", "programacion-anual", 96),
+            ("Charlas", "charlas", 97),
+            ("Diplomados", "diplomados", 98),
+            ("Flashtraining", "flashtraining", 99),
+        ]
+        for name, slug, sequence in children:
+            child = self.search([("slug", "=", slug), ("website_id", "=", False)], limit=1)
+            if child:
+                values = {}
+                if child.parent_id != parent:
+                    values["parent_id"] = parent.id
+                if child.menu_only:
+                    values["menu_only"] = False
+                if values:
+                    child.write(values)
+                continue
+            self.create(
+                {
+                    "name": name,
+                    "slug": slug,
+                    "sequence": sequence,
+                    "parent_id": parent.id,
+                    "menu_only": False,
+                    "description": "%s de Revista LatinPyme." % name,
+                }
+            )
+        return True
 
 
 class LatinpymeRevistaAlly(models.Model):

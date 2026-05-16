@@ -114,8 +114,11 @@
       <list string="Secciones editoriales" default_order="sequence,name">
         <field name="sequence" widget="handle"/>
         <field name="name"/>
+        <field name="parent_id"/>
         <field name="slug"/>
         <field name="tag_id"/>
+        <field name="menu_only"/>
+        <field name="menu_url"/>
         <field name="website_id"/>
         <field name="active"/>
       </list>
@@ -141,6 +144,28 @@
               <field name="cover_image" widget="image"/>
             </group>
           </group>
+          <group string="Menu editorial">
+            <group>
+              <field name="parent_id"/>
+              <field name="menu_only"/>
+              <field name="menu_url"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Submenus">
+              <field name="child_ids">
+                <list editable="bottom" default_order="sequence,name">
+                  <field name="sequence" widget="handle"/>
+                  <field name="active"/>
+                  <field name="name"/>
+                  <field name="slug"/>
+                  <field name="tag_id"/>
+                  <field name="menu_only"/>
+                  <field name="menu_url"/>
+                </list>
+              </field>
+            </page>
+          </notebook>
           <group string="Contenido">
             <field name="description"/>
           </group>
@@ -161,8 +186,12 @@
         <field name="name"/>
         <field name="slug"/>
         <field name="tag_id"/>
+        <field name="parent_id"/>
         <filter name="active" string="Activas" domain="[('active', '=', True)]"/>
         <filter name="inactive" string="Inactivas" domain="[('active', '=', False)]"/>
+        <filter name="top_level" string="Menu principal" domain="[('parent_id', '=', False)]"/>
+        <filter name="submenus" string="Submenus" domain="[('parent_id', '!=', False)]"/>
+        <filter name="menu_only" string="Solo menu" domain="[('menu_only', '=', True)]"/>
       </search>
     </field>
   </record>

@@ -2,8 +2,7 @@
 <odoo>
   <template id="lp_masthead" name="Revista LatinPyme Masthead">
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
-    <t t-set="lp_masthead_section_records" t-value="request.env['latinpyme.revista.section'].sudo().get_active_sections()"/>
-    <t t-set="lp_masthead_sections" t-value="[{'slug': section.slug, 'name': section.name, 'url': '/revista/seccion/%s' % section.slug} for section in lp_masthead_section_records] or [{'slug': 'gerencia', 'name': 'Gerencia', 'url': '/revista/seccion/gerencia'}, {'slug': 'negocios', 'name': 'Negocios', 'url': '/revista/seccion/negocios'}, {'slug': 'ia', 'name': 'IA', 'url': '/revista/seccion/ia'}, {'slug': 'laboral', 'name': 'Laboral', 'url': '/revista/seccion/laboral'}, {'slug': 'finanzas', 'name': 'Finanzas', 'url': '/revista/seccion/finanzas'}, {'slug': 'entrevistas', 'name': 'Entrevistas', 'url': '/revista/seccion/entrevistas'}, {'slug': 'especiales', 'name': 'Especiales', 'url': '/revista/seccion/especiales'}, {'slug': 'mujeres', 'name': 'Mujeres', 'url': '/revista/seccion/mujeres'}, {'slug': 'portafolio', 'name': 'Portafolio', 'url': '/revista/seccion/portafolio'}]"/>
+    <t t-set="lp_masthead_sections" t-value="request.env['latinpyme.revista.section'].sudo().get_nav_sections() or [{'slug': 'gerencia', 'name': 'Gerencia', 'url': '/revista/seccion/gerencia', 'children': []}, {'slug': 'negocios', 'name': 'Negocios', 'url': '/revista/seccion/negocios', 'children': []}, {'slug': 'ia', 'name': 'IA', 'url': '/revista/seccion/ia', 'children': []}, {'slug': 'laboral', 'name': 'Laboral', 'url': '/revista/seccion/laboral', 'children': []}, {'slug': 'finanzas', 'name': 'Finanzas', 'url': '/revista/seccion/finanzas', 'children': []}, {'slug': 'entrevistas', 'name': 'Entrevistas', 'url': '/revista/seccion/entrevistas', 'children': []}, {'slug': 'especiales', 'name': 'Especiales', 'url': '/revista/seccion/especiales', 'children': []}, {'slug': 'mujeres', 'name': 'Mujeres', 'url': '/revista/seccion/mujeres', 'children': []}, {'slug': 'portafolio', 'name': 'Portafolio', 'url': '/revista/seccion/portafolio', 'children': []}, {'slug': 'capacitacion', 'name': 'Capacitación', 'url': False, 'menu_only': True, 'children': [{'slug': 'programacion-anual', 'name': 'Programación anual', 'url': '/revista/seccion/programacion-anual', 'children': []}, {'slug': 'charlas', 'name': 'Charlas', 'url': '/revista/seccion/charlas', 'children': []}, {'slug': 'diplomados', 'name': 'Diplomados', 'url': '/revista/seccion/diplomados', 'children': []}, {'slug': 'flashtraining', 'name': 'Flashtraining', 'url': '/revista/seccion/flashtraining', 'children': []}]}]"/>
     <header class="lp-revista-masthead" role="banner">
       <div class="lp-revista-container lp-revista-masthead__top">
         <a href="/revista" class="lp-revista-brand" t-att-aria-label="lp_config.name if lp_config else 'Revista LatinPyme'">
@@ -35,9 +34,26 @@
         <div class="lp-revista-container lp-revista-nav__inner">
           <a href="/revista" t-attf-class="lp-revista-nav__link #{'is-active' if not section_slug else ''}">Inicio</a>
           <t t-foreach="lp_masthead_sections" t-as="section">
-            <a t-att-href="section['url']" t-attf-class="lp-revista-nav__link #{'is-active' if section.get('slug') == section_slug else ''}">
-              <t t-out="section['name']"/>
-            </a>
+            <t t-if="section.get('children')">
+              <div class="lp-revista-nav__item lp-revista-nav__item--dropdown">
+                <button type="button" class="lp-revista-nav__link lp-revista-nav__toggle">
+                  <span t-out="section['name']"/>
+                  <i class="fa fa-angle-down" aria-hidden="true"/>
+                </button>
+                <div class="lp-revista-nav__dropdown">
+                  <t t-foreach="section.get('children')" t-as="child">
+                    <a t-att-href="child.get('url') or '#'" t-attf-class="lp-revista-nav__dropdown-link #{'is-active' if child.get('slug') == section_slug else ''}">
+                      <t t-out="child['name']"/>
+                    </a>
+                  </t>
+                </div>
+              </div>
+            </t>
+            <t t-else="">
+              <a t-att-href="section.get('url') or '#'" t-attf-class="lp-revista-nav__link #{'is-active' if section.get('slug') == section_slug else ''}">
+                <t t-out="section['name']"/>
+              </a>
+            </t>
           </t>
           <a href="/suscribirse" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
         </div>
@@ -86,6 +102,18 @@
             <a href="/revista/seccion/especiales" class="lp-revista-nav__link">Especiales</a>
             <a href="/revista/seccion/mujeres" class="lp-revista-nav__link">Mujeres</a>
             <a href="/revista/seccion/portafolio" class="lp-revista-nav__link">Portafolio</a>
+            <div class="lp-revista-nav__item lp-revista-nav__item--dropdown">
+              <button type="button" class="lp-revista-nav__link lp-revista-nav__toggle">
+                <span>Capacitación</span>
+                <i class="fa fa-angle-down" aria-hidden="true"/>
+              </button>
+              <div class="lp-revista-nav__dropdown">
+                <a href="/revista/seccion/programacion-anual" class="lp-revista-nav__dropdown-link">Programación anual</a>
+                <a href="/revista/seccion/charlas" class="lp-revista-nav__dropdown-link">Charlas</a>
+                <a href="/revista/seccion/diplomados" class="lp-revista-nav__dropdown-link">Diplomados</a>
+                <a href="/revista/seccion/flashtraining" class="lp-revista-nav__dropdown-link">Flashtraining</a>
+              </div>
+            </div>
             <a href="/suscribirse" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
           </div>
         </nav>

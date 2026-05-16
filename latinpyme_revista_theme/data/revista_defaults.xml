@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo noupdate="1">
+<odoo>
+  <data noupdate="1">
   <record id="revista_config_default" model="latinpyme.revista.config">
     <field name="name">Revista LatinPyme</field>
     <field name="production_domain">latinpyme.com</field>
@@ -83,4 +84,7 @@
     <field name="sequence">90</field>
     <field name="description">Servicios, formacion, eventos y soluciones de LatinPyme.</field>
   </record>
+  </data>
+
+  <function model="latinpyme.revista.section" name="ensure_training_menu"/>
 </odoo>
