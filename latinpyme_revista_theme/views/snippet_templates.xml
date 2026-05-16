@@ -40,7 +40,7 @@
           <a href="/revista" t-attf-class="lp-revista-nav__link #{'is-active' if not section_slug else ''}">Inicio</a>
           <t t-foreach="lp_masthead_sections" t-as="section">
             <t t-if="section.get('children')">
-              <div t-attf-class="lp-revista-nav__item lp-revista-nav__item--dropdown #{'is-active' if section_slug in section.get('active_slugs', []) else ''}">
+              <div t-attf-class="lp-revista-nav__item lp-revista-nav__item--dropdown #{'lp-revista-nav__item--align-end' if section.get('slug') == 'portafolio' else ''} #{'is-active' if section_slug in section.get('active_slugs', []) else ''}">
                 <button type="button" t-attf-class="lp-revista-nav__link lp-revista-nav__toggle #{'is-active' if section_slug in section.get('active_slugs', []) else ''}">
                   <span t-out="section['name']"/>
                   <i class="fa fa-angle-down" aria-hidden="true"/>

@@ -249,7 +249,9 @@
   left: 10px;
   z-index: 20;
   display: grid;
+  width: max-content;
   min-width: 230px;
+  max-width: calc(100vw - 32px);
   border: 1px solid var(--lp-border);
   border-radius: var(--lp-radius);
   padding: 8px;
@@ -271,19 +273,27 @@
 .lp-revista-nav__dropdown-link {
   display: flex;
   align-items: center;
+  gap: 12px;
   min-height: 38px;
   border-radius: 6px;
-  padding: 0 12px;
+  padding: 9px 12px;
   color: #242b35;
   font-size: 13px;
   font-weight: 800;
-  white-space: nowrap;
+  line-height: 1.25;
+  overflow-wrap: break-word;
+  white-space: normal;
 
   &:hover,
   &.is-active {
     background: #fff3f4;
     color: var(--lp-red);
   }
+}
+
+.lp-revista-nav__item--align-end .lp-revista-nav__dropdown {
+  right: 0;
+  left: auto;
 }
 
 .lp-revista-nav__subitem {
@@ -299,8 +309,13 @@
   justify-content: space-between;
   text-align: left;
 
+  span {
+    min-width: 0;
+  }
+
   i {
-    margin-left: 18px;
+    flex: 0 0 auto;
+    margin-left: auto;
     color: currentColor;
     font-size: 12px;
   }
@@ -312,7 +327,9 @@
   left: calc(100% + 8px);
   z-index: 21;
   display: grid;
-  min-width: 260px;
+  width: max-content;
+  min-width: 280px;
+  max-width: calc(100vw - 32px);
   border: 1px solid var(--lp-border);
   border-radius: var(--lp-radius);
   padding: 8px;
@@ -322,6 +339,12 @@
   transform: translateX(8px);
   box-shadow: 0 18px 42px rgba(17, 19, 24, .14);
   transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+}
+
+.lp-revista-nav__item--align-end .lp-revista-nav__subdropdown {
+  right: calc(100% + 8px);
+  left: auto;
+  transform: translateX(-8px);
 }
 
 .lp-revista-nav__subitem:hover > .lp-revista-nav__subdropdown,
@@ -2817,12 +2840,16 @@
 
   .lp-revista-nav__dropdown {
     left: 0;
+    width: max-content;
     min-width: 210px;
+    max-width: calc(100vw - 28px);
   }
 
   .lp-revista-nav__subdropdown {
     position: static;
+    width: auto;
     min-width: 0;
+    max-width: 100%;
     margin: 4px 0 4px 10px;
     border-radius: 8px;
     opacity: 1;
