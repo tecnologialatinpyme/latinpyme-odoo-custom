@@ -126,7 +126,7 @@
         <main class="lp-revista-main">
           <section class="lp-revista-container">
             <div t-if="program_hero_banner and program_hero_banner.image" class="lp-revista-program-hero-banner">
-              <a t-if="program_hero_banner.url" t-att-href="program_hero_banner.url" class="lp-revista-program-hero-banner__link" aria-label="Abrir publicidad">
+              <a t-if="program_hero_banner.url" t-att-href="program_hero_banner.url" class="lp-revista-program-hero-banner__link" target="_blank" rel="noopener" aria-label="Abrir publicidad">
                 <img t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
               </a>
               <img t-else="" t-att-src="'/web/image/latinpyme.revista.banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
