@@ -350,16 +350,8 @@ class LatinpymeRevistaController(http.Controller):
         return summary
 
     def _program_filter_options(self):
-        return [
-            {"key": "all", "label": "Todos"},
-            {"key": "type:capacitacion", "label": "Capacitación"},
-            {"key": "type:charla", "label": "Charlas"},
-            {"key": "type:diplomado", "label": "Diplomados"},
-            {"key": "type:flashtraining", "label": "Flashtraining"},
-            {"key": "modality:virtual", "label": "Virtual"},
-            {"key": "modality:presencial", "label": "Presencial"},
-            {"key": "modality:hibrida", "label": "Híbrida"},
-        ]
+        Event = request.env["latinpyme.revista.program.event"].sudo()
+        return [{"key": "all", "label": "Todos"}] + Event.get_event_type_filter_options()
 
     def _revista_program_section(self, section_slug, section_record, kwargs=None):
         kwargs = kwargs or {}
@@ -393,6 +385,7 @@ class LatinpymeRevistaController(http.Controller):
             "program_upcoming_events": upcoming_events,
             "program_type_summary": self._program_type_summary(events),
             "program_filter_options": self._program_filter_options(),
+            "program_hero_banner": self._banners("program_hero", limit=1),
         }
         return self._render("latinpyme_revista_theme.revista_program_page", values)
 

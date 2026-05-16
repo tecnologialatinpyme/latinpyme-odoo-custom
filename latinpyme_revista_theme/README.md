@@ -18,7 +18,7 @@ El módulo trabaja únicamente dentro de `latinpyme_revista_theme` y no depende 
 
 - `__init__.py`: carga modelos y controladores del módulo.
 - `__manifest__.py`: declara dependencias `website` y `website_blog`, assets y vistas QWeb.
-- `models/revista_models.py`: modelos backend para configuración, secciones, aliados y publicidad.
+- `models/revista_models.py`: modelos backend para configuración, secciones, aliados, publicidad y programación anual.
 - `controllers/main.py`: crea rutas públicas para la Home y las secciones editoriales.
 - `security/ir.model.access.csv`: permisos para administradores de Website y sistema.
 - `data/revista_defaults.xml`: configuración y secciones editoriales iniciales.
@@ -32,6 +32,7 @@ El módulo trabaja únicamente dentro de `latinpyme_revista_theme` y no depende 
 - `views/section_templates.xml`: template visual dinámico para `/revista/seccion/<seccion>`.
 - `views/blog_post_templates.xml`: plantilla editorial segura para nota individual, heredando `website_blog` sin crear páginas manuales.
 - `static/src/scss/revista.scss`: estilos scoped bajo `.lp-revista`.
+- `static/src/js/program_calendar.js`: interacción ligera del calendario anual de Programación anual.
 
 ## Rutas disponibles
 
@@ -159,11 +160,32 @@ Cada evento controla:
 - orden,
 - sitio web si aplica.
 
+Tipos de evento disponibles:
+
+- `Charlas`
+- `Diplomados`
+- `Flashtraining`
+- `Foros`
+- `Curso 50 y 20 horas`
+
+Al actualizar el módulo, los valores antiguos se normalizan de forma segura:
+
+- `charla` -> `charlas`
+- `diplomado` -> `diplomados`
+- `capacitacion` -> `charlas`
+- `otro` -> `foros`
+
+El hero superior de esta página puede administrarse desde:
+
+`Revista LatinPyme > Publicidad`
+
+Crear un banner con ubicación `Programacion anual hero`. Si hay banner activo, reemplaza el bloque de título/descripcion de Programación anual. Si no hay banner activo, se conserva el fallback editorial.
+
 En la página pública, la sección usa una vista anual tipo calendario editorial:
 
 - selector de año anterior/siguiente,
 - resumen del año,
-- filtros por tipo y modalidad,
+- filtros por tipo de evento sincronizados con el backend,
 - 12 tarjetas mensuales en grilla responsive,
 - días con eventos marcados en rojo,
 - panel lateral/drawer con el detalle del día seleccionado,
@@ -174,6 +196,7 @@ Cada evento conserva:
 - botón de inscripción,
 - enlace para Google Calendar,
 - enlace para Outlook / Microsoft 365,
+- opción Apple Calendar mediante archivo `.ics`,
 - descarga `.ics`.
 
 Esta vista no usa el sidebar editorial de conferencia, encuesta ni publicidad lateral. Por eso no muestra:
@@ -202,7 +225,7 @@ El carrusel `Aliados` primero usa estos registros. Si no hay aliados activos, ma
 Cada banner controla:
 
 - nombre interno,
-- ubicación: `home_horizontal`, `sidebar`, `footer`, `note`, `section`,
+- ubicación: `home_horizontal`, `sidebar`, `footer`, `note`, `section`, `program_hero`,
 - imagen,
 - título,
 - texto,

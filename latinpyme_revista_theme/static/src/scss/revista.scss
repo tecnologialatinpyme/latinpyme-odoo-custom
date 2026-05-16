@@ -1329,6 +1329,7 @@
 }
 
 .lp-revista-section-hero {
+  position: relative;
   min-height: 220px;
   display: flex;
   flex-direction: column;
@@ -1359,6 +1360,48 @@
     font-size: 18px;
     line-height: 1.55;
   }
+}
+
+.lp-revista-program-hero {
+  min-height: 330px;
+
+  .lp-revista-button {
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+}
+
+.lp-revista-program-hero--banner {
+  background:
+    linear-gradient(90deg, rgba(9, 13, 20, .94), rgba(9, 13, 20, .48)),
+    linear-gradient(135deg, #151922, #4b515a);
+}
+
+.lp-revista-program-hero__image,
+.lp-revista-program-hero__shade {
+  position: absolute;
+  inset: 0;
+}
+
+.lp-revista-program-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lp-revista-program-hero__shade {
+  background:
+    linear-gradient(90deg, rgba(9, 13, 20, .9), rgba(9, 13, 20, .46) 58%, rgba(9, 13, 20, .18)),
+    radial-gradient(circle at 84% 18%, rgba(185, 0, 18, .22), transparent 32%);
+}
+
+.lp-revista-program-hero__content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  max-width: 780px;
+  gap: 10px;
 }
 
 .lp-revista-note-head {

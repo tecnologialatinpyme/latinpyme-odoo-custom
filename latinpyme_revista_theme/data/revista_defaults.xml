@@ -87,4 +87,5 @@
   </data>
 
   <function model="latinpyme.revista.section" name="ensure_training_menu"/>
+  <function model="latinpyme.revista.program.event" name="migrate_legacy_event_types"/>
 </odoo>

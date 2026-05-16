@@ -37,6 +37,19 @@ SPANISH_MONTHS_SHORT = {
     11: "nov",
     12: "dic",
 }
+PROGRAM_EVENT_TYPES = [
+    ("charlas", "Charlas"),
+    ("diplomados", "Diplomados"),
+    ("flashtraining", "Flashtraining"),
+    ("foros", "Foros"),
+    ("curso_50_20", "Curso 50 y 20 horas"),
+]
+PROGRAM_EVENT_TYPE_LEGACY_MAP = {
+    "charla": "charlas",
+    "diplomado": "diplomados",
+    "capacitacion": "charlas",
+    "otro": "foros",
+}
 
 
 class LatinpymeRevistaConfig(models.Model):
@@ -381,6 +394,7 @@ class LatinpymeRevistaBanner(models.Model):
             ("footer", "Footer"),
             ("note", "Nota individual"),
             ("section", "Seccion"),
+            ("program_hero", "Programacion anual hero"),
         ],
         required=True,
         default="sidebar",
@@ -435,16 +449,10 @@ class LatinpymeRevistaProgramEvent(models.Model):
 
     name = fields.Char(required=True)
     event_type = fields.Selection(
-        [
-            ("charla", "Charla"),
-            ("diplomado", "Diplomado"),
-            ("flashtraining", "Flashtraining"),
-            ("capacitacion", "Capacitacion"),
-            ("otro", "Otro"),
-        ],
+        PROGRAM_EVENT_TYPES,
         string="Tipo de evento",
         required=True,
-        default="capacitacion",
+        default="charlas",
     )
     date_start = fields.Date(string="Fecha de inicio", required=True, default=fields.Date.context_today)
     date_end = fields.Date(string="Fecha de fin")
@@ -470,6 +478,39 @@ class LatinpymeRevistaProgramEvent(models.Model):
     featured = fields.Boolean(string="Destacado")
     sequence = fields.Integer(default=10)
     website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
+
+    @api.model
+    def _normalize_event_type_value(self, value):
+        return PROGRAM_EVENT_TYPE_LEGACY_MAP.get(value, value)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("event_type"):
+                vals["event_type"] = self._normalize_event_type_value(vals["event_type"])
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if vals.get("event_type"):
+            vals["event_type"] = self._normalize_event_type_value(vals["event_type"])
+        return super().write(vals)
+
+    @api.model
+    def migrate_legacy_event_types(self):
+        for old_value, new_value in PROGRAM_EVENT_TYPE_LEGACY_MAP.items():
+            self.search([("event_type", "=", old_value)]).write({"event_type": new_value})
+        return True
+
+    @api.model
+    def get_event_type_options(self):
+        return list(PROGRAM_EVENT_TYPES)
+
+    @api.model
+    def get_event_type_filter_options(self):
+        return [
+            {"key": "type:%s" % key, "label": label}
+            for key, label in self.get_event_type_options()
+        ]
 
     @api.constrains("date_start", "date_end")
     def _check_dates(self):
@@ -621,6 +662,7 @@ class LatinpymeRevistaProgramEvent(models.Model):
         return {
             "google": "https://calendar.google.com/calendar/render?%s" % urlencode(google_params),
             "outlook": "https://outlook.office.com/calendar/0/deeplink/compose?%s" % urlencode(outlook_params),
+            "apple": "/revista/programacion/%s/ics?calendar=apple" % self.id,
             "ics": "/revista/programacion/%s/ics" % self.id,
         }
 
