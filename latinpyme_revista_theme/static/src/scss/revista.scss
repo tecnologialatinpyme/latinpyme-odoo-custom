@@ -1381,6 +1381,16 @@
   }
 }
 
+.lp-revista-footer__toggle {
+  display: none;
+}
+
+.lp-revista-footer__panel {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+}
+
 .lp-revista-footer__brand {
   display: grid;
   align-content: start;
@@ -3289,37 +3299,67 @@
   .lp-revista-footer__contact {
     gap: 8px;
     min-width: 0;
-    padding: 18px 0;
+    padding: 0;
     border-bottom: 1px solid rgba(17, 19, 24, .08);
 
     h3 {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 6px;
-      color: #111318;
-      font-size: 14px;
-      letter-spacing: 0;
-
-      &::after {
-        content: "";
-        flex: 1 1 auto;
-        max-width: 44px;
-        height: 2px;
-        border-radius: 999px;
-        background: var(--lp-red);
-      }
+      display: none;
     }
   }
 
-  .lp-revista-footer > nav a,
+  .lp-revista-footer__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 54px;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    color: #111318;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 900;
+    text-align: left;
+
+    i {
+      flex: 0 0 auto;
+      color: #111318;
+      font-size: 16px;
+      transition: transform .18s ease, color .18s ease;
+    }
+  }
+
+  .lp-revista-footer__group.is-open > .lp-revista-footer__toggle {
+    color: var(--lp-red);
+
+    i {
+      color: var(--lp-red);
+      transform: rotate(180deg);
+    }
+  }
+
+  .lp-revista-footer__panel {
+    display: none;
+    gap: 0;
+    padding: 0 0 14px;
+  }
+
+  .lp-revista-footer__group.is-open > .lp-revista-footer__panel {
+    display: grid;
+  }
+
+  .lp-revista-footer__panel a,
   .lp-revista-footer__contact p {
     display: flex;
     align-items: center;
-    min-height: 40px;
-    border-radius: 12px;
-    padding: 9px 12px;
-    background: rgba(255, 255, 255, .78);
+    min-height: 42px;
+    border-radius: 0;
+    padding: 9px 2px;
+    background: transparent;
     color: #2c3440;
     font-size: 14px;
     line-height: 1.35;
@@ -3327,8 +3367,8 @@
     overflow-wrap: anywhere;
   }
 
-  .lp-revista-footer > nav a:hover {
-    background: #fff3f4;
+  .lp-revista-footer__panel a:hover {
+    background: transparent;
     color: var(--lp-red);
   }
 

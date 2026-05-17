@@ -1003,35 +1003,59 @@
           <t t-call="latinpyme_revista_theme.lp_social_links"/>
         </div>
       </div>
-      <nav aria-label="Footer secciones">
+      <nav class="lp-revista-footer__group" aria-label="Footer secciones">
+        <button type="button" class="lp-revista-footer__toggle" aria-expanded="false" aria-controls="lpFooterSections">
+          <span>Secciones</span>
+          <i class="fa fa-angle-down" aria-hidden="true"/>
+        </button>
         <h3>Secciones</h3>
-        <a href="/revista/seccion/gerencia">Gerencia</a>
-        <a href="/revista/seccion/negocios">Negocios</a>
-        <a href="/revista/seccion/ia">IA</a>
-        <a href="/revista/seccion/laboral">Laboral</a>
-        <a href="/revista/seccion/finanzas">Finanzas</a>
-        <a href="/revista/seccion/entrevistas">Entrevistas</a>
-        <a href="/revista/seccion/especiales">Especiales</a>
-        <a href="/revista/seccion/mujeres">Mujeres</a>
+        <div id="lpFooterSections" class="lp-revista-footer__panel">
+          <a href="/revista/seccion/gerencia">Gerencia</a>
+          <a href="/revista/seccion/negocios">Negocios</a>
+          <a href="/revista/seccion/ia">IA</a>
+          <a href="/revista/seccion/laboral">Laboral</a>
+          <a href="/revista/seccion/finanzas">Finanzas</a>
+          <a href="/revista/seccion/entrevistas">Entrevistas</a>
+          <a href="/revista/seccion/especiales">Especiales</a>
+          <a href="/revista/seccion/mujeres">Mujeres</a>
+        </div>
       </nav>
-      <nav aria-label="Footer portafolio">
+      <nav class="lp-revista-footer__group" aria-label="Footer portafolio">
+        <button type="button" class="lp-revista-footer__toggle" aria-expanded="false" aria-controls="lpFooterPortfolio">
+          <span>Portafolio</span>
+          <i class="fa fa-angle-down" aria-hidden="true"/>
+        </button>
         <h3>Portafolio</h3>
-        <a href="/revista/seccion/portafolio">Escuela</a>
-        <a href="/revista/seccion/portafolio">Consultoría</a>
-        <a href="/revista/seccion/portafolio">Eventos</a>
-        <a href="/revista/seccion/portafolio">Membresías</a>
+        <div id="lpFooterPortfolio" class="lp-revista-footer__panel">
+          <a href="/revista/seccion/portafolio">Escuela</a>
+          <a href="/revista/seccion/portafolio">Consultoría</a>
+          <a href="/revista/seccion/portafolio">Eventos</a>
+          <a href="/revista/seccion/portafolio">Membresías</a>
+        </div>
       </nav>
-      <nav aria-label="Footer legal">
+      <nav class="lp-revista-footer__group" aria-label="Footer legal">
+        <button type="button" class="lp-revista-footer__toggle" aria-expanded="false" aria-controls="lpFooterLegal">
+          <span>Legal</span>
+          <i class="fa fa-angle-down" aria-hidden="true"/>
+        </button>
         <h3>Legal</h3>
-        <a href="/privacy">Tratamiento de datos personales</a>
-        <a href="/terms">Términos y condiciones</a>
-        <a href="/contactus">Derechos de autor</a>
+        <div id="lpFooterLegal" class="lp-revista-footer__panel">
+          <a href="/privacy">Tratamiento de datos personales</a>
+          <a href="/terms">Términos y condiciones</a>
+          <a href="/contactus">Derechos de autor</a>
+        </div>
       </nav>
-      <div class="lp-revista-footer__contact">
+      <div class="lp-revista-footer__contact lp-revista-footer__group">
+        <button type="button" class="lp-revista-footer__toggle" aria-expanded="false" aria-controls="lpFooterContact">
+          <span>Contacto</span>
+          <i class="fa fa-angle-down" aria-hidden="true"/>
+        </button>
         <h3>Contacto</h3>
-        <p t-if="lp_config and lp_config.phone"><i class="fa fa-whatsapp"/> <t t-out="lp_config.phone"/></p>
-        <p t-if="lp_config and lp_config.city"><i class="fa fa-map-marker"/> <t t-out="lp_config.city"/></p>
-        <p t-if="lp_config and lp_config.email"><i class="fa fa-envelope"/> <t t-out="lp_config.email"/></p>
+        <div id="lpFooterContact" class="lp-revista-footer__panel">
+          <p t-if="lp_config and lp_config.phone"><i class="fa fa-whatsapp"/> <t t-out="lp_config.phone"/></p>
+          <p t-if="lp_config and lp_config.city"><i class="fa fa-map-marker"/> <t t-out="lp_config.city"/></p>
+          <p t-if="lp_config and lp_config.email"><i class="fa fa-envelope"/> <t t-out="lp_config.email"/></p>
+        </div>
       </div>
       <p class="lp-revista-footer__copyright" t-out="lp_config.footer_text if lp_config and lp_config.footer_text else '© 2026 Revista LatinPyme - Todos los derechos reservados'"/>
     </footer>
@@ -1056,37 +1080,61 @@
           <t t-call="latinpyme_revista_theme.lp_social_links"/>
         </div>
       </div>
-      <nav aria-label="Footer secciones">
+      <nav class="lp-revista-footer__group" aria-label="Footer secciones">
+        <button type="button" class="lp-revista-footer__toggle" aria-expanded="false" aria-controls="lpFooterAdSections">
+          <span>Secciones</span>
+          <i class="fa fa-angle-down" aria-hidden="true"/>
+        </button>
         <h3>Secciones</h3>
-        <a href="/revista/seccion/gerencia">Gerencia</a>
-        <a href="/revista/seccion/negocios">Negocios</a>
-        <a href="/revista/seccion/ia">IA</a>
-        <a href="/revista/seccion/laboral">Laboral</a>
-        <a href="/revista/seccion/finanzas">Finanzas</a>
-        <a href="/revista/seccion/entrevistas">Entrevistas</a>
-        <a href="/revista/seccion/especiales">Especiales</a>
-        <a href="/revista/seccion/mujeres">Mujeres</a>
+        <div id="lpFooterAdSections" class="lp-revista-footer__panel">
+          <a href="/revista/seccion/gerencia">Gerencia</a>
+          <a href="/revista/seccion/negocios">Negocios</a>
+          <a href="/revista/seccion/ia">IA</a>
+          <a href="/revista/seccion/laboral">Laboral</a>
+          <a href="/revista/seccion/finanzas">Finanzas</a>
+          <a href="/revista/seccion/entrevistas">Entrevistas</a>
+          <a href="/revista/seccion/especiales">Especiales</a>
+          <a href="/revista/seccion/mujeres">Mujeres</a>
+        </div>
       </nav>
-      <nav aria-label="Footer portafolio">
+      <nav class="lp-revista-footer__group" aria-label="Footer portafolio">
+        <button type="button" class="lp-revista-footer__toggle" aria-expanded="false" aria-controls="lpFooterAdPortfolio">
+          <span>Portafolio</span>
+          <i class="fa fa-angle-down" aria-hidden="true"/>
+        </button>
         <h3>Portafolio</h3>
-        <a href="/revista/seccion/portafolio">Escuela</a>
-        <a href="/revista/seccion/portafolio">Consultoría</a>
-        <a href="/revista/seccion/portafolio">Eventos</a>
-        <a href="/revista/seccion/portafolio">Membresías</a>
-        <a href="/revista/seccion/portafolio">Portafolio</a>
+        <div id="lpFooterAdPortfolio" class="lp-revista-footer__panel">
+          <a href="/revista/seccion/portafolio">Escuela</a>
+          <a href="/revista/seccion/portafolio">Consultoría</a>
+          <a href="/revista/seccion/portafolio">Eventos</a>
+          <a href="/revista/seccion/portafolio">Membresías</a>
+          <a href="/revista/seccion/portafolio">Portafolio</a>
+        </div>
       </nav>
-      <nav aria-label="Footer legal">
+      <nav class="lp-revista-footer__group" aria-label="Footer legal">
+        <button type="button" class="lp-revista-footer__toggle" aria-expanded="false" aria-controls="lpFooterAdLegal">
+          <span>Legal</span>
+          <i class="fa fa-angle-down" aria-hidden="true"/>
+        </button>
         <h3>Legal</h3>
-        <a href="/privacy">Tratamiento de datos personales</a>
-        <a href="/terms">Términos y condiciones</a>
-        <a href="/contactus">Derechos de autor</a>
-        <a href="/contactus">Curso 50 y 20 horas SG-SST</a>
+        <div id="lpFooterAdLegal" class="lp-revista-footer__panel">
+          <a href="/privacy">Tratamiento de datos personales</a>
+          <a href="/terms">Términos y condiciones</a>
+          <a href="/contactus">Derechos de autor</a>
+          <a href="/contactus">Curso 50 y 20 horas SG-SST</a>
+        </div>
       </nav>
-      <div class="lp-revista-footer__contact">
+      <div class="lp-revista-footer__contact lp-revista-footer__group">
+        <button type="button" class="lp-revista-footer__toggle" aria-expanded="false" aria-controls="lpFooterAdContact">
+          <span>Contacto</span>
+          <i class="fa fa-angle-down" aria-hidden="true"/>
+        </button>
         <h3>Contacto</h3>
-        <p t-if="lp_config and lp_config.phone"><i class="fa fa-whatsapp"/> <t t-out="lp_config.phone"/></p>
-        <p t-if="lp_config and lp_config.city"><i class="fa fa-map-marker"/> <t t-out="lp_config.city"/></p>
-        <p t-if="lp_config and lp_config.email"><i class="fa fa-envelope"/> <t t-out="lp_config.email"/></p>
+        <div id="lpFooterAdContact" class="lp-revista-footer__panel">
+          <p t-if="lp_config and lp_config.phone"><i class="fa fa-whatsapp"/> <t t-out="lp_config.phone"/></p>
+          <p t-if="lp_config and lp_config.city"><i class="fa fa-map-marker"/> <t t-out="lp_config.city"/></p>
+          <p t-if="lp_config and lp_config.email"><i class="fa fa-envelope"/> <t t-out="lp_config.email"/></p>
+        </div>
       </div>
       <a class="lp-revista-footer__ad" t-att-href="lp_footer_banner.url if lp_footer_banner and lp_footer_banner.url else '/contactus'" aria-label="Publicidad Revista LatinPyme">
         <img t-if="lp_footer_banner and lp_footer_banner.image" t-att-src="'/revista/media/banner/%s/image' % lp_footer_banner.id" t-att-alt="lp_footer_banner.name" loading="lazy"/>
