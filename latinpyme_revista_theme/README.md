@@ -247,7 +247,7 @@ El carrusel `Aliados` primero usa estos registros. Si no hay aliados activos, ma
 Cada banner controla:
 
 - nombre interno,
-- ubicación: `home_horizontal`, `sidebar`, `footer`, `note`, `section`, `program_hero`,
+- ubicación: `home_top`, `home_horizontal`, `sidebar`, `footer`, `note`, `section`, `program_hero`,
 - imagen,
 - título,
 - texto,
@@ -298,28 +298,29 @@ Snippets disponibles:
 7. `LP Revista - Entrevistas`
 8. `LP Revista - Especiales`
 9. `LP Revista - Banner Publicitario Horizontal`
-10. `LP Revista - Novedades`
-11. `LP Revista - Portafolio`
-12. `LP Revista - Aliados`
-13. `LP Revista - Footer Editorial`
-14. `LP Revista - Footer con Publicidad`
-15. `LP Revista - Hero Sección`
-16. `LP Revista - Listado de Artículos por Sección`
-17. `LP Revista - Card Artículo Horizontal`
-18. `LP Revista - Sidebar Conferencia`
-19. `LP Revista - Sidebar Encuesta`
-20. `LP Revista - Sidebar Publicidad`
-21. `LP Revista - Paginación Visual`
-22. `LP Revista - Entrevistas Relacionadas`
-23. `LP Revista - Portafolio Compacto`
-24. `LP Revista - Cabecera de Nota`
-25. `LP Revista - Autor de Nota`
-26. `LP Revista - Botones Compartir`
-27. `LP Revista - Cuerpo Editorial`
-28. `LP Revista - Cita Destacada`
-29. `LP Revista - Imagen dentro del Artículo`
-30. `LP Revista - Sidebar Nota`
-31. `LP Revista - Artículos Relacionados`
+10. `LP Revista - Programación anual`
+11. `LP Revista - Novedades`
+12. `LP Revista - Portafolio`
+13. `LP Revista - Aliados`
+14. `LP Revista - Footer Editorial`
+15. `LP Revista - Footer con Publicidad`
+16. `LP Revista - Hero Sección`
+17. `LP Revista - Listado de Artículos por Sección`
+18. `LP Revista - Card Artículo Horizontal`
+19. `LP Revista - Sidebar Conferencia`
+20. `LP Revista - Sidebar Encuesta`
+21. `LP Revista - Sidebar Publicidad`
+22. `LP Revista - Paginación Visual`
+23. `LP Revista - Entrevistas Relacionadas`
+24. `LP Revista - Portafolio Compacto`
+25. `LP Revista - Cabecera de Nota`
+26. `LP Revista - Autor de Nota`
+27. `LP Revista - Botones Compartir`
+28. `LP Revista - Cuerpo Editorial`
+29. `LP Revista - Cita Destacada`
+30. `LP Revista - Imagen dentro del Artículo`
+31. `LP Revista - Sidebar Nota`
+32. `LP Revista - Artículos Relacionados`
 
 Notas de edición de bloques:
 
@@ -339,7 +340,9 @@ Notas de edición de bloques:
 | Nota individual de Blog | Fase 4 ajustada | Mantiene `website_blog`; añade toggles backend para sidebar, entrevistas, portafolio y aliados. |
 | Aliados | Fase 4 implementada | Modelo `latinpyme.revista.ally` alimenta el carrusel; si no hay registros activos, se usan placeholders. |
 | Publicidad | Fase 4 implementada | Modelo `latinpyme.revista.banner` alimenta Home, sidebar, footer, nota y sección con fallback visual. |
-| Sidebar editorial | Fase 4 implementada | Conferencia, encuesta y visibilidad de bloques se configuran desde `Revista LatinPyme > Configuración`. |
+| Sidebar editorial | Administrable fino | Modelo `latinpyme.revista.sidebar.item` permite bloques por ubicación: global, Home, sección y nota. |
+| Home editorial | Administrable fino | Modelo `latinpyme.revista.home.block` controla visibilidad, orden, etiquetas, cantidad y selección manual de notas. |
+| Portafolio | Administrable fino | Modelo `latinpyme.revista.portfolio.item` controla tarjetas, bullets, icono/imagen y enlaces. |
 | Snippets Home | Completo base | Bloques reutilizables y editables desde Website Builder. |
 | Snippets Sección | Completo base | Hero, listado visual, card horizontal, sidebars, paginación y relacionados. |
 | Snippets Nota | Completo base | Cabecera, autor, compartir, cuerpo, cita, imagen, sidebar, relacionados. |
@@ -471,3 +474,91 @@ La estructura final de posts debe definirse con base en inventario SEO. Si se ne
 - Integrar buscador editorial avanzado por sección, fecha y etiqueta.
 - Alimentar relacionados por coincidencia de etiquetas, no solo por publicaciones recientes del mismo blog.
 - Revisar y ajustar visualmente en Odoo.sh con datos reales, mobile y desktop.
+
+## Administrabilidad fina
+
+Esta fase agrega menús backend pensados para editores no técnicos:
+
+- `Revista LatinPyme > Home editorial`: permite activar/desactivar bloques del Home, ordenar, cambiar títulos, elegir etiqueta fuente, definir cantidad de notas y seleccionar publicaciones manualmente.
+- `Revista LatinPyme > Portafolio`: permite administrar las tarjetas del bloque Portafolio sin tocar QWeb ni Builder.
+- `Revista LatinPyme > Sidebar editorial`: permite crear bloques por ubicación: `Global`, `Home`, `Pagina de seccion` y `Nota individual`.
+- `Revista LatinPyme > Secciones`: ahora permite overrides por sección para sidebar, relacionados, portafolio, aliados, banner de sección y banner de nota.
+
+### Como administrar el Home
+
+1. Abrir `Revista LatinPyme > Home editorial`.
+2. Editar cada bloque:
+   - `Banners superiores`
+   - `Hero y destacados`
+   - `Lo mas reciente`
+   - `Secciones`
+   - `Novedades`
+   - `Entrevistas`
+   - `Especiales`
+   - `Banners intermedios`
+   - `Portafolio`
+   - `Aliados`
+3. Para destacar notas manualmente, usar `Notas seleccionadas`.
+4. Si no se seleccionan notas, el bloque usa la etiqueta fuente.
+5. Si tampoco hay etiqueta fuente, usa las publicaciones recientes como fallback.
+
+### Como administrar Portafolio
+
+1. Abrir `Revista LatinPyme > Portafolio`.
+2. Crear o editar tarjetas.
+3. Completar titulo, icono o imagen, bullets y enlaces.
+4. Ordenar con el campo `Orden`.
+5. Activar/desactivar segun campaña.
+
+### Como administrar Sidebar editorial
+
+1. Abrir `Revista LatinPyme > Sidebar editorial`.
+2. Elegir ubicacion:
+   - `Global`: fallback para todo el sitio.
+   - `Home`: solo portada.
+   - `Pagina de seccion`: secciones.
+   - `Nota individual`: notas de Blog.
+3. Elegir tipo:
+   - `Proxima conferencia`
+   - `Encuesta`
+   - `CTA entrevistas`
+   - `Banner lateral`
+4. Si existen bloques para una ubicacion especifica, se usan esos. Si no existen, se usa `Global`.
+
+### Como administrar una seccion
+
+En `Revista LatinPyme > Secciones`, cada seccion puede controlar:
+
+- cantidad de notas por pagina,
+- mostrar/ocultar sidebar,
+- mostrar/ocultar relacionados,
+- mostrar/ocultar portafolio,
+- mostrar/ocultar aliados,
+- banner especifico de seccion,
+- banner especifico para notas de esa seccion,
+- SEO title,
+- SEO description.
+
+El valor `Usar configuracion general` conserva el comportamiento global.
+
+### Snippet Programacion anual
+
+El Website Builder incluye el snippet:
+
+`LP Revista - Programación anual`
+
+Este snippet se puede arrastrar a una pagina complementaria. Los eventos no se editan en el Builder; se administran desde `Revista LatinPyme > Programacion anual`.
+
+### Checklist editorial antes de produccion
+
+- Home configurado desde `Home editorial`.
+- Banners creados por ubicacion clara.
+- Portafolio cargado desde backend.
+- Sidebar cargado por ubicacion.
+- Secciones asociadas a etiquetas de Blog.
+- Notas publicadas con titulo, subtitulo, cover, autor, etiquetas y SEO.
+- Programacion anual con eventos activos y links de calendario probados.
+- Footer con redes sociales reales.
+- Mobile revisado sin scroll horizontal.
+- Preproduccion con `noindex` activo.
+- Inventario SEO listo antes de redirecciones 301.

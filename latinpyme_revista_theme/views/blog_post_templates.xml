@@ -128,7 +128,12 @@
     </xpath>
     <xpath expr="//div[@id='o_wblog_post_content']" position="after">
       <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
-      <div t-if="not opt_blog_post_sidebar and (not lp_config or lp_config.show_note_sidebar)" class="lp-revista-blog-post-sidebar">
+      <t t-set="lp_note_primary_tag" t-value="blog_post.tag_ids[:1]"/>
+      <t t-set="lp_note_section" t-value="request.env['latinpyme.revista.section'].sudo().get_by_tag(lp_note_primary_tag) if lp_note_primary_tag else False"/>
+      <t t-set="lp_default_note_sidebar" t-value="not lp_config or lp_config.show_note_sidebar"/>
+      <t t-set="lp_show_note_sidebar" t-value="lp_note_section.display_mode_enabled('note_sidebar_mode', lp_default_note_sidebar) if lp_note_section else lp_default_note_sidebar"/>
+      <div t-if="not opt_blog_post_sidebar and lp_show_note_sidebar" class="lp-revista-blog-post-sidebar">
+        <t t-set="lp_sidebar_placement" t-value="'note'"/>
         <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
       </div>
     </xpath>
@@ -137,19 +142,24 @@
     </xpath>
     <xpath expr="//section[@id='o_wblog_post_footer']" position="inside">
       <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+      <t t-set="lp_note_primary_tag" t-value="blog_post.tag_ids[:1]"/>
+      <t t-set="lp_note_section" t-value="request.env['latinpyme.revista.section'].sudo().get_by_tag(lp_note_primary_tag) if lp_note_primary_tag else False"/>
+      <t t-set="lp_show_note_interviews" t-value="lp_note_section.display_mode_enabled('note_interviews_mode', (not lp_config or lp_config.show_note_interviews)) if lp_note_section else (not lp_config or lp_config.show_note_interviews)"/>
+      <t t-set="lp_show_note_portfolio" t-value="lp_note_section.display_mode_enabled('note_portfolio_mode', (not lp_config or lp_config.show_note_portfolio)) if lp_note_section else (not lp_config or lp_config.show_note_portfolio)"/>
+      <t t-set="lp_show_note_allies" t-value="lp_note_section.display_mode_enabled('note_allies_mode', (not lp_config or lp_config.show_note_allies)) if lp_note_section else (not lp_config or lp_config.show_note_allies)"/>
       <div class="lp-revista-container lp-revista-blog-post-addons">
         <t t-call="latinpyme_revista_theme.lp_blog_related_posts"/>
-        <t t-if="not lp_config or lp_config.show_note_interviews" t-call="latinpyme_revista_theme.lp_blog_related_interviews"/>
-        <t t-set="lp_note_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('note')"/>
+        <t t-if="lp_show_note_interviews" t-call="latinpyme_revista_theme.lp_blog_related_interviews"/>
+        <t t-set="lp_note_banner" t-value="lp_note_section.note_banner_id if lp_note_section and lp_note_section.note_banner_id and lp_note_section.note_banner_id.active else request.env['latinpyme.revista.banner'].sudo().get_active_banner('note')"/>
         <section t-if="lp_note_banner" class="lp-revista-block lp-revista-ad-row">
           <t t-call="latinpyme_revista_theme.lp_dynamic_banner">
             <t t-set="banner" t-value="lp_note_banner"/>
           </t>
         </section>
-        <section t-if="not lp_config or lp_config.show_note_portfolio" class="lp-revista-block">
+        <section t-if="lp_show_note_portfolio" class="lp-revista-block">
           <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
         </section>
-        <section t-if="not lp_config or lp_config.show_note_allies" class="lp-revista-block">
+        <section t-if="lp_show_note_allies" class="lp-revista-block">
           <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
         </section>
         <section class="lp-revista-block">

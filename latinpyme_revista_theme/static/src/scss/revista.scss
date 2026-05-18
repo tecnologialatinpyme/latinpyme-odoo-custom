@@ -41,6 +41,11 @@
   padding-block: 22px 36px;
 }
 
+.lp-revista-home .lp-revista-main {
+  display: flex;
+  flex-direction: column;
+}
+
 .lp-revista-masthead {
   background: #fff;
   border-bottom: 1px solid var(--lp-border);
@@ -1238,6 +1243,15 @@
     font-size: 50px;
   }
 
+  > img {
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 0 20px 12px;
+    border-radius: 14px;
+    object-fit: cover;
+  }
+
   ul {
     min-height: 78px;
     margin: 0 20px 18px 90px;
@@ -1258,6 +1272,20 @@
     color: var(--lp-red);
     font-size: 13px;
     font-weight: 850;
+  }
+}
+
+.lp-revista-widget--interview {
+  .lp-revista-button {
+    align-self: flex-start;
+    margin-top: 6px;
+  }
+}
+
+.lp-revista-program-snippet {
+  .lp-revista-program-upcoming-card {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: flex-start;
   }
 }
 

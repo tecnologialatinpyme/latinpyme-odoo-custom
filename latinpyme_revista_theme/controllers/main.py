@@ -188,6 +188,32 @@ class LatinpymeRevistaController(http.Controller):
             raise NotFound()
         return self._image_response(event.image)
 
+    @http.route(
+        "/revista/media/portfolio/<int:item_id>/image",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def revista_portfolio_item_image(self, item_id, **kwargs):
+        item = request.env["latinpyme.revista.portfolio.item"].sudo().browse(item_id).exists()
+        if not item or not item.active or not item.image or not self._website_matches(item):
+            raise NotFound()
+        return self._image_response(item.image)
+
+    @http.route(
+        "/revista/media/sidebar/<int:item_id>/image",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def revista_sidebar_item_image(self, item_id, **kwargs):
+        item = request.env["latinpyme.revista.sidebar.item"].sudo().browse(item_id).exists()
+        if not item or not item.active or not item.image or not self._website_matches(item):
+            raise NotFound()
+        return self._image_response(item.image)
+
     def _website_domain(self, model):
         if request.website and "website_id" in model._fields:
             return [("website_id", "in", [False, request.website.id])]
@@ -339,6 +365,77 @@ class LatinpymeRevistaController(http.Controller):
             limit=limit,
         )
 
+    def _home_block(self, block_type):
+        Block = request.env["latinpyme.revista.home.block"].sudo()
+        domain = [("block_type", "=", block_type)]
+        if request.website:
+            website_block = Block.search(domain + [("website_id", "=", request.website.id)], order="sequence, id", limit=1)
+            if website_block:
+                return website_block
+        return Block.search(domain + [("website_id", "=", False)], order="sequence, id", limit=1)
+
+    def _home_blocks_map(self):
+        return {
+            block_type: self._home_block(block_type)
+            for block_type, _label in request.env["latinpyme.revista.home.block"].sudo()._fields["block_type"].selection
+        }
+
+    def _home_block_enabled(self, block, default=True):
+        return block.active if block else bool(default)
+
+    def _home_block_limit(self, block, default=3):
+        if block and block.limit:
+            return block.limit
+        return default
+
+    def _manual_posts(self, block, blog=None, limit=6, exclude_ids=None):
+        if not block or not block.post_ids:
+            return request.env["blog.post"].sudo().browse()
+        posts = block.post_ids.sudo()
+        exclude_ids = set(exclude_ids or [])
+        if blog:
+            posts = posts.filtered(lambda post: post.blog_id == blog)
+        if exclude_ids:
+            posts = posts.filtered(lambda post: post.id not in exclude_ids)
+        now = fields.Datetime.now()
+        if "active" in posts._fields:
+            posts = posts.filtered(lambda post: post.active)
+        if "website_published" in posts._fields:
+            posts = posts.filtered(lambda post: post.website_published)
+        elif "is_published" in posts._fields:
+            posts = posts.filtered(lambda post: post.is_published)
+        if "post_date" in posts._fields:
+            posts = posts.filtered(lambda post: not post.post_date or post.post_date <= now)
+        if request.website and "website_id" in posts._fields:
+            posts = posts.filtered(lambda post: not post.website_id or post.website_id == request.website)
+        return posts[:limit]
+
+    def _home_posts(self, block, blog=None, default_tag=None, default_limit=6, exclude_ids=None):
+        limit = self._home_block_limit(block, default_limit)
+        manual_posts = self._manual_posts(block, blog=blog, limit=limit, exclude_ids=exclude_ids)
+        if manual_posts:
+            return manual_posts
+        tag = block.tag_id if block and block.tag_id else default_tag
+        return self._posts(blog=blog, tag=tag, limit=limit, exclude_ids=exclude_ids)
+
+    def _home_featured_post(self, block, blog=None):
+        manual_post = self._manual_posts(block, blog=blog, limit=1)
+        if manual_post:
+            return manual_post
+        if block and block.tag_id:
+            return self._posts(blog=blog, tag=block.tag_id, limit=1)
+        return self._featured_post(blog=blog)
+
+    def _section_display_enabled(self, section, field_name, default=True):
+        if section and field_name in section._fields:
+            return section.display_mode_enabled(field_name, default_enabled=default)
+        return bool(default)
+
+    def _section_banners(self, section):
+        if section and section.section_banner_id and section.section_banner_id.active and self._website_matches(section.section_banner_id):
+            return section.section_banner_id
+        return self._banners("section", limit=1)
+
     def _program_event_groups(self, events):
         groups = []
         current_key = False
@@ -474,23 +571,51 @@ class LatinpymeRevistaController(http.Controller):
     def revista_home(self, **kwargs):
         config = self._config()
         blog = self._revista_blog()
-        featured_post = self._featured_post(blog=blog)
+        home_blocks = self._home_blocks_map()
+        block_defaults = {
+            "top_banners": config.show_home_banners if config else True,
+            "hero": True,
+            "latest": True,
+            "sections": True,
+            "news": True,
+            "interviews": config.show_home_interviews if config else True,
+            "specials": config.show_home_specials if config else True,
+            "mid_banners": config.show_home_banners if config else True,
+            "portfolio": config.show_home_portfolio if config else True,
+            "allies": config.show_home_allies if config else True,
+        }
+        featured_post = self._home_featured_post(home_blocks.get("hero"), blog=blog)
         exclude_ids = featured_post.ids if featured_post else []
         interview_tag = self._tag_by_name("Entrevistas")
         special_tag = self._tag_by_name("Especiales")
         highlight_limit = config.home_highlight_limit if config else 3
         latest_limit = config.home_latest_limit if config else 6
         new_limit = config.home_new_limit if config else 5
+        home_top_banners = self._banners("home_top", limit=self._home_block_limit(home_blocks.get("top_banners"), 2))
+        if not home_top_banners:
+            home_top_banners = self._banners("home_horizontal", limit=self._home_block_limit(home_blocks.get("top_banners"), 2))
         values = {
             "blog": blog,
+            "home_blocks": home_blocks,
+            "show_home_top_banners": self._home_block_enabled(home_blocks.get("top_banners"), block_defaults["top_banners"]),
+            "show_home_hero": self._home_block_enabled(home_blocks.get("hero"), block_defaults["hero"]),
+            "show_home_latest": self._home_block_enabled(home_blocks.get("latest"), block_defaults["latest"]),
+            "show_home_sections": self._home_block_enabled(home_blocks.get("sections"), block_defaults["sections"]),
+            "show_home_news": self._home_block_enabled(home_blocks.get("news"), block_defaults["news"]),
+            "show_home_interviews": self._home_block_enabled(home_blocks.get("interviews"), block_defaults["interviews"]),
+            "show_home_specials": self._home_block_enabled(home_blocks.get("specials"), block_defaults["specials"]),
+            "show_home_mid_banners": self._home_block_enabled(home_blocks.get("mid_banners"), block_defaults["mid_banners"]),
+            "show_home_portfolio": self._home_block_enabled(home_blocks.get("portfolio"), block_defaults["portfolio"]),
+            "show_home_allies": self._home_block_enabled(home_blocks.get("allies"), block_defaults["allies"]),
             "featured_post": featured_post,
             "featured_style": self._cover_style(featured_post),
-            "highlight_posts": self._posts(blog=blog, limit=highlight_limit, exclude_ids=exclude_ids),
-            "latest_posts": self._posts(blog=blog, limit=latest_limit, exclude_ids=exclude_ids),
-            "new_posts": self._posts(blog=blog, limit=new_limit, exclude_ids=exclude_ids),
-            "interview_posts": self._posts(blog=blog, tag=interview_tag, limit=3),
-            "special_posts": self._posts(blog=blog, tag=special_tag, limit=2),
-            "home_banners": self._banners("home_horizontal", limit=2),
+            "highlight_posts": self._home_posts(home_blocks.get("hero"), blog=blog, default_limit=highlight_limit, exclude_ids=exclude_ids),
+            "latest_posts": self._home_posts(home_blocks.get("latest"), blog=blog, default_limit=latest_limit, exclude_ids=exclude_ids),
+            "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, exclude_ids=exclude_ids),
+            "interview_posts": self._home_posts(home_blocks.get("interviews"), blog=blog, default_tag=interview_tag, default_limit=3),
+            "special_posts": self._home_posts(home_blocks.get("specials"), blog=blog, default_tag=special_tag, default_limit=2),
+            "home_banners": home_top_banners,
+            "home_mid_banners": self._banners("home_horizontal", limit=self._home_block_limit(home_blocks.get("mid_banners"), 3)),
         }
         return self._render("latinpyme_revista_theme.revista_home_page", values)
 
@@ -521,7 +646,7 @@ class LatinpymeRevistaController(http.Controller):
             current_page = max(int(page or kwargs.get("page", 1) or 1), 1)
         except (TypeError, ValueError):
             current_page = 1
-        per_page = config.section_posts_per_page if config else 9
+        per_page = section_record.section_posts_per_page if section_record and section_record.section_posts_per_page else (config.section_posts_per_page if config else 9)
         total_posts = self._posts_count(blog=blog, tag=section_tag, exclude_ids=exclude_ids) if section_tag else 0
         page_count = max((total_posts + per_page - 1) // per_page, 1)
         if current_page > page_count:
@@ -547,7 +672,11 @@ class LatinpymeRevistaController(http.Controller):
             "total_posts": total_posts,
             "prev_page_url": "%s?page=%s" % (section_url, current_page - 1) if current_page > 1 else False,
             "next_page_url": "%s?page=%s" % (section_url, current_page + 1) if current_page < page_count else False,
-            "section_banners": self._banners("section", limit=1),
+            "section_banners": self._section_banners(section_record),
+            "section_show_sidebar": self._section_display_enabled(section_record, "section_sidebar_mode", True),
+            "section_show_related": self._section_display_enabled(section_record, "section_related_mode", True),
+            "section_show_portfolio": self._section_display_enabled(section_record, "section_portfolio_mode", True),
+            "section_show_allies": self._section_display_enabled(section_record, "section_allies_mode", True),
         }
         return self._render("latinpyme_revista_theme.revista_section_page", values)
 

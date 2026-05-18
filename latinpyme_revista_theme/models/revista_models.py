@@ -51,6 +51,42 @@ PROGRAM_EVENT_TYPE_LEGACY_MAP = {
     "capacitacion": "charlas",
     "otro": "foros",
 }
+DISPLAY_MODE_SELECTION = [
+    ("default", "Usar configuracion general"),
+    ("show", "Mostrar"),
+    ("hide", "Ocultar"),
+]
+HOME_BLOCK_TYPES = [
+    ("top_banners", "Banners superiores"),
+    ("hero", "Hero y destacados"),
+    ("latest", "Lo mas reciente"),
+    ("sections", "Secciones"),
+    ("news", "Novedades"),
+    ("interviews", "Entrevistas"),
+    ("specials", "Especiales"),
+    ("mid_banners", "Banners intermedios"),
+    ("portfolio", "Portafolio"),
+    ("allies", "Aliados"),
+]
+SIDEBAR_PLACEMENTS = [
+    ("global", "Global"),
+    ("home", "Home"),
+    ("section", "Pagina de seccion"),
+    ("note", "Nota individual"),
+]
+SIDEBAR_ITEM_TYPES = [
+    ("conference", "Proxima conferencia"),
+    ("poll", "Encuesta"),
+    ("interview_cta", "CTA entrevistas"),
+    ("banner", "Banner lateral"),
+]
+
+
+def _current_website():
+    try:
+        return getattr(http_request, "website", False)
+    except Exception:
+        return False
 
 
 class LatinpymeRevistaConfig(models.Model):
@@ -58,50 +94,50 @@ class LatinpymeRevistaConfig(models.Model):
     _description = "Configuracion Revista LatinPyme"
     _order = "website_id, id"
 
-    name = fields.Char(required=True, default="Revista LatinPyme")
+    name = fields.Char(string="Nombre", required=True, default="Revista LatinPyme")
     website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
-    production_domain = fields.Char(default="latinpyme.com")
-    preproduction_domain = fields.Char(default="revista.latinpyme.com")
-    preproduction_noindex = fields.Boolean(default=True)
-    footer_text = fields.Char(default="© 2026 Revista LatinPyme - Todos los derechos reservados")
-    phone = fields.Char(default="+57 310 123 4567")
-    city = fields.Char(default="Bogota, Colombia")
-    email = fields.Char()
-    facebook_url = fields.Char(default="#")
-    linkedin_url = fields.Char(default="#")
-    instagram_url = fields.Char(default="#")
-    youtube_url = fields.Char(default="#")
-    whatsapp_url = fields.Char(default="#")
-    show_home_banners = fields.Boolean(default=True)
-    show_home_interviews = fields.Boolean(default=True)
-    show_home_specials = fields.Boolean(default=True)
-    show_home_portfolio = fields.Boolean(default=True)
-    show_home_allies = fields.Boolean(default=True)
-    home_highlight_limit = fields.Integer(default=3)
-    home_latest_limit = fields.Integer(default=6)
-    home_new_limit = fields.Integer(default=5)
-    section_posts_per_page = fields.Integer(default=9)
-    show_note_sidebar = fields.Boolean(default=True)
-    show_note_interviews = fields.Boolean(default=True)
-    show_note_portfolio = fields.Boolean(default=True)
-    show_note_allies = fields.Boolean(default=True)
-    show_sidebar_conference = fields.Boolean(default=True)
-    show_sidebar_poll = fields.Boolean(default=True)
-    show_sidebar_ad = fields.Boolean(default=True)
-    conference_label = fields.Char(default="Proxima conferencia")
-    conference_title = fields.Char(default="Liderazgo y cultura organizacional: claves para el futuro")
-    conference_date_text = fields.Char(default="25 de junio de 2024")
-    conference_location = fields.Char(default="Bogota, Colombia")
-    conference_time = fields.Char(default="9:00 a.m. - 12:00 m.")
-    conference_button_label = fields.Char(default="Mas informacion")
-    conference_url = fields.Char(default="/event")
-    poll_label = fields.Char(default="Encuesta")
-    poll_question = fields.Char(default="¿Cual es el mayor desafio de tu empresa este año?")
-    poll_option_1 = fields.Char(default="Acceso a financiamiento")
-    poll_option_2 = fields.Char(default="Transformacion digital")
-    poll_option_3 = fields.Char(default="Atraccion y retencion de talento")
-    poll_option_4 = fields.Char(default="Aumento de costos")
-    poll_button_label = fields.Char(default="Votar")
+    production_domain = fields.Char(string="Dominio final", default="latinpyme.com")
+    preproduction_domain = fields.Char(string="Dominio de preproduccion", default="revista.latinpyme.com")
+    preproduction_noindex = fields.Boolean(string="No indexar preproduccion", default=True)
+    footer_text = fields.Char(string="Texto legal del footer", default="© 2026 Revista LatinPyme - Todos los derechos reservados")
+    phone = fields.Char(string="Telefono", default="+57 310 123 4567")
+    city = fields.Char(string="Ciudad", default="Bogota, Colombia")
+    email = fields.Char(string="Correo")
+    facebook_url = fields.Char(string="URL Facebook", default="#")
+    linkedin_url = fields.Char(string="URL LinkedIn", default="#")
+    instagram_url = fields.Char(string="URL Instagram", default="#")
+    youtube_url = fields.Char(string="URL YouTube", default="#")
+    whatsapp_url = fields.Char(string="URL WhatsApp", default="#")
+    show_home_banners = fields.Boolean(string="Mostrar banners en Home", default=True)
+    show_home_interviews = fields.Boolean(string="Mostrar entrevistas en Home", default=True)
+    show_home_specials = fields.Boolean(string="Mostrar especiales en Home", default=True)
+    show_home_portfolio = fields.Boolean(string="Mostrar portafolio en Home", default=True)
+    show_home_allies = fields.Boolean(string="Mostrar aliados en Home", default=True)
+    home_highlight_limit = fields.Integer(string="Cantidad de destacados", default=3)
+    home_latest_limit = fields.Integer(string="Cantidad de recientes", default=6)
+    home_new_limit = fields.Integer(string="Cantidad de novedades", default=5)
+    section_posts_per_page = fields.Integer(string="Notas por pagina de seccion", default=9)
+    show_note_sidebar = fields.Boolean(string="Mostrar sidebar en notas", default=True)
+    show_note_interviews = fields.Boolean(string="Mostrar entrevistas en notas", default=True)
+    show_note_portfolio = fields.Boolean(string="Mostrar portafolio en notas", default=True)
+    show_note_allies = fields.Boolean(string="Mostrar aliados en notas", default=True)
+    show_sidebar_conference = fields.Boolean(string="Mostrar conferencia", default=True)
+    show_sidebar_poll = fields.Boolean(string="Mostrar encuesta", default=True)
+    show_sidebar_ad = fields.Boolean(string="Mostrar publicidad lateral", default=True)
+    conference_label = fields.Char(string="Etiqueta de conferencia", default="Proxima conferencia")
+    conference_title = fields.Char(string="Titulo de conferencia", default="Liderazgo y cultura organizacional: claves para el futuro")
+    conference_date_text = fields.Char(string="Fecha visible", default="25 de junio de 2024")
+    conference_location = fields.Char(string="Lugar", default="Bogota, Colombia")
+    conference_time = fields.Char(string="Hora", default="9:00 a.m. - 12:00 m.")
+    conference_button_label = fields.Char(string="Texto del boton", default="Mas informacion")
+    conference_url = fields.Char(string="URL de conferencia", default="/event")
+    poll_label = fields.Char(string="Etiqueta de encuesta", default="Encuesta")
+    poll_question = fields.Char(string="Pregunta", default="¿Cual es el mayor desafio de tu empresa este año?")
+    poll_option_1 = fields.Char(string="Opcion 1", default="Acceso a financiamiento")
+    poll_option_2 = fields.Char(string="Opcion 2", default="Transformacion digital")
+    poll_option_3 = fields.Char(string="Opcion 3", default="Atraccion y retencion de talento")
+    poll_option_4 = fields.Char(string="Opcion 4", default="Aumento de costos")
+    poll_button_label = fields.Char(string="Texto del boton encuesta", default="Votar")
 
     @api.constrains("home_highlight_limit", "home_latest_limit", "home_new_limit", "section_posts_per_page")
     def _check_positive_limits(self):
@@ -160,8 +196,8 @@ class LatinpymeRevistaSection(models.Model):
     _description = "Seccion editorial Revista LatinPyme"
     _order = "sequence, name"
 
-    name = fields.Char(required=True)
-    slug = fields.Char(required=True, index=True)
+    name = fields.Char(string="Nombre", required=True)
+    slug = fields.Char(string="Slug", required=True, index=True)
     tag_id = fields.Many2one("blog.tag", string="Etiqueta de Blog")
     parent_id = fields.Many2one("latinpyme.revista.section", string="Menu padre", ondelete="cascade")
     child_ids = fields.One2many("latinpyme.revista.section", "parent_id", string="Submenus")
@@ -173,13 +209,72 @@ class LatinpymeRevistaSection(models.Model):
         string="URL personalizada",
         help="Opcional. Si se deja vacia, el enlace apunta a /revista/seccion/<slug>.",
     )
-    active = fields.Boolean(default=True)
-    sequence = fields.Integer(default=10)
-    description = fields.Text()
-    cover_image = fields.Image(max_width=1920, max_height=1080)
-    cover_filename = fields.Char()
-    seo_title = fields.Char()
-    seo_description = fields.Text()
+    active = fields.Boolean(string="Activa", default=True)
+    sequence = fields.Integer(string="Orden", default=10)
+    description = fields.Text(string="Descripcion")
+    cover_image = fields.Image(string="Imagen de portada", max_width=1920, max_height=1080)
+    cover_filename = fields.Char(string="Nombre de archivo")
+    section_posts_per_page = fields.Integer(string="Notas por pagina")
+    section_sidebar_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Sidebar en seccion",
+        default="default",
+        required=True,
+    )
+    section_related_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Relacionadas en seccion",
+        default="default",
+        required=True,
+    )
+    section_portfolio_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Portafolio en seccion",
+        default="default",
+        required=True,
+    )
+    section_allies_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Aliados en seccion",
+        default="default",
+        required=True,
+    )
+    section_banner_id = fields.Many2one(
+        "latinpyme.revista.banner",
+        string="Banner especifico de seccion",
+        domain=[("placement", "=", "section")],
+    )
+    note_sidebar_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Sidebar en notas",
+        default="default",
+        required=True,
+    )
+    note_interviews_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Entrevistas en notas",
+        default="default",
+        required=True,
+    )
+    note_portfolio_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Portafolio en notas",
+        default="default",
+        required=True,
+    )
+    note_allies_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Aliados en notas",
+        default="default",
+        required=True,
+    )
+    note_banner_id = fields.Many2one(
+        "latinpyme.revista.banner",
+        string="Banner especifico de nota",
+        domain=[("placement", "=", "note")],
+    )
+    seo_title = fields.Char(string="Titulo SEO")
+    seo_description = fields.Text(string="Descripcion SEO")
     website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
 
     _sql_constraints = [
@@ -243,6 +338,7 @@ class LatinpymeRevistaSection(models.Model):
 
     @api.model
     def get_active_sections(self, website=None):
+        website = website or _current_website()
         domain = [("active", "=", True)]
         if website:
             domain.append(("website_id", "in", [False, website.id]))
@@ -293,6 +389,7 @@ class LatinpymeRevistaSection(models.Model):
 
     @api.model
     def get_by_slug(self, slug, website=None, active=True, routable=False):
+        website = website or _current_website()
         slug = (slug or "").strip().lower()
         domain = [("slug", "=", slug)]
         if active:
@@ -307,6 +404,7 @@ class LatinpymeRevistaSection(models.Model):
 
     @api.model
     def get_by_tag(self, tag, website=None):
+        website = website or _current_website()
         if not tag:
             return self.browse()
         domain = [("active", "=", True), ("menu_only", "=", False), ("tag_id", "=", tag.id)]
@@ -329,6 +427,15 @@ class LatinpymeRevistaSection(models.Model):
         if self.tag_id:
             return self.tag_id
         return self.env["blog.tag"].sudo().search([("name", "=ilike", self.name)], limit=1)
+
+    def display_mode_enabled(self, field_name, default_enabled=True):
+        self.ensure_one()
+        value = self[field_name] or "default"
+        if value == "show":
+            return True
+        if value == "hide":
+            return False
+        return bool(default_enabled)
 
     @api.model
     def ensure_training_menu(self):
@@ -464,20 +571,286 @@ class LatinpymeRevistaSection(models.Model):
         return True
 
 
+class LatinpymeRevistaHomeBlock(models.Model):
+    _name = "latinpyme.revista.home.block"
+    _description = "Bloque del Home Revista LatinPyme"
+    _order = "sequence, id"
+
+    name = fields.Char(string="Nombre interno", required=True)
+    block_type = fields.Selection(HOME_BLOCK_TYPES, string="Bloque", required=True, default="hero", index=True)
+    active = fields.Boolean(string="Activo", default=True)
+    sequence = fields.Integer(string="Orden", default=10)
+    title = fields.Char(string="Titulo visible")
+    tag_id = fields.Many2one(
+        "blog.tag",
+        string="Etiqueta fuente",
+        help="Si se configura, el bloque tomara notas de esta etiqueta.",
+    )
+    post_ids = fields.Many2many(
+        "blog.post",
+        "latinpyme_revista_home_block_post_rel",
+        "block_id",
+        "post_id",
+        string="Notas seleccionadas",
+        help="Opcional. Si se seleccionan notas, se usan antes que la regla por etiqueta.",
+    )
+    limit = fields.Integer(string="Cantidad de notas", default=3)
+    link_label = fields.Char(string="Texto del enlace")
+    link_url = fields.Char(string="URL del enlace")
+    website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
+
+    @api.onchange("block_type")
+    def _onchange_block_type(self):
+        labels = dict(HOME_BLOCK_TYPES)
+        for record in self:
+            if record.block_type:
+                label = labels.get(record.block_type)
+                if not record.name:
+                    record.name = label
+                if not record.title:
+                    record.title = label
+
+    @api.constrains("limit")
+    def _check_limit(self):
+        for record in self:
+            if record.limit < 1:
+                raise ValidationError("La cantidad de notas debe ser mayor que cero.")
+
+    @api.model
+    def get_block(self, block_type, website=None):
+        domain = [("active", "=", True), ("block_type", "=", block_type)]
+        if website:
+            website_record = self.search(domain + [("website_id", "=", website.id)], order="sequence, id", limit=1)
+            if website_record:
+                return website_record
+        return self.search(domain + [("website_id", "=", False)], order="sequence, id", limit=1)
+
+    @api.model
+    def get_blocks_map(self, website=None):
+        return {block_type: self.get_block(block_type, website=website) for block_type, _label in HOME_BLOCK_TYPES}
+
+    @api.model
+    def ensure_default_blocks(self):
+        defaults = [
+            ("top_banners", "Banners superiores", 5, 2, False, False),
+            ("hero", "Hero y destacados", 10, 3, False, False),
+            ("latest", "Lo mas reciente", 20, 6, False, "/blog"),
+            ("sections", "Secciones", 30, 1, False, False),
+            ("news", "Novedades", 40, 5, False, False),
+            ("interviews", "Entrevistas", 50, 3, "Entrevistas", "/revista/seccion/entrevistas"),
+            ("specials", "Especiales", 60, 2, "Especiales", "/revista/seccion/especiales"),
+            ("mid_banners", "Banners intermedios", 70, 3, False, False),
+            ("portfolio", "Portafolio", 80, 3, False, "/revista/seccion/portafolio"),
+            ("allies", "Aliados", 90, 8, False, False),
+        ]
+        Tag = self.env["blog.tag"].sudo()
+        for block_type, title, sequence, limit, tag_name, link_url in defaults:
+            block = self.search([("block_type", "=", block_type), ("website_id", "=", False)], limit=1)
+            tag = Tag.search([("name", "=ilike", tag_name)], limit=1) if tag_name else False
+            values = {
+                "name": title,
+                "title": title,
+                "sequence": sequence,
+                "limit": limit,
+                "link_url": link_url or False,
+            }
+            if tag:
+                values["tag_id"] = tag.id
+            if block:
+                missing_values = {key: value for key, value in values.items() if value and not block[key]}
+                if missing_values:
+                    block.write(missing_values)
+                continue
+            self.create(dict(values, block_type=block_type, active=True))
+        return True
+
+
+class LatinpymeRevistaPortfolioItem(models.Model):
+    _name = "latinpyme.revista.portfolio.item"
+    _description = "Item de Portafolio Revista LatinPyme"
+    _order = "sequence, name"
+
+    name = fields.Char(string="Titulo", required=True)
+    category = fields.Char(string="Categoria")
+    icon_class = fields.Char(string="Icono FontAwesome", default="fa fa-graduation-cap")
+    image = fields.Image(string="Imagen", max_width=1024, max_height=768)
+    bullet_1 = fields.Char(string="Bullet 1")
+    bullet_2 = fields.Char(string="Bullet 2")
+    bullet_3 = fields.Char(string="Bullet 3")
+    bullet_4 = fields.Char(string="Bullet 4")
+    bullet_5 = fields.Char(string="Bullet 5")
+    contact_label = fields.Char(string="Texto boton WhatsApp", default="Contactanos")
+    contact_url = fields.Char(string="URL boton WhatsApp", default="/contactus")
+    agenda_label = fields.Char(string="Texto boton agenda", default="Agenda una cita")
+    agenda_url = fields.Char(string="URL boton agenda", default="/appointment")
+    active = fields.Boolean(string="Activo", default=True)
+    sequence = fields.Integer(string="Orden", default=10)
+    website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
+
+    def bullet_lines(self):
+        self.ensure_one()
+        return [line for line in (self.bullet_1, self.bullet_2, self.bullet_3, self.bullet_4, self.bullet_5) if line]
+
+    @api.model
+    def get_active_items(self, website=None, limit=None):
+        website = website or _current_website()
+        domain = [("active", "=", True)]
+        if website:
+            domain.append(("website_id", "in", [False, website.id]))
+        return self.search(domain, order="sequence, name", limit=limit)
+
+    @api.model
+    def ensure_default_items(self):
+        defaults = [
+            {
+                "name": "Aprendizaje empresarial",
+                "sequence": 10,
+                "icon_class": "fa fa-graduation-cap",
+                "bullet_1": "Capacitacion a la medida",
+                "bullet_2": "Fidelizacion empresarial",
+                "bullet_3": "Cursos de actualizacion",
+            },
+            {
+                "name": "Tecnologia: salones y espacios",
+                "sequence": 20,
+                "icon_class": "fa fa-calendar-o",
+                "bullet_1": "LMS - Aulas",
+                "bullet_2": "Salon de Eventos",
+            },
+            {
+                "name": "Inteligencia artificial",
+                "sequence": 30,
+                "icon_class": "fa fa-microchip",
+                "bullet_1": "Automatizacion de procesos con IA",
+            },
+        ]
+        for values in defaults:
+            item = self.search([("name", "=ilike", values["name"]), ("website_id", "=", False)], limit=1)
+            if item:
+                continue
+            self.create(dict(values, active=True))
+        return True
+
+
+class LatinpymeRevistaSidebarItem(models.Model):
+    _name = "latinpyme.revista.sidebar.item"
+    _description = "Contenido del Sidebar Revista LatinPyme"
+    _order = "placement, sequence, name"
+
+    name = fields.Char(string="Nombre interno", required=True)
+    placement = fields.Selection(SIDEBAR_PLACEMENTS, string="Ubicacion", required=True, default="global")
+    item_type = fields.Selection(SIDEBAR_ITEM_TYPES, string="Tipo de bloque", required=True, default="conference")
+    active = fields.Boolean(string="Activo", default=True)
+    sequence = fields.Integer(string="Orden", default=10)
+    label = fields.Char(string="Etiqueta superior")
+    title = fields.Char(string="Titulo")
+    text = fields.Text(string="Texto")
+    date_text = fields.Char(string="Fecha visible")
+    location_text = fields.Char(string="Lugar")
+    time_text = fields.Char(string="Hora")
+    button_label = fields.Char(string="Texto del boton")
+    url = fields.Char(string="URL")
+    image = fields.Image(string="Imagen", max_width=1200, max_height=900)
+    banner_id = fields.Many2one(
+        "latinpyme.revista.banner",
+        string="Banner relacionado",
+        domain=[("placement", "=", "sidebar")],
+    )
+    poll_option_1 = fields.Char(string="Opcion 1")
+    poll_option_2 = fields.Char(string="Opcion 2")
+    poll_option_3 = fields.Char(string="Opcion 3")
+    poll_option_4 = fields.Char(string="Opcion 4")
+    website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
+
+    def poll_options(self):
+        self.ensure_one()
+        return [option for option in (self.poll_option_1, self.poll_option_2, self.poll_option_3, self.poll_option_4) if option]
+
+    @api.model
+    def _active_domain(self, placement, website=None):
+        website = website or _current_website()
+        domain = [("active", "=", True), ("placement", "=", placement or "global")]
+        if website:
+            domain.append(("website_id", "in", [False, website.id]))
+        return domain
+
+    @api.model
+    def get_active_items(self, placement="global", website=None):
+        placement = placement or "global"
+        items = self.search(self._active_domain(placement, website=website), order="sequence, id")
+        if items or placement == "global":
+            return items
+        return self.search(self._active_domain("global", website=website), order="sequence, id")
+
+    @api.model
+    def ensure_default_items(self):
+        defaults = [
+            {
+                "name": "Proxima conferencia",
+                "placement": "global",
+                "item_type": "conference",
+                "sequence": 10,
+                "label": "Proxima conferencia",
+                "title": "Liderazgo y cultura organizacional: claves para el futuro",
+                "date_text": "25 de junio de 2024",
+                "location_text": "Bogota, Colombia",
+                "time_text": "9:00 a.m. - 12:00 m.",
+                "button_label": "Mas informacion",
+                "url": "/event",
+            },
+            {
+                "name": "Encuesta empresarial",
+                "placement": "global",
+                "item_type": "poll",
+                "sequence": 20,
+                "label": "Encuesta",
+                "title": "¿Cual es el mayor desafio de tu empresa este año?",
+                "poll_option_1": "Acceso a financiamiento",
+                "poll_option_2": "Transformacion digital",
+                "poll_option_3": "Atraccion y retencion de talento",
+                "poll_option_4": "Aumento de costos",
+                "button_label": "Votar",
+            },
+            {
+                "name": "Banner lateral automatizacion",
+                "placement": "global",
+                "item_type": "banner",
+                "sequence": 30,
+                "title": "Automatiza procesos, optimiza recursos y crece sin limites.",
+                "button_label": "Conoce mas",
+                "url": "/contactus",
+            },
+        ]
+        for values in defaults:
+            item = self.search(
+                [
+                    ("name", "=ilike", values["name"]),
+                    ("placement", "=", values["placement"]),
+                    ("website_id", "=", False),
+                ],
+                limit=1,
+            )
+            if item:
+                continue
+            self.create(dict(values, active=True))
+        return True
+
+
 class LatinpymeRevistaAlly(models.Model):
     _name = "latinpyme.revista.ally"
     _description = "Aliado Revista LatinPyme"
     _order = "sequence, name"
 
-    name = fields.Char(required=True)
-    logo = fields.Image(max_width=1024, max_height=512)
-    url = fields.Char()
-    active = fields.Boolean(default=True)
-    sequence = fields.Integer(default=10)
+    name = fields.Char(string="Nombre", required=True)
+    logo = fields.Image(string="Logo", max_width=1024, max_height=512)
+    url = fields.Char(string="URL")
+    active = fields.Boolean(string="Activo", default=True)
+    sequence = fields.Integer(string="Orden", default=10)
     website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
 
     @api.model
     def get_active_allies(self, website=None):
+        website = website or _current_website()
         domain = [("active", "=", True)]
         if website:
             domain.append(("website_id", "in", [False, website.id]))
@@ -495,9 +868,10 @@ class LatinpymeRevistaBanner(models.Model):
     _description = "Publicidad Revista LatinPyme"
     _order = "sequence, name"
 
-    name = fields.Char(required=True)
+    name = fields.Char(string="Nombre", required=True)
     placement = fields.Selection(
         [
+            ("home_top", "Home superior"),
             ("home_horizontal", "Home horizontal"),
             ("sidebar", "Sidebar"),
             ("footer", "Footer"),
@@ -505,18 +879,19 @@ class LatinpymeRevistaBanner(models.Model):
             ("section", "Seccion"),
             ("program_hero", "Programacion anual hero"),
         ],
+        string="Ubicacion",
         required=True,
         default="sidebar",
     )
-    image = fields.Image(max_width=1920, max_height=1080)
-    title = fields.Char()
-    text = fields.Text()
-    button_label = fields.Char(default="Conoce mas")
-    url = fields.Char(default="/contactus")
-    active = fields.Boolean(default=True)
-    sequence = fields.Integer(default=10)
-    date_start = fields.Date()
-    date_end = fields.Date()
+    image = fields.Image(string="Imagen", max_width=1920, max_height=1080)
+    title = fields.Char(string="Titulo")
+    text = fields.Text(string="Texto")
+    button_label = fields.Char(string="Texto del boton", default="Conoce mas")
+    url = fields.Char(string="URL", default="/contactus")
+    active = fields.Boolean(string="Activo", default=True)
+    sequence = fields.Integer(string="Orden", default=10)
+    date_start = fields.Date(string="Fecha de inicio")
+    date_end = fields.Date(string="Fecha de fin")
     website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
 
     @api.constrains("date_start", "date_end")
@@ -527,6 +902,7 @@ class LatinpymeRevistaBanner(models.Model):
 
     @api.model
     def _active_domain(self, placement, website=None):
+        website = website or _current_website()
         today = fields.Date.context_today(self)
         domain = [
             ("active", "=", True),
@@ -544,6 +920,7 @@ class LatinpymeRevistaBanner(models.Model):
 
     @api.model
     def _available_until_domain(self, placement, website=None):
+        website = website or _current_website()
         today = fields.Date.context_today(self)
         domain = [
             ("active", "=", True),
@@ -577,7 +954,7 @@ class LatinpymeRevistaProgramEvent(models.Model):
     _description = "Evento Programacion anual Revista LatinPyme"
     _order = "date_start, time_start, sequence, name"
 
-    name = fields.Char(required=True)
+    name = fields.Char(string="Nombre", required=True)
     event_type = fields.Selection(
         PROGRAM_EVENT_TYPES,
         string="Tipo de evento",
@@ -600,13 +977,13 @@ class LatinpymeRevistaProgramEvent(models.Model):
         default="virtual",
     )
     location = fields.Char(string="Lugar o enlace")
-    description = fields.Text()
-    image = fields.Image(max_width=1600, max_height=900)
+    description = fields.Text(string="Descripcion")
+    image = fields.Image(string="Imagen", max_width=1600, max_height=900)
     registration_url = fields.Char(string="Enlace de inscripcion")
-    button_label = fields.Char(default="Inscribirme")
-    active = fields.Boolean(default=True)
+    button_label = fields.Char(string="Texto del boton", default="Inscribirme")
+    active = fields.Boolean(string="Activo", default=True)
     featured = fields.Boolean(string="Destacado")
-    sequence = fields.Integer(default=10)
+    sequence = fields.Integer(string="Orden", default=10)
     website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
 
     @api.model
@@ -661,6 +1038,7 @@ class LatinpymeRevistaProgramEvent(models.Model):
 
     @api.model
     def get_active_events(self, website=None):
+        website = website or _current_website()
         domain = [("active", "=", True)]
         if website:
             domain.append(("website_id", "in", [False, website.id]))
@@ -668,6 +1046,7 @@ class LatinpymeRevistaProgramEvent(models.Model):
 
     @api.model
     def get_public_event(self, event_id, website=None):
+        website = website or _current_website()
         domain = [("id", "=", event_id), ("active", "=", True)]
         if website:
             website_record = self.search(domain + [("website_id", "=", website.id)], limit=1)

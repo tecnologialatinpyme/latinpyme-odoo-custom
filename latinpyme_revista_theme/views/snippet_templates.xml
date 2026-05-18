@@ -505,12 +505,73 @@
     </section>
   </template>
 
+  <template id="lp_sidebar_item_card" name="Revista LatinPyme Sidebar Dynamic Item">
+    <t t-if="item.item_type == 'conference'">
+      <section class="lp-revista-widget lp-revista-widget--event">
+        <div>
+          <p class="lp-revista-eyebrow" t-out="item.label or 'Próxima conferencia'"/>
+          <h3 t-out="item.title or item.name"/>
+          <ul>
+            <li t-if="item.date_text"><i class="fa fa-calendar"/><t t-out="item.date_text"/></li>
+            <li t-if="item.location_text"><i class="fa fa-map-marker"/><t t-out="item.location_text"/></li>
+            <li t-if="item.time_text"><i class="fa fa-clock-o"/><t t-out="item.time_text"/></li>
+          </ul>
+          <a t-if="item.url" t-att-href="item.url" class="lp-revista-button">
+            <t t-out="item.button_label or 'Más información'"/> <i class="fa fa-arrow-right"/>
+          </a>
+        </div>
+      </section>
+    </t>
+    <t t-elif="item.item_type == 'poll'">
+      <section class="lp-revista-widget lp-revista-widget--poll">
+        <p class="lp-revista-eyebrow" t-out="item.label or 'Encuesta'"/>
+        <h3 t-out="item.title or item.name"/>
+        <t t-foreach="item.poll_options()" t-as="option">
+          <label><input type="radio" t-att-name="'lp_poll_%s' % item.id"/> <t t-out="option"/></label>
+        </t>
+        <button type="button" class="lp-revista-button" t-out="item.button_label or 'Votar'"/>
+      </section>
+    </t>
+    <t t-elif="item.item_type == 'interview_cta'">
+      <section class="lp-revista-widget lp-revista-widget--poll lp-revista-widget--interview">
+        <p t-if="item.label" class="lp-revista-eyebrow" t-out="item.label"/>
+        <h3 t-out="item.title or item.name"/>
+        <p t-if="item.text" t-out="item.text"/>
+        <a t-if="item.url" t-att-href="item.url" class="lp-revista-button">
+          <t t-out="item.button_label or 'Postúlate aquí'"/> <i class="fa fa-arrow-right"/>
+        </a>
+      </section>
+    </t>
+    <t t-else="">
+      <t t-set="item_banner" t-value="item.banner_id"/>
+      <section class="lp-revista-widget lp-revista-widget--ad">
+        <img t-if="item.image" class="lp-revista-widget__image" t-att-src="'/revista/media/sidebar/%s/image' % item.id" t-att-alt="item.name" loading="lazy"/>
+        <img t-elif="item_banner and item_banner.image" class="lp-revista-widget__image" t-att-src="'/revista/media/banner/%s/image' % item_banner.id" t-att-alt="item_banner.name" loading="lazy"/>
+        <span class="lp-revista-widget__shade"/>
+        <h3 t-out="item.title or (item_banner.title if item_banner else item.name)"/>
+        <p t-if="item.text or (item_banner and item_banner.text)" t-out="item.text or item_banner.text"/>
+        <a t-if="item.url or (item_banner and item_banner.url)" t-att-href="item.url or item_banner.url" class="lp-revista-button lp-revista-button--small">
+          <t t-out="item.button_label or (item_banner.button_label if item_banner else 'Conoce más')"/> <i class="fa fa-arrow-right"/>
+        </a>
+        <span class="lp-revista-widget__lp">LP</span>
+      </section>
+    </t>
+  </template>
+
   <template id="lp_editorial_sidebar" name="Revista LatinPyme Sidebar">
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+    <t t-set="lp_sidebar_items" t-value="request.env['latinpyme.revista.sidebar.item'].sudo().get_active_items(lp_sidebar_placement)"/>
     <aside class="lp-revista-sidebar" aria-label="Contenido recomendado">
-      <t t-if="not lp_config or lp_config.show_sidebar_conference" t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
-      <t t-if="not lp_config or lp_config.show_sidebar_poll" t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
-      <t t-if="not lp_config or lp_config.show_sidebar_ad" t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
+      <t t-if="lp_sidebar_items">
+        <t t-foreach="lp_sidebar_items" t-as="item">
+          <t t-call="latinpyme_revista_theme.lp_sidebar_item_card"/>
+        </t>
+      </t>
+      <t t-else="">
+        <t t-if="not lp_config or lp_config.show_sidebar_conference" t-call="latinpyme_revista_theme.lp_sidebar_conference_card"/>
+        <t t-if="not lp_config or lp_config.show_sidebar_poll" t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
+        <t t-if="not lp_config or lp_config.show_sidebar_ad" t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
+      </t>
     </aside>
   </template>
 
@@ -570,9 +631,47 @@
     </section>
   </template>
 
+  <template id="s_lp_revista_program_calendar" name="LP Revista - Programación anual">
+    <section class="lp-revista s_lp_revista_program_calendar lp-revista-block" data-snippet="s_lp_revista_program_calendar" data-name="LP Revista - Programación anual">
+      <div class="lp-revista-container lp-revista-program-snippet">
+        <t t-call="latinpyme_revista_theme.lp_section_heading">
+          <t t-set="title">Programación anual</t>
+          <t t-set="eyebrow" t-value="False"/>
+          <t t-set="href">/revista/seccion/programacion-anual</t>
+          <t t-set="link_label">Ver calendario completo</t>
+        </t>
+        <t t-set="lp_program_events" t-value="request.env['latinpyme.revista.program.event'].sudo().get_active_events()[:6]"/>
+        <div t-if="lp_program_events" class="lp-revista-card-grid lp-revista-card-grid--three">
+          <t t-foreach="lp_program_events" t-as="event">
+            <article class="lp-revista-program-upcoming-card">
+              <span class="lp-revista-program-day">
+                <strong t-out="event.day_label()"/>
+                <small t-out="event.month_short_label()"/>
+              </span>
+              <div>
+                <span class="lp-revista-program-chip" t-out="event.event_type_label()"/>
+                <h3 t-out="event.name"/>
+                <p><i class="fa fa-calendar"/> <t t-out="event.date_label()"/></p>
+                <p><i class="fa fa-clock-o"/> <t t-out="event.time_label()"/></p>
+                <a t-if="event.registration_url" t-att-href="event.registration_url" class="lp-revista-button lp-revista-button--small" target="_blank" rel="noopener">
+                  <t t-out="event.button_label or 'Inscribirme'"/> <i class="fa fa-arrow-right"/>
+                </a>
+              </div>
+            </article>
+          </t>
+        </div>
+        <div t-else="" class="lp-revista-empty">
+          <h3>Aun no hay eventos publicados.</h3>
+          <p>Los eventos que se creen en Revista LatinPyme &gt; Programación anual aparecerán automáticamente aquí.</p>
+        </div>
+      </div>
+    </section>
+  </template>
+
   <template id="s_lp_revista_sidebar" name="Revista LatinPyme Sidebar Snippet">
     <section class="lp-revista s_lp_revista_sidebar" data-snippet="s_lp_revista_sidebar" data-name="Sidebar editorial">
       <div class="lp-revista-container">
+        <t t-set="lp_sidebar_placement" t-value="'global'"/>
         <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
       </div>
     </section>
@@ -833,43 +932,64 @@
         <t t-set="href">/revista/seccion/portafolio</t>
         <t t-set="link_label">Ver portafolio</t>
       </t>
+      <t t-set="lp_portfolio_items" t-value="request.env['latinpyme.revista.portfolio.item'].sudo().get_active_items()"/>
       <div class="lp-revista-portfolio__grid">
-        <article class="lp-revista-service-card">
-          <h3>Aprendizaje empresarial</h3>
-          <i class="fa fa-graduation-cap"/>
-          <ul>
-            <li>Capacitación a la medida</li>
-            <li>Fidelización empresarial</li>
-            <li>Cursos de actualización</li>
-          </ul>
-          <div>
-            <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
-            <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
-          </div>
-        </article>
-        <article class="lp-revista-service-card">
-          <h3>Tecnología: salones y espacios</h3>
-          <i class="fa fa-calendar-o"/>
-          <ul>
-            <li>LMS - Aulas</li>
-            <li>Salón de Eventos</li>
-          </ul>
-          <div>
-            <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
-            <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
-          </div>
-        </article>
-        <article class="lp-revista-service-card">
-          <h3>Inteligencia artificial</h3>
-          <i class="fa fa-microchip"/>
-          <ul>
-            <li>Automatización de procesos con IA</li>
-          </ul>
-          <div>
-            <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
-            <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
-          </div>
-        </article>
+        <t t-if="lp_portfolio_items">
+          <t t-foreach="lp_portfolio_items" t-as="portfolio_item">
+            <article class="lp-revista-service-card">
+              <h3 t-out="portfolio_item.name"/>
+              <img t-if="portfolio_item.image" t-att-src="'/revista/media/portfolio/%s/image' % portfolio_item.id" t-att-alt="portfolio_item.name" loading="lazy"/>
+              <i t-else="" t-att-class="portfolio_item.icon_class or 'fa fa-graduation-cap'"/>
+              <ul t-if="portfolio_item.bullet_lines()">
+                <t t-foreach="portfolio_item.bullet_lines()" t-as="bullet">
+                  <li t-out="bullet"/>
+                </t>
+              </ul>
+              <div>
+                <a t-if="portfolio_item.contact_url" t-att-href="portfolio_item.contact_url"><i class="fa fa-whatsapp"/> <t t-out="portfolio_item.contact_label or 'Contáctanos'"/></a>
+                <a t-if="portfolio_item.agenda_url" t-att-href="portfolio_item.agenda_url"><i class="fa fa-calendar"/> <t t-out="portfolio_item.agenda_label or 'Agenda una cita'"/></a>
+              </div>
+            </article>
+          </t>
+        </t>
+        <t t-else="">
+          <article class="lp-revista-service-card">
+            <h3>Aprendizaje empresarial</h3>
+            <i class="fa fa-graduation-cap"/>
+            <ul>
+              <li>Capacitación a la medida</li>
+              <li>Fidelización empresarial</li>
+              <li>Cursos de actualización</li>
+            </ul>
+            <div>
+              <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
+              <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
+            </div>
+          </article>
+          <article class="lp-revista-service-card">
+            <h3>Tecnología: salones y espacios</h3>
+            <i class="fa fa-calendar-o"/>
+            <ul>
+              <li>LMS - Aulas</li>
+              <li>Salón de Eventos</li>
+            </ul>
+            <div>
+              <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
+              <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
+            </div>
+          </article>
+          <article class="lp-revista-service-card">
+            <h3>Inteligencia artificial</h3>
+            <i class="fa fa-microchip"/>
+            <ul>
+              <li>Automatización de procesos con IA</li>
+            </ul>
+            <div>
+              <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
+              <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
+            </div>
+          </article>
+        </t>
       </div>
     </section>
   </template>

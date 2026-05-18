@@ -14,6 +14,7 @@
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_interviews" string="LP Revista - Entrevistas" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_interviews.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_specials" string="LP Revista - Especiales" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_specials.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_promo_banner" string="LP Revista - Banner Publicitario Horizontal" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_banner_ad.svg"/>
+      <t t-snippet="latinpyme_revista_theme.s_lp_revista_program_calendar" string="LP Revista - Programación anual" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_news" string="LP Revista - Novedades" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_portfolio" string="LP Revista - Portafolio" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_portfolio.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_allies" string="LP Revista - Aliados" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_allies.svg"/>

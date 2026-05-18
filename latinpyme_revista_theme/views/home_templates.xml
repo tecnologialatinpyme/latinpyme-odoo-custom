@@ -18,7 +18,7 @@
         <main class="lp-revista-main" itemscope="itemscope" itemtype="https://schema.org/Periodical">
           <meta itemprop="name" t-att-content="lp_config.name if lp_config else 'Revista LatinPyme'"/>
 
-          <section t-if="not lp_config or lp_config.show_home_banners" class="lp-revista-container lp-revista-home-ads" aria-label="Destacados comerciales">
+          <section t-if="show_home_top_banners" class="lp-revista-container lp-revista-home-ads" aria-label="Destacados comerciales" t-att-style="'order: %s' % (home_blocks.get('top_banners').sequence if home_blocks.get('top_banners') else 5)">
             <t t-if="home_banners">
               <t t-foreach="home_banners" t-as="banner">
                 <t t-call="latinpyme_revista_theme.lp_dynamic_banner"/>
@@ -37,7 +37,7 @@
             </t>
           </section>
 
-          <section class="lp-revista-container lp-revista-hero-grid" aria-labelledby="lp-home-title">
+          <section t-if="show_home_hero" class="lp-revista-container lp-revista-hero-grid" aria-labelledby="lp-home-title" t-att-style="'order: %s' % (home_blocks.get('hero').sequence if home_blocks.get('hero') else 10)">
             <div class="lp-revista-hero-card" t-att-style="featured_style">
               <t t-if="featured_post">
                 <t t-set="hero_tag" t-value="featured_post.tag_ids[:1]"/>
@@ -64,15 +64,16 @@
                 </t>
               </t>
             </div>
+            <t t-set="lp_sidebar_placement" t-value="'home'"/>
             <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
           </section>
 
-          <section class="lp-revista-container lp-revista-block" aria-labelledby="lp-latest-title">
+          <section t-if="show_home_latest" class="lp-revista-container lp-revista-block" aria-labelledby="lp-latest-title" t-att-style="'order: %s' % (home_blocks.get('latest').sequence if home_blocks.get('latest') else 20)">
             <t t-call="latinpyme_revista_theme.lp_section_heading">
-              <t t-set="title">Lo más reciente</t>
+              <t t-set="title" t-value="home_blocks.get('latest').title if home_blocks.get('latest') and home_blocks.get('latest').title else 'Lo más reciente'"/>
               <t t-set="eyebrow" t-value="False"/>
-              <t t-set="href">/blog</t>
-              <t t-set="link_label">Ver archivo</t>
+              <t t-set="href" t-value="home_blocks.get('latest').link_url if home_blocks.get('latest') and home_blocks.get('latest').link_url else '/blog'"/>
+              <t t-set="link_label" t-value="home_blocks.get('latest').link_label if home_blocks.get('latest') and home_blocks.get('latest').link_label else 'Ver archivo'"/>
             </t>
             <div class="lp-revista-card-grid lp-revista-card-grid--three">
               <t t-foreach="latest_posts[:3]" t-as="post">
@@ -83,13 +84,13 @@
             </div>
           </section>
 
-          <section class="lp-revista-container lp-revista-block lp-revista-block--split">
-            <div>
+          <section t-if="show_home_sections or show_home_news" class="lp-revista-container lp-revista-block lp-revista-block--split" t-att-style="'order: %s' % (home_blocks.get('sections').sequence if home_blocks.get('sections') else 30)">
+            <div t-if="show_home_sections">
               <t t-call="latinpyme_revista_theme.lp_section_heading">
-                <t t-set="title">Secciones</t>
+                <t t-set="title" t-value="home_blocks.get('sections').title if home_blocks.get('sections') and home_blocks.get('sections').title else 'Secciones'"/>
                 <t t-set="eyebrow" t-value="False"/>
-                <t t-set="href">/blog</t>
-                <t t-set="link_label">Ver más secciones</t>
+                <t t-set="href" t-value="home_blocks.get('sections').link_url if home_blocks.get('sections') and home_blocks.get('sections').link_url else '/blog'"/>
+                <t t-set="link_label" t-value="home_blocks.get('sections').link_label if home_blocks.get('sections') and home_blocks.get('sections').link_label else 'Ver más secciones'"/>
               </t>
               <div class="lp-revista-section-list">
                 <t t-foreach="sections" t-as="section">
@@ -100,12 +101,12 @@
                 </t>
               </div>
             </div>
-            <div>
+            <div t-if="show_home_news">
               <t t-call="latinpyme_revista_theme.lp_section_heading">
-                <t t-set="title">Novedades</t>
+                <t t-set="title" t-value="home_blocks.get('news').title if home_blocks.get('news') and home_blocks.get('news').title else 'Novedades'"/>
                 <t t-set="eyebrow" t-value="False"/>
-                <t t-set="href" t-value="False"/>
-                <t t-set="link_label" t-value="False"/>
+                <t t-set="href" t-value="home_blocks.get('news').link_url if home_blocks.get('news') and home_blocks.get('news').link_url else False"/>
+                <t t-set="link_label" t-value="home_blocks.get('news').link_label if home_blocks.get('news') and home_blocks.get('news').link_label else False"/>
               </t>
               <div class="lp-revista-list">
                 <t t-foreach="new_posts" t-as="post">
@@ -117,12 +118,12 @@
             </div>
           </section>
 
-          <section t-if="not lp_config or lp_config.show_home_interviews" class="lp-revista-container lp-revista-block" aria-labelledby="lp-interviews-title">
+          <section t-if="show_home_interviews" class="lp-revista-container lp-revista-block" aria-labelledby="lp-interviews-title" t-att-style="'order: %s' % (home_blocks.get('interviews').sequence if home_blocks.get('interviews') else 50)">
             <t t-call="latinpyme_revista_theme.lp_section_heading">
-              <t t-set="title">Entrevistas</t>
+              <t t-set="title" t-value="home_blocks.get('interviews').title if home_blocks.get('interviews') and home_blocks.get('interviews').title else 'Entrevistas'"/>
               <t t-set="eyebrow" t-value="False"/>
-              <t t-set="href">/revista/seccion/entrevistas</t>
-              <t t-set="link_label">Ver más entrevistas</t>
+              <t t-set="href" t-value="home_blocks.get('interviews').link_url if home_blocks.get('interviews') and home_blocks.get('interviews').link_url else '/revista/seccion/entrevistas'"/>
+              <t t-set="link_label" t-value="home_blocks.get('interviews').link_label if home_blocks.get('interviews') and home_blocks.get('interviews').link_label else 'Ver más entrevistas'"/>
             </t>
             <div class="lp-revista-interviews-grid">
               <div class="lp-revista-interview-cta">
@@ -141,12 +142,12 @@
             </div>
           </section>
 
-          <section t-if="not lp_config or lp_config.show_home_specials" class="lp-revista-container lp-revista-block" aria-labelledby="lp-specials-title">
+          <section t-if="show_home_specials" class="lp-revista-container lp-revista-block" aria-labelledby="lp-specials-title" t-att-style="'order: %s' % (home_blocks.get('specials').sequence if home_blocks.get('specials') else 60)">
             <t t-call="latinpyme_revista_theme.lp_section_heading">
-              <t t-set="title">Especiales</t>
+              <t t-set="title" t-value="home_blocks.get('specials').title if home_blocks.get('specials') and home_blocks.get('specials').title else 'Especiales'"/>
               <t t-set="eyebrow" t-value="False"/>
-              <t t-set="href">/revista/seccion/especiales</t>
-              <t t-set="link_label">Ver otros especiales</t>
+              <t t-set="href" t-value="home_blocks.get('specials').link_url if home_blocks.get('specials') and home_blocks.get('specials').link_url else '/revista/seccion/especiales'"/>
+              <t t-set="link_label" t-value="home_blocks.get('specials').link_label if home_blocks.get('specials') and home_blocks.get('specials').link_label else 'Ver otros especiales'"/>
             </t>
             <div class="lp-revista-card-grid lp-revista-card-grid--two">
               <t t-foreach="special_posts" t-as="post">
@@ -157,19 +158,24 @@
             </div>
           </section>
 
-          <section t-if="not lp_config or lp_config.show_home_banners" class="lp-revista-container lp-revista-block lp-revista-ad-row" aria-label="Publicidad">
-            <t t-call="latinpyme_revista_theme.s_lp_revista_promo_banner"/>
+          <section t-if="show_home_mid_banners" class="lp-revista-container lp-revista-block lp-revista-ad-row" aria-label="Publicidad" t-att-style="'order: %s' % (home_blocks.get('mid_banners').sequence if home_blocks.get('mid_banners') else 70)">
+            <t t-if="home_mid_banners">
+              <t t-foreach="home_mid_banners" t-as="banner">
+                <t t-call="latinpyme_revista_theme.lp_dynamic_banner"/>
+              </t>
+            </t>
+            <t t-else="" t-call="latinpyme_revista_theme.s_lp_revista_promo_banner"/>
           </section>
 
-          <section t-if="not lp_config or lp_config.show_home_portfolio" class="lp-revista-container lp-revista-block">
+          <section t-if="show_home_portfolio" class="lp-revista-container lp-revista-block" t-att-style="'order: %s' % (home_blocks.get('portfolio').sequence if home_blocks.get('portfolio') else 80)">
             <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
           </section>
 
-          <section t-if="not lp_config or lp_config.show_home_allies" class="lp-revista-container lp-revista-block">
+          <section t-if="show_home_allies" class="lp-revista-container lp-revista-block" t-att-style="'order: %s' % (home_blocks.get('allies').sequence if home_blocks.get('allies') else 90)">
             <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
           </section>
 
-          <section class="lp-revista-container lp-revista-block">
+          <section class="lp-revista-container lp-revista-block" style="order: 1000">
             <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer')"/>
             <t t-if="lp_footer_banner" t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
             <t t-else="" t-call="latinpyme_revista_theme.lp_footer"/>

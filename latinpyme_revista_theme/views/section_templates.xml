@@ -66,7 +66,10 @@
                 <p>Los editores pueden asignar la etiqueta <strong t-out="section_name"/> a las notas de Odoo Blog para que aparezcan aquí automáticamente.</p>
               </div>
             </div>
-            <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
+            <t t-if="section_show_sidebar">
+              <t t-set="lp_sidebar_placement" t-value="'section'"/>
+              <t t-call="latinpyme_revista_theme.lp_editorial_sidebar"/>
+            </t>
           </section>
 
           <section t-if="section_banners" class="lp-revista-container lp-revista-block lp-revista-ad-row" aria-label="Publicidad de sección">
@@ -75,7 +78,7 @@
             </t>
           </section>
 
-          <section class="lp-revista-container lp-revista-block">
+          <section t-if="section_show_related" class="lp-revista-container lp-revista-block">
             <t t-call="latinpyme_revista_theme.lp_section_heading">
               <t t-set="title">También puede interesarte</t>
               <t t-set="eyebrow" t-value="False"/>
@@ -91,11 +94,11 @@
             </div>
           </section>
 
-          <section class="lp-revista-container lp-revista-block">
+          <section t-if="section_show_portfolio" class="lp-revista-container lp-revista-block">
             <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
           </section>
 
-          <section class="lp-revista-container lp-revista-block">
+          <section t-if="section_show_allies" class="lp-revista-container lp-revista-block">
             <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
           </section>
 
