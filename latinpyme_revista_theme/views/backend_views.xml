@@ -688,13 +688,8 @@
     <field name="arch" type="xml">
       <search string="Buscar notas editoriales">
         <field name="post_id"/>
-        <field name="name"/>
-        <field name="note_banner_id"/>
         <filter name="active" string="Activas" domain="[('active', '=', True)]"/>
         <filter name="inactive" string="Inactivas" domain="[('active', '=', False)]"/>
-        <group expand="0" string="Agrupar por">
-          <filter name="group_banner" string="Banner" context="{'group_by': 'note_banner_id'}"/>
-        </group>
       </search>
     </field>
   </record>
