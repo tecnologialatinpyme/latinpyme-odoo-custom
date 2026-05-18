@@ -571,6 +571,107 @@ class LatinpymeRevistaSection(models.Model):
         return True
 
 
+class LatinpymeRevistaBlogPostOverride(models.Model):
+    _name = "latinpyme.revista.blog.post.override"
+    _description = "Control editorial por nota Revista LatinPyme"
+    _order = "post_id"
+
+    post_id = fields.Many2one(
+        "blog.post",
+        string="Nota de Blog",
+        required=True,
+        ondelete="cascade",
+        help="Selecciona la publicacion de Odoo Blog que tendra controles editoriales propios.",
+    )
+    name = fields.Char(string="Nombre", related="post_id.name", store=True, readonly=True)
+    active = fields.Boolean(
+        string="Activo",
+        default=True,
+        help="Si esta desactivado, la nota usa la configuracion de su seccion o la configuracion global.",
+    )
+    sidebar_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Sidebar",
+        default="default",
+        required=True,
+        help="Controla si esta nota muestra el sidebar editorial.",
+    )
+    related_posts_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Articulos relacionados",
+        default="default",
+        required=True,
+        help="Controla si esta nota muestra articulos relacionados al final.",
+    )
+    interviews_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Entrevistas relacionadas",
+        default="default",
+        required=True,
+        help="Controla si esta nota muestra entrevistas relacionadas.",
+    )
+    portfolio_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Portafolio",
+        default="default",
+        required=True,
+        help="Controla si esta nota muestra el bloque Portafolio.",
+    )
+    allies_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Aliados",
+        default="default",
+        required=True,
+        help="Controla si esta nota muestra el carrusel de aliados.",
+    )
+    note_banner_id = fields.Many2one(
+        "latinpyme.revista.banner",
+        string="Banner especifico",
+        domain=[("placement", "=", "note")],
+        help="Opcional. Si se selecciona, reemplaza el banner global de notas.",
+    )
+    seo_title = fields.Char(
+        string="Titulo SEO",
+        help="Opcional. Se usa para metadatos sociales de esta nota sin cambiar el titulo visible.",
+    )
+    seo_description = fields.Text(
+        string="Descripcion SEO",
+        help="Opcional. Se usa como descripcion SEO/social de esta nota.",
+    )
+    canonical_url = fields.Char(
+        string="URL final SEO",
+        help="Opcional. Usar solo cuando SEO defina una URL absoluta validada para esta nota.",
+    )
+
+    _sql_constraints = [
+        ("post_unique", "unique(post_id)", "Cada nota solo puede tener un control editorial activo o inactivo."),
+    ]
+
+    @api.constrains("canonical_url")
+    def _check_canonical_url(self):
+        for record in self:
+            url = (record.canonical_url or "").strip()
+            if url and not url.startswith(("https://", "http://")):
+                raise ValidationError("La URL final SEO debe iniciar con http:// o https://.")
+
+    @api.model
+    def get_for_post(self, post):
+        if not post:
+            return self.browse()
+        post_id = post.id if hasattr(post, "id") else int(post)
+        return self.search([("post_id", "=", post_id), ("active", "=", True)], limit=1)
+
+    def display_mode_enabled(self, field_name, default_enabled=True):
+        if not self:
+            return default_enabled
+        mode = self[:1][field_name]
+        if mode == "show":
+            return True
+        if mode == "hide":
+            return False
+        return default_enabled
+
+
 class LatinpymeRevistaHomeBlock(models.Model):
     _name = "latinpyme.revista.home.block"
     _description = "Bloque del Home Revista LatinPyme"

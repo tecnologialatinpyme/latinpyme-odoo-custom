@@ -622,6 +622,83 @@
     </field>
   </record>
 
+  <record id="view_latinpyme_revista_blog_post_override_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.blog.post.override.list</field>
+    <field name="model">latinpyme.revista.blog.post.override</field>
+    <field name="arch" type="xml">
+      <list string="Notas editoriales" default_order="post_id">
+        <field name="active"/>
+        <field name="post_id"/>
+        <field name="sidebar_mode"/>
+        <field name="related_posts_mode"/>
+        <field name="interviews_mode"/>
+        <field name="portfolio_mode"/>
+        <field name="allies_mode"/>
+        <field name="note_banner_id"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_blog_post_override_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.blog.post.override.form</field>
+    <field name="model">latinpyme.revista.blog.post.override</field>
+    <field name="arch" type="xml">
+      <form string="Control editorial de nota">
+        <sheet>
+          <group>
+            <group string="Nota">
+              <field name="active"/>
+              <field name="post_id" options="{'no_create': True}"/>
+              <field name="name" readonly="1"/>
+            </group>
+            <group string="Banner">
+              <field name="note_banner_id"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Bloques visibles">
+              <group>
+                <group string="Contenido lateral">
+                  <field name="sidebar_mode"/>
+                </group>
+                <group string="Bloques inferiores">
+                  <field name="related_posts_mode"/>
+                  <field name="interviews_mode"/>
+                  <field name="portfolio_mode"/>
+                  <field name="allies_mode"/>
+                </group>
+              </group>
+            </page>
+            <page string="SEO">
+              <group>
+                <field name="seo_title" placeholder="Titulo SEO opcional"/>
+                <field name="seo_description" placeholder="Descripcion SEO opcional"/>
+                <field name="canonical_url" placeholder="https://latinpyme.com/ruta-final"/>
+              </group>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_blog_post_override_search" model="ir.ui.view">
+    <field name="name">latinpyme.revista.blog.post.override.search</field>
+    <field name="model">latinpyme.revista.blog.post.override</field>
+    <field name="arch" type="xml">
+      <search string="Buscar notas editoriales">
+        <field name="post_id"/>
+        <field name="name"/>
+        <field name="note_banner_id"/>
+        <filter name="active" string="Activas" domain="[('active', '=', True)]"/>
+        <filter name="inactive" string="Inactivas" domain="[('active', '=', False)]"/>
+        <group expand="0" string="Agrupar por">
+          <filter name="group_banner" string="Banner" context="{'group_by': 'note_banner_id'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
   <record id="action_latinpyme_revista_config" model="ir.actions.act_window">
     <field name="name">Configuracion</field>
     <field name="res_model">latinpyme.revista.config</field>
@@ -662,6 +739,17 @@
     <field name="search_view_id" ref="view_latinpyme_revista_sidebar_item_search"/>
   </record>
 
+  <record id="action_latinpyme_revista_blog_post_override" model="ir.actions.act_window">
+    <field name="name">Notas editoriales</field>
+    <field name="res_model">latinpyme.revista.blog.post.override</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_blog_post_override_search"/>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">Crea controles editoriales para una nota especifica.</p>
+      <p>Si una nota no tiene control propio, usara la configuracion de su seccion o la configuracion global.</p>
+    </field>
+  </record>
+
   <record id="action_latinpyme_revista_banner" model="ir.actions.act_window">
     <field name="name">Publicidad</field>
     <field name="res_model">latinpyme.revista.banner</field>
@@ -678,6 +766,7 @@
   <menuitem id="menu_latinpyme_revista_config" name="Configuracion" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_config" sequence="10"/>
   <menuitem id="menu_latinpyme_revista_home_blocks" name="Home editorial" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_home_block" sequence="15"/>
   <menuitem id="menu_latinpyme_revista_sections" name="Secciones" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_section" sequence="20"/>
+  <menuitem id="menu_latinpyme_revista_blog_post_overrides" name="Notas editoriales" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_blog_post_override" sequence="22"/>
   <menuitem id="menu_latinpyme_revista_program_event" name="Programacion anual" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_program_event" sequence="25"/>
   <menuitem id="menu_latinpyme_revista_sidebar_items" name="Sidebar editorial" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_sidebar_item" sequence="27"/>
   <menuitem id="menu_latinpyme_revista_allies" name="Aliados" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_ally" sequence="30"/>

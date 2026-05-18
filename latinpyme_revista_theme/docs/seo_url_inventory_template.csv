@@ -1,0 +1,3 @@
+url_actual,url_nueva,tipo_contenido,prioridad_seo,estado,redireccion_requerida,observaciones
+https://latinpyme.com/ruta-antigua,https://latinpyme.com/ruta-nueva,nota,alta,pendiente,si,Completar despues de validar que la nota existe en Odoo
+https://latinpyme.com/categoria/gerencia,https://latinpyme.com/revista/seccion/gerencia,seccion,alta,pendiente,si,Validar trafico organico antes de aplicar 301

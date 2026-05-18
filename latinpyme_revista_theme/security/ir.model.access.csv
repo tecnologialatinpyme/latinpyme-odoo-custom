@@ -7,6 +7,7 @@ access_latinpyme_revista_program_event_designer,latinpyme.revista.program.event 
 access_latinpyme_revista_home_block_designer,latinpyme.revista.home.block designer,model_latinpyme_revista_home_block,website.group_website_designer,1,1,1,1
 access_latinpyme_revista_portfolio_item_designer,latinpyme.revista.portfolio.item designer,model_latinpyme_revista_portfolio_item,website.group_website_designer,1,1,1,1
 access_latinpyme_revista_sidebar_item_designer,latinpyme.revista.sidebar.item designer,model_latinpyme_revista_sidebar_item,website.group_website_designer,1,1,1,1
+access_latinpyme_revista_blog_post_override_designer,latinpyme.revista.blog.post.override designer,model_latinpyme_revista_blog_post_override,website.group_website_designer,1,1,1,1
 access_latinpyme_revista_config_system,latinpyme.revista.config system,model_latinpyme_revista_config,base.group_system,1,1,1,1
 access_latinpyme_revista_section_system,latinpyme.revista.section system,model_latinpyme_revista_section,base.group_system,1,1,1,1
 access_latinpyme_revista_ally_system,latinpyme.revista.ally system,model_latinpyme_revista_ally,base.group_system,1,1,1,1
@@ -15,3 +16,4 @@ access_latinpyme_revista_program_event_system,latinpyme.revista.program.event sy
 access_latinpyme_revista_home_block_system,latinpyme.revista.home.block system,model_latinpyme_revista_home_block,base.group_system,1,1,1,1
 access_latinpyme_revista_portfolio_item_system,latinpyme.revista.portfolio.item system,model_latinpyme_revista_portfolio_item,base.group_system,1,1,1,1
 access_latinpyme_revista_sidebar_item_system,latinpyme.revista.sidebar.item system,model_latinpyme_revista_sidebar_item,base.group_system,1,1,1,1
+access_latinpyme_revista_blog_post_override_system,latinpyme.revista.blog.post.override system,model_latinpyme_revista_blog_post_override,base.group_system,1,1,1,1

@@ -33,6 +33,7 @@ El módulo trabaja únicamente dentro de `latinpyme_revista_theme` y no depende 
 - `views/blog_post_templates.xml`: plantilla editorial segura para nota individual, heredando `website_blog` sin crear páginas manuales.
 - `static/src/scss/revista.scss`: estilos scoped bajo `.lp-revista`.
 - `static/src/js/program_calendar.js`: interacción ligera del calendario anual de Programación anual.
+- `docs/seo_url_inventory_template.csv`: plantilla base para inventario SEO antes de redirecciones 301.
 
 ## Rutas disponibles
 
@@ -337,7 +338,7 @@ Notas de edición de bloques:
 | Configuración backend | Fase 4 implementada | Modelo `latinpyme.revista.config` con dominios, noindex, contacto, redes, footer, cantidades y visibilidad de bloques. |
 | Home editorial `/revista` | Dinámica y configurable | Toma destacados, recientes, novedades, entrevistas y especiales desde Odoo Blog; banners y visibilidad de bloques se controlan desde backend. |
 | Secciones `/revista/seccion/<slug>` | Dinámica y administrable | Filtra `blog.post` por `blog.tag`, usa registros `latinpyme.revista.section`, cover, descripción, SEO y activación por backend. |
-| Nota individual de Blog | Fase 4 ajustada | Mantiene `website_blog`; añade toggles backend para sidebar, entrevistas, portafolio y aliados. |
+| Nota individual de Blog | Administrable fino | Mantiene `website_blog`; añade controles globales, por sección y por nota desde `Notas editoriales`. |
 | Aliados | Fase 4 implementada | Modelo `latinpyme.revista.ally` alimenta el carrusel; si no hay registros activos, se usan placeholders. |
 | Publicidad | Fase 4 implementada | Modelo `latinpyme.revista.banner` alimenta Home, sidebar, footer, nota y sección con fallback visual. |
 | Sidebar editorial | Administrable fino | Modelo `latinpyme.revista.sidebar.item` permite bloques por ubicación: global, Home, sección y nota. |
@@ -403,6 +404,20 @@ El módulo añade automáticamente:
 
 Desde `Revista LatinPyme > Configuración`, el administrador puede mostrar u ocultar sidebar, entrevistas relacionadas, portafolio y aliados para todas las notas.
 
+Desde `Revista LatinPyme > Secciones`, el administrador puede aplicar reglas por sección para todas las notas de una etiqueta.
+
+Desde `Revista LatinPyme > Notas editoriales`, el editor puede crear un control específico por nota para:
+
+- mostrar/ocultar sidebar,
+- mostrar/ocultar artículos relacionados,
+- mostrar/ocultar entrevistas relacionadas,
+- mostrar/ocultar portafolio,
+- mostrar/ocultar aliados,
+- seleccionar banner específico de nota,
+- configurar título SEO, descripción SEO y URL final SEO opcional.
+
+Si no existe un control activo en `Notas editoriales`, la nota usa la regla de su sección. Si la sección tampoco define regla, usa la configuración global.
+
 Para que una nota quede asociada a una sección, el editor debe asignar una etiqueta editorial:
 
 `Gerencia`, `Negocios`, `IA`, `Laboral`, `Finanzas`, `Entrevistas`, `Especiales`, `Mujeres` o `Portafolio`.
@@ -428,7 +443,8 @@ Mientras se navegue desde el dominio temporal configurado, `.odoo.com` u `.odoo.
 Canonical:
 
 - La Home y secciones usan el dominio final configurado en `Revista LatinPyme > Configuración`.
-- La nota individual no fuerza canonical hacia `latinpyme.com` mientras el dominio histórico siga en WordPress.
+- La nota individual no fuerza canonical hacia `latinpyme.com` por defecto mientras el dominio histórico siga en WordPress.
+- Si SEO valida una URL final, `Revista LatinPyme > Notas editoriales` permite registrar la URL final por nota para inventario y metadatos sociales, sin reemplazar masivamente el canonical nativo de Odoo.
 - Se mantiene el canonical nativo de Odoo Website para evitar duplicados o señales cruzadas en preproducción.
 - En preproducción la defensa principal es `noindex,nofollow`; cuando `latinpyme.com` migre a Odoo se debe validar el dominio principal del Website y Search Console.
 - Antes de producción, el dominio principal de Website debe quedar configurado como `latinpyme.com` y el dominio final SEO debe revisarse en la configuración de Revista.
@@ -436,6 +452,22 @@ Canonical:
 ## Estrategia de migración SEO desde WordPress
 
 No implementar redirecciones 301 hasta tener inventario real de URLs antiguas.
+
+Plantilla incluida:
+
+`docs/seo_url_inventory_template.csv`
+
+Columnas sugeridas:
+
+| Campo | Uso |
+| --- | --- |
+| `url_actual` | URL histórica de WordPress o del sitio anterior. |
+| `url_nueva` | URL final equivalente en Odoo. |
+| `tipo_contenido` | Home, sección, nota, landing, recurso, etc. |
+| `prioridad_seo` | Alta, media o baja según tráfico, enlaces y negocio. |
+| `estado` | Pendiente, validada, lista para redirección, aplicada. |
+| `redireccion_requerida` | Sí/no. |
+| `observaciones` | Riesgos, tráfico, owner editorial o notas técnicas. |
 
 Fase de migración:
 
@@ -480,6 +512,7 @@ La estructura final de posts debe definirse con base en inventario SEO. Si se ne
 Esta fase agrega menús backend pensados para editores no técnicos:
 
 - `Revista LatinPyme > Home editorial`: permite activar/desactivar bloques del Home, ordenar, cambiar títulos, elegir etiqueta fuente, definir cantidad de notas y seleccionar publicaciones manualmente.
+- `Revista LatinPyme > Notas editoriales`: permite controlar bloques, banner y SEO de una nota específica sin tocar la página en Builder.
 - `Revista LatinPyme > Portafolio`: permite administrar las tarjetas del bloque Portafolio sin tocar QWeb ni Builder.
 - `Revista LatinPyme > Sidebar editorial`: permite crear bloques por ubicación: `Global`, `Home`, `Pagina de seccion` y `Nota individual`.
 - `Revista LatinPyme > Secciones`: ahora permite overrides por sección para sidebar, relacionados, portafolio, aliados, banner de sección y banner de nota.
@@ -541,6 +574,23 @@ En `Revista LatinPyme > Secciones`, cada seccion puede controlar:
 
 El valor `Usar configuracion general` conserva el comportamiento global.
 
+### Como administrar una nota especifica
+
+1. Publicar o editar la nota desde Odoo Blog.
+2. Abrir `Revista LatinPyme > Notas editoriales`.
+3. Crear un registro y seleccionar la `Nota de Blog`.
+4. En `Bloques visibles`, elegir `Usar configuracion general`, `Mostrar` u `Ocultar` para cada bloque.
+5. En `Banner`, elegir un banner de ubicacion `Nota individual` si la nota necesita pauta propia.
+6. En `SEO`, completar solo si esa nota necesita un override especifico.
+
+Regla de prioridad:
+
+1. `Notas editoriales`.
+2. `Secciones`.
+3. `Configuracion`.
+
+No se recomienda llenar la URL final SEO por nota durante preproduccion salvo que SEO ya haya validado la equivalencia final.
+
 ### Snippet Programacion anual
 
 El Website Builder incluye el snippet:
@@ -557,8 +607,23 @@ Este snippet se puede arrastrar a una pagina complementaria. Los eventos no se e
 - Sidebar cargado por ubicacion.
 - Secciones asociadas a etiquetas de Blog.
 - Notas publicadas con titulo, subtitulo, cover, autor, etiquetas y SEO.
+- Notas criticas revisadas en `Notas editoriales`.
 - Programacion anual con eventos activos y links de calendario probados.
 - Footer con redes sociales reales.
 - Mobile revisado sin scroll horizontal.
 - Preproduccion con `noindex` activo.
 - Inventario SEO listo antes de redirecciones 301.
+
+### Plan de prueba editorial en Odoo.sh
+
+1. Crear una nota real en Odoo Blog con título, subtítulo, autor, cover, cuerpo y etiqueta de sección.
+2. Verificar que la nota aparece en `/revista`, en la sección correspondiente y en su URL nativa de Blog.
+3. Abrir `Revista LatinPyme > Home editorial` y probar activar/desactivar bloques, cambiar orden y seleccionar notas manuales.
+4. Abrir `Revista LatinPyme > Publicidad` y probar banners por ubicación: Home, sección, nota, sidebar, footer y Programación anual.
+5. Abrir `Revista LatinPyme > Notas editoriales` y crear un override para una nota crítica.
+6. Validar en frontend que el override muestra/oculta sidebar, relacionados, entrevistas, portafolio, aliados y banner según lo configurado.
+7. Abrir `Revista LatinPyme > Portafolio` y confirmar que las tarjetas se actualizan sin editar Builder.
+8. Abrir `Revista LatinPyme > Sidebar editorial` y confirmar bloques por ubicación.
+9. Crear eventos en `Revista LatinPyme > Programacion anual` y probar Google Calendar, Outlook y `.ics`/Apple Calendar.
+10. Validar responsive móvil en Home, sección, nota individual y Programación anual.
+11. Revisar SEO básico: noindex en preproducción, metadatos sociales, canonical si aplica e inventario de URLs.
