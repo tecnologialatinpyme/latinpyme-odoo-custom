@@ -1,0 +1,2 @@
+url_wordpress,titulo,seccion_wordpress,categoria_odoo,etiquetas,fecha_publicacion,autor,url_imagen_destacada,url_destino_odoo_sugerida,prioridad,estado_carga,requiere_redireccion_301,observaciones
+https://latinpyme.com/ejemplo-nota/,"Titulo de ejemplo","Gerencia","Gerencia","gestion; liderazgo","2026-05-18","Autor ejemplo","https://latinpyme.com/wp-content/uploads/ejemplo.jpg","/blog/revista-latinpyme-1/titulo-de-ejemplo",Alta,Pendiente,Si,"Conservar slug si es posible"
