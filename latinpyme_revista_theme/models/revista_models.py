@@ -878,6 +878,29 @@ class LatinpymeRevistaInterview(models.Model):
             return self.post_id.website_url
         return self.link_url or "/revista/seccion/entrevistas"
 
+    def youtube_video_id(self):
+        self.ensure_one()
+        url = (self.youtube_url or "").strip()
+        if not url or url == "#":
+            return False
+        patterns = [
+            r"(?:youtube\.com/watch\?[^#]*v=)([A-Za-z0-9_-]{11})",
+            r"(?:youtube\.com/embed/)([A-Za-z0-9_-]{11})",
+            r"(?:youtube\.com/shorts/)([A-Za-z0-9_-]{11})",
+            r"(?:youtube\.com/live/)([A-Za-z0-9_-]{11})",
+            r"(?:youtu\.be/)([A-Za-z0-9_-]{11})",
+        ]
+        for pattern in patterns:
+            match = re.search(pattern, url)
+            if match:
+                return match.group(1)
+        return False
+
+    def youtube_thumbnail_url(self):
+        self.ensure_one()
+        video_id = self.youtube_video_id()
+        return video_id and "https://img.youtube.com/vi/%s/hqdefault.jpg" % video_id or False
+
     def person_label(self):
         self.ensure_one()
         return self.interviewee_name or self.name
