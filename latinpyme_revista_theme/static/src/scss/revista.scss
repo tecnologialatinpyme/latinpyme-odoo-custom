@@ -1077,6 +1077,115 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.lp-revista {
+  .lp-revista-interviews-grid--builder {
+    grid-template-columns: minmax(210px, .82fr) minmax(0, 2.9fr) minmax(230px, .9fr);
+    align-items: stretch;
+  }
+
+  .lp-revista-interviews-grid__cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 26px;
+    min-width: 0;
+  }
+
+  .lp-revista-interview-featured,
+  .lp-revista-interview-cta--join {
+    min-width: 0;
+    min-height: 100%;
+    border: 1px solid rgba(231, 233, 238, .95);
+    border-radius: var(--lp-radius);
+    box-shadow: 0 16px 38px rgba(17, 19, 24, .05);
+  }
+
+  .lp-revista-interview-featured {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 22px;
+    padding: 26px;
+    background: linear-gradient(145deg, #fff, #f8fafc);
+
+    > span {
+      color: var(--lp-red);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0;
+      color: #1e2530;
+      font-size: 17px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+  }
+
+  .lp-revista-interview-featured__body {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+  }
+
+  .lp-revista-interview-featured__play {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border: 1px solid rgba(17, 19, 24, .18);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--lp-ink);
+    font-size: 28px;
+    box-shadow: 0 12px 28px rgba(17, 19, 24, .08);
+
+    &:hover {
+      color: var(--lp-red);
+      border-color: rgba(185, 0, 18, .32);
+    }
+  }
+
+  .lp-revista-interview-cta--join {
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 22px;
+    padding: 28px;
+    background: linear-gradient(145deg, #fff7f8, #fff);
+
+    > i {
+      width: 58px;
+      height: 58px;
+      border: 0;
+      color: var(--lp-red);
+      font-size: 42px;
+    }
+
+    h3 {
+      max-width: 230px;
+      font-size: 18px;
+    }
+
+    p {
+      margin-bottom: 22px;
+      font-size: 15px;
+    }
+
+    .lp-revista-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .lp-revista-empty--interviews {
+    grid-column: 1 / -1;
+    min-height: 220px;
+  }
+}
+
 .lp-revista-interview-cta {
   display: grid;
   grid-template-columns: 56px minmax(0, 1fr);
@@ -3069,6 +3178,21 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .lp-revista {
+    .lp-revista-interviews-grid--builder {
+      grid-template-columns: 1fr;
+    }
+
+    .lp-revista-interviews-grid__cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .lp-revista-interview-featured,
+    .lp-revista-interview-cta--join {
+      min-height: auto;
+    }
+  }
+
   .lp-revista-footer {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -3459,6 +3583,28 @@
   .lp-revista-program-upcoming__grid,
   .lp-revista-year-grid {
     grid-template-columns: 1fr;
+  }
+
+  .lp-revista {
+    .lp-revista-interviews-grid__cards {
+      grid-template-columns: 1fr;
+    }
+
+    .lp-revista-interview-featured,
+    .lp-revista-interview-cta--join {
+      padding: 22px;
+    }
+
+    .lp-revista-interview-featured__body {
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .lp-revista-interview-featured__play {
+      width: 58px;
+      height: 58px;
+      font-size: 23px;
+    }
   }
 
   .lp-revista-allies__carousel {

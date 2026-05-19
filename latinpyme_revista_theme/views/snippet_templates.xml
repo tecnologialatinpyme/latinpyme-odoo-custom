@@ -699,55 +699,45 @@
   <template id="s_lp_revista_interviews" name="Revista LatinPyme Interviews">
     <section class="lp-revista s_lp_revista_interviews" data-snippet="s_lp_revista_interviews" data-name="LP Revista - Entrevistas">
       <div class="lp-revista-container">
+        <t t-set="lp_snippet_interviews" t-value="request.env['latinpyme.revista.interview'].sudo().get_active_interviews(request.website, None, 3)"/>
         <t t-call="latinpyme_revista_theme.lp_section_heading">
           <t t-set="title">Entrevistas</t>
           <t t-set="eyebrow" t-value="False"/>
-          <t t-set="href">/revista/seccion/entrevistas</t>
-          <t t-set="link_label">Ver más entrevistas</t>
+          <t t-set="href" t-value="False"/>
+          <t t-set="link_label" t-value="False"/>
         </t>
-        <p class="lp-revista-block-intro">Conversaciones con líderes que están transformando negocios y comunidades.</p>
-        <div class="lp-revista-interviews-grid">
-          <div class="lp-revista-interview-cta">
+        <div class="lp-revista-interviews-grid lp-revista-interviews-grid--builder">
+          <aside class="lp-revista-interview-featured">
+            <span>Destacado</span>
+            <div class="lp-revista-interview-featured__body">
+              <a href="/revista/seccion/entrevistas" class="lp-revista-interview-featured__play" aria-label="Ver más entrevistas">
+                <i class="fa fa-play"/>
+              </a>
+              <p>Explora más entrevistas con líderes que están transformando negocios y comunidades.</p>
+            </div>
+            <a href="/revista/seccion/entrevistas" class="lp-revista-inline-link">Ver más entrevistas <i class="fa fa-arrow-right"/></a>
+          </aside>
+          <div class="lp-revista-interviews-grid__cards">
+            <t t-if="lp_snippet_interviews">
+              <t t-foreach="lp_snippet_interviews" t-as="interview">
+                <t t-call="latinpyme_revista_theme.lp_interview_card">
+                  <t t-set="interview" t-value="interview"/>
+                </t>
+              </t>
+            </t>
+            <div t-else="" class="lp-revista-empty lp-revista-empty--interviews">
+              <h3>Aun no hay entrevistas publicadas.</h3>
+              <p>Las entrevistas que se creen en Revista LatinPyme &gt; Entrevistas aparecerán automáticamente aquí.</p>
+            </div>
+          </div>
+          <aside class="lp-revista-interview-cta lp-revista-interview-cta--join">
             <i class="fa fa-microphone"/>
             <div>
               <h3>¿Quieres ser parte de nuestras entrevistas?</h3>
               <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
               <a href="/contactus" class="lp-revista-button">Postúlate aquí <i class="fa fa-arrow-right"/></a>
             </div>
-          </div>
-          <article class="lp-revista-interview-card">
-            <a href="/blog">
-              <img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="María Claudia Lacouture"/>
-              <span class="lp-revista-play"><i class="fa fa-play"/></span>
-            </a>
-            <div>
-              <h3>María Claudia Lacouture</h3>
-              <p>Presidenta Ejecutiva</p>
-              <span>AmCham Colombia</span>
-            </div>
-          </article>
-          <article class="lp-revista-interview-card">
-            <a href="/blog">
-              <img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="Ricardo Leyva"/>
-              <span class="lp-revista-play"><i class="fa fa-play"/></span>
-            </a>
-            <div>
-              <h3>Ricardo Leyva</h3>
-              <p>CEO</p>
-              <span>Grupo Nutresa</span>
-            </div>
-          </article>
-          <article class="lp-revista-interview-card">
-            <a href="/blog">
-              <img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="Juan Carlos Mora"/>
-              <span class="lp-revista-play"><i class="fa fa-play"/></span>
-            </a>
-            <div>
-              <h3>Juan Carlos Mora</h3>
-              <p>Presidente</p>
-              <span>Bancolombia</span>
-            </div>
-          </article>
+          </aside>
         </div>
       </div>
     </section>

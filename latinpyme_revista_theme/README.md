@@ -331,6 +331,7 @@ Notas de edición de bloques:
 - `LP Revista - Footer Editorial` incluye el texto `© 2026 Revista LatinPyme - Todos los derechos reservados`.
 - `LP Revista - Footer con Publicidad` replica el footer editorial y agrega un banner editable a la derecha para pauta o campañas.
 - En Fase 4, los banners de Home, sidebar, footer, nota y sección pueden venir de `Revista LatinPyme > Publicidad`.
+- `LP Revista - Entrevistas` se puede arrastrar desde el grupo `LP Revista` y se alimenta automáticamente desde `Revista LatinPyme > Entrevistas`; muestra un panel destacado, hasta tres entrevistas activas y un llamado a postulación.
 
 ## Auditoría técnica actual
 
