@@ -2780,7 +2780,8 @@
     &::before,
     &::after {
       content: "";
-      width: min(86px, 18vw);
+      width: 86px;
+      max-width: 18vw;
       height: 3px;
       background: var(--lp-red);
       border-radius: 999px;
@@ -3038,7 +3039,9 @@
   div {
     right: auto;
     left: 0;
-    min-width: min(230px, calc(100vw - 48px));
+    width: 230px;
+    max-width: calc(100vw - 48px);
+    min-width: 0;
   }
 }
 
