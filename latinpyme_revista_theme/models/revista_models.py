@@ -1064,6 +1064,10 @@ class LatinpymeRevistaProgramEvent(models.Model):
     )
     date_start = fields.Date(string="Fecha de inicio", required=True, default=fields.Date.context_today)
     date_end = fields.Date(string="Fecha de fin")
+    display_days = fields.Char(
+        string="Dias visibles",
+        help="Usar para agendas con fechas no consecutivas. Ejemplo: 13|14|19|20|21|26|27|28.",
+    )
     time_start = fields.Float(string="Hora de inicio", required=True, default=9.0)
     time_end = fields.Float(string="Hora de fin", required=True, default=10.0)
     timezone = fields.Char(string="Zona horaria", default="America/Bogota", required=True)
@@ -1119,6 +1123,129 @@ class LatinpymeRevistaProgramEvent(models.Model):
             {"key": "type:%s" % key, "label": label}
             for key, label in self.get_event_type_options()
         ]
+
+    @api.model
+    def ensure_program_2026_events(self):
+        school_url = "https://escuela.latinpyme.com/"
+        events = [
+            ("diplomados", 101, "1. DIPLOMADO: Actualizacion Tributaria 2026.", "2026-01-13", "2026-01-28", "13|14|19|20|21|26|27|28", 18.5, 20.5),
+            ("charlas", 102, "Charla empresarial 1: La ventaja competitiva de integrar IA sin perder el ADN empresarial.", "2026-01-14", False, "14", 9.0, 10.0),
+            ("charlas", 103, "Charla empresarial 2: Contratacion y jornada laboral bajo la reforma laboral.", "2026-01-21", False, "21", 9.0, 10.0),
+            ("charlas", 104, "Charla empresarial 3: Claves para Transformar la Cultura Organizacional.", "2026-01-28", False, "28", 9.0, 10.0),
+            ("diplomados", 201, "1. DIPLOMADO: Reforma laboral 2025 y su impacto en la gestion empresarial.", "2026-02-09", False, "9", 18.5, 20.5),
+            ("flashtraining", 202, "2. FLASH TRAINING: Declaracion de renta para empresas.", "2026-02-26", "2026-02-27", "26|27", 9.0, 10.0),
+            ("charlas", 203, "Charla empresarial 1: ¿Como liquidar bien las cesantias y evitar sanciones?", "2026-02-04", False, "4", 9.0, 10.0),
+            ("charlas", 204, "Charla Empresarial 2: Transforma los procesos de formacion con tecnologia amigable.", "2026-02-11", False, "11", 9.0, 10.0),
+            ("charlas", 205, "Charla Empresarial 3: Ventas Agiles con IA.", "2026-02-18", False, "18", 9.0, 10.0),
+            ("charlas", 206, "Charla Empresarial 4: Liderazgo colaborativo: fomentar el trabajo en equipo de alto rendimiento.", "2026-02-25", False, "25", 9.0, 10.0),
+            ("diplomados", 301, "1. DIPLOMADO: Gestion de servicio al cliente y cultura de experiencia.", "2026-03-09", "2026-03-25", "9|10|11|16|17|18|24|25", 18.5, 20.5),
+            ("flashtraining", 302, "2. FLASH TRAINING: Excel - Nivel Basico.", "2026-03-26", "2026-03-27", "26|27", 9.0, 10.0),
+            ("charlas", 303, "Charla empresarial 1: Gestion emocional y liderazgo consciente.", "2026-03-04", False, "4", 9.0, 10.0),
+            ("charlas", 304, "Charla empresarial 2: ¿Que responsabilidades tienen las empresas frente a la prevencion del riesgo psicosocial?", "2026-03-11", False, "11", 9.0, 10.0),
+            ("charlas", 305, "Charla empresarial 3: Estrategias efectivas para liderar equipos efectivos.", "2026-03-18", False, "18", 9.0, 10.0),
+            ("charlas", 306, "Charla empresarial 4: Como Presentar un Presupuesto Ejecutivo: Visual, Claro y Estrategico.", "2026-03-25", False, "25", 9.0, 10.0),
+            ("diplomados", 401, "1. DIPLOMADO: Competencias del futuro y desarrollo del talento.", "2026-04-06", "2026-04-21", "6|7|8|13|14|15|20|21", 18.5, 20.5),
+            ("foros", 402, "2. FORO: ¿Cual es el panorama economico en Colombia?", "2026-04-23", False, "23", 9.0, 10.0),
+            ("charlas", 403, "Charla empresarial 1: Conecta, Inspira y Lidera con Emocion.", "2026-04-08", False, "8", 9.0, 10.0),
+            ("charlas", 404, "Charla empresarial 2: Marketing emocional: conectar con personas, no con consumidores.", "2026-04-15", False, "15", 9.0, 10.0),
+            ("charlas", 405, "Charla empresarial 3: Ciberseguridad: Protegiendo la Innovacion.", "2026-04-22", False, "22", 9.0, 10.0),
+            ("charlas", 406, "Charla empresarial 4: Como actualizar su reglamento Interno bajo la reforma laboral.", "2026-04-29", False, "29", 9.0, 10.0),
+            ("diplomados", 501, "1. DIPLOMADO: Cambios claves de la nueva Ley sobre salud mental laboral.", "2026-05-04", "2026-05-20", "4|5|6|11|12|13|19|20", 18.5, 20.5),
+            ("flashtraining", 502, "2. FLASH TRAINING: Power BI - Nivel Basico.", "2026-05-21", "2026-05-22", "21|22", 9.0, 10.0),
+            ("charlas", 503, "Charla empresarial 1: El futuro de las comunidades digitales: del seguidor al fan leal.", "2026-05-06", False, "6", 9.0, 10.0),
+            ("charlas", 504, "Charla empresarial 2: ¿Esta mi pension segura con la reforma?", "2026-05-13", False, "13", 9.0, 10.0),
+            ("charlas", 505, "Charla empresarial 3: Liderazgo Basado en la comprension y el respeto.", "2026-05-20", False, "20", 9.0, 10.0),
+            ("charlas", 506, "Charla empresarial 4: Tres IA que Potencian los equipos de trabajo.", "2026-05-27", False, "27", 9.0, 10.0),
+            ("diplomados", 601, "1. DIPLOMADO: Finanzas con vision estrategica.", "2026-06-09", "2026-06-24", "9|10|16|17|22|23|24", 18.5, 20.5),
+            ("charlas", 602, "Charla empresarial 1: Obligaciones de la empresa en materia de seguridad social.", "2026-06-03", False, "3", 9.0, 10.0),
+            ("charlas", 603, "Charla empresarial 2: El Poder de Innovar con Proposito.", "2026-06-10", False, "10", 9.0, 10.0),
+            ("charlas", 604, "Charla empresarial 3: Nuevas formas de atraer, encantar y fidelizar clientes.", "2026-06-17", False, "17", 9.0, 10.0),
+            ("charlas", 605, "Charla empresarial 4: IA para disenar el perfil de cargos.", "2026-06-24", False, "24", 9.0, 10.0),
+            ("diplomados", 701, "1. DIPLOMADO: Economia Circular como Estrategia de Valor Sostenible.", "2026-07-06", "2026-07-22", "6|7|8|13|14|15|21|22", 18.5, 20.5),
+            ("foros", 702, "2. FORO: Los retos del sector empresarial frente a la Inteligencia Artificial.", "2026-07-23", False, "23", 9.0, 10.0),
+            ("charlas", 703, "Charla empresarial 1: Futuro de las ventas en redes sociales con IA.", "2026-07-01", False, "1", 9.0, 10.0),
+            ("charlas", 704, "Charla empresarial 2: Conozca como aplicar la bateria de riesgo psicosocial segun la nueva ley.", "2026-07-08", False, "8", 9.0, 10.0),
+            ("charlas", 705, "Charla empresarial 3: Tableros y control de gastos con IA (alertas y anomalias).", "2026-07-15", False, "15", 9.0, 10.0),
+            ("charlas", 706, "Charla empresarial 4: El Rol del Feedback Continuo en el Desarrollo del Talento.", "2026-07-22", False, "22", 9.0, 10.0),
+            ("charlas", 707, "Charla empresarial 5: Practicas efectivas para fomentar compromiso y pertenencia.", "2026-07-29", False, "29", 9.0, 10.0),
+            ("diplomados", 801, "1. DIPLOMADO: Employee Engagement: estrategias para conectar, motivar y retener el talento humano.", "2026-08-03", "2026-08-19", "3|4|5|10|11|12|18|19", 18.5, 20.5),
+            ("flashtraining", 802, "2. FLASH TRAINING: Marketing y ventas en la era de la IA.", "2026-08-20", "2026-08-21", "20|21", 9.0, 10.0),
+            ("charlas", 803, "Charla empresarial 1: Auditoria interna para prevenir sanciones de la UGPP.", "2026-08-05", False, "5", 9.0, 10.0),
+            ("charlas", 804, "Charla empresarial 2: Habitos Financieros para el Exito Personal y Profesional.", "2026-08-12", False, "12", 9.0, 10.0),
+            ("charlas", 805, "Charla empresarial 3: Ventas 5.0: Estrategias inteligentes con IA.", "2026-08-19", False, "19", 9.0, 10.0),
+            ("charlas", 806, "Charla empresarial 4: Del Problema a la Solucion: Innovacion Agil en la Practica.", "2026-08-26", False, "26", 9.0, 10.0),
+            ("diplomados", 901, "1. DIPLOMADO: Transformacion Digital y Analitica de Datos.", "2026-09-07", "2026-09-22", "7|8|9|14|15|16|21|22", 18.5, 20.5),
+            ("flashtraining", 902, "2. FLASH TRAINING: Responsabilidad Social (RSE).", "2026-09-24", "2026-09-25", "24|25", 9.0, 10.0),
+            ("charlas", 903, "Charla empresarial 1: Como Optimizar Presupuestos Limitados en su area de trabajo.", "2026-09-02", False, "2", 9.0, 10.0),
+            ("charlas", 904, "Charla empresarial 2: Promocion del bienestar mental en la empresa como lo exige la Ley.", "2026-09-09", False, "9", 9.0, 10.0),
+            ("charlas", 905, "Charla empresarial 3: Equipos del futuro: liderar personas en entornos inteligentes y automatizados.", "2026-09-16", False, "16", 9.0, 10.0),
+            ("charlas", 906, "Charla empresarial 4: Que decidir, que hacer, que delegar y que eliminar.", "2026-09-23", False, "23", 9.0, 10.0),
+            ("charlas", 907, "Charla empresarial 5: Como liquidar bien la nomina y seguridad social.", "2026-09-30", False, "30", 9.0, 10.0),
+            ("diplomados", 1001, "1. DIPLOMADO: Gestion laboral para No Abogados.", "2026-10-05", "2026-10-21", "5|6|7|13|14|19|20|21", 18.5, 20.5),
+            ("flashtraining", 1002, "2. FLASH TRAINING: Obligaciones de la empresa en seguridad social.", "2026-10-22", "2026-10-23", "22|23", 9.0, 10.0),
+            ("charlas", 1003, "Charla empresarial 1: Innovando para un Futuro Sostenible con IA.", "2026-10-07", False, "7", 9.0, 10.0),
+            ("charlas", 1004, "Charla empresarial 2: Del servicio al cliente a la experiencia WOW.", "2026-10-14", False, "14", 9.0, 10.0),
+            ("charlas", 1005, "Charla empresarial 3: Conozca como evitar fraudes financieros en la era digital.", "2026-10-21", False, "21", 9.0, 10.0),
+            ("charlas", 1006, "Charla empresarial 4: Habilidades blandas en tiempos de IA.", "2026-10-28", False, "28", 9.0, 10.0),
+            ("diplomados", 1101, "1. DIPLOMADO: Habilidades Gerenciales para Entornos de Cambio.", "2026-11-03", "2026-11-18", "3|4|9|10|11|17|18", 18.5, 20.5),
+            ("foros", 1102, "2. FORO: Los retos del sector empresarial para la recuperacion economica.", "2026-11-26", False, "26", 9.0, 10.0),
+            ("charlas", 1103, "Charla empresarial 1: El auge del trabajo hibrido y la inteligencia artificial.", "2026-11-04", False, "4", 9.0, 10.0),
+            ("charlas", 1104, "Charla empresarial 2: El Debido Proceso Laboral: Como evitar errores que le cuestan sanciones a la empresa.", "2026-11-11", False, "11", 9.0, 10.0),
+            ("charlas", 1105, "Charla empresarial 3: Agentes IA aplicados a Marketing.", "2026-11-18", False, "18", 9.0, 10.0),
+            ("charlas", 1106, "Charla Empresarial 4: Claves para proyectar un plan de capacitacion efectivo hacia el 2027.", "2026-11-25", False, "25", 9.0, 10.0),
+            ("diplomados", 1201, "1. DIPLOMADO: Human Power: el liderazgo que inspira transformacion.", "2026-12-01", "2026-12-16", "1|2|7|9|14|15|16", 18.5, 20.5),
+            ("charlas", 1202, "Charla empresarial 1: Storytelling corporativo: el arte de contar historias que posicionan.", "2026-12-02", False, "2", 9.0, 10.0),
+            ("charlas", 1203, "Charla empresarial 2: Finanzas con Intencion.", "2026-12-09", False, "9", 9.0, 10.0),
+            ("charlas", 1204, "Charla empresarial 3: Sindrome de agotamiento laboral - Burnout.", "2026-12-16", False, "16", 9.0, 10.0),
+        ]
+        for event_type, sequence, name, date_start, date_end, display_days, time_start, time_end in events:
+            vals = {
+                "active": True,
+                "featured": False,
+                "sequence": sequence,
+                "name": name,
+                "event_type": event_type,
+                "date_start": date_start,
+                "date_end": date_end or date_start,
+                "display_days": display_days,
+                "time_start": time_start,
+                "time_end": time_end,
+                "timezone": "America/Bogota",
+                "modality": "virtual",
+                "location": school_url,
+                "registration_url": school_url,
+                "button_label": "Inscribirme",
+                "description": "Dias exactos de programacion: %s" % display_days,
+            }
+            event = self.search(
+                [
+                    ("date_start", "=", date_start),
+                    ("sequence", "=", sequence),
+                ],
+                limit=1,
+            )
+            if not event:
+                event = self.search(
+                    [
+                        ("name", "=", name),
+                        ("date_start", "=", date_start),
+                    ],
+                    limit=1,
+                )
+            if not event:
+                same_day_type = self.search(
+                    [
+                        ("date_start", "=", date_start),
+                        ("event_type", "=", event_type),
+                    ]
+                )
+                if len(same_day_type) == 1:
+                    event = same_day_type
+            if event:
+                event.write(vals)
+            else:
+                self.create(vals)
+        return True
 
     @api.constrains("date_start", "date_end")
     def _check_dates(self):
@@ -1217,6 +1344,10 @@ class LatinpymeRevistaProgramEvent(models.Model):
             return "%s al %s de %s de %s" % (start.day, end.day, SPANISH_MONTHS.get(start.month, ""), start.year)
         end_label = "%s de %s de %s" % (end.day, SPANISH_MONTHS.get(end.month, ""), end.year)
         return "%s al %s" % (start_label, end_label)
+
+    def program_days_label(self):
+        self.ensure_one()
+        return self.display_days or self.date_label()
 
     def event_type_label(self):
         self.ensure_one()

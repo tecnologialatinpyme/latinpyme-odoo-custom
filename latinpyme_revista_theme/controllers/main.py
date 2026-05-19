@@ -531,6 +531,22 @@ class LatinpymeRevistaController(http.Controller):
         Event = request.env["latinpyme.revista.program.event"].sudo()
         return [{"key": "all", "label": "Todos"}] + Event.get_event_type_filter_options()
 
+    def _program_monthly_agenda(self, year, events):
+        months = []
+        for month_number in range(1, 13):
+            month_events = events.filtered(
+                lambda event: fields.Date.to_date(event.date_start).month == month_number
+            )
+            months.append(
+                {
+                    "number": month_number,
+                    "name": PROGRAM_MONTHS[month_number],
+                    "events": month_events,
+                    "event_count": len(month_events),
+                }
+            )
+        return months
+
     def _revista_program_section(self, section_slug, section_record, kwargs=None):
         kwargs = kwargs or {}
         blog = self._revista_blog()
@@ -563,6 +579,14 @@ class LatinpymeRevistaController(http.Controller):
             "program_upcoming_events": upcoming_events,
             "program_type_summary": self._program_type_summary(events),
             "program_filter_options": self._program_filter_options(),
+            "program_monthly_agenda": self._program_monthly_agenda(program_year, events),
+            "program_legend_items": [
+                "Clases de diplomados: lunes, martes y miercoles.",
+                "Flashtraining: jueves y viernes.",
+                "Charlas empresariales: miercoles.",
+                "Foros empresariales: miercoles.",
+                "Cursos practicos: lunes y viernes.",
+            ],
             "program_hero_banner": request.env["latinpyme.revista.banner"].sudo().get_program_hero_banner(request.website),
         }
         return self._render("latinpyme_revista_theme.revista_program_page", values)

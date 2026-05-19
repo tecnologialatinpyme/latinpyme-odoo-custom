@@ -358,6 +358,7 @@
       <list string="Programacion anual" default_order="date_start,time_start,sequence,name">
         <field name="sequence" widget="handle"/>
         <field name="date_start"/>
+        <field name="display_days" optional="show"/>
         <field name="time_start" widget="float_time"/>
         <field name="name"/>
         <field name="event_type"/>
@@ -394,6 +395,7 @@
             <group string="Fecha y hora">
               <field name="date_start"/>
               <field name="date_end"/>
+              <field name="display_days" placeholder="Ej. 13|14|19|20|21|26|27|28"/>
               <field name="time_start" widget="float_time"/>
               <field name="time_end" widget="float_time"/>
               <field name="timezone"/>
