@@ -879,16 +879,32 @@
     .lp-revista-latest-layout__aside {
       .lp-revista-widget--poll {
         align-content: start;
-        gap: 12px;
-        padding: 22px 26px 24px;
+        gap: 10px;
+        padding: 20px 24px 22px;
 
         .lp-revista-eyebrow {
-          margin-bottom: 2px;
+          margin-bottom: 0;
         }
 
         h3 {
-          margin-bottom: 2px;
-          line-height: 1.28;
+          margin: 0 0 5px;
+          font-size: 18px;
+          line-height: 1.25;
+        }
+
+        label {
+          gap: 9px;
+          font-size: 13px;
+          line-height: 1.25;
+        }
+
+        .lp-revista-button {
+          justify-self: start;
+          min-width: 112px;
+          min-height: 38px;
+          margin-top: 4px;
+          padding-inline: 24px;
+          font-size: 13px;
         }
       }
     }
