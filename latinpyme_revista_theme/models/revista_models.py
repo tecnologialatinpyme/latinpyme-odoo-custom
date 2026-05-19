@@ -43,8 +43,8 @@ PROGRAM_EVENT_TYPES = [
     ("diplomados", "Diplomados"),
     ("flashtraining", "Flashtraining"),
     ("foros", "Foros"),
-    ("curso_50_20", "Curso 50 y 20 horas"),
 ]
+REMOVED_PROGRAM_EVENT_TYPES = ("curso_50_20",)
 PROGRAM_EVENT_TYPE_LEGACY_MAP = {
     "charla": "charlas",
     "diplomado": "diplomados",
@@ -1114,6 +1114,11 @@ class LatinpymeRevistaProgramEvent(models.Model):
         return True
 
     @api.model
+    def archive_removed_event_types(self):
+        self.search([("event_type", "in", list(REMOVED_PROGRAM_EVENT_TYPES))]).write({"active": False})
+        return True
+
+    @api.model
     def get_event_type_options(self):
         return list(PROGRAM_EVENT_TYPES)
 
@@ -1267,7 +1272,10 @@ class LatinpymeRevistaProgramEvent(models.Model):
     @api.model
     def get_active_events(self, website=None):
         website = website or _current_website()
-        domain = [("active", "=", True)]
+        domain = [
+            ("active", "=", True),
+            ("event_type", "in", [key for key, label in PROGRAM_EVENT_TYPES]),
+        ]
         if website:
             domain.append(("website_id", "in", [False, website.id]))
         return self.search(domain, order="date_start, time_start, sequence, id")
@@ -1275,7 +1283,11 @@ class LatinpymeRevistaProgramEvent(models.Model):
     @api.model
     def get_public_event(self, event_id, website=None):
         website = website or _current_website()
-        domain = [("id", "=", event_id), ("active", "=", True)]
+        domain = [
+            ("id", "=", event_id),
+            ("active", "=", True),
+            ("event_type", "in", [key for key, label in PROGRAM_EVENT_TYPES]),
+        ]
         if website:
             website_record = self.search(domain + [("website_id", "=", website.id)], limit=1)
             if website_record:

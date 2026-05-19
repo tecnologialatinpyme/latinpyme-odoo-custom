@@ -2789,133 +2789,79 @@
   }
 }
 
-.lp-revista-program-guide {
-  display: grid;
-  grid-template-columns: minmax(220px, .7fr) 1.3fr;
-  gap: 28px;
-  align-items: center;
-  margin-bottom: 22px;
-  padding: 24px 28px;
-  border: 1px solid rgba(185, 0, 18, .14);
-  border-radius: var(--lp-radius);
-  background:
-    radial-gradient(circle at 0 0, rgba(185, 0, 18, .08), transparent 34%),
-    linear-gradient(135deg, #fff, #fff7f8);
-  box-shadow: 0 18px 46px rgba(17, 19, 24, .06);
-
-  > div > span {
-    display: inline-flex;
-    color: var(--lp-red);
-    font-weight: 900;
-    font-size: 12px;
-    text-transform: uppercase;
-  }
-
-  h2 {
-    margin: 6px 0 0;
-    color: var(--lp-dark);
-    font-size: 24px;
-    line-height: 1.15;
-  }
-
-  ul {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 18px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  li {
-    display: flex;
-    gap: 9px;
-    align-items: flex-start;
-    color: #303846;
-    font-size: 14px;
-    line-height: 1.4;
-
-    i {
-      color: var(--lp-red);
-      margin-top: 3px;
-    }
-  }
-}
-
-.lp-revista-program-toolbar--monthly {
-  align-items: center;
-  gap: 18px;
-}
-
-.lp-revista-program-month-nav {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-
-  a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 36px;
-    padding: 8px 12px;
-    border: 1px solid var(--lp-border);
-    border-radius: 999px;
-    color: var(--lp-dark);
-    font-size: 13px;
-    font-weight: 800;
-    text-decoration: none;
-    text-transform: capitalize;
-    background: #fff;
-
-    &:hover {
-      border-color: rgba(185, 0, 18, .32);
-      color: var(--lp-red);
-      background: #fff7f8;
-    }
-  }
-}
-
 .lp-revista-program-monthly-agenda {
-  padding-top: 12px;
+  padding-top: 6px;
 }
 
 .lp-revista-program-month-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 34px 30px;
+  gap: 28px;
+  align-items: stretch;
 }
 
 .lp-revista-program-month-column {
+  position: relative;
   min-width: 0;
-  padding: 0 0 28px;
-  border-bottom: 1px solid rgba(17, 19, 24, .12);
+  padding: 22px;
+  border: 1px solid rgba(17, 19, 24, .08);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 247, 248, .82), rgba(255, 255, 255, .96) 150px),
+    #fff;
+  box-shadow: 0 22px 58px rgba(17, 19, 24, .08);
   scroll-margin-top: 120px;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: linear-gradient(180deg, var(--lp-red), rgba(185, 0, 18, .08));
+  }
 }
 
 .lp-revista-program-month-column__header {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 18px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid rgba(185, 0, 18, .12);
+  margin-bottom: 20px;
+  padding-left: 4px;
+
+  small {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--lp-red);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
 
   h2 {
     margin: 0;
     color: var(--lp-dark);
-    font-size: 21px;
+    font-size: 26px;
     font-weight: 900;
-    text-transform: uppercase;
+    text-transform: capitalize;
     letter-spacing: 0;
   }
 
   span {
+    display: inline-flex;
     flex: 0 0 auto;
+    align-items: center;
+    min-height: 30px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #fff;
     color: var(--lp-red);
     font-size: 12px;
     font-weight: 900;
     text-transform: uppercase;
+    box-shadow: inset 0 0 0 1px rgba(185, 0, 18, .12);
   }
 }
 
@@ -2930,17 +2876,22 @@
 .lp-revista-program-month-event {
   position: relative;
   display: grid;
-  gap: 9px;
+  grid-template-columns: 70px minmax(0, 1fr);
+  gap: 14px;
   min-width: 0;
-  padding: 16px 0 16px 18px;
-  border-left: 3px solid rgba(185, 0, 18, .28);
+  padding: 16px;
+  border: 1px solid rgba(17, 19, 24, .08);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(17, 19, 24, .05);
 
   & + & {
-    border-top: 1px solid rgba(17, 19, 24, .08);
+    margin-top: 12px;
   }
 
   &:hover {
-    border-left-color: var(--lp-red);
+    border-color: rgba(185, 0, 18, .24);
+    box-shadow: 0 16px 34px rgba(185, 0, 18, .08);
   }
 
   h3 {
@@ -2953,34 +2904,45 @@
   }
 }
 
-.lp-revista-program-month-event__top {
+.lp-revista-program-month-event__date {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.lp-revista-program-month-event__days {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: 72px;
+  padding: 10px 8px;
+  border-radius: 12px;
+  text-align: center;
+  background: #fff5f6;
 
   span {
-    color: #687181;
-    font-size: 12px;
-    font-weight: 800;
+    color: #7c2530;
+    font-size: 11px;
+    font-weight: 900;
     text-transform: uppercase;
   }
 
   strong {
     color: var(--lp-red);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 900;
-    letter-spacing: 0;
+    line-height: 1.2;
     overflow-wrap: anywhere;
   }
+}
+
+.lp-revista-program-month-event__body {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.lp-revista-program-month-event__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .lp-revista-program-month-event__time {
@@ -3048,14 +3010,6 @@
 @media (max-width: 1100px) {
   .lp-revista-masthead__top {
     grid-template-columns: 1fr auto;
-  }
-
-  .lp-revista-program-guide {
-    grid-template-columns: 1fr;
-
-    ul {
-      grid-template-columns: 1fr;
-    }
   }
 
   .lp-revista-program-month-grid {
@@ -3171,38 +3125,49 @@
     }
   }
 
-  .lp-revista-program-guide {
-    padding: 20px;
-
-    h2 {
-      font-size: 20px;
-    }
-  }
-
-  .lp-revista-program-toolbar--monthly {
-    align-items: stretch;
-  }
-
-  .lp-revista-program-month-nav {
-    justify-content: flex-start;
-
-    a {
-      flex: 1 1 calc(33.333% - 8px);
-      justify-content: center;
-    }
-  }
-
   .lp-revista-program-month-grid {
     grid-template-columns: 1fr;
     gap: 26px;
   }
 
   .lp-revista-program-month-column {
-    padding-bottom: 22px;
+    padding: 20px 18px;
+    border-radius: 16px;
+  }
+
+  .lp-revista-program-month-column__header {
+    gap: 10px;
+
+    h2 {
+      font-size: 24px;
+    }
+
+    span {
+      font-size: 11px;
+      white-space: nowrap;
+    }
   }
 
   .lp-revista-program-month-event {
-    padding-left: 14px;
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .lp-revista-program-month-event__date {
+    min-height: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .lp-revista-program-month-event__actions {
+    align-items: stretch;
+
+    > a,
+    .lp-revista-calendar-picker--compact summary {
+      justify-content: center;
+    }
   }
 
   .lp-revista-masthead__top {

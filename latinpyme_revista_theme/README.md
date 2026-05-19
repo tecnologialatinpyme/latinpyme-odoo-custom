@@ -187,7 +187,6 @@ Tipos de evento disponibles:
 - `Diplomados`
 - `Flashtraining`
 - `Foros`
-- `Curso 50 y 20 horas`
 
 Al actualizar el módulo, los valores antiguos se normalizan de forma segura:
 
@@ -195,6 +194,8 @@ Al actualizar el módulo, los valores antiguos se normalizan de forma segura:
 - `diplomado` -> `diplomados`
 - `capacitacion` -> `charlas`
 - `otro` -> `foros`
+
+Los registros antiguos con tipo `Curso 50 y 20 horas` se archivan durante la actualización porque ese tipo ya no forma parte de la programación pública.
 
 El hero superior de esta página puede administrarse desde:
 

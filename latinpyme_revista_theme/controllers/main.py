@@ -46,6 +46,7 @@ PREPRODUCTION_HOSTS = {
 }
 
 PROGRAM_SECTION_SLUG = "programacion-anual"
+PROGRAM_DISPLAY_YEAR = 2026
 PROGRAM_WEEKDAYS = ("L", "M", "M", "J", "V", "S", "D")
 PROGRAM_MONTHS = {
     1: "enero",
@@ -552,7 +553,7 @@ class LatinpymeRevistaController(http.Controller):
         blog = self._revista_blog()
         section_name = section_record.name if section_record else "Programacion anual"
         Event = request.env["latinpyme.revista.program.event"].sudo()
-        program_year = self._program_year(kwargs)
+        program_year = PROGRAM_DISPLAY_YEAR
         today = fields.Date.context_today(Event)
         events = Event.get_active_events(request.website).filtered(
             lambda event: self._event_intersects_year(event, program_year)
@@ -574,19 +575,10 @@ class LatinpymeRevistaController(http.Controller):
             "program_calendar_months": self._program_calendar_months(program_year, events, today),
             "program_weekdays": PROGRAM_WEEKDAYS,
             "program_year": program_year,
-            "program_prev_year_url": "/revista/seccion/%s?year=%s" % (section_slug, program_year - 1),
-            "program_next_year_url": "/revista/seccion/%s?year=%s" % (section_slug, program_year + 1),
             "program_upcoming_events": upcoming_events,
             "program_type_summary": self._program_type_summary(events),
             "program_filter_options": self._program_filter_options(),
             "program_monthly_agenda": self._program_monthly_agenda(program_year, events),
-            "program_legend_items": [
-                "Clases de diplomados: lunes, martes y miercoles.",
-                "Flashtraining: jueves y viernes.",
-                "Charlas empresariales: miercoles.",
-                "Foros empresariales: miercoles.",
-                "Cursos practicos: lunes y viernes.",
-            ],
             "program_hero_banner": request.env["latinpyme.revista.banner"].sudo().get_program_hero_banner(request.website),
         }
         return self._render("latinpyme_revista_theme.revista_program_page", values)

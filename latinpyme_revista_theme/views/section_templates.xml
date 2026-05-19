@@ -115,7 +115,7 @@
   <template id="revista_program_page" name="Revista LatinPyme Programacion Mensual">
     <t t-call="website.layout">
       <t t-set="title" t-value="section_seo_title or ('Programación %s | Revista LatinPyme' % program_year)"/>
-      <t t-set="website_meta_description" t-value="section_seo_description or 'Programación mensual de capacitaciones, charlas, diplomados, foros y cursos de Revista LatinPyme.'"/>
+      <t t-set="website_meta_description" t-value="section_seo_description or 'Programación mensual de charlas, diplomados, flashtraining y foros de Revista LatinPyme.'"/>
       <t t-set="seo_object" t-value="section_record or blog"/>
       <t t-set="head">
         <meta t-if="lp_preproduction" name="robots" content="noindex,nofollow"/>
@@ -146,7 +146,7 @@
                 <h1>Programación <t t-out="program_year"/></h1>
                 <p>
                   <t t-if="section_description" t-out="section_description"/>
-                  <t t-else="">Consulta la agenda mensual de charlas, diplomados, flashtraining, foros y cursos de LatinPyme.</t>
+                  <t t-else="">Consulta la agenda mensual de charlas, diplomados, flashtraining y foros de LatinPyme.</t>
                 </p>
               </div>
             </div>
@@ -154,39 +154,6 @@
 
           <section class="lp-revista-container lp-revista-program-title lp-revista-program-title--monthly">
             <h1>Programación <t t-out="program_year"/></h1>
-          </section>
-
-          <section class="lp-revista-container lp-revista-program-guide" aria-label="Convenciones de la programación">
-            <div>
-              <span>Guía rápida</span>
-              <h2>Agenda mensual de formación empresarial</h2>
-            </div>
-            <ul>
-              <li t-foreach="program_legend_items" t-as="legend_item">
-                <i class="fa fa-check"/>
-                <span t-out="legend_item"/>
-              </li>
-            </ul>
-          </section>
-
-          <section class="lp-revista-container lp-revista-program-toolbar lp-revista-program-toolbar--monthly" aria-label="Controles de programación mensual">
-            <div class="lp-revista-program-year">
-              <a t-att-href="program_prev_year_url" aria-label="Año anterior"><i class="fa fa-angle-left"/></a>
-              <strong t-out="program_year"/>
-              <a t-att-href="program_next_year_url" aria-label="Año siguiente"><i class="fa fa-angle-right"/></a>
-            </div>
-            <div class="lp-revista-program-month-nav" aria-label="Ir a mes">
-              <a t-foreach="program_monthly_agenda" t-as="month" t-attf-href="#lp-program-month-#{month['number']}">
-                <t t-out="month['name']"/>
-              </a>
-            </div>
-          </section>
-
-          <section t-if="program_type_summary" class="lp-revista-container lp-revista-program-type-strip" aria-label="Eventos por tipo">
-            <article t-foreach="program_type_summary" t-as="type_summary">
-              <span t-out="type_summary['label']"/>
-              <strong t-out="type_summary['count']"/>
-            </article>
           </section>
 
           <section class="lp-revista-container lp-revista-program-annual lp-revista-program-monthly-agenda">
@@ -197,41 +164,44 @@
             <div class="lp-revista-program-month-grid">
               <section t-foreach="program_monthly_agenda" t-as="month" class="lp-revista-program-month-column" t-att-data-month="month['number']" t-attf-id="lp-program-month-#{month['number']}">
                 <header class="lp-revista-program-month-column__header">
+                  <div>
+                    <small>Mes <t t-out="'%02d' % month['number']"/></small>
+                    <h2 t-out="month['name']"/>
+                  </div>
                   <span><t t-out="month['event_count']"/> eventos</span>
-                  <h2 t-out="month['name']"/>
                 </header>
                 <div t-if="not month['events']" class="lp-revista-program-month-column__empty">
                   Sin eventos publicados.
                 </div>
-                <article t-foreach="month['events']" t-as="event" class="lp-revista-program-month-event" t-att-data-event-type="event.event_type" t-att-data-event-modality="event.modality">
-                  <div class="lp-revista-program-month-event__top">
-                    <span class="lp-revista-kicker" t-out="event.event_type_label()"/>
-                    <span class="lp-revista-program-card__mode" t-out="event.modality_label()"/>
-                  </div>
-                  <h3 t-out="event.name"/>
-                  <p class="lp-revista-program-month-event__days">
+                <article t-foreach="month['events']" t-as="event" t-attf-class="lp-revista-program-month-event lp-revista-program-month-event--#{event.event_type}" t-att-data-event-type="event.event_type" t-att-data-event-modality="event.modality">
+                  <div class="lp-revista-program-month-event__date">
                     <span>Días</span>
                     <strong t-out="event.program_days_label()"/>
-                  </p>
-                  <p class="lp-revista-program-month-event__time">
-                    <i class="fa fa-clock-o"/>
-                    <span t-out="event.time_label()"/>
-                  </p>
-                  <div class="lp-revista-program-month-event__actions">
-                    <a t-if="event.location_url()" t-att-href="event.location_url()" target="_blank" rel="noopener">Ver</a>
-                    <a t-if="event.registration_url" class="lp-revista-program-month-event__register" t-att-href="event.registration_url" target="_blank" rel="noopener">
-                      <t t-out="event.button_label or 'Inscribirme'"/>
-                    </a>
-                    <t t-set="calendar_links" t-value="event.calendar_links()"/>
-                    <details class="lp-revista-calendar-picker lp-revista-calendar-picker--compact">
-                      <summary>Calendario <i class="fa fa-angle-down"/></summary>
-                      <div>
-                        <a t-att-href="calendar_links['google']" target="_blank" rel="noopener"><i class="fa fa-google"/> Google Calendar</a>
-                        <a t-att-href="calendar_links['outlook']" target="_blank" rel="noopener"><i class="fa fa-windows"/> Outlook / Microsoft 365</a>
-                        <a t-att-href="calendar_links['apple']"><i class="fa fa-apple"/> Apple Calendar</a>
-                        <a t-att-href="calendar_links['ics']"><i class="fa fa-download"/> Descargar .ics</a>
-                      </div>
-                    </details>
+                  </div>
+                  <div class="lp-revista-program-month-event__body">
+                    <div class="lp-revista-program-month-event__top">
+                      <span class="lp-revista-kicker" t-out="event.event_type_label()"/>
+                      <span class="lp-revista-program-card__mode" t-out="event.modality_label()"/>
+                    </div>
+                    <h3 t-out="event.name"/>
+                    <p class="lp-revista-program-month-event__time">
+                      <i class="fa fa-clock-o"/>
+                      <span t-out="event.time_label()"/>
+                    </p>
+                    <div class="lp-revista-program-month-event__actions">
+                      <a t-if="event.location_url()" t-att-href="event.location_url()" target="_blank" rel="noopener">Ver</a>
+                      <a t-if="event.registration_url" class="lp-revista-program-month-event__register" t-att-href="event.registration_url" target="_blank" rel="noopener">Inscribirse</a>
+                      <t t-set="calendar_links" t-value="event.calendar_links()"/>
+                      <details class="lp-revista-calendar-picker lp-revista-calendar-picker--compact">
+                        <summary>Calendario <i class="fa fa-angle-down"/></summary>
+                        <div>
+                          <a t-att-href="calendar_links['google']" target="_blank" rel="noopener"><i class="fa fa-google"/> Google Calendar</a>
+                          <a t-att-href="calendar_links['outlook']" target="_blank" rel="noopener"><i class="fa fa-windows"/> Outlook / Microsoft 365</a>
+                          <a t-att-href="calendar_links['apple']"><i class="fa fa-apple"/> Apple Calendar</a>
+                          <a t-att-href="calendar_links['ics']"><i class="fa fa-download"/> Descargar .ics</a>
+                        </div>
+                      </details>
+                    </div>
                   </div>
                 </article>
               </section>
