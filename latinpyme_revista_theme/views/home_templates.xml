@@ -78,8 +78,8 @@
               <t t-call="latinpyme_revista_theme.lp_section_heading">
                 <t t-set="title" t-value="home_blocks.get('latest').title if home_blocks.get('latest') and home_blocks.get('latest').title else 'Lo más reciente'"/>
                 <t t-set="eyebrow" t-value="False"/>
-                <t t-set="href" t-value="home_blocks.get('latest').link_url if home_blocks.get('latest') and home_blocks.get('latest').link_url else '/blog'"/>
-                <t t-set="link_label" t-value="home_blocks.get('latest').link_label if home_blocks.get('latest') and home_blocks.get('latest').link_label else 'Ver archivo'"/>
+                <t t-set="href" t-value="False"/>
+                <t t-set="link_label" t-value="False"/>
               </t>
               <div class="lp-revista-latest-grid">
                 <t t-if="show_home_latest">

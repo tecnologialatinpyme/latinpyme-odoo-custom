@@ -849,6 +849,60 @@
   }
 }
 
+.lp-revista {
+  .lp-revista-home-sections-mini {
+    gap: 11px;
+
+    .lp-revista-section-list--mini {
+      gap: 2px;
+
+      a {
+        min-height: 25px;
+        padding: 3px 0;
+        font-size: 12px;
+        line-height: 1.18;
+      }
+
+      span {
+        line-height: 1.18;
+      }
+
+      i {
+        margin-left: 8px;
+        font-size: 11px;
+      }
+    }
+
+    > .lp-revista-inline-link {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      gap: 6px;
+      color: #b90012;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.15;
+      text-decoration: none;
+      transition: color .18s ease;
+
+      i {
+        margin-left: 4px;
+        font-size: 13px;
+        transition: transform .18s ease;
+      }
+
+      &:hover {
+        color: #8f000d;
+        text-decoration: none;
+      }
+
+      &:hover i {
+        transform: translateX(2px);
+      }
+    }
+  }
+}
+
 .lp-revista-news-strip__grid {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 18px;
