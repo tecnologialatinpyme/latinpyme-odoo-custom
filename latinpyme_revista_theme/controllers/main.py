@@ -203,6 +203,19 @@ class LatinpymeRevistaController(http.Controller):
         return self._image_response(item.image)
 
     @http.route(
+        "/revista/media/interview/<int:interview_id>/image",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def revista_interview_image(self, interview_id, **kwargs):
+        interview = request.env["latinpyme.revista.interview"].sudo().browse(interview_id).exists()
+        if not interview or not interview.active or not interview.image or not self._website_matches(interview):
+            raise NotFound()
+        return self._image_response(interview.image)
+
+    @http.route(
         "/revista/media/sidebar/<int:item_id>/image",
         type="http",
         auth="public",
@@ -437,6 +450,13 @@ class LatinpymeRevistaController(http.Controller):
             return section.section_banner_id
         return self._banners("section", limit=1)
 
+    def _interviews(self, section=None, limit=3):
+        return request.env["latinpyme.revista.interview"].sudo().get_active_interviews(
+            request.website,
+            section,
+            limit,
+        )
+
     def _program_event_groups(self, events):
         groups = []
         current_key = False
@@ -602,7 +622,6 @@ class LatinpymeRevistaController(http.Controller):
         }
         featured_post = self._home_featured_post(home_blocks.get("hero"), blog=blog)
         exclude_ids = featured_post.ids if featured_post else []
-        interview_tag = self._tag_by_name("Entrevistas")
         special_tag = self._tag_by_name("Especiales")
         highlight_limit = config.home_highlight_limit if config else 3
         latest_limit = config.home_latest_limit if config else 6
@@ -628,7 +647,7 @@ class LatinpymeRevistaController(http.Controller):
             "highlight_posts": self._home_posts(home_blocks.get("hero"), blog=blog, default_limit=highlight_limit, exclude_ids=exclude_ids),
             "latest_posts": self._home_posts(home_blocks.get("latest"), blog=blog, default_limit=latest_limit, exclude_ids=exclude_ids),
             "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, exclude_ids=exclude_ids),
-            "interview_posts": self._home_posts(home_blocks.get("interviews"), blog=blog, default_tag=interview_tag, default_limit=3),
+            "interviews": self._interviews(limit=self._home_block_limit(home_blocks.get("interviews"), 3)),
             "special_posts": self._home_posts(home_blocks.get("specials"), blog=blog, default_tag=special_tag, default_limit=2),
             "home_banners": home_top_banners,
             "home_mid_banners": self._banners("home_horizontal", limit=self._home_block_limit(home_blocks.get("mid_banners"), 3)),
@@ -691,8 +710,10 @@ class LatinpymeRevistaController(http.Controller):
             "section_banners": self._section_banners(section_record),
             "section_show_sidebar": self._section_display_enabled(section_record, "section_sidebar_mode", True),
             "section_show_related": self._section_display_enabled(section_record, "section_related_mode", True),
+            "section_show_interviews": self._section_display_enabled(section_record, "section_interviews_mode", True),
             "section_show_portfolio": self._section_display_enabled(section_record, "section_portfolio_mode", True),
             "section_show_allies": self._section_display_enabled(section_record, "section_allies_mode", True),
+            "section_interviews": self._interviews(section=section_record, limit=3) if section_record else request.env["latinpyme.revista.interview"].sudo().browse(),
         }
         return self._render("latinpyme_revista_theme.revista_section_page", values)
 

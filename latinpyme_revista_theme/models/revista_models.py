@@ -227,6 +227,12 @@ class LatinpymeRevistaSection(models.Model):
         default="default",
         required=True,
     )
+    section_interviews_mode = fields.Selection(
+        DISPLAY_MODE_SELECTION,
+        string="Entrevistas en seccion",
+        default="default",
+        required=True,
+    )
     section_portfolio_mode = fields.Selection(
         DISPLAY_MODE_SELECTION,
         string="Portafolio en seccion",
@@ -831,6 +837,70 @@ class LatinpymeRevistaPortfolioItem(models.Model):
                 continue
             self.create(dict(values, active=True))
         return True
+
+
+class LatinpymeRevistaInterview(models.Model):
+    _name = "latinpyme.revista.interview"
+    _description = "Entrevista Revista LatinPyme"
+    _order = "sequence, interview_date desc, name"
+
+    name = fields.Char(string="Titulo", required=True)
+    interviewee_name = fields.Char(string="Nombre del entrevistado")
+    role = fields.Char(string="Cargo")
+    company = fields.Char(string="Empresa")
+    summary = fields.Text(string="Resumen")
+    youtube_url = fields.Char(string="URL de YouTube")
+    link_url = fields.Char(
+        string="URL alternativa",
+        help="Opcional. Se usa si no hay URL de YouTube ni nota relacionada.",
+    )
+    post_id = fields.Many2one("blog.post", string="Nota relacionada", ondelete="set null")
+    section_ids = fields.Many2many(
+        "latinpyme.revista.section",
+        "latinpyme_revista_interview_section_rel",
+        "interview_id",
+        "section_id",
+        string="Secciones",
+        help="Selecciona una o varias secciones donde debe aparecer esta entrevista. Si se deja vacio, puede mostrarse como entrevista general.",
+    )
+    image = fields.Image(string="Imagen", max_width=1600, max_height=900)
+    interview_date = fields.Date(string="Fecha")
+    active = fields.Boolean(string="Activo", default=True)
+    featured = fields.Boolean(string="Destacada")
+    sequence = fields.Integer(string="Orden", default=10)
+    website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
+
+    def target_url(self):
+        self.ensure_one()
+        if self.youtube_url:
+            return self.youtube_url
+        if self.post_id and self.post_id.website_url:
+            return self.post_id.website_url
+        return self.link_url or "/revista/seccion/entrevistas"
+
+    def person_label(self):
+        self.ensure_one()
+        return self.interviewee_name or self.name
+
+    def meta_label(self):
+        self.ensure_one()
+        parts = [value for value in (self.role, self.company) if value]
+        return " - ".join(parts)
+
+    def section_label(self):
+        self.ensure_one()
+        section = self.section_ids[:1]
+        return section.name if section else "Entrevistas"
+
+    @api.model
+    def get_active_interviews(self, website=None, section=None, limit=None):
+        website = website or _current_website()
+        domain = [("active", "=", True)]
+        if website:
+            domain.append(("website_id", "in", [False, website.id]))
+        if section:
+            domain.extend(["|", ("section_ids", "=", False), ("section_ids", "in", section.id)])
+        return self.search(domain, order="sequence, interview_date desc, id desc", limit=limit)
 
 
 class LatinpymeRevistaSidebarItem(models.Model):

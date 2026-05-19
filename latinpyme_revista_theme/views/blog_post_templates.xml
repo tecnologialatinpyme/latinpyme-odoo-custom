@@ -227,11 +227,8 @@
   </template>
 
   <template id="lp_blog_related_interviews" name="Revista LatinPyme Related Interviews">
-    <t t-set="lp_post_model" t-value="request.env['blog.post'].sudo()"/>
-    <t t-set="lp_publish_domain" t-value="[('website_published', '=', True)] if 'website_published' in lp_post_model._fields else ([('is_published', '=', True)] if 'is_published' in lp_post_model._fields else [])"/>
-    <t t-set="lp_interview_tag" t-value="request.env['blog.tag'].sudo().search([('name', '=ilike', 'Entrevistas')], limit=1)"/>
-    <t t-set="lp_interview_posts" t-value="lp_post_model.search([('blog_id', '=', blog_post.blog_id.id), ('id', '!=', blog_post.id), ('tag_ids', 'in', lp_interview_tag.ids)] + lp_publish_domain, order='post_date desc, id desc', limit=3) if lp_interview_tag else lp_post_model.browse()"/>
-    <section t-if="lp_interview_posts" class="lp-revista-block lp-revista-blog-related" aria-labelledby="lp-blog-interviews-title">
+    <t t-set="lp_interviews" t-value="request.env['latinpyme.revista.interview'].sudo().get_active_interviews(request.website, lp_note_section, 3)"/>
+    <section t-if="lp_interviews" class="lp-revista-block lp-revista-blog-related" aria-labelledby="lp-blog-interviews-title">
       <t t-call="latinpyme_revista_theme.lp_section_heading">
         <t t-set="title">Entrevistas relacionadas</t>
         <t t-set="eyebrow" t-value="False"/>
@@ -239,9 +236,9 @@
         <t t-set="link_label">Ver más entrevistas</t>
       </t>
       <div class="lp-revista-card-grid lp-revista-card-grid--three">
-        <t t-foreach="lp_interview_posts" t-as="post">
-          <t t-call="latinpyme_revista_theme.lp_post_card">
-            <t t-set="variant" t-value="'video'"/>
+        <t t-foreach="lp_interviews" t-as="interview">
+          <t t-call="latinpyme_revista_theme.lp_interview_card">
+            <t t-set="interview" t-value="interview"/>
           </t>
         </t>
       </div>

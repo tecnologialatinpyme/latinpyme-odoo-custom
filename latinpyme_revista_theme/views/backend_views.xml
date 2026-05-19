@@ -212,6 +212,7 @@
                   <field name="section_posts_per_page"/>
                   <field name="section_sidebar_mode"/>
                   <field name="section_related_mode"/>
+                  <field name="section_interviews_mode"/>
                   <field name="section_portfolio_mode"/>
                   <field name="section_allies_mode"/>
                 </group>
@@ -547,6 +548,88 @@
     </field>
   </record>
 
+  <record id="view_latinpyme_revista_interview_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.interview.list</field>
+    <field name="model">latinpyme.revista.interview</field>
+    <field name="arch" type="xml">
+      <list string="Entrevistas" default_order="sequence,interview_date desc,name">
+        <field name="sequence" widget="handle"/>
+        <field name="image" widget="image" optional="hide"/>
+        <field name="active"/>
+        <field name="featured"/>
+        <field name="name"/>
+        <field name="interviewee_name"/>
+        <field name="company"/>
+        <field name="section_ids" widget="many2many_tags"/>
+        <field name="interview_date"/>
+        <field name="youtube_url" optional="hide"/>
+        <field name="website_id"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_interview_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.interview.form</field>
+    <field name="model">latinpyme.revista.interview</field>
+    <field name="arch" type="xml">
+      <form string="Entrevista">
+        <sheet>
+          <group>
+            <group string="General">
+              <field name="active"/>
+              <field name="featured"/>
+              <field name="sequence"/>
+              <field name="name"/>
+              <field name="interview_date"/>
+              <field name="website_id"/>
+            </group>
+            <group string="Imagen">
+              <field name="image" widget="image"/>
+            </group>
+          </group>
+          <group string="Entrevistado">
+            <group>
+              <field name="interviewee_name"/>
+              <field name="role"/>
+            </group>
+            <group>
+              <field name="company"/>
+              <field name="section_ids" widget="many2many_tags"/>
+            </group>
+          </group>
+          <group string="Contenido">
+            <field name="summary"/>
+          </group>
+          <group string="Enlaces">
+            <group>
+              <field name="youtube_url" placeholder="https://www.youtube.com/watch?v=..."/>
+              <field name="link_url" placeholder="https://..."/>
+            </group>
+            <group>
+              <field name="post_id" options="{'no_create': True}"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_interview_search" model="ir.ui.view">
+    <field name="name">latinpyme.revista.interview.search</field>
+    <field name="model">latinpyme.revista.interview</field>
+    <field name="arch" type="xml">
+      <search string="Buscar entrevistas">
+        <field name="name"/>
+        <field name="interviewee_name"/>
+        <field name="company"/>
+        <field name="section_ids"/>
+        <filter name="active" string="Activas" domain="[('active', '=', True)]"/>
+        <filter name="inactive" string="Inactivas" domain="[('active', '=', False)]"/>
+        <filter name="featured" string="Destacadas" domain="[('featured', '=', True)]"/>
+      </search>
+    </field>
+  </record>
+
   <record id="view_latinpyme_revista_sidebar_item_list" model="ir.ui.view">
     <field name="name">latinpyme.revista.sidebar.item.list</field>
     <field name="model">latinpyme.revista.sidebar.item</field>
@@ -717,6 +800,17 @@
     <field name="search_view_id" ref="view_latinpyme_revista_portfolio_item_search"/>
   </record>
 
+  <record id="action_latinpyme_revista_interview" model="ir.actions.act_window">
+    <field name="name">Entrevistas</field>
+    <field name="res_model">latinpyme.revista.interview</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_interview_search"/>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">Crea entrevistas con enlace a YouTube.</p>
+      <p>Asocia cada entrevista a una o varias secciones para mostrarla en Home, secciones y notas relacionadas.</p>
+    </field>
+  </record>
+
   <record id="action_latinpyme_revista_sidebar_item" model="ir.actions.act_window">
     <field name="name">Sidebar editorial</field>
     <field name="res_model">latinpyme.revista.sidebar.item</field>
@@ -751,6 +845,7 @@
   <menuitem id="menu_latinpyme_revista_home_blocks" name="Home editorial" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_home_block" sequence="15"/>
   <menuitem id="menu_latinpyme_revista_sections" name="Secciones" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_section" sequence="20"/>
   <menuitem id="menu_latinpyme_revista_blog_post_overrides" name="Notas editoriales" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_blog_post_override" sequence="22"/>
+  <menuitem id="menu_latinpyme_revista_interviews" name="Entrevistas" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_interview" sequence="23"/>
   <menuitem id="menu_latinpyme_revista_program_event" name="Programacion anual" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_program_event" sequence="25"/>
   <menuitem id="menu_latinpyme_revista_sidebar_items" name="Sidebar editorial" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_sidebar_item" sequence="27"/>
   <menuitem id="menu_latinpyme_revista_allies" name="Aliados" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_ally" sequence="30"/>

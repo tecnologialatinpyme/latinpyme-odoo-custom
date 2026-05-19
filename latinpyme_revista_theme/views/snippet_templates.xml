@@ -460,6 +460,25 @@
     </article>
   </template>
 
+  <template id="lp_interview_card" name="Revista LatinPyme Interview Card">
+    <article t-if="interview" class="lp-revista-interview-card" itemscope="itemscope" itemtype="https://schema.org/VideoObject">
+      <a t-att-href="interview.target_url()" t-att-title="interview.name" t-att-target="'_blank' if interview.youtube_url else None" t-att-rel="'noopener' if interview.youtube_url else None">
+        <img t-if="interview.image" t-att-src="'/revista/media/interview/%s/image' % interview.id" t-att-alt="interview.name" loading="lazy"/>
+        <img t-else="" src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" t-att-alt="interview.name" loading="lazy"/>
+        <span t-if="interview.youtube_url" class="lp-revista-play"><i class="fa fa-play"/></span>
+      </a>
+      <div>
+        <span class="lp-revista-kicker" t-out="interview.section_label()"/>
+        <h3>
+          <a t-att-href="interview.target_url()" t-att-target="'_blank' if interview.youtube_url else None" t-att-rel="'noopener' if interview.youtube_url else None" t-out="interview.name"/>
+        </h3>
+        <p class="lp-revista-interview-card__person" t-out="interview.person_label()"/>
+        <span t-if="interview.meta_label()" class="lp-revista-interview-card__meta" t-out="interview.meta_label()"/>
+        <p t-if="interview.summary" class="lp-revista-interview-card__summary" t-out="interview.summary"/>
+      </div>
+    </article>
+  </template>
+
   <template id="lp_sidebar_conference_card" name="Revista LatinPyme Conference Card">
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <section class="lp-revista-widget lp-revista-widget--event">

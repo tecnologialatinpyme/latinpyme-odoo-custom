@@ -559,6 +559,20 @@ Esta fase agrega menús backend pensados para editores no técnicos:
    - `Banner lateral`
 4. Si existen bloques para una ubicacion especifica, se usan esos. Si no existen, se usa `Global`.
 
+### Como administrar Entrevistas
+
+1. Abrir `Revista LatinPyme > Entrevistas`.
+2. Crear una entrevista y completar:
+   - titulo,
+   - nombre del entrevistado,
+   - cargo y empresa,
+   - imagen,
+   - URL de YouTube,
+   - secciones donde debe mostrarse.
+3. Si la entrevista tambien tiene una nota en Odoo Blog, seleccionar `Nota relacionada`.
+4. Ordenar con el campo `Orden` y activar/desactivar segun vigencia.
+5. Las entrevistas aparecen en Home, paginas de seccion y notas relacionadas segun las secciones configuradas.
+
 ### Como administrar una seccion
 
 En `Revista LatinPyme > Secciones`, cada seccion puede controlar:
@@ -566,6 +580,7 @@ En `Revista LatinPyme > Secciones`, cada seccion puede controlar:
 - cantidad de notas por pagina,
 - mostrar/ocultar sidebar,
 - mostrar/ocultar relacionados,
+- mostrar/ocultar entrevistas,
 - mostrar/ocultar portafolio,
 - mostrar/ocultar aliados,
 - banner especifico de seccion,
