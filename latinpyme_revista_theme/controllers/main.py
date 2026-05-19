@@ -623,6 +623,7 @@ class LatinpymeRevistaController(http.Controller):
         featured_post = self._home_featured_post(home_blocks.get("hero"), blog=blog)
         exclude_ids = featured_post.ids if featured_post else []
         special_tag = self._tag_by_name("Especiales")
+        interview_tag = self._tag_by_name("Entrevistas")
         highlight_limit = config.home_highlight_limit if config else 3
         latest_limit = config.home_latest_limit if config else 6
         new_limit = config.home_new_limit if config else 5
@@ -652,6 +653,7 @@ class LatinpymeRevistaController(http.Controller):
             "latest_posts": self._home_posts(home_blocks.get("latest"), blog=blog, default_limit=latest_limit, exclude_ids=exclude_ids),
             "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, exclude_ids=exclude_ids),
             "interviews": self._interviews(limit=self._home_block_limit(home_blocks.get("interviews"), 3)),
+            "interview_posts": self._home_posts(home_blocks.get("interviews"), blog=blog, default_tag=interview_tag, default_limit=3),
             "special_posts": self._home_posts(home_blocks.get("specials"), blog=blog, default_tag=special_tag, default_limit=2),
             "home_banners": home_top_banners,
             "home_mid_banners": self._banners("home_horizontal", limit=self._home_block_limit(home_blocks.get("mid_banners"), 3)),
