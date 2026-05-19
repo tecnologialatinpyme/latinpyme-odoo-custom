@@ -526,7 +526,7 @@
 
   <template id="lp_sidebar_item_card" name="Revista LatinPyme Sidebar Dynamic Item">
     <t t-if="item.item_type == 'conference'">
-      <section class="lp-revista-widget lp-revista-widget--event">
+      <section t-attf-class="lp-revista-widget lp-revista-widget--event #{'lp-revista-widget--has-speaker' if item.image else ''}">
         <div>
           <p class="lp-revista-eyebrow" t-out="item.label or 'Próxima conferencia'"/>
           <h3 t-out="item.title or item.name"/>
@@ -539,6 +539,7 @@
             <t t-out="item.button_label or 'Más información'"/> <i class="fa fa-arrow-right"/>
           </a>
         </div>
+        <img t-if="item.image" class="lp-revista-widget__speaker" t-att-src="'/revista/media/sidebar/%s/image' % item.id" t-att-alt="item.name" loading="lazy"/>
       </section>
     </t>
     <t t-elif="item.item_type == 'poll'">

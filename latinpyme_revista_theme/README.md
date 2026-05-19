@@ -536,6 +536,11 @@ Esta fase agrega menús backend pensados para editores no técnicos:
 3. Para destacar notas manualmente, usar `Notas seleccionadas`.
 4. Si no se seleccionan notas, el bloque usa la etiqueta fuente.
 5. Si tampoco hay etiqueta fuente, usa las publicaciones recientes como fallback.
+6. El Home usa una grilla editorial compuesta:
+   - `Hero y destacados` muestra la nota principal, tres notas secundarias y la `Proxima conferencia`.
+   - `Lo mas reciente` muestra tres notas y un minibloque de `Secciones` limitado a seis enlaces.
+   - La encuesta se alinea junto a `Lo mas reciente` y se administra desde `Sidebar editorial` o desde la configuracion general.
+7. Para cambiar la conferencia o encuesta del Home, crear items en `Revista LatinPyme > Sidebar editorial` con ubicacion `Home`.
 
 ### Como administrar Portafolio
 
