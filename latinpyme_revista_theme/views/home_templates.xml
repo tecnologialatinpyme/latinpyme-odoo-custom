@@ -224,12 +224,29 @@
           </section>
 
           <section t-if="show_home_mid_banners" class="lp-revista-container lp-revista-block lp-revista-ad-row" aria-label="Publicidad" style="order: 60">
-            <t t-if="home_mid_banners">
-              <t t-foreach="home_mid_banners" t-as="banner">
+            <t t-set="lp_mid_banner_left" t-value="home_mid_banners[:1] if home_mid_banners else False"/>
+            <t t-set="lp_mid_banner_right" t-value="home_mid_banners[1:2] if home_mid_banners else False"/>
+            <div class="lp-revista-ad-row__grid">
+              <t t-if="lp_mid_banner_left">
+                <t t-set="banner" t-value="lp_mid_banner_left"/>
                 <t t-call="latinpyme_revista_theme.lp_dynamic_banner"/>
               </t>
-            </t>
-            <t t-else="" t-call="latinpyme_revista_theme.s_lp_revista_promo_banner"/>
+              <a t-else="" href="/contactus" class="lp-revista-promo-banner lp-revista-promo-banner--dynamic lp-revista-promo-banner--city">
+                <span class="lp-revista-promo-banner__shade"/>
+                <h2>Automatiza procesos, optimiza recursos y crece sin límites.</h2>
+                <span class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></span>
+                <span class="lp-revista-promo-banner__mark">LP</span>
+              </a>
+              <t t-if="lp_mid_banner_right">
+                <t t-set="banner" t-value="lp_mid_banner_right"/>
+                <t t-call="latinpyme_revista_theme.lp_dynamic_banner"/>
+              </t>
+              <a t-else="" href="/contactus" class="lp-revista-promo-banner lp-revista-promo-banner--dynamic lp-revista-promo-banner--sustainable">
+                <span class="lp-revista-promo-banner__shade"/>
+                <h2>Soluciones para un futuro más sostenible y competitivo.</h2>
+                <span class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></span>
+              </a>
+            </div>
           </section>
 
           <section t-if="show_home_news" class="lp-revista-container lp-revista-block lp-revista-news-strip" style="order: 70">

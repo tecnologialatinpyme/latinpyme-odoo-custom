@@ -1818,13 +1818,125 @@
   }
 }
 
-.lp-revista-ad-row {
-  .s_lp_revista_promo_banner {
-    background: transparent;
+.lp-revista {
+  .lp-revista-ad-row {
+    .s_lp_revista_promo_banner {
+      background: transparent;
+    }
+
+    .lp-revista-container {
+      width: 100%;
+    }
   }
 
-  .lp-revista-container {
-    width: 100%;
+  .lp-revista-ad-row__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .lp-revista-ad-row .lp-revista-promo-banner {
+    min-height: 132px;
+    gap: 12px;
+    justify-content: center;
+    padding: 22px 30px;
+    border-radius: 8px;
+    box-shadow: 0 12px 26px rgba(17, 19, 24, .11);
+  }
+
+  .lp-revista-ad-row .lp-revista-promo-banner h2 {
+    max-width: 470px;
+    font-size: 26px;
+    font-weight: 850;
+    line-height: 1.16;
+  }
+
+  .lp-revista-ad-row .lp-revista-promo-banner p {
+    max-width: 380px;
+    margin-top: -4px;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .lp-revista-ad-row .lp-revista-button {
+    min-height: 36px;
+    padding: 9px 16px;
+    border-color: #b90012;
+    background: #b90012;
+    color: #fff;
+    font-size: 13px;
+
+    &:hover {
+      border-color: #8f000d;
+      background: #8f000d;
+      color: #fff;
+    }
+  }
+
+  .lp-revista-ad-row .lp-revista-promo-banner__shade {
+    background:
+      radial-gradient(circle at 78% 50%, rgba(255, 255, 255, .16), transparent 24%),
+      linear-gradient(90deg, rgba(7, 10, 16, .9), rgba(7, 10, 16, .38));
+  }
+
+  .lp-revista-ad-row .lp-revista-promo-banner__mark {
+    right: 26px;
+    bottom: 22px;
+    width: 58px;
+    height: 58px;
+    font-size: 35px;
+    opacity: .96;
+  }
+
+  .lp-revista-ad-row__grid > :nth-child(2) .lp-revista-promo-banner__mark {
+    display: none;
+  }
+
+  .lp-revista-ad-row .lp-revista-promo-banner--city {
+    background:
+      linear-gradient(90deg, rgba(8, 12, 19, .94), rgba(8, 12, 19, .36)),
+      radial-gradient(circle at 72% 70%, rgba(128, 144, 162, .55), transparent 34%),
+      linear-gradient(135deg, #101722, #34475a);
+  }
+
+  .lp-revista-ad-row .lp-revista-promo-banner--sustainable {
+    background:
+      linear-gradient(90deg, rgba(5, 39, 22, .92), rgba(5, 39, 22, .44)),
+      radial-gradient(circle at 76% 50%, rgba(105, 149, 74, .62), transparent 36%),
+      linear-gradient(135deg, #07331f, #315d34);
+  }
+}
+
+@media (max-width: 900px) {
+  .lp-revista {
+    .lp-revista-ad-row__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+  }
+}
+
+@media (max-width: 760px) {
+  .lp-revista {
+    .lp-revista-ad-row .lp-revista-promo-banner {
+      min-height: 124px;
+      padding: 20px;
+    }
+
+    .lp-revista-ad-row .lp-revista-promo-banner h2 {
+      max-width: 260px;
+      font-size: 21px;
+      line-height: 1.18;
+    }
+
+    .lp-revista-ad-row .lp-revista-promo-banner__mark {
+      right: 18px;
+      bottom: 18px;
+      width: 44px;
+      height: 44px;
+      font-size: 27px;
+    }
   }
 }
 
