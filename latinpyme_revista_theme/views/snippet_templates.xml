@@ -1021,7 +1021,7 @@
         <t t-set="href" t-value="False"/>
         <t t-set="link_label" t-value="False"/>
       </t>
-      <t t-set="lp_ally_slides" t-value="request.env['latinpyme.revista.ally'].sudo().get_active_ally_slides(False, 8)"/>
+      <t t-set="lp_ally_slides" t-value="request.env['latinpyme.revista.ally'].sudo().get_active_ally_slides(request.website, 8)"/>
       <div t-if="lp_ally_slides" id="lpRevistaAlliesCarousel" class="lp-revista-allies__carousel carousel slide" data-bs-ride="false" data-bs-interval="false">
         <div class="carousel-inner">
           <t t-foreach="lp_ally_slides" t-as="ally_slide">
