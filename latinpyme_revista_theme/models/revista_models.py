@@ -1047,7 +1047,9 @@ class LatinpymeRevistaAlly(models.Model):
         website = website or _current_website()
         domain = [("active", "=", True)]
         if website:
-            domain.append(("website_id", "in", [False, website.id]))
+            allies = self.search(domain + [("website_id", "in", [False, website.id])], order="sequence, name")
+            if allies:
+                return allies
         return self.search(domain, order="sequence, name")
 
     @api.model

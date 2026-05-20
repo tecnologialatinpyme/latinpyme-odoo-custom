@@ -159,7 +159,7 @@ class LatinpymeRevistaController(http.Controller):
     )
     def revista_ally_logo(self, ally_id, **kwargs):
         ally = request.env["latinpyme.revista.ally"].sudo().browse(ally_id).exists()
-        if not ally or not ally.active or not ally.logo or not self._website_matches(ally):
+        if not ally or not ally.active or not ally.logo:
             raise NotFound()
         return self._image_response(ally.logo)
 
