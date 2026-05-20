@@ -194,12 +194,22 @@
                 <t t-set="link_label" t-value="home_blocks.get('news').link_label if home_blocks.get('news') and home_blocks.get('news').link_label else False"/>
               </t>
               <div class="lp-revista-list lp-revista-news-strip__grid">
-                <t t-set="lp_news_posts" t-value="new_posts[:4]"/>
+                <t t-set="lp_news_posts" t-value="new_posts[:3]"/>
                 <t t-foreach="lp_news_posts" t-as="post">
                   <t t-call="latinpyme_revista_theme.lp_post_card">
                     <t t-set="variant" t-value="'horizontal'"/>
                   </t>
                 </t>
+                <t t-set="lp_news_banner" t-value="home_news_banner[:1] if home_news_banner else False"/>
+                <a class="lp-revista-news-banner" t-att-href="lp_news_banner.url if lp_news_banner and lp_news_banner.url else '/contactus'" aria-label="Publicidad LatinPyme">
+                  <img t-if="lp_news_banner and lp_news_banner.image" class="lp-revista-news-banner__image" t-att-src="'/revista/media/banner/%s/image' % lp_news_banner.id" t-att-alt="lp_news_banner.name" loading="lazy"/>
+                  <span class="lp-revista-news-banner__shade"/>
+                  <span class="lp-revista-news-banner__label">Publicidad</span>
+                  <strong class="lp-revista-news-banner__title" t-out="lp_news_banner.title if lp_news_banner and lp_news_banner.title else 'Impulsa tu marca con LatinPyme'"/>
+                  <span class="lp-revista-news-banner__cta">
+                    <t t-out="lp_news_banner.button_label if lp_news_banner and lp_news_banner.button_label else 'Conoce más'"/> <i class="fa fa-arrow-right"/>
+                  </span>
+                </a>
               </div>
           </section>
 

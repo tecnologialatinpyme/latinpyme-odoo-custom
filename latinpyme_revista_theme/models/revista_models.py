@@ -1067,6 +1067,7 @@ class LatinpymeRevistaBanner(models.Model):
         [
             ("home_top", "Home superior"),
             ("home_horizontal", "Home horizontal"),
+            ("home_news", "Home novedades"),
             ("sidebar", "Sidebar"),
             ("footer", "Footer"),
             ("note", "Nota individual"),

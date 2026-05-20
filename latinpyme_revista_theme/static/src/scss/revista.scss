@@ -4742,6 +4742,97 @@
       line-height: 1.2;
     }
   }
+
+  .lp-revista-news-banner {
+    position: relative;
+    display: flex;
+    min-height: 118px;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(185, 0, 18, .14);
+    border-radius: 8px;
+    padding: 15px 17px;
+    background:
+      linear-gradient(135deg, rgba(185, 0, 18, .95), rgba(17, 19, 24, .9)),
+      #b90012;
+    box-shadow: 0 10px 24px rgba(17, 19, 24, .06);
+    color: #fff;
+    text-decoration: none;
+    transition: transform .18s ease, box-shadow .18s ease;
+
+    &:hover {
+      color: #fff;
+      text-decoration: none;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(185, 0, 18, .16);
+    }
+
+    &:hover .lp-revista-news-banner__cta i {
+      transform: translateX(2px);
+    }
+  }
+
+  .lp-revista-news-banner__image,
+  .lp-revista-news-banner__shade {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lp-revista-news-banner__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lp-revista-news-banner__shade {
+    background: linear-gradient(90deg, rgba(17, 19, 24, .82), rgba(185, 0, 18, .58));
+  }
+
+  .lp-revista-news-banner__label,
+  .lp-revista-news-banner__title,
+  .lp-revista-news-banner__cta {
+    position: relative;
+    z-index: 1;
+  }
+
+  .lp-revista-news-banner__label {
+    color: rgba(255, 255, 255, .82);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .lp-revista-news-banner__title {
+    display: -webkit-box;
+    overflow: hidden;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 850;
+    line-height: 1.16;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .lp-revista-news-banner__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 1px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.1;
+
+    i {
+      font-size: 11px;
+      transition: transform .18s ease;
+    }
+  }
 }
 
 @media (max-width: 1100px) {
@@ -4757,6 +4848,10 @@
       .lp-revista-post-card__media {
         height: 112px;
       }
+    }
+
+    .lp-revista-news-banner {
+      min-height: 112px;
     }
   }
 }
@@ -4779,6 +4874,10 @@
       .lp-revista-post-card__media {
         height: 100px;
       }
+    }
+
+    .lp-revista-news-banner {
+      min-height: 104px;
     }
   }
 }
