@@ -651,7 +651,7 @@ class LatinpymeRevistaController(http.Controller):
             "featured_style": self._cover_style(featured_post),
             "highlight_posts": self._home_posts(home_blocks.get("hero"), blog=blog, default_limit=highlight_limit, exclude_ids=exclude_ids),
             "latest_posts": self._home_posts(home_blocks.get("latest"), blog=blog, default_limit=latest_limit, exclude_ids=exclude_ids),
-            "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, min_limit=5, exclude_ids=exclude_ids),
+            "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, min_limit=4, exclude_ids=exclude_ids),
             "interviews": self._interviews(limit=self._home_block_limit(home_blocks.get("interviews"), 3)),
             "interview_posts": self._home_posts(home_blocks.get("interviews"), blog=blog, default_tag=interview_tag, default_limit=3),
             "special_posts": self._home_posts(home_blocks.get("specials"), blog=blog, default_tag=special_tag, default_limit=2),
