@@ -2104,6 +2104,18 @@
   }
 }
 
+.lp-revista {
+  .lp-revista-allies__empty {
+    display: grid;
+    min-height: 96px;
+    border-block: 1px solid var(--lp-border);
+    place-items: center;
+    color: #6c7380;
+    font-size: 14px;
+    font-weight: 700;
+  }
+}
+
 .lp-revista-footer {
   display: grid;
   grid-template-columns: 1.25fr repeat(4, minmax(120px, 1fr));

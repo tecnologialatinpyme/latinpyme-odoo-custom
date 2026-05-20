@@ -1055,63 +1055,8 @@
           </t>
         </div>
       </div>
-      <div t-else="" id="lpRevistaAlliesCarousel" class="lp-revista-allies__carousel carousel slide" data-bs-ride="false" data-bs-interval="false">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <div class="lp-revista-allies__track">
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-bancolombia.svg" alt="Bancolombia" loading="lazy"/>
-              </figure>
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-colsubsidio.svg" alt="Colsubsidio" loading="lazy"/>
-              </figure>
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-sura.svg" alt="Sura" loading="lazy"/>
-              </figure>
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-davivienda.svg" alt="Davivienda" loading="lazy"/>
-              </figure>
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-compensar.svg" alt="Compensar" loading="lazy"/>
-              </figure>
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-bimbo.svg" alt="Bimbo" loading="lazy"/>
-              </figure>
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-lasabana.svg" alt="Universidad de La Sabana" loading="lazy"/>
-              </figure>
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-camara.svg" alt="Cámara de Comercio" loading="lazy"/>
-              </figure>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="lp-revista-allies__track">
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-bancolombia.svg" alt="Aliado editorial 1" loading="lazy"/>
-              </figure>
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-colsubsidio.svg" alt="Aliado editorial 2" loading="lazy"/>
-              </figure>
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-sura.svg" alt="Aliado editorial 3" loading="lazy"/>
-              </figure>
-              <figure class="lp-revista-ally-logo">
-                <img src="/latinpyme_revista_theme/static/src/img/editorial/ally-davivienda.svg" alt="Aliado editorial 4" loading="lazy"/>
-              </figure>
-            </div>
-          </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#lpRevistaAlliesCarousel" data-bs-slide="prev" aria-label="Aliado anterior">
-          <i class="fa fa-angle-left"/>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#lpRevistaAlliesCarousel" data-bs-slide="next" aria-label="Aliado siguiente">
-          <i class="fa fa-angle-right"/>
-        </button>
-        <div class="carousel-indicators">
-          <button type="button" data-bs-target="#lpRevistaAlliesCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Aliados 1"/>
-          <button type="button" data-bs-target="#lpRevistaAlliesCarousel" data-bs-slide-to="1" aria-label="Aliados 2"/>
-        </div>
+      <div t-else="" class="lp-revista-allies__empty" role="status">
+        <span>Aliados editoriales próximamente</span>
       </div>
     </section>
   </template>
