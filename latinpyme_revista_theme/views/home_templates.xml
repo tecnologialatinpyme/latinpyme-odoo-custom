@@ -194,9 +194,22 @@
                 <t t-set="link_label" t-value="home_blocks.get('news').link_label if home_blocks.get('news') and home_blocks.get('news').link_label else False"/>
               </t>
               <div class="lp-revista-list lp-revista-news-strip__grid">
-                <t t-foreach="new_posts[:5]" t-as="post">
+                <t t-set="lp_news_posts" t-value="new_posts[:5]"/>
+                <t t-foreach="lp_news_posts" t-as="post">
                   <t t-call="latinpyme_revista_theme.lp_post_card">
                     <t t-set="variant" t-value="'horizontal'"/>
+                  </t>
+                </t>
+                <t t-if="len(lp_news_posts) &lt; 5">
+                  <t t-foreach="range(5 - len(lp_news_posts))" t-as="placeholder">
+                    <article class="lp-revista-post-card lp-revista-post-card--horizontal lp-revista-post-card--placeholder" aria-hidden="true">
+                      <span class="lp-revista-post-card__media lp-revista-post-card__media--placeholder"/>
+                      <div class="lp-revista-post-card__body">
+                        <span class="lp-revista-kicker">Novedad</span>
+                        <h3 class="lp-revista-post-card__title">Próxima actualización editorial</h3>
+                        <span class="lp-revista-date">Muy pronto</span>
+                      </div>
+                    </article>
                   </t>
                 </t>
               </div>

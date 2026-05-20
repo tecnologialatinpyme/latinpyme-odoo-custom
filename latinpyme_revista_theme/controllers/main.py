@@ -424,8 +424,8 @@ class LatinpymeRevistaController(http.Controller):
             posts = posts.filtered(lambda post: not post.website_id or post.website_id == request.website)
         return posts[:limit]
 
-    def _home_posts(self, block, blog=None, default_tag=None, default_limit=6, exclude_ids=None):
-        limit = self._home_block_limit(block, default_limit)
+    def _home_posts(self, block, blog=None, default_tag=None, default_limit=6, exclude_ids=None, min_limit=0):
+        limit = max(self._home_block_limit(block, default_limit), min_limit)
         manual_posts = self._manual_posts(block, blog=blog, limit=limit, exclude_ids=exclude_ids)
         if manual_posts:
             return manual_posts
@@ -651,7 +651,7 @@ class LatinpymeRevistaController(http.Controller):
             "featured_style": self._cover_style(featured_post),
             "highlight_posts": self._home_posts(home_blocks.get("hero"), blog=blog, default_limit=highlight_limit, exclude_ids=exclude_ids),
             "latest_posts": self._home_posts(home_blocks.get("latest"), blog=blog, default_limit=latest_limit, exclude_ids=exclude_ids),
-            "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, exclude_ids=exclude_ids),
+            "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, min_limit=5, exclude_ids=exclude_ids),
             "interviews": self._interviews(limit=self._home_block_limit(home_blocks.get("interviews"), 3)),
             "interview_posts": self._home_posts(home_blocks.get("interviews"), blog=blog, default_tag=interview_tag, default_limit=3),
             "special_posts": self._home_posts(home_blocks.get("specials"), blog=blog, default_tag=special_tag, default_limit=2),
