@@ -1047,10 +1047,8 @@ class LatinpymeRevistaAlly(models.Model):
         website = website or _current_website()
         domain = [("active", "=", True)]
         if website:
-            allies = self.search(domain + [("website_id", "in", [False, website.id])], order="sequence, name")
-            if allies:
-                return allies
-        return self.search(domain, order="sequence, name")
+            domain.append(("website_id", "in", [False, website.id]))
+        return self.search(domain, order="sequence, id")
 
     @api.model
     def get_active_ally_slides(self, website=None, per_slide=8):

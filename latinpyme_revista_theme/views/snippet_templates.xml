@@ -1061,6 +1061,53 @@
     </section>
   </template>
 
+  <template id="lp_home_allies_carousel" name="Revista LatinPyme Home Allies Carousel">
+    <section class="lp-revista-home-allies__inner" aria-label="Aliados">
+      <t t-call="latinpyme_revista_theme.lp_section_heading">
+        <t t-set="title">Aliados</t>
+        <t t-set="eyebrow" t-value="False"/>
+        <t t-set="href" t-value="False"/>
+        <t t-set="link_label" t-value="False"/>
+      </t>
+      <div t-if="home_ally_slides" id="lpRevistaHomeAlliesCarousel" class="lp-revista-home-allies__carousel carousel slide" data-bs-ride="false" data-bs-interval="false">
+        <div class="carousel-inner">
+          <t t-foreach="home_ally_slides" t-as="ally_slide">
+            <div t-attf-class="carousel-item #{'active' if ally_slide_index == 0 else ''}">
+              <div class="lp-revista-home-allies__track">
+                <t t-foreach="ally_slide" t-as="ally">
+                  <figure class="lp-revista-home-ally-card">
+                    <a t-if="ally.url" class="lp-revista-home-ally-card__link" t-att-href="ally.url" target="_blank" rel="noopener" t-att-title="ally.name" t-att-aria-label="ally.name">
+                      <img t-if="ally.logo" t-att-src="'/revista/media/ally/%s/logo' % ally.id" t-att-alt="ally.name" loading="lazy"/>
+                      <span t-else="" t-out="ally.name"/>
+                    </a>
+                    <div t-else="" class="lp-revista-home-ally-card__link" t-att-title="ally.name">
+                      <img t-if="ally.logo" t-att-src="'/revista/media/ally/%s/logo' % ally.id" t-att-alt="ally.name" loading="lazy"/>
+                      <span t-else="" t-out="ally.name"/>
+                    </div>
+                  </figure>
+                </t>
+              </div>
+            </div>
+          </t>
+        </div>
+        <button t-if="len(home_ally_slides) &gt; 1" class="carousel-control-prev" type="button" data-bs-target="#lpRevistaHomeAlliesCarousel" data-bs-slide="prev" aria-label="Aliado anterior">
+          <i class="fa fa-angle-left"/>
+        </button>
+        <button t-if="len(home_ally_slides) &gt; 1" class="carousel-control-next" type="button" data-bs-target="#lpRevistaHomeAlliesCarousel" data-bs-slide="next" aria-label="Aliado siguiente">
+          <i class="fa fa-angle-right"/>
+        </button>
+        <div t-if="len(home_ally_slides) &gt; 1" class="carousel-indicators">
+          <t t-foreach="home_ally_slides" t-as="ally_slide">
+            <button type="button" data-bs-target="#lpRevistaHomeAlliesCarousel" t-att-data-bs-slide-to="ally_slide_index" t-attf-class="#{'active' if ally_slide_index == 0 else ''}" t-att-aria-current="'true' if ally_slide_index == 0 else None" t-att-aria-label="'Aliados %s' % (ally_slide_index + 1)"/>
+          </t>
+        </div>
+      </div>
+      <div t-else="" class="lp-revista-home-allies__empty" role="status">
+        <span>Aliados editoriales próximamente</span>
+      </div>
+    </section>
+  </template>
+
   <template id="s_lp_revista_allies" name="Revista LatinPyme Allies">
     <section class="lp-revista s_lp_revista_allies" data-snippet="s_lp_revista_allies" data-name="LP Revista - Aliados">
       <div class="lp-revista-container">
