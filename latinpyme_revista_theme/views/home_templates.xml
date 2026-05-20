@@ -157,11 +157,13 @@
           </section>
 
           <section t-if="show_home_specials" class="lp-revista-container lp-revista-block lp-revista-home-specials" aria-labelledby="lp-specials-title" style="order: 50">
+            <t t-set="lp_specials_url" t-value="home_blocks.get('specials').link_url if home_blocks.get('specials') and home_blocks.get('specials').link_url else '/revista/seccion/especiales'"/>
+            <t t-set="lp_specials_label" t-value="home_blocks.get('specials').link_label if home_blocks.get('specials') and home_blocks.get('specials').link_label else 'Ver otros especiales'"/>
             <t t-call="latinpyme_revista_theme.lp_section_heading">
               <t t-set="title" t-value="home_blocks.get('specials').title if home_blocks.get('specials') and home_blocks.get('specials').title else 'Especiales'"/>
               <t t-set="eyebrow" t-value="False"/>
-              <t t-set="href" t-value="home_blocks.get('specials').link_url if home_blocks.get('specials') and home_blocks.get('specials').link_url else '/revista/seccion/especiales'"/>
-              <t t-set="link_label" t-value="home_blocks.get('specials').link_label if home_blocks.get('specials') and home_blocks.get('specials').link_label else 'Ver otros especiales'"/>
+              <t t-set="href" t-value="False"/>
+              <t t-set="link_label" t-value="False"/>
             </t>
             <div class="lp-revista-home-specials__grid">
               <t t-set="lp_special_posts" t-value="special_posts[:2]"/>
@@ -216,6 +218,9 @@
                 <span class="lp-revista-special-banner__mark">LP</span>
               </a>
             </div>
+            <a t-att-href="lp_specials_url" class="lp-revista-home-specials__more">
+              <t t-out="lp_specials_label"/> <i class="fa fa-arrow-right"/>
+            </a>
           </section>
 
           <section t-if="show_home_mid_banners" class="lp-revista-container lp-revista-block lp-revista-ad-row" aria-label="Publicidad" style="order: 60">

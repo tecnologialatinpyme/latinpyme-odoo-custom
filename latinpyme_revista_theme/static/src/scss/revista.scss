@@ -4947,31 +4947,21 @@
 .lp-revista {
   .lp-revista-home-specials {
     .lp-revista-section-heading {
-      margin-bottom: 16px;
-    }
-
-    .lp-revista-section-heading__link {
-      color: #111318;
-      font-size: 13px;
-      font-weight: 850;
-
-      &:hover {
-        color: #b90012;
-      }
+      margin-bottom: 14px;
     }
   }
 
   .lp-revista-home-specials__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
+    gap: 16px;
     align-items: stretch;
   }
 
   .lp-revista-special-card,
   .lp-revista-special-banner {
     position: relative;
-    min-height: 188px;
+    min-height: 168px;
     overflow: hidden;
     border-radius: 8px;
     box-shadow: 0 12px 28px rgba(17, 19, 24, .06);
@@ -5003,7 +4993,7 @@
 
   .lp-revista-special-card__shade {
     z-index: 1;
-    background: linear-gradient(180deg, rgba(17, 19, 24, .12), rgba(17, 19, 24, .88));
+    background: linear-gradient(180deg, rgba(17, 19, 24, .04), rgba(17, 19, 24, .74));
   }
 
   .lp-revista-special-card__body {
@@ -5013,18 +5003,18 @@
     min-height: 100%;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 18px;
+    padding: 16px;
   }
 
   .lp-revista-special-card__label {
     display: inline-flex;
     align-self: flex-start;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     border-radius: 4px;
-    padding: 5px 8px;
+    padding: 5px 7px;
     background: #b90012;
     color: #fff;
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 900;
     line-height: 1;
     text-transform: uppercase;
@@ -5035,7 +5025,7 @@
     margin: 0;
     overflow: hidden;
     color: #fff;
-    font-size: 21px;
+    font-size: 19px;
     font-weight: 850;
     line-height: 1.14;
     -webkit-box-orient: vertical;
@@ -5056,7 +5046,7 @@
   .lp-revista-special-card time,
   .lp-revista-special-card__date {
     display: block;
-    margin-top: 12px;
+    margin-top: 10px;
     color: rgba(255, 255, 255, .82);
     font-size: 12px;
     font-weight: 700;
@@ -5065,23 +5055,26 @@
 
   .lp-revista-special-card--fallback {
     background:
-      linear-gradient(180deg, rgba(17, 19, 24, .08), rgba(17, 19, 24, .8)),
-      linear-gradient(135deg, #334155, #111318);
+      radial-gradient(circle at 78% 18%, rgba(185, 0, 18, .28), transparent 30%),
+      linear-gradient(180deg, rgba(17, 19, 24, .04), rgba(17, 19, 24, .78)),
+      linear-gradient(135deg, #51606f, #131821);
   }
 
   .lp-revista-special-card--alt {
     background:
-      linear-gradient(180deg, rgba(17, 19, 24, .08), rgba(17, 19, 24, .82)),
-      linear-gradient(135deg, #5b1d28, #111318);
+      radial-gradient(circle at 78% 18%, rgba(255, 255, 255, .16), transparent 30%),
+      linear-gradient(180deg, rgba(17, 19, 24, .04), rgba(17, 19, 24, .78)),
+      linear-gradient(135deg, #6d2633, #151821);
   }
 
   .lp-revista-special-banner {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 12px;
-    padding: 20px;
+    gap: 10px;
+    padding: 17px;
     background:
+      radial-gradient(circle at 88% 22%, rgba(185, 0, 18, .28), transparent 30%),
       linear-gradient(90deg, rgba(8, 11, 18, .96), rgba(8, 11, 18, .7)),
       linear-gradient(135deg, #111318, #252b35);
     color: #fff;
@@ -5110,7 +5103,7 @@
   }
 
   .lp-revista-special-banner__shade {
-    background: linear-gradient(90deg, rgba(8, 11, 18, .92), rgba(8, 11, 18, .46));
+    background: linear-gradient(90deg, rgba(8, 11, 18, .9), rgba(8, 11, 18, .36));
   }
 
   .lp-revista-special-banner__label,
@@ -5134,7 +5127,7 @@
   .lp-revista-special-banner__title {
     max-width: 86%;
     color: #fff;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 850;
     line-height: 1.14;
   }
@@ -5148,7 +5141,7 @@
 
   .lp-revista-special-banner .lp-revista-button {
     align-self: flex-start;
-    min-height: 34px;
+    min-height: 32px;
     border-color: #b90012;
     background: #b90012;
     color: #fff;
@@ -5180,6 +5173,34 @@
     font-weight: 700;
     line-height: 1;
   }
+
+  .lp-revista-home-specials__more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 14px auto 0;
+    color: #b90012;
+    font-size: 13px;
+    font-weight: 850;
+    line-height: 1.15;
+    text-decoration: none;
+
+    i {
+      color: inherit;
+      font-size: 12px;
+      transition: transform .18s ease;
+    }
+
+    &:hover {
+      color: #8f000d;
+      text-decoration: none;
+
+      i {
+        transform: translateX(2px);
+      }
+    }
+  }
 }
 
 @media (max-width: 1100px) {
@@ -5190,7 +5211,7 @@
 
     .lp-revista-special-banner {
       grid-column: 1 / -1;
-      min-height: 160px;
+      min-height: 150px;
     }
   }
 }
@@ -5204,7 +5225,7 @@
 
     .lp-revista-special-card,
     .lp-revista-special-banner {
-      min-height: 158px;
+      min-height: 150px;
     }
 
     .lp-revista-special-card__body,
@@ -5214,7 +5235,12 @@
 
     .lp-revista-special-card h3,
     .lp-revista-special-banner__title {
-      font-size: 18px;
+      font-size: 17px;
+    }
+
+    .lp-revista-home-specials__more {
+      display: flex;
+      margin-top: 12px;
     }
   }
 }
