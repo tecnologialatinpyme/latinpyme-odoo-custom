@@ -1837,19 +1837,19 @@
   }
 
   .lp-revista-ad-row .lp-revista-promo-banner {
-    min-height: 132px;
-    gap: 12px;
+    min-height: 76px;
+    gap: 7px;
     justify-content: center;
-    padding: 22px 30px;
+    padding: 12px 22px;
     border-radius: 8px;
     box-shadow: 0 12px 26px rgba(17, 19, 24, .11);
   }
 
   .lp-revista-ad-row .lp-revista-promo-banner h2 {
-    max-width: 470px;
-    font-size: 26px;
+    max-width: 380px;
+    font-size: 19px;
     font-weight: 850;
-    line-height: 1.16;
+    line-height: 1.12;
   }
 
   .lp-revista-ad-row .lp-revista-promo-banner p {
@@ -1860,12 +1860,12 @@
   }
 
   .lp-revista-ad-row .lp-revista-button {
-    min-height: 36px;
-    padding: 9px 16px;
+    min-height: 27px;
+    padding: 6px 12px;
     border-color: #b90012;
     background: #b90012;
     color: #fff;
-    font-size: 13px;
+    font-size: 11px;
 
     &:hover {
       border-color: #8f000d;
@@ -1881,11 +1881,11 @@
   }
 
   .lp-revista-ad-row .lp-revista-promo-banner__mark {
-    right: 26px;
-    bottom: 22px;
-    width: 58px;
-    height: 58px;
-    font-size: 35px;
+    right: 18px;
+    bottom: 14px;
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
     opacity: .96;
   }
 
@@ -1920,22 +1920,22 @@
 @media (max-width: 760px) {
   .lp-revista {
     .lp-revista-ad-row .lp-revista-promo-banner {
-      min-height: 124px;
-      padding: 20px;
+      min-height: 86px;
+      padding: 14px 18px;
     }
 
     .lp-revista-ad-row .lp-revista-promo-banner h2 {
-      max-width: 260px;
-      font-size: 21px;
-      line-height: 1.18;
+      max-width: 240px;
+      font-size: 18px;
+      line-height: 1.14;
     }
 
     .lp-revista-ad-row .lp-revista-promo-banner__mark {
-      right: 18px;
-      bottom: 18px;
-      width: 44px;
-      height: 44px;
-      font-size: 27px;
+      right: 16px;
+      bottom: 14px;
+      width: 36px;
+      height: 36px;
+      font-size: 23px;
     }
   }
 }
