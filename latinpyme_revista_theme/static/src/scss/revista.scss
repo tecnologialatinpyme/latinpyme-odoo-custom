@@ -4944,6 +4944,281 @@
   }
 }
 
+.lp-revista {
+  .lp-revista-home-specials {
+    .lp-revista-section-heading {
+      margin-bottom: 16px;
+    }
+
+    .lp-revista-section-heading__link {
+      color: #111318;
+      font-size: 13px;
+      font-weight: 850;
+
+      &:hover {
+        color: #b90012;
+      }
+    }
+  }
+
+  .lp-revista-home-specials__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .lp-revista-special-card,
+  .lp-revista-special-banner {
+    position: relative;
+    min-height: 188px;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 12px 28px rgba(17, 19, 24, .06);
+  }
+
+  .lp-revista-special-card {
+    display: flex;
+    align-items: flex-end;
+    background:
+      linear-gradient(135deg, rgba(185, 0, 18, .16), rgba(17, 19, 24, .28)),
+      #20242d;
+  }
+
+  .lp-revista-special-card__media-link,
+  .lp-revista-special-card__media,
+  .lp-revista-special-card__shade {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lp-revista-special-card__media {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    background-position: center !important;
+    background-size: cover !important;
+    opacity: .88;
+  }
+
+  .lp-revista-special-card__shade {
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(17, 19, 24, .12), rgba(17, 19, 24, .88));
+  }
+
+  .lp-revista-special-card__body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 18px;
+  }
+
+  .lp-revista-special-card__label {
+    display: inline-flex;
+    align-self: flex-start;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    padding: 5px 8px;
+    background: #b90012;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .lp-revista-special-card h3 {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    color: #fff;
+    font-size: 21px;
+    font-weight: 850;
+    line-height: 1.14;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        color: #fff;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+      }
+    }
+  }
+
+  .lp-revista-special-card time,
+  .lp-revista-special-card__date {
+    display: block;
+    margin-top: 12px;
+    color: rgba(255, 255, 255, .82);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .lp-revista-special-card--fallback {
+    background:
+      linear-gradient(180deg, rgba(17, 19, 24, .08), rgba(17, 19, 24, .8)),
+      linear-gradient(135deg, #334155, #111318);
+  }
+
+  .lp-revista-special-card--alt {
+    background:
+      linear-gradient(180deg, rgba(17, 19, 24, .08), rgba(17, 19, 24, .82)),
+      linear-gradient(135deg, #5b1d28, #111318);
+  }
+
+  .lp-revista-special-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    background:
+      linear-gradient(90deg, rgba(8, 11, 18, .96), rgba(8, 11, 18, .7)),
+      linear-gradient(135deg, #111318, #252b35);
+    color: #fff;
+    text-decoration: none;
+
+    &:hover {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    &:hover .lp-revista-button i {
+      transform: translateX(2px);
+    }
+  }
+
+  .lp-revista-special-banner__image,
+  .lp-revista-special-banner__shade {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lp-revista-special-banner__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lp-revista-special-banner__shade {
+    background: linear-gradient(90deg, rgba(8, 11, 18, .92), rgba(8, 11, 18, .46));
+  }
+
+  .lp-revista-special-banner__label,
+  .lp-revista-special-banner__title,
+  .lp-revista-special-banner__text,
+  .lp-revista-special-banner .lp-revista-button,
+  .lp-revista-special-banner__mark {
+    position: relative;
+    z-index: 1;
+  }
+
+  .lp-revista-special-banner__label {
+    color: rgba(255, 255, 255, .72);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .lp-revista-special-banner__title {
+    max-width: 86%;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 850;
+    line-height: 1.14;
+  }
+
+  .lp-revista-special-banner__text {
+    max-width: 82%;
+    color: rgba(255, 255, 255, .78);
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+
+  .lp-revista-special-banner .lp-revista-button {
+    align-self: flex-start;
+    min-height: 34px;
+    border-color: #b90012;
+    background: #b90012;
+    color: #fff;
+
+    i {
+      transition: transform .18s ease;
+    }
+
+    &:hover {
+      border-color: #8f000d;
+      background: #8f000d;
+      color: #fff;
+    }
+  }
+
+  .lp-revista-special-banner__mark {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    display: inline-grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border-radius: 4px;
+    background: #b90012;
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1;
+  }
+}
+
+@media (max-width: 1100px) {
+  .lp-revista {
+    .lp-revista-home-specials__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .lp-revista-special-banner {
+      grid-column: 1 / -1;
+      min-height: 160px;
+    }
+  }
+}
+
+@media (max-width: 760px) {
+  .lp-revista {
+    .lp-revista-home-specials__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .lp-revista-special-card,
+    .lp-revista-special-banner {
+      min-height: 158px;
+    }
+
+    .lp-revista-special-card__body,
+    .lp-revista-special-banner {
+      padding: 16px;
+    }
+
+    .lp-revista-special-card h3,
+    .lp-revista-special-banner__title {
+      font-size: 18px;
+    }
+  }
+}
+
 @media (max-width: 760px) {
   .lp-revista {
     .lp-revista-home-interviews {

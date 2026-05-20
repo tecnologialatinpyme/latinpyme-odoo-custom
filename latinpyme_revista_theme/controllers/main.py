@@ -633,6 +633,7 @@ class LatinpymeRevistaController(http.Controller):
         home_news_banner = self._banners("home_news", limit=1)
         if not home_news_banner:
             home_news_banner = self._banners("home_horizontal", limit=1)
+        home_specials_banner = self._banners("home_specials", limit=1)
         home_sidebar_items = request.env["latinpyme.revista.sidebar.item"].sudo().get_active_items("home", request.website)
         home_sections = self._sections()
         values = {
@@ -661,6 +662,7 @@ class LatinpymeRevistaController(http.Controller):
             "home_banners": home_top_banners,
             "home_mid_banners": self._banners("home_horizontal", limit=self._home_block_limit(home_blocks.get("mid_banners"), 3)),
             "home_news_banner": home_news_banner,
+            "home_specials_banner": home_specials_banner,
             "home_conference_item": home_sidebar_items.filtered(lambda item: item.item_type == "conference")[:1],
             "home_poll_item": home_sidebar_items.filtered(lambda item: item.item_type == "poll")[:1],
             "home_ad_item": home_sidebar_items.filtered(lambda item: item.item_type == "banner")[:1],

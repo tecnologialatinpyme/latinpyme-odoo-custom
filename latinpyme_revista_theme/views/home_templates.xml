@@ -156,19 +156,65 @@
             </div>
           </section>
 
-          <section t-if="show_home_specials" class="lp-revista-container lp-revista-block" aria-labelledby="lp-specials-title" style="order: 50">
+          <section t-if="show_home_specials" class="lp-revista-container lp-revista-block lp-revista-home-specials" aria-labelledby="lp-specials-title" style="order: 50">
             <t t-call="latinpyme_revista_theme.lp_section_heading">
               <t t-set="title" t-value="home_blocks.get('specials').title if home_blocks.get('specials') and home_blocks.get('specials').title else 'Especiales'"/>
               <t t-set="eyebrow" t-value="False"/>
               <t t-set="href" t-value="home_blocks.get('specials').link_url if home_blocks.get('specials') and home_blocks.get('specials').link_url else '/revista/seccion/especiales'"/>
               <t t-set="link_label" t-value="home_blocks.get('specials').link_label if home_blocks.get('specials') and home_blocks.get('specials').link_label else 'Ver otros especiales'"/>
             </t>
-            <div class="lp-revista-card-grid lp-revista-card-grid--two">
-              <t t-foreach="special_posts" t-as="post">
-                <t t-call="latinpyme_revista_theme.lp_post_card">
-                  <t t-set="variant" t-value="'wide'"/>
-                </t>
+            <div class="lp-revista-home-specials__grid">
+              <t t-set="lp_special_posts" t-value="special_posts[:2]"/>
+              <t t-foreach="lp_special_posts" t-as="post">
+                <article class="lp-revista-special-card">
+                  <a class="lp-revista-special-card__media-link" t-att-href="post.website_url" t-att-title="post.name">
+                    <t t-call="website.record_cover">
+                      <t t-set="_record" t-value="post"/>
+                      <t t-set="use_filters" t-value="True"/>
+                      <t t-set="use_size" t-value="False"/>
+                      <t t-set="additionnal_classes" t-value="'lp-revista-special-card__media'"/>
+                    </t>
+                  </a>
+                  <span class="lp-revista-special-card__shade"/>
+                  <div class="lp-revista-special-card__body">
+                    <span class="lp-revista-special-card__label">Especial</span>
+                    <h3>
+                      <a t-att-href="post.website_url" t-out="post.name"/>
+                    </h3>
+                    <time t-if="post.post_date" t-att-datetime="post.post_date.isoformat()">
+                      <span t-field="post.post_date" t-options="{'widget': 'date'}"/>
+                    </time>
+                  </div>
+                </article>
               </t>
+              <article t-if="not lp_special_posts" class="lp-revista-special-card lp-revista-special-card--fallback">
+                <span class="lp-revista-special-card__shade"/>
+                <div class="lp-revista-special-card__body">
+                  <span class="lp-revista-special-card__label">Especial</span>
+                  <h3>Historias empresariales que inspiran nuevas decisiones.</h3>
+                  <span class="lp-revista-special-card__date">Próximamente</span>
+                </div>
+              </article>
+              <article t-if="len(lp_special_posts) &lt; 2" class="lp-revista-special-card lp-revista-special-card--fallback lp-revista-special-card--alt">
+                <span class="lp-revista-special-card__shade"/>
+                <div class="lp-revista-special-card__body">
+                  <span class="lp-revista-special-card__label">Especial</span>
+                  <h3>Miradas editoriales para empresas que quieren avanzar.</h3>
+                  <span class="lp-revista-special-card__date">Muy pronto</span>
+                </div>
+              </article>
+              <t t-set="lp_specials_banner" t-value="home_specials_banner[:1] if home_specials_banner else False"/>
+              <a class="lp-revista-special-banner" t-att-href="lp_specials_banner.url if lp_specials_banner and lp_specials_banner.url else '/contactus'" aria-label="Publicidad LatinPyme">
+                <img t-if="lp_specials_banner and lp_specials_banner.image" class="lp-revista-special-banner__image" t-att-src="'/revista/media/banner/%s/image' % lp_specials_banner.id" t-att-alt="lp_specials_banner.name" loading="lazy"/>
+                <span class="lp-revista-special-banner__shade"/>
+                <span class="lp-revista-special-banner__label">Publicidad</span>
+                <strong class="lp-revista-special-banner__title" t-out="lp_specials_banner.title if lp_specials_banner and lp_specials_banner.title else 'Potencia tu empresa con soluciones que generan resultados'"/>
+                <span t-if="lp_specials_banner and lp_specials_banner.text" class="lp-revista-special-banner__text" t-out="lp_specials_banner.text"/>
+                <span class="lp-revista-button lp-revista-button--small">
+                  <t t-out="lp_specials_banner.button_label if lp_specials_banner and lp_specials_banner.button_label else 'Conoce más'"/> <i class="fa fa-arrow-right"/>
+                </span>
+                <span class="lp-revista-special-banner__mark">LP</span>
+              </a>
             </div>
           </section>
 
