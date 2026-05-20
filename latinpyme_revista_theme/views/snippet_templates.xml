@@ -1025,7 +1025,7 @@
       <div t-if="lp_ally_slides" id="lpRevistaAlliesCarousel" class="lp-revista-allies__carousel carousel slide" data-bs-ride="false" data-bs-interval="false">
         <div class="carousel-inner">
           <t t-foreach="lp_ally_slides" t-as="ally_slide">
-            <div t-attf-class="carousel-item #{'active' if ally_slide_index == 0 else ''}">
+            <div class="carousel-item" t-att-class="'carousel-item active' if ally_slide_index == 0 else 'carousel-item'">
               <div class="lp-revista-allies__track">
                 <t t-foreach="ally_slide" t-as="ally">
                   <figure class="lp-revista-ally-logo">
@@ -1051,7 +1051,7 @@
         </button>
         <div t-if="len(lp_ally_slides) &gt; 1" class="carousel-indicators">
           <t t-foreach="lp_ally_slides" t-as="ally_slide">
-            <button type="button" data-bs-target="#lpRevistaAlliesCarousel" t-att-data-bs-slide-to="ally_slide_index" t-attf-class="#{'active' if ally_slide_index == 0 else ''}" t-att-aria-current="'true' if ally_slide_index == 0 else None" t-att-aria-label="'Aliados %s' % (ally_slide_index + 1)"/>
+            <button type="button" data-bs-target="#lpRevistaAlliesCarousel" t-att-data-bs-slide-to="ally_slide_index" t-att-class="'active' if ally_slide_index == 0 else None" t-att-aria-current="'true' if ally_slide_index == 0 else None" t-att-aria-label="'Aliados %s' % (ally_slide_index + 1)"/>
           </t>
         </div>
       </div>
@@ -1072,7 +1072,7 @@
       <div t-if="home_ally_slides" id="lpRevistaHomeAlliesCarousel" class="lp-revista-home-allies__carousel carousel slide" data-bs-ride="false" data-bs-interval="false">
         <div class="carousel-inner">
           <t t-foreach="home_ally_slides" t-as="ally_slide">
-            <div t-attf-class="carousel-item #{'active' if ally_slide_index == 0 else ''}">
+            <div class="carousel-item" t-att-class="'carousel-item active' if ally_slide_index == 0 else 'carousel-item'">
               <div class="lp-revista-home-allies__track">
                 <t t-foreach="ally_slide" t-as="ally">
                   <figure class="lp-revista-home-ally-card">
@@ -1098,7 +1098,7 @@
         </button>
         <div t-if="len(home_ally_slides) &gt; 1" class="carousel-indicators">
           <t t-foreach="home_ally_slides" t-as="ally_slide">
-            <button type="button" data-bs-target="#lpRevistaHomeAlliesCarousel" t-att-data-bs-slide-to="ally_slide_index" t-attf-class="#{'active' if ally_slide_index == 0 else ''}" t-att-aria-current="'true' if ally_slide_index == 0 else None" t-att-aria-label="'Aliados %s' % (ally_slide_index + 1)"/>
+            <button type="button" data-bs-target="#lpRevistaHomeAlliesCarousel" t-att-data-bs-slide-to="ally_slide_index" t-att-class="'active' if ally_slide_index == 0 else None" t-att-aria-current="'true' if ally_slide_index == 0 else None" t-att-aria-label="'Aliados %s' % (ally_slide_index + 1)"/>
           </t>
         </div>
       </div>
