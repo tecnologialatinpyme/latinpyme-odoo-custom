@@ -1065,6 +1065,12 @@
         <t t-set="link_label" t-value="False"/>
       </t>
       <div t-if="home_allies" class="lp-revista-home-allies__viewport" aria-label="Carrusel automatico de aliados">
+        <span class="lp-revista-home-allies__edge lp-revista-home-allies__edge--prev" aria-hidden="true">
+          <i class="fa fa-angle-left"/>
+        </span>
+        <span class="lp-revista-home-allies__edge lp-revista-home-allies__edge--next" aria-hidden="true">
+          <i class="fa fa-angle-right"/>
+        </span>
         <div class="lp-revista-home-allies__marquee">
           <div class="lp-revista-home-allies__group">
             <t t-foreach="home_allies" t-as="ally">
