@@ -2018,7 +2018,7 @@
 .lp-revista-allies__carousel {
   position: relative;
   border-block: 1px solid var(--lp-border);
-  padding: 18px 58px 42px;
+  padding: 18px 58px;
 
   .carousel-inner {
     overflow: hidden;
@@ -2120,81 +2120,62 @@
     gap: 14px;
   }
 
-  .lp-revista-home-allies__carousel {
+  .lp-revista-home-allies__viewport {
+    --lp-allies-marquee-duration: 36s;
     position: relative;
+    overflow: hidden;
     border-block: 1px solid var(--lp-border);
-    padding: 18px 54px 38px;
+    padding-block: 18px;
 
-    .carousel-inner {
-      overflow: hidden;
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      z-index: 2;
+      width: 80px;
+      height: 100%;
+      pointer-events: none;
     }
 
-    .carousel-control-prev,
-    .carousel-control-next {
-      top: 50%;
-      width: 42px;
-      height: 42px;
-      border: 1px solid var(--lp-border);
-      border-radius: 50%;
-      background: #fff;
-      color: #b90012;
-      opacity: 1;
-      transform: translateY(-50%);
-      box-shadow: 0 10px 24px rgba(17, 19, 24, .08);
-
-      i {
-        font-size: 26px;
-        font-weight: 900;
-      }
-
-      &:hover {
-        border-color: rgba(185, 0, 18, .28);
-        background: #fff5f6;
-        color: #8f000d;
-      }
-    }
-
-    .carousel-control-prev {
+    &::before {
       left: 0;
+      background: linear-gradient(90deg, #fff, rgba(255, 255, 255, 0));
     }
 
-    .carousel-control-next {
+    &::after {
       right: 0;
+      background: linear-gradient(270deg, #fff, rgba(255, 255, 255, 0));
     }
 
-    .carousel-indicators {
-      right: 0;
-      bottom: 7px;
-      left: 0;
-      margin: 0;
-      gap: 12px;
-
-      [data-bs-target] {
-        width: 10px;
-        height: 10px;
-        border: 0;
-        border-radius: 50%;
-        margin: 0;
-        background: #dfe3e8;
-        opacity: 1;
-      }
-
-      .active {
-        background: #b90012;
-      }
+    &:hover .lp-revista-home-allies__marquee,
+    &:focus-within .lp-revista-home-allies__marquee {
+      animation-play-state: paused;
     }
   }
 
-  .lp-revista-home-allies__track {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 14px;
-    align-items: stretch;
+  .lp-revista-home-allies__marquee {
+    display: flex;
+    width: max-content;
+    min-width: 200%;
+    animation: lp-revista-home-allies-marquee var(--lp-allies-marquee-duration) linear infinite;
+    will-change: transform;
+  }
+
+  .lp-revista-home-allies__group {
+    display: flex;
+    flex: 0 0 auto;
+    min-width: 50%;
+    align-items: center;
+    justify-content: space-around;
+    gap: 18px;
+    padding-inline: 9px;
   }
 
   .lp-revista-home-ally-card {
     display: grid;
-    min-height: 96px;
+    flex: 0 0 clamp(150px, 13vw, 190px);
+    min-height: 92px;
     margin: 0;
     overflow: hidden;
     border: 1px solid rgba(17, 19, 24, .08);
@@ -2208,7 +2189,7 @@
     display: grid;
     width: 100%;
     height: 100%;
-    min-height: 96px;
+    min-height: 92px;
     place-items: center;
     padding: 14px;
     color: #1d242e;
@@ -2244,31 +2225,27 @@
 
 @media (max-width: 1100px) {
   .lp-revista {
-    .lp-revista-home-allies__track {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .lp-revista-home-allies__viewport {
+      --lp-allies-marquee-duration: 32s;
     }
   }
 }
 
 @media (max-width: 760px) {
   .lp-revista {
-    .lp-revista-home-allies__carousel {
-      padding: 14px 42px 34px;
+    .lp-revista-home-allies__viewport {
+      --lp-allies-marquee-duration: 28s;
+      padding-block: 14px;
 
-      .carousel-control-prev,
-      .carousel-control-next {
-        width: 36px;
-        height: 36px;
-
-        i {
-          font-size: 22px;
-        }
+      &::before,
+      &::after {
+        width: 34px;
       }
     }
 
-    .lp-revista-home-allies__track {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .lp-revista-home-allies__group {
       gap: 10px;
+      padding-inline: 5px;
     }
 
     .lp-revista-home-ally-card,
@@ -2284,6 +2261,40 @@
         max-height: 46px;
       }
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-revista {
+    .lp-revista-home-allies__viewport {
+      overflow-x: auto;
+      scrollbar-width: thin;
+
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+
+    .lp-revista-home-allies__marquee {
+      width: auto;
+      min-width: 0;
+      animation: none;
+    }
+
+    .lp-revista-home-allies__group[aria-hidden="true"] {
+      display: none;
+    }
+  }
+}
+
+@keyframes lp-revista-home-allies-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
