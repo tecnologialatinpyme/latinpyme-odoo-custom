@@ -49,7 +49,7 @@ function ensureHiddenSelect(form, name) {
 
 function fieldWrap(form, name) {
     const field = form.elements[name];
-    return field?.parentElement || null;
+    return field?.closest?.(`.div_${name}, [data-name="${name}"], .mb-3, .form-group`) || field?.parentElement || null;
 }
 
 function labelForField(form, name) {
@@ -93,10 +93,29 @@ function arrangeAddressFields(form) {
 
     const row = streetWrap.parentElement;
     if (!row || !orderedWraps.every((wrap) => wrap.parentElement === row)) {
+        setAddressFieldLayout(form);
         return;
     }
 
     streetWrap.after(...orderedWraps);
+    setAddressFieldLayout(form);
+}
+
+function setAddressFieldLayout(form) {
+    [
+        ["country_id", "10"],
+        ["state_id", "11"],
+        ["city", "12"],
+        ["zip", "13"],
+    ].forEach(([fieldName, order]) => {
+        const wrap = fieldWrap(form, fieldName);
+        if (!wrap || wrap.hidden || wrap.dataset.lpTiendaAddressGuard) {
+            return;
+        }
+        wrap.classList.remove("col-md-3", "col-md-4", "col-md-5", "col-md-7", "col-md-8", "col-lg-3", "col-lg-4", "col-lg-5", "col-lg-7", "col-lg-8");
+        wrap.classList.add("col-12", "col-md-6");
+        wrap.style.order = order;
+    });
 }
 
 function ensureAddressCompatibility(root) {
