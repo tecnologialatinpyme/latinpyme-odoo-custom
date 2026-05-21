@@ -66,6 +66,22 @@ function ensureAddressCompatibility(root) {
 }
 
 patch(CustomerAddress.prototype, {
+    async start() {
+        ensureAddressCompatibility(this.el);
+        if (typeof super.start !== "function") {
+            return;
+        }
+        try {
+            return await super.start(...arguments);
+        } catch (error) {
+            const message = error?.message || "";
+            if (error instanceof TypeError && message.includes("dispatchEvent")) {
+                return;
+            }
+            throw error;
+        }
+    },
+
     setup() {
         const form = ensureAddressCompatibility(this.el);
         if (!form) {
