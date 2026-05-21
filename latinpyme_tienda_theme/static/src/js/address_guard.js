@@ -61,6 +61,42 @@ function fieldWrap(form, name) {
     ) || field.parentElement || null;
 }
 
+function isVisibleAddressWrap(wrap) {
+    return Boolean(wrap && !wrap.hidden && !wrap.dataset.lpTiendaAddressGuard);
+}
+
+function labelWrapByText(form, expectedText) {
+    const expected = normalizeText(expectedText);
+    const label = Array.from(form.querySelectorAll("label")).find((node) => {
+        const text = normalizeText(node.textContent);
+        return text.includes(expected);
+    });
+    return label ? wrapperForControl(label) : null;
+}
+
+function addressFieldWrap(form, name) {
+    const aliases = {
+        country_id: ["country_id"],
+        state_id: ["state_id"],
+        city: ["city", "city_id"],
+        zip: ["zip"],
+    };
+    for (const alias of aliases[name] || [name]) {
+        const wrap = fieldWrap(form, alias);
+        if (isVisibleAddressWrap(wrap)) {
+            return wrap;
+        }
+    }
+    const labelText = {
+        country_id: "pais",
+        state_id: "departamento",
+        city: "ciudad",
+        zip: "codigo postal",
+    }[name];
+    const wrap = labelText ? labelWrapByText(form, labelText) : null;
+    return isVisibleAddressWrap(wrap) ? wrap : null;
+}
+
 function labelForField(form, name) {
     const field = form.elements[name];
     return field?.id ? fieldWrap(form, name)?.querySelector(`label[for="${field.id}"]`) : null;
@@ -197,29 +233,74 @@ function applyAddressAdjustments(form) {
 }
 
 function arrangeAddressFields(form) {
-    markAddressParent(form);
+    normalizeAddressLocationGrid(form);
     setAddressFieldLayout(form);
 }
 
-function markAddressParent(form) {
-    const wrappers = ["country_id", "state_id", "city", "zip"]
-        .map((fieldName) => fieldWrap(form, fieldName))
-        .filter((wrap) => wrap && !wrap.hidden && !wrap.dataset.lpTiendaAddressGuard);
-    const parent = wrappers[0]?.parentElement;
-    if (parent && wrappers.every((wrap) => wrap.parentElement === parent)) {
-        parent.classList.add("lp-tienda-address-fields", "row");
+function normalizeAddressLocationGrid(form) {
+    const locationFields = [
+        ["country_id", addressFieldWrap(form, "country_id")],
+        ["state_id", addressFieldWrap(form, "state_id")],
+        ["city", addressFieldWrap(form, "city")],
+        ["zip", addressFieldWrap(form, "zip")],
+    ];
+    if (locationFields.some(([, wrap]) => !wrap)) {
+        return;
+    }
+
+    const grid = ensureAddressLocationGrid(form, locationFields);
+    locationFields.forEach(([fieldName, wrap]) => {
+        const previousParent = wrap.parentElement;
+        wrap.dataset.lpTiendaAddressField = fieldName;
+        if (previousParent !== grid) {
+            grid.appendChild(wrap);
+            collapseEmptyAddressRow(previousParent);
+        }
+    });
+}
+
+function ensureAddressLocationGrid(form, locationFields) {
+    const existing = form.querySelector(".lp-tienda-address-location-grid");
+    if (existing) {
+        existing.classList.add("lp-tienda-address-fields", "row");
+        return existing;
+    }
+
+    const grid = document.createElement("div");
+    grid.className = "lp-tienda-address-location-grid lp-tienda-address-fields row";
+    grid.dataset.lpTiendaAddressLocationGrid = "1";
+
+    const streetWrap = fieldWrap(form, "street");
+    const referenceWrap = isVisibleAddressWrap(streetWrap) ? streetWrap : locationFields[0][1];
+    if (referenceWrap?.parentElement) {
+        referenceWrap.insertAdjacentElement("afterend", grid);
+    } else {
+        form.appendChild(grid);
+    }
+    return grid;
+}
+
+function collapseEmptyAddressRow(row) {
+    if (!row || row.dataset.lpTiendaAddressLocationGrid) {
+        return;
+    }
+    const hasVisibleChildren = Array.from(row.children || []).some((child) => {
+        return !child.hidden && child.offsetParent !== null && !child.dataset.lpTiendaAddressGuard;
+    });
+    if (!hasVisibleChildren && row.classList?.contains("row")) {
+        row.hidden = true;
     }
 }
 
 function setAddressFieldLayout(form) {
     [
-        ["country_id", "10"],
-        ["state_id", "11"],
-        ["city", "12"],
-        ["zip", "13"],
+        ["country_id", "1"],
+        ["state_id", "2"],
+        ["city", "3"],
+        ["zip", "4"],
     ].forEach(([fieldName, order]) => {
-        const wrap = fieldWrap(form, fieldName);
-        if (!wrap || wrap.hidden || wrap.dataset.lpTiendaAddressGuard) {
+        const wrap = addressFieldWrap(form, fieldName);
+        if (!wrap) {
             return;
         }
         Array.from(wrap.classList).forEach((className) => {
