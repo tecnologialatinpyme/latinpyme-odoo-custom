@@ -47,6 +47,58 @@ function ensureHiddenSelect(form, name) {
     return hiddenSelect;
 }
 
+function fieldWrap(form, name) {
+    const field = form.elements[name];
+    return field?.parentElement || null;
+}
+
+function labelForField(form, name) {
+    const field = form.elements[name];
+    return field?.id ? field.parentElement?.querySelector(`label[for="${field.id}"]`) : null;
+}
+
+function makeZipOptional(form) {
+    const requiredFields = form.elements.required_fields;
+    if (requiredFields?.value) {
+        requiredFields.value = requiredFields.value
+            .split(",")
+            .map((fieldName) => fieldName.trim())
+            .filter((fieldName) => fieldName && fieldName !== "zip")
+            .join(",");
+    }
+
+    const zip = form.elements.zip;
+    if (zip) {
+        zip.required = false;
+        zip.removeAttribute("required");
+        zip.classList.remove("is-invalid");
+    }
+
+    const label = labelForField(form, "zip");
+    label?.classList.add("label-optional");
+    if (label && !label.children.length) {
+        label.textContent = label.textContent.replace(/\s*\*+\s*$/, "");
+    }
+}
+
+function arrangeAddressFields(form) {
+    const streetWrap = fieldWrap(form, "street");
+    const orderedWraps = ["country_id", "state_id", "city", "zip"]
+        .map((fieldName) => fieldWrap(form, fieldName))
+        .filter(Boolean);
+
+    if (!streetWrap || !orderedWraps.length) {
+        return;
+    }
+
+    const row = streetWrap.parentElement;
+    if (!row || !orderedWraps.every((wrap) => wrap.parentElement === row)) {
+        return;
+    }
+
+    streetWrap.after(...orderedWraps);
+}
+
 function ensureAddressCompatibility(root) {
     const form = root?.querySelector?.("form.address_autoformat");
     if (!form) {
@@ -61,6 +113,8 @@ function ensureAddressCompatibility(root) {
     ensureHiddenInput(form, "phone");
     ensureHiddenSelect(form, "country_id");
     ensureHiddenSelect(form, "state_id");
+    makeZipOptional(form);
+    arrangeAddressFields(form);
 
     return form;
 }
@@ -102,7 +156,21 @@ patch(CustomerAddress.prototype, {
         if (!this.addressForm?.country_id?.value) {
             return;
         }
-        return super._onChangeCountry(...arguments);
+        const result = await super._onChangeCountry(...arguments);
+        makeZipOptional(this.addressForm);
+        arrangeAddressFields(this.addressForm);
+        return result;
+    },
+
+    _markRequired(name, required) {
+        if (name === "zip") {
+            required = false;
+        }
+        const result = super._markRequired(name, required);
+        if (name === "zip" && this.addressForm) {
+            makeZipOptional(this.addressForm);
+        }
+        return result;
     },
 
     _showInput(name) {
@@ -129,6 +197,8 @@ patch(CustomerAddress.prototype, {
         if (!this.addressForm) {
             return;
         }
+        makeZipOptional(this.addressForm);
+        arrangeAddressFields(this.addressForm);
         return super.saveAddress(...arguments);
     },
 });
