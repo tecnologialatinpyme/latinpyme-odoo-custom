@@ -99,6 +99,103 @@ function makeZipOptional(form) {
     }
 }
 
+function normalizeText(value = "") {
+    return value
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+}
+
+function isObligationsField(value = "") {
+    const text = normalizeText(value);
+    return (
+        (text.includes("oblig") && text.includes("respons"))
+        || (text.includes("l10n_co") && (text.includes("oblig") || text.includes("respons")))
+        || text.includes("fiscal_respons")
+        || text.includes("responsibility_ids")
+        || text.includes("obligation_ids")
+    );
+}
+
+function wrapperForControl(control) {
+    return control?.closest?.(
+        "[class*='div_'], [data-name], .lp-tienda-address-field, .mb-3, .form-group"
+    ) || control?.parentElement || null;
+}
+
+function removeRequiredField(form, fieldName) {
+    const requiredFields = form.elements.required_fields;
+    if (!requiredFields?.value || !fieldName) {
+        return;
+    }
+    requiredFields.value = requiredFields.value
+        .split(",")
+        .map((name) => name.trim())
+        .filter((name) => name && name !== fieldName && !isObligationsField(name))
+        .join(",");
+}
+
+function hideObligationsControl(form) {
+    if (!form?.querySelectorAll) {
+        return;
+    }
+
+    const requiredFields = form.elements.required_fields;
+    if (requiredFields?.value) {
+        requiredFields.value = requiredFields.value
+            .split(",")
+            .map((name) => name.trim())
+            .filter((name) => name && !isObligationsField(name))
+            .join(",");
+    }
+
+    const wrappers = new Set();
+    form.querySelectorAll("input, select, textarea").forEach((field) => {
+        const wrap = wrapperForControl(field);
+        const label = field.id ? wrap?.querySelector(`label[for="${field.id}"]`) : null;
+        const dataName = field.closest("[data-name]")?.dataset?.name || "";
+        if (
+            isObligationsField(field.name)
+            || isObligationsField(field.id)
+            || isObligationsField(dataName)
+            || isObligationsField(label?.textContent)
+        ) {
+            wrappers.add(wrap);
+        }
+    });
+
+    form.querySelectorAll("label").forEach((label) => {
+        if (isObligationsField(label.textContent)) {
+            wrappers.add(wrapperForControl(label));
+        }
+    });
+
+    wrappers.forEach((wrap) => {
+        if (!wrap || wrap.dataset.lpTiendaAddressGuard) {
+            return;
+        }
+        wrap.hidden = true;
+        wrap.style.display = "none";
+        wrap.classList.add("d-none", "lp-tienda-address-field--hidden-obligations");
+        wrap.querySelectorAll("input, select, textarea").forEach((field) => {
+            removeRequiredField(form, field.name);
+            field.required = false;
+            field.disabled = true;
+            field.removeAttribute("required");
+            field.classList.remove("is-invalid");
+        });
+    });
+}
+
+function applyAddressAdjustments(form) {
+    if (!form) {
+        return;
+    }
+    makeZipOptional(form);
+    hideObligationsControl(form);
+    arrangeAddressFields(form);
+}
+
 function arrangeAddressFields(form) {
     markAddressParent(form);
     setAddressFieldLayout(form);
@@ -160,8 +257,7 @@ function ensureAddressCompatibility(root) {
     ensureHiddenInput(form, "phone");
     ensureHiddenSelect(form, "country_id");
     ensureHiddenSelect(form, "state_id");
-    makeZipOptional(form);
-    arrangeAddressFields(form);
+    applyAddressAdjustments(form);
 
     return form;
 }
@@ -175,16 +271,14 @@ patch(CustomerAddress.prototype, {
         try {
             const result = await super.start(...arguments);
             if (this.addressForm) {
-                makeZipOptional(this.addressForm);
-                arrangeAddressFields(this.addressForm);
+                applyAddressAdjustments(this.addressForm);
             }
             return result;
         } catch (error) {
             const message = error?.message || "";
             if (error instanceof TypeError && message.includes("dispatchEvent")) {
                 if (this.addressForm) {
-                    makeZipOptional(this.addressForm);
-                    arrangeAddressFields(this.addressForm);
+                    applyAddressAdjustments(this.addressForm);
                 }
                 return;
             }
@@ -199,8 +293,7 @@ patch(CustomerAddress.prototype, {
             return;
         }
         const result = super.setup(...arguments);
-        makeZipOptional(this.addressForm);
-        arrangeAddressFields(this.addressForm);
+        applyAddressAdjustments(this.addressForm);
         return result;
     },
 
@@ -209,8 +302,7 @@ patch(CustomerAddress.prototype, {
             return;
         }
         const result = await super.willStart(...arguments);
-        makeZipOptional(this.addressForm);
-        arrangeAddressFields(this.addressForm);
+        applyAddressAdjustments(this.addressForm);
         return result;
     },
 
@@ -219,8 +311,7 @@ patch(CustomerAddress.prototype, {
             return;
         }
         const result = await super._onChangeCountry(...arguments);
-        makeZipOptional(this.addressForm);
-        arrangeAddressFields(this.addressForm);
+        applyAddressAdjustments(this.addressForm);
         return result;
     },
 
@@ -229,8 +320,8 @@ patch(CustomerAddress.prototype, {
             required = false;
         }
         const result = super._markRequired(name, required);
-        if (name === "zip" && this.addressForm) {
-            makeZipOptional(this.addressForm);
+        if (this.addressForm) {
+            applyAddressAdjustments(this.addressForm);
         }
         return result;
     },
@@ -241,8 +332,7 @@ patch(CustomerAddress.prototype, {
             return;
         }
         const result = super._showInput(...arguments);
-        makeZipOptional(this.addressForm);
-        arrangeAddressFields(this.addressForm);
+        applyAddressAdjustments(this.addressForm);
         return result;
     },
 
@@ -252,8 +342,7 @@ patch(CustomerAddress.prototype, {
             return;
         }
         const result = super._hideInput(...arguments);
-        makeZipOptional(this.addressForm);
-        arrangeAddressFields(this.addressForm);
+        applyAddressAdjustments(this.addressForm);
         return result;
     },
 
@@ -265,8 +354,7 @@ patch(CustomerAddress.prototype, {
         if (!this.addressForm) {
             return;
         }
-        makeZipOptional(this.addressForm);
-        arrangeAddressFields(this.addressForm);
+        applyAddressAdjustments(this.addressForm);
         return super.saveAddress(...arguments);
     },
 });
