@@ -16,9 +16,9 @@ El objetivo del modulo sera construir una experiencia premium de tienda sobre Od
 
 ## Estado actual
 
-**Fase 2 / primer bloque visual reutilizable.**
+**Fase 3 / pagina dedicada de tienda.**
 
-El modulo ya cuenta con un esqueleto instalable y un primer bloque visual reutilizable para iniciar el desarrollo de la tienda sin alterar paginas existentes.
+El modulo ya cuenta con un esqueleto instalable, un primer bloque visual reutilizable y una pagina dedicada `/tienda` para montarlo sin alterar `/shop`.
 
 ## Que incluye
 
@@ -27,6 +27,7 @@ El modulo ya cuenta con un esqueleto instalable y un primer bloque visual reutil
 - Registro de assets frontend desde el manifest.
 - Template QWeb base scoped para futuras personalizaciones.
 - Template QWeb `lp_tienda_storefront_intro` como primer bloque visual de tienda.
+- Ruta publica `/tienda` que renderiza el bloque mediante un controlador propio.
 - SCSS minimo bajo el scope `.lp-tienda`.
 - Documentacion base y carpeta de referencias visuales.
 
@@ -43,4 +44,4 @@ El modulo ya cuenta con un esqueleto instalable y un primer bloque visual reutil
 
 ## Alcance de esta fase
 
-Esta fase deja preparado un bloque visual pequeno, medible y seguro para evolucionar en futuras fases. La insercion en `/shop` o en una pagina de tienda debera hacerse despues mediante una herencia controlada, un snippet o una pagina dedicada.
+Esta fase monta el bloque en una pagina dedicada y reversible. La insercion en `/shop`, si se decide mas adelante, debera hacerse mediante una herencia controlada y documentada.

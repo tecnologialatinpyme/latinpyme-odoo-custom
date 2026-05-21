@@ -39,4 +39,12 @@
       </div>
     </t>
   </template>
+
+  <template id="lp_tienda_home_page" name="Tienda LatinPyme Home Page">
+    <t t-call="website.layout">
+      <main id="wrap" class="lp-tienda-page">
+        <t t-call="latinpyme_tienda_theme.lp_tienda_storefront_intro"/>
+      </main>
+    </t>
+  </template>
 </odoo>
