@@ -3,12 +3,12 @@
 
     const COURSE_CARD = {
         sectionTitle: "cursos de auditor en sg-sst",
-        title: "Charla sin costo - Acoso sexual laboral",
+        title: "Taller - Acoso Sexual Laboral",
         description: "Lo que toda empresa debe revisar antes de una sanción.",
-        price: "Sin costo",
+        price: "$150.000 COP",
         link: "/shop/protocolo-de-acoso-sexual-laboral-157",
         image: "/web/image/product.template/157/image_1024",
-        button: "Inscribirme sin costo",
+        button: "Mas información...",
     };
 
     function normalizeText(value = "") {
@@ -56,8 +56,15 @@
         image.loading = "lazy";
     }
 
+    function cardLinks(card) {
+        return [
+            ...(card.matches("a") ? [card] : []),
+            ...Array.from(card.querySelectorAll("a")),
+        ];
+    }
+
     function setCardLink(card) {
-        card.querySelectorAll("a").forEach((link) => {
+        cardLinks(card).forEach((link) => {
             link.href = COURSE_CARD.link;
             link.setAttribute("aria-label", COURSE_CARD.title);
             const text = normalizeText(link.textContent);
@@ -91,6 +98,22 @@
         }
     }
 
+    function removeDuplicatedIds(card) {
+        card.removeAttribute("id");
+        card.querySelectorAll("[id]").forEach((node) => node.removeAttribute("id"));
+    }
+
+    function createAcosoCourseCard(baseCard) {
+        const card = baseCard.cloneNode(true);
+        removeDuplicatedIds(card);
+        card.dataset.lpTiendaAcosoCourse = "1";
+        card.classList.add("lp-tienda-acoso-course-card");
+        setCardImage(card);
+        setCardText(card);
+        setCardLink(card);
+        return card;
+    }
+
     function mountAcosoCourseCard() {
         if (!isCursosPage()) {
             return;
@@ -102,15 +125,15 @@
 
         headings.forEach((heading) => {
             const section = sectionFromHeading(heading);
-            const card = section ? findFirstAuditorCard(section) : null;
-            if (!card || card.dataset.lpTiendaAcosoCourse === "1") {
+            if (!section || section.querySelector("[data-lp-tienda-acoso-course='1']")) {
                 return;
             }
-            card.dataset.lpTiendaAcosoCourse = "1";
-            card.classList.add("lp-tienda-acoso-course-card");
-            setCardImage(card);
-            setCardText(card);
-            setCardLink(card);
+            const firstAuditorCard = findFirstAuditorCard(section);
+            if (!firstAuditorCard?.parentElement) {
+                return;
+            }
+            const acosoCard = createAcosoCourseCard(firstAuditorCard);
+            firstAuditorCard.parentElement.insertBefore(acosoCard, firstAuditorCard);
         });
     }
 
