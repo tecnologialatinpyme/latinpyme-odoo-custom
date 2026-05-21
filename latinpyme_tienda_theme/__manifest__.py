@@ -27,7 +27,6 @@ minimos para iniciar el desarrollo visual en fases posteriores.
         ],
         "web.assets_frontend_lazy": [
             "latinpyme_tienda_theme/static/src/js/address_guard.js",
-            "latinpyme_tienda_theme/static/src/js/cursos_page.js",
         ],
     },
     "installable": True,
