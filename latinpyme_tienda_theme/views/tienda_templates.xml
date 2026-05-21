@@ -7,5 +7,36 @@
       </div>
     </section>
   </template>
-</odoo>
 
+  <template id="lp_tienda_storefront_intro" name="Tienda LatinPyme Storefront Intro">
+    <t t-call="latinpyme_tienda_theme.lp_tienda_base_layout">
+      <div class="lp-tienda-shop-hero" aria-labelledby="lp-tienda-shop-hero-title">
+        <div class="lp-tienda-shop-hero__content">
+          <p class="lp-tienda-shop-hero__eyebrow">Tienda LatinPyme</p>
+          <h1 id="lp-tienda-shop-hero-title">Soluciones empresariales para crecer con foco</h1>
+          <p class="lp-tienda-shop-hero__lead">
+            Encuentra cursos, herramientas y servicios pensados para fortalecer equipos, ventas y decisiones empresariales.
+          </p>
+          <div class="lp-tienda-shop-hero__actions">
+            <a class="lp-tienda-button lp-tienda-button--primary" href="/shop">Explorar tienda</a>
+            <a class="lp-tienda-button lp-tienda-button--secondary" href="/contactus">Hablar con un asesor</a>
+          </div>
+        </div>
+        <div class="lp-tienda-shop-hero__panel" aria-label="Lineas principales de la tienda">
+          <article class="lp-tienda-shop-hero__item">
+            <span>Cursos</span>
+            <strong>Formacion practica para empresas</strong>
+          </article>
+          <article class="lp-tienda-shop-hero__item">
+            <span>Soluciones</span>
+            <strong>Servicios para equipos y lideres</strong>
+          </article>
+          <article class="lp-tienda-shop-hero__item">
+            <span>Eventos</span>
+            <strong>Experiencias y contenido ejecutivo</strong>
+          </article>
+        </div>
+      </div>
+    </t>
+  </template>
+</odoo>
