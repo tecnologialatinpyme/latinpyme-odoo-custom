@@ -99,39 +99,19 @@ function makeZipOptional(form) {
     }
 }
 
-function ensureAddressGrid(form) {
-    const streetWrap = fieldWrap(form, "street");
-    let grid = form.querySelector(".lp-tienda-address-grid");
-    if (!grid) {
-        grid = document.createElement("div");
-        grid.className = "lp-tienda-address-grid row col-12";
-        grid.dataset.lpTiendaAddressGrid = "true";
-    }
-    grid.classList.add("lp-tienda-address-grid", "row", "col-12");
-
-    if (streetWrap?.parentElement) {
-        streetWrap.after(grid);
-    } else if (!grid.parentElement) {
-        form.appendChild(grid);
-    }
-    return grid;
+function arrangeAddressFields(form) {
+    markAddressParent(form);
+    setAddressFieldLayout(form);
 }
 
-function arrangeAddressFields(form) {
-    const grid = ensureAddressGrid(form);
-    if (!grid) {
-        return;
+function markAddressParent(form) {
+    const wrappers = ["country_id", "state_id", "city", "zip"]
+        .map((fieldName) => fieldWrap(form, fieldName))
+        .filter((wrap) => wrap && !wrap.hidden && !wrap.dataset.lpTiendaAddressGuard);
+    const parent = wrappers[0]?.parentElement;
+    if (parent && wrappers.every((wrap) => wrap.parentElement === parent)) {
+        parent.classList.add("lp-tienda-address-fields", "row");
     }
-
-    ["country_id", "state_id", "city", "zip"].forEach((fieldName) => {
-        const wrap = fieldWrap(form, fieldName);
-        if (!wrap || wrap.hidden || wrap.dataset.lpTiendaAddressGuard || wrap === grid) {
-            return;
-        }
-        grid.appendChild(wrap);
-    });
-
-    setAddressFieldLayout(form);
 }
 
 function setAddressFieldLayout(form) {
