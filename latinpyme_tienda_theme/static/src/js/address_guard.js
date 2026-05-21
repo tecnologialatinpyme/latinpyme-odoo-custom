@@ -48,13 +48,22 @@ function ensureHiddenSelect(form, name) {
 }
 
 function fieldWrap(form, name) {
+    if (!form?.elements) {
+        return null;
+    }
     const field = form.elements[name];
-    return field?.closest?.(`.div_${name}, [data-name="${name}"], .mb-3, .form-group`) || field?.parentElement || null;
+    if (!field?.closest) {
+        return field?.parentElement || null;
+    }
+    const compactName = name.replace(/_id$/, "");
+    return field.closest(
+        `.div_${name}, .div_${compactName}, [data-name="${name}"], [data-name="${compactName}"], .lp-tienda-address-field, .mb-3, .form-group`
+    ) || field.parentElement || null;
 }
 
 function labelForField(form, name) {
     const field = form.elements[name];
-    return field?.id ? field.parentElement?.querySelector(`label[for="${field.id}"]`) : null;
+    return field?.id ? fieldWrap(form, name)?.querySelector(`label[for="${field.id}"]`) : null;
 }
 
 function makeZipOptional(form) {
@@ -76,28 +85,52 @@ function makeZipOptional(form) {
 
     const label = labelForField(form, "zip");
     label?.classList.add("label-optional");
-    if (label && !label.children.length) {
-        label.textContent = label.textContent.replace(/\s*\*+\s*$/, "");
+    if (label) {
+        label.childNodes.forEach((node) => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                node.nodeValue = node.nodeValue.replace(/\s*\*+\s*$/, "");
+            }
+        });
+        label.querySelectorAll("span, sup").forEach((node) => {
+            if (node.textContent.trim() === "*") {
+                node.remove();
+            }
+        });
     }
 }
 
-function arrangeAddressFields(form) {
+function ensureAddressGrid(form) {
     const streetWrap = fieldWrap(form, "street");
-    const orderedWraps = ["country_id", "state_id", "city", "zip"]
-        .map((fieldName) => fieldWrap(form, fieldName))
-        .filter(Boolean);
+    let grid = form.querySelector(".lp-tienda-address-grid");
+    if (!grid) {
+        grid = document.createElement("div");
+        grid.className = "lp-tienda-address-grid row col-12";
+        grid.dataset.lpTiendaAddressGrid = "true";
+    }
+    grid.classList.add("lp-tienda-address-grid", "row", "col-12");
 
-    if (!streetWrap || !orderedWraps.length) {
+    if (streetWrap?.parentElement) {
+        streetWrap.after(grid);
+    } else if (!grid.parentElement) {
+        form.appendChild(grid);
+    }
+    return grid;
+}
+
+function arrangeAddressFields(form) {
+    const grid = ensureAddressGrid(form);
+    if (!grid) {
         return;
     }
 
-    const row = streetWrap.parentElement;
-    if (!row || !orderedWraps.every((wrap) => wrap.parentElement === row)) {
-        setAddressFieldLayout(form);
-        return;
-    }
+    ["country_id", "state_id", "city", "zip"].forEach((fieldName) => {
+        const wrap = fieldWrap(form, fieldName);
+        if (!wrap || wrap.hidden || wrap.dataset.lpTiendaAddressGuard || wrap === grid) {
+            return;
+        }
+        grid.appendChild(wrap);
+    });
 
-    streetWrap.after(...orderedWraps);
     setAddressFieldLayout(form);
 }
 
@@ -112,9 +145,24 @@ function setAddressFieldLayout(form) {
         if (!wrap || wrap.hidden || wrap.dataset.lpTiendaAddressGuard) {
             return;
         }
-        wrap.classList.remove("col-md-3", "col-md-4", "col-md-5", "col-md-7", "col-md-8", "col-lg-3", "col-lg-4", "col-lg-5", "col-lg-7", "col-lg-8");
-        wrap.classList.add("col-12", "col-md-6");
+        Array.from(wrap.classList).forEach((className) => {
+            if (
+                className.startsWith("col-")
+                || className.startsWith("col-md-")
+                || className.startsWith("col-lg-")
+                || className.startsWith("col-xl-")
+                || className.startsWith("offset-")
+                || className.startsWith("order-")
+                || className.startsWith("flex-grow-")
+                || className === "w-100"
+            ) {
+                wrap.classList.remove(className);
+            }
+        });
+        wrap.classList.add("lp-tienda-address-field", `lp-tienda-address-field--${fieldName}`, "col-12", "col-md-6");
         wrap.style.order = order;
+        wrap.style.width = "";
+        wrap.style.flex = "";
     });
 }
 
@@ -145,10 +193,19 @@ patch(CustomerAddress.prototype, {
             return;
         }
         try {
-            return await super.start(...arguments);
+            const result = await super.start(...arguments);
+            if (this.addressForm) {
+                makeZipOptional(this.addressForm);
+                arrangeAddressFields(this.addressForm);
+            }
+            return result;
         } catch (error) {
             const message = error?.message || "";
             if (error instanceof TypeError && message.includes("dispatchEvent")) {
+                if (this.addressForm) {
+                    makeZipOptional(this.addressForm);
+                    arrangeAddressFields(this.addressForm);
+                }
                 return;
             }
             throw error;
@@ -161,14 +218,20 @@ patch(CustomerAddress.prototype, {
             this.addressForm = null;
             return;
         }
-        return super.setup(...arguments);
+        const result = super.setup(...arguments);
+        makeZipOptional(this.addressForm);
+        arrangeAddressFields(this.addressForm);
+        return result;
     },
 
     async willStart() {
         if (!ensureAddressCompatibility(this.el)?.country_id?.value) {
             return;
         }
-        return super.willStart(...arguments);
+        const result = await super.willStart(...arguments);
+        makeZipOptional(this.addressForm);
+        arrangeAddressFields(this.addressForm);
+        return result;
     },
 
     async _onChangeCountry() {
@@ -197,7 +260,10 @@ patch(CustomerAddress.prototype, {
         if (!input?.parentElement) {
             return;
         }
-        return super._showInput(...arguments);
+        const result = super._showInput(...arguments);
+        makeZipOptional(this.addressForm);
+        arrangeAddressFields(this.addressForm);
+        return result;
     },
 
     _hideInput(name) {
@@ -205,11 +271,14 @@ patch(CustomerAddress.prototype, {
         if (!input?.parentElement) {
             return;
         }
-        return super._hideInput(...arguments);
+        const result = super._hideInput(...arguments);
+        makeZipOptional(this.addressForm);
+        arrangeAddressFields(this.addressForm);
+        return result;
     },
 
     _getInputDiv(name) {
-        return this.addressForm?.[name]?.parentElement || null;
+        return fieldWrap(this.addressForm, name);
     },
 
     async saveAddress() {
