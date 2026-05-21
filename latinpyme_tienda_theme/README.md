@@ -1,6 +1,6 @@
 # Tienda LatinPyme Theme
 
-Este directorio queda reservado para el futuro modulo **Tienda LatinPyme Theme** para Odoo 19.
+Modulo base para la futura experiencia **Tienda LatinPyme Theme** sobre Odoo 19.
 
 El objetivo del modulo sera construir una experiencia premium de tienda sobre Odoo Website y eCommerce, orientada a:
 
@@ -16,22 +16,29 @@ El objetivo del modulo sera construir una experiencia premium de tienda sobre Od
 
 ## Estado actual
 
-**Fase 0 / preparacion.**
+**Fase 1 / modulo instalable minimo.**
 
-Esta carpeta existe solo para organizar el trabajo inicial, documentar el flujo Git y guardar referencias visuales del futuro desarrollo.
+El modulo ya cuenta con un esqueleto instalable seguro para iniciar el desarrollo visual en fases posteriores.
 
-## Importante
+## Que incluye
 
-- Todavia no es un modulo instalable.
-- No contiene todavia `__manifest__.py`.
-- No debe instalarse aun en Odoo.
-- No contiene vistas QWeb.
-- No contiene SCSS.
-- No contiene templates de `website_sale`.
-- No modifica carrito, checkout ni Mercado Pago.
-- El desarrollo real del modulo empezara en la **Fase 1**.
+- `__manifest__.py` con dependencias controladas.
+- Dependencias base: `website` y `website_sale`.
+- Registro de assets frontend desde el manifest.
+- Template QWeb base scoped para futuras personalizaciones.
+- SCSS minimo bajo el scope `.lp-tienda`.
+- Documentacion base y carpeta de referencias visuales.
+
+## Que no incluye todavia
+
+- No implementa paginas completas de tienda.
+- No modifica templates de `website_sale`.
+- No modifica carrito.
+- No modifica checkout.
+- No modifica Mercado Pago ni flujos de pago.
+- No crea snippets avanzados.
+- No agrega controladores ni modelos propios.
 
 ## Alcance de esta fase
 
-En esta fase solo se prepara la estructura base para trabajar de forma ordenada con Git, GitHub, Odoo.sh, documentacion y referencias visuales.
-
+Esta fase deja el modulo listo para instalarse y para iniciar, en Fase 2, el trabajo visual de tienda con cambios pequenos, medibles y seguros.

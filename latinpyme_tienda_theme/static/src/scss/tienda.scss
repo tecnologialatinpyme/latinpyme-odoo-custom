@@ -1,0 +1,21 @@
+.lp-tienda {
+  --lp-tienda-red: #b90012;
+  --lp-tienda-ink: #111318;
+  --lp-tienda-muted: #5f6672;
+  --lp-tienda-border: rgba(17, 19, 24, .12);
+  --lp-tienda-surface: #fff;
+
+  color: var(--lp-tienda-ink);
+  font-family: inherit;
+}
+
+.lp-tienda__container {
+  width: min(100%, 1320px);
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 40px);
+}
+
+.lp-tienda-base {
+  background: var(--lp-tienda-surface);
+}
+

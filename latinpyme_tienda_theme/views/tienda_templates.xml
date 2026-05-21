@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="lp_tienda_base_layout" name="Tienda LatinPyme Base Layout">
+    <section class="lp-tienda lp-tienda-base" data-lp-tienda-phase="1">
+      <div class="lp-tienda__container">
+        <t t-out="0"/>
+      </div>
+    </section>
+  </template>
+</odoo>
+
