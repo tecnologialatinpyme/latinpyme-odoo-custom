@@ -3561,6 +3561,11 @@
     align-items: center;
   }
 
+  .lp-revista-blog-hero__grid--with-aside {
+    grid-template-columns: minmax(0, 1fr) minmax(290px, .72fr) minmax(280px, .68fr);
+    gap: 32px;
+  }
+
   .lp-revista-blog-hero__copy {
     display: grid;
     align-content: center;
@@ -3625,6 +3630,17 @@
     overflow: hidden;
   }
 
+  .lp-revista-blog-hero__aside {
+    display: grid;
+    min-width: 0;
+    align-self: stretch;
+
+    .lp-revista-widget--event {
+      height: 100%;
+      min-height: 360px;
+    }
+  }
+
   .lp-revista-post-title {
     h1,
     .o_wblog_post_name {
@@ -3660,6 +3676,11 @@
     min-width: 330px;
     align-self: flex-start;
     margin-top: 2px;
+  }
+
+  .lp-revista-blog-post-sidebar--lower {
+    width: 340px;
+    min-width: 340px;
   }
 
   .lp-revista-blog-post-tools {
@@ -4089,6 +4110,11 @@
     .lp-revista-blog-hero__grid {
       grid-template-columns: 1fr;
       gap: 26px;
+    }
+
+    .lp-revista-blog-hero__aside .lp-revista-widget--event {
+      height: auto;
+      min-height: 0;
     }
 
     .lp-revista-post-content {

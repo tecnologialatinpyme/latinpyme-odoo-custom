@@ -977,6 +977,21 @@ class LatinpymeRevistaSidebarItem(models.Model):
         return self.search(self._active_domain("global", website=website), order="sequence, id")
 
     @api.model
+    def get_active_item(self, placement="global", item_type=False, website=None):
+        placement = placement or "global"
+        domain = self._active_domain(placement, website=website)
+        if item_type:
+            domain.append(("item_type", "=", item_type))
+        item = self.search(domain, order="sequence, id", limit=1)
+        if item or placement == "global":
+            return item
+
+        fallback_domain = self._active_domain("global", website=website)
+        if item_type:
+            fallback_domain.append(("item_type", "=", item_type))
+        return self.search(fallback_domain, order="sequence, id", limit=1)
+
+    @api.model
     def ensure_default_items(self):
         defaults = [
             {
