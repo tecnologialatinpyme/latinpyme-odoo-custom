@@ -85,9 +85,9 @@
                 <h1 t-field="blog_post.name" class="o_wblog_post_name"/>
                 <p t-if="blog_post.subtitle or blog_post.teaser" class="o_wblog_post_subtitle" t-out="blog_post.subtitle or blog_post.teaser"/>
                 <div class="lp-revista-note-meta">
-                  <span t-if="blog_post.author_id">
+                  <span>
                     <i class="fa fa-user"/>
-                    <t t-out="blog_post.author_id.name"/>
+                    <t>Revista LatinPyme</t>
                   </span>
                   <span t-if="blog_post.post_date">
                     <i class="fa fa-calendar"/>
@@ -191,13 +191,12 @@
     <xpath expr="//div[contains(@t-attf-class, 'o_wblog_post_content_field')]" position="before">
       <div class="lp-revista-blog-post-tools">
         <div class="lp-revista-author-box">
-          <img t-if="blog_post.author_id" t-att-src="'/web/image/res.partner/%s/image_128' % blog_post.author_id.id" t-att-alt="blog_post.author_id.name"/>
-          <img t-else="" src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="Autor"/>
+          <img src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" alt="Revista LatinPyme"/>
           <div>
             <strong>
-              <t t-out="blog_post.author_id and blog_post.author_id.name or 'Equipo LatinPyme'"/>
+              <t>Revista LatinPyme</t>
             </strong>
-            <p>Revista LatinPyme</p>
+            <p>Equipo editorial</p>
             <span t-if="blog_post.post_date" t-field="blog_post.post_date" t-options="{'widget': 'date'}"/>
           </div>
         </div>
