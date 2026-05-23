@@ -153,18 +153,18 @@
       <t t-set="lp_sidebar_model" t-value="request.env['latinpyme.revista.sidebar.item'].sudo()"/>
       <t t-set="lp_note_poll_item" t-value="lp_sidebar_model.get_active_item('note', 'poll')"/>
       <t t-set="lp_note_ad_item" t-value="lp_sidebar_model.get_active_item('note', 'banner')"/>
-      <div t-if="lp_show_note_sidebar and (lp_note_poll_item or lp_note_ad_item or not lp_config or lp_config.show_sidebar_poll or lp_config.show_sidebar_ad)" class="lp-revista-blog-post-sidebar lp-revista-blog-post-sidebar--lower">
+      <div t-if="lp_show_note_sidebar" class="lp-revista-blog-post-sidebar lp-revista-blog-post-sidebar--lower">
         <aside class="lp-revista-sidebar lp-revista-sidebar--note-lower" aria-label="Encuesta y recursos recomendados">
           <t t-if="lp_note_poll_item">
             <t t-set="item" t-value="lp_note_poll_item"/>
             <t t-call="latinpyme_revista_theme.lp_sidebar_item_card"/>
           </t>
-          <t t-elif="not lp_config or lp_config.show_sidebar_poll" t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
+          <t t-else="" t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
           <t t-if="lp_note_ad_item">
             <t t-set="item" t-value="lp_note_ad_item"/>
             <t t-call="latinpyme_revista_theme.lp_sidebar_item_card"/>
           </t>
-          <t t-elif="not lp_config or lp_config.show_sidebar_ad" t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
+          <t t-else="" t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
         </aside>
       </div>
     </xpath>
