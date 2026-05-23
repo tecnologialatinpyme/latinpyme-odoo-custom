@@ -3697,24 +3697,29 @@
 
   .lp-revista-post-content {
     position: relative;
-    width: 100%;
-    max-width: 590px;
-    min-height: 560px;
+    left: 50%;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(290px, .72fr) minmax(280px, .68fr);
+    column-gap: 32px;
+    row-gap: 0;
+    width: calc(100vw - 40px) !important;
+    max-width: 1180px !important;
+    min-height: 0;
     margin-right: 0 !important;
     margin-left: 0 !important;
     border-radius: var(--lp-radius);
     overflow: visible;
+    transform: translateX(-50%);
   }
 
   #o_wblog_post_content.lp-revista-post-content {
-    flex: 0 0 590px !important;
-    width: 590px !important;
-    max-width: 590px !important;
+    flex: 0 0 auto !important;
+    width: calc(100vw - 40px) !important;
+    max-width: 1180px !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
     padding-right: 0 !important;
     padding-left: 0 !important;
-    transform: none !important;
   }
 
   .lp-revista-post-content > *:not(.lp-revista-blog-post-sidebar) {
@@ -3723,8 +3728,9 @@
 
   .lp-revista-post-content .lp-revista-blog-post-tools,
   .lp-revista-post-content .lp-revista-article-body {
+    grid-column: 1;
     width: 100% !important;
-    max-width: 590px !important;
+    max-width: none !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
   }
@@ -3737,11 +3743,11 @@
   }
 
   .lp-revista-blog-post-sidebar--lower {
-    position: absolute;
-    top: 0;
-    left: calc(100% + 42px);
-    width: 340px;
-    min-width: 340px;
+    position: static;
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    width: 100%;
+    min-width: 0;
     margin-top: 0;
   }
 
@@ -4180,10 +4186,13 @@
     }
 
     .lp-revista-post-content {
-      display: block;
+      left: auto;
+      display: block !important;
+      width: 100% !important;
       max-width: none;
       min-height: 0;
       margin-right: 0;
+      transform: none;
     }
 
     #o_wblog_post_content.lp-revista-post-content {
