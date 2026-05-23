@@ -724,6 +724,17 @@
     </field>
   </record>
 
+  <record id="view_latinpyme_revista_blog_post_author_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.blog.post.author.form</field>
+    <field name="model">blog.post</field>
+    <field name="inherit_id" ref="website_blog.view_blog_post_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='author_id']" position="after">
+        <field name="author_avatar" string="Foto del autor" widget="image" class="oe_avatar"/>
+      </xpath>
+    </field>
+  </record>
+
   <record id="view_latinpyme_revista_blog_post_override_form" model="ir.ui.view">
     <field name="name">latinpyme.revista.blog.post.override.form</field>
     <field name="model">latinpyme.revista.blog.post.override</field>

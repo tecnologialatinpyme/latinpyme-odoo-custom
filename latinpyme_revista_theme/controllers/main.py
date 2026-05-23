@@ -216,6 +216,19 @@ class LatinpymeRevistaController(http.Controller):
         return self._image_response(interview.image)
 
     @http.route(
+        "/revista/media/blog-post/<int:post_id>/author-avatar",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def revista_blog_post_author_avatar(self, post_id, **kwargs):
+        post = request.env["blog.post"].sudo().browse(post_id).exists()
+        if not post or not post.author_avatar or not self._blog_post_is_public(post):
+            raise NotFound()
+        return self._image_response(post.author_avatar)
+
+    @http.route(
         "/revista/media/sidebar/<int:item_id>/image",
         type="http",
         auth="public",
@@ -320,6 +333,10 @@ class LatinpymeRevistaController(http.Controller):
             domain.append(("post_date", "<=", fields.Datetime.now()))
         domain += self._website_domain(Post)
         return domain
+
+    def _blog_post_is_public(self, post):
+        Post = request.env["blog.post"].sudo()
+        return bool(post and Post.search([("id", "=", post.id)] + self._published_domain(Post), limit=1))
 
     def _posts_domain(self, blog=None, tag=None, extra_tags=None, exclude_ids=None):
         Post = request.env["blog.post"].sudo()
