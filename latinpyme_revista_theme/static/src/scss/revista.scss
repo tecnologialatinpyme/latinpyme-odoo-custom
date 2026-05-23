@@ -3657,6 +3657,11 @@
   }
 
   .lp-revista-post-main {
+    width: calc(100% - 40px);
+    max-width: 1180px;
+    margin-inline: auto;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
     overflow: visible;
     background: #fff;
     padding-top: 26px !important;
@@ -3667,14 +3672,14 @@
     align-items: flex-start;
     gap: 42px;
     width: 100%;
-    max-width: 1180px;
-    margin-inline: auto;
+    max-width: none;
+    margin-inline: 0;
   }
 
   .lp-revista-post-content {
     position: relative;
     width: 100%;
-    max-width: 790px;
+    max-width: 590px;
     min-height: 560px;
     margin-right: 0 !important;
     margin-left: 0 !important;
