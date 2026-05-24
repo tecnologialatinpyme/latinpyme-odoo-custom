@@ -3695,7 +3695,11 @@
 
   .lp-revista-post-content {
     position: relative;
-    display: block !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 660px) minmax(300px, 340px);
+    align-items: flex-start;
+    column-gap: 86px;
+    row-gap: 0;
     width: 100% !important;
     max-width: none !important;
     min-height: 0;
@@ -3706,12 +3710,12 @@
     transform: none;
   }
 
+  .lp-revista-post-content > * {
+    display: contents;
+  }
+
   .lp-revista-post-body-grid {
-    display: grid !important;
-    grid-template-columns: minmax(0, 660px) minmax(300px, 340px);
-    align-items: flex-start;
-    column-gap: 86px;
-    row-gap: 0;
+    display: contents !important;
     width: 100% !important;
     max-width: none !important;
     margin-right: 0 !important;
@@ -3741,6 +3745,7 @@
   }
 
   .lp-revista-post-content .lp-revista-blog-post-tools {
+    grid-column: 1;
     width: 100% !important;
     max-width: 560px !important;
     margin-right: 0 !important;
@@ -3748,6 +3753,7 @@
   }
 
   .lp-revista-post-content .lp-revista-article-body {
+    grid-column: 1;
     width: 100% !important;
     max-width: 660px !important;
     margin-right: 0 !important;
@@ -4212,7 +4218,9 @@
     .lp-revista-post-content {
       left: auto;
       grid-column: auto;
-      display: block !important;
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
+      column-gap: 32px;
       width: 100% !important;
       max-width: none;
       min-height: 0;
@@ -4220,8 +4228,12 @@
       transform: none;
     }
 
+    .lp-revista-post-content > * {
+      display: contents;
+    }
+
     .lp-revista-post-body-grid {
-      display: block !important;
+      display: contents !important;
       width: 100% !important;
       max-width: none !important;
       margin-right: 0 !important;
@@ -4236,7 +4248,7 @@
 
     .lp-revista-post-content .lp-revista-blog-post-tools,
     .lp-revista-post-content .lp-revista-article-body {
-      max-width: none !important;
+      max-width: 100% !important;
     }
 
     .lp-revista-blog-post-sidebar {
@@ -4256,6 +4268,27 @@
 @media (max-width: 760px) {
   .lp-revista-container {
     width: calc(100% - 28px);
+  }
+
+  .lp-revista--native-blog {
+    .lp-revista-post-content {
+      display: block !important;
+    }
+
+    .lp-revista-post-content > *,
+    .lp-revista-post-body-grid {
+      display: block !important;
+    }
+
+    .lp-revista-post-content .lp-revista-blog-post-tools,
+    .lp-revista-post-content .lp-revista-article-body {
+      max-width: none !important;
+    }
+
+    .lp-revista-blog-post-sidebar--lower {
+      width: 100%;
+      margin-top: 28px;
+    }
   }
 
   .lp-revista-program-title--monthly {
