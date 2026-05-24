@@ -3768,6 +3768,7 @@
     max-width: 560px !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
+    transform: translateX(-170px);
   }
 
   .lp-revista-post-content .lp-revista-article-body {
@@ -3775,6 +3776,7 @@
     max-width: 660px !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
+    transform: translateX(-170px);
   }
 
   .lp-revista-blog-post-sidebar {
@@ -4265,6 +4267,7 @@
     .lp-revista-post-content .lp-revista-article-body {
       max-width: 100% !important;
       margin-left: 0 !important;
+      transform: none;
     }
 
     .lp-revista-blog-post-sidebar {
