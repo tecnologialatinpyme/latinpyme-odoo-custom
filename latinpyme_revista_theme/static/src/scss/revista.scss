@@ -3684,6 +3684,7 @@
   .lp-revista-post-main > .container,
   .lp-revista-post-main > .container-fluid,
   .lp-revista-post-main > .o_container_small,
+  #o_wblog_post_main > .o_container_small,
   .lp-revista-post-main > .row,
   .lp-revista-post-main .d-flex.flex-column.flex-lg-row {
     width: 100% !important;
@@ -3696,7 +3697,8 @@
 
   .lp-revista-post-content-row,
   .lp-revista-post-content-shell,
-  .lp-revista-post-main > .o_container_small {
+  .lp-revista-post-main > .o_container_small,
+  #o_wblog_post_main > .o_container_small {
     width: 100% !important;
     max-width: none !important;
     flex: 0 0 100% !important;
@@ -3748,16 +3750,11 @@
   }
 
   .lp-revista-post-content > .lp-revista-post-body-grid {
-    flex: 0 1 auto !important;
-    width: 100% !important;
-    max-width: none !important;
-    margin-right: 0 !important;
-    margin-left: 0 !important;
-    padding-right: 0 !important;
-    padding-left: 0 !important;
+    display: contents !important;
   }
 
-  .lp-revista-post-content > *:not(.lp-revista-blog-post-sidebar) {
+  .lp-revista-post-content > *:not(.lp-revista-blog-post-sidebar),
+  .lp-revista-post-main #o_wblog_post_content > *:not(.lp-revista-blog-post-sidebar) {
     grid-column: 1;
     min-width: 0;
   }
@@ -4331,6 +4328,10 @@
     .lp-revista-post-content > *,
     .lp-revista-post-main #o_wblog_post_content > *,
     .lp-revista-post-body-grid {
+      display: block !important;
+    }
+
+    .lp-revista-post-content > .lp-revista-post-body-grid {
       display: block !important;
     }
 
