@@ -3722,7 +3722,14 @@
     padding-left: 0 !important;
   }
 
-  #o_wblog_post_content.lp-revista-post-content,
+  #o_wblog_post_content.lp-revista-post-content {
+    flex: 0 1 auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+
   .lp-revista-post-content > .lp-revista-post-body-grid {
     flex: 0 1 auto !important;
     width: 100% !important;
