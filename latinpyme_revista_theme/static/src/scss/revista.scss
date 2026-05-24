@@ -3740,6 +3740,11 @@
     min-width: 0;
   }
 
+  .lp-revista-post-content > nav.breadcrumb,
+  .lp-revista-post-main #o_wblog_post_content > nav.breadcrumb {
+    display: none !important;
+  }
+
   #o_wblog_post_content.lp-revista-post-content {
     display: grid !important;
     flex: 0 1 auto !important;
