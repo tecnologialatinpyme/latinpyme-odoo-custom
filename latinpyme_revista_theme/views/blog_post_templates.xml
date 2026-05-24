@@ -179,8 +179,9 @@
         <section t-if="lp_show_note_portfolio" class="lp-revista-block">
           <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
         </section>
-        <section t-if="lp_show_note_allies" class="lp-revista-block">
-          <t t-call="latinpyme_revista_theme.lp_allies_strip"/>
+        <section t-if="lp_show_note_allies" class="lp-revista-block lp-revista-home-allies">
+          <t t-set="home_allies" t-value="request.env['latinpyme.revista.ally'].sudo().get_active_allies(request.website)"/>
+          <t t-call="latinpyme_revista_theme.lp_home_allies_carousel"/>
         </section>
         <section class="lp-revista-block">
           <t t-call="latinpyme_revista_theme.lp_footer"/>
@@ -238,19 +239,44 @@
 
   <template id="lp_blog_related_interviews" name="Revista LatinPyme Related Interviews">
     <t t-set="lp_interviews" t-value="request.env['latinpyme.revista.interview'].sudo().get_active_interviews(request.website, lp_note_section, 3)"/>
-    <section t-if="lp_interviews" class="lp-revista-block lp-revista-blog-related" aria-labelledby="lp-blog-interviews-title">
+    <section t-if="lp_interviews" class="lp-revista-block lp-revista-home-interviews lp-revista-note-interviews" aria-labelledby="lp-blog-interviews-title">
+      <t t-set="lp_interviews_youtube_url" t-value="'https://www.youtube.com/@revistalatinpyme'"/>
       <t t-call="latinpyme_revista_theme.lp_section_heading">
-        <t t-set="title">Entrevistas relacionadas</t>
+        <t t-set="title">Entrevistas</t>
         <t t-set="eyebrow" t-value="False"/>
-        <t t-set="href">/revista/seccion/entrevistas</t>
-        <t t-set="link_label">Ver más entrevistas</t>
+        <t t-set="href" t-value="False"/>
+        <t t-set="link_label" t-value="False"/>
       </t>
-      <div class="lp-revista-card-grid lp-revista-card-grid--three">
-        <t t-foreach="lp_interviews" t-as="interview">
-          <t t-call="latinpyme_revista_theme.lp_interview_card">
-            <t t-set="interview" t-value="interview"/>
+      <div class="lp-revista-interviews-grid lp-revista-interviews-grid--builder lp-revista-interviews-grid--home">
+        <aside class="lp-revista-interview-featured">
+          <span>Destacado</span>
+          <div class="lp-revista-interview-featured__body">
+            <a t-att-href="lp_interviews_youtube_url" class="lp-revista-interview-featured__play" aria-label="Ver más entrevistas" target="_blank" rel="noopener">
+              <i class="fa fa-play"/>
+            </a>
+            <p>Explora más entrevistas con líderes que están transformando negocios y comunidades.</p>
+          </div>
+          <a t-att-href="lp_interviews_youtube_url" class="lp-revista-inline-link" target="_blank" rel="noopener">
+            Ver más entrevistas <i class="fa fa-arrow-right"/>
+          </a>
+        </aside>
+        <div class="lp-revista-interviews-grid__cards">
+          <t t-foreach="lp_interviews" t-as="interview">
+            <t t-call="latinpyme_revista_theme.lp_interview_card">
+              <t t-set="interview" t-value="interview"/>
+            </t>
           </t>
-        </t>
+        </div>
+        <aside class="lp-revista-interview-cta lp-revista-interview-cta--join">
+          <i class="fa fa-microphone"/>
+          <div>
+            <h3>¿Quieres ser parte de nuestras entrevistas?</h3>
+            <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
+            <a t-att-href="lp_interviews_youtube_url" class="lp-revista-button" target="_blank" rel="noopener">
+              Postúlate aquí <i class="fa fa-arrow-right"/>
+            </a>
+          </div>
+        </aside>
       </div>
     </section>
   </template>
