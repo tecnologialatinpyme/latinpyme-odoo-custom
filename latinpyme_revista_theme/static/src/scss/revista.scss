@@ -3675,11 +3675,7 @@
   }
 
   .lp-revista-post-main .d-flex.flex-column.flex-lg-row {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) minmax(290px, .72fr) minmax(280px, .68fr);
-    align-items: flex-start;
-    column-gap: 32px;
-    row-gap: 0;
+    display: block !important;
     width: 100%;
     max-width: none;
     margin-inline: 0;
@@ -3699,11 +3695,14 @@
 
   .lp-revista-post-content {
     position: relative;
-    grid-column: 1 / 3;
-    display: block !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 660px) minmax(300px, 340px);
+    align-items: flex-start;
+    column-gap: 86px;
+    row-gap: 0;
     width: 100% !important;
     max-width: none !important;
-    min-height: 620px;
+    min-height: 0;
     margin-right: 0 !important;
     margin-left: 0 !important;
     border-radius: var(--lp-radius);
@@ -3722,6 +3721,7 @@
   }
 
   .lp-revista-post-content > *:not(.lp-revista-blog-post-sidebar) {
+    grid-column: 1;
     min-width: 0;
   }
 
@@ -3734,7 +3734,7 @@
 
   .lp-revista-post-content .lp-revista-article-body {
     width: 100% !important;
-    max-width: 640px !important;
+    max-width: 660px !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
   }
@@ -3747,12 +3747,12 @@
   }
 
   .lp-revista-blog-post-sidebar--lower {
-    position: absolute;
-    top: 0;
-    left: calc(100% - 72px);
+    position: static;
+    grid-column: 2;
+    grid-row: 2 / span 2;
     width: 100%;
-    max-width: 340px;
-    min-width: 300px;
+    max-width: none;
+    min-width: 0;
     margin-top: 0;
   }
 
