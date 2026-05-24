@@ -137,16 +137,16 @@
     </xpath>
 
     <xpath expr="//section[@id='o_wblog_post_main']" position="attributes">
-      <attribute name="t-attf-class" add="lp-revista-post-main" separator=" "/>
+      <attribute name="class" add="lp-revista-post-main" separator=" "/>
     </xpath>
     <xpath expr="//div[@id='o_wblog_post_content']" position="attributes">
-      <attribute name="t-attf-class" add="lp-revista-post-content" separator=" "/>
+      <attribute name="class" add="lp-revista-post-content" separator=" "/>
     </xpath>
     <xpath expr="//div[@id='o_wblog_post_content']/parent::*" position="attributes">
-      <attribute name="t-attf-class" add="lp-revista-post-content-shell" separator=" "/>
+      <attribute name="class" add="lp-revista-post-content-shell" separator=" "/>
     </xpath>
     <xpath expr="//div[@id='o_wblog_post_content']/parent::*/parent::*" position="attributes">
-      <attribute name="t-attf-class" add="lp-revista-post-content-row" separator=" "/>
+      <attribute name="class" add="lp-revista-post-content-row" separator=" "/>
     </xpath>
     <xpath expr="//section[@id='o_wblog_post_footer']" position="attributes">
       <attribute name="class" add="lp-revista-post-footer" separator=" "/>
@@ -190,15 +190,6 @@
   </template>
 
   <template id="lp_revista_blog_post_content_visual" inherit_id="website_blog.blog_post_content" name="Revista LatinPyme Blog Post Content Visual">
-    <xpath expr="//div[@id='o_wblog_post_content']" position="attributes">
-      <attribute name="class" add="lp-revista-post-content" separator=" "/>
-    </xpath>
-    <xpath expr="//div[@id='o_wblog_post_content']/parent::*" position="attributes">
-      <attribute name="class" add="lp-revista-post-content-shell" separator=" "/>
-    </xpath>
-    <xpath expr="//div[@id='o_wblog_post_content']/parent::*/parent::*" position="attributes">
-      <attribute name="class" add="lp-revista-post-content-row" separator=" "/>
-    </xpath>
     <xpath expr="//div[contains(@t-attf-class, 'o_wblog_post_content_field')]/parent::*" position="attributes">
       <attribute name="t-attf-class" add="lp-revista-post-body-grid" separator=" "/>
     </xpath>
