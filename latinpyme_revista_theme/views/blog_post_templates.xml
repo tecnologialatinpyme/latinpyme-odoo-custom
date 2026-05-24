@@ -191,6 +191,7 @@
   </template>
 
   <template id="lp_revista_blog_post_content_visual" inherit_id="website_blog.blog_post_content" name="Revista LatinPyme Blog Post Content Visual">
+    <xpath expr="//nav[contains(concat(' ', normalize-space(@class), ' '), ' breadcrumb ')]" position="replace"/>
     <xpath expr="//div[contains(@t-attf-class, 'o_wblog_post_content_field')]/parent::*" position="attributes">
       <attribute name="t-attf-class" add="lp-revista-post-body-grid" separator=" "/>
     </xpath>
