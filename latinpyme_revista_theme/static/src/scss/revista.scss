@@ -3675,9 +3675,11 @@
   }
 
   .lp-revista-post-main .d-flex.flex-column.flex-lg-row {
-    display: block !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(290px, .72fr) minmax(280px, .68fr);
     align-items: flex-start;
-    gap: 42px;
+    column-gap: 32px;
+    row-gap: 0;
     width: 100%;
     max-width: none;
     margin-inline: 0;
@@ -3697,25 +3699,22 @@
 
   .lp-revista-post-content {
     position: relative;
-    left: 50%;
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) minmax(290px, .72fr) minmax(280px, .68fr);
-    column-gap: 32px;
-    row-gap: 0;
-    width: calc(100vw - 40px) !important;
-    max-width: 1180px !important;
+    grid-column: 1;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
     min-height: 0;
     margin-right: 0 !important;
     margin-left: 0 !important;
     border-radius: var(--lp-radius);
     overflow: visible;
-    transform: translateX(-50%);
+    transform: none;
   }
 
   #o_wblog_post_content.lp-revista-post-content {
-    flex: 0 0 auto !important;
-    width: calc(100vw - 40px) !important;
-    max-width: 1180px !important;
+    flex: 0 1 auto !important;
+    width: 100% !important;
+    max-width: none !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
     padding-right: 0 !important;
@@ -3728,7 +3727,6 @@
 
   .lp-revista-post-content .lp-revista-blog-post-tools,
   .lp-revista-post-content .lp-revista-article-body {
-    grid-column: 1;
     width: 100% !important;
     max-width: none !important;
     margin-right: 0 !important;
@@ -3745,7 +3743,7 @@
   .lp-revista-blog-post-sidebar--lower {
     position: static;
     grid-column: 3;
-    grid-row: 1 / span 2;
+    grid-row: 1;
     width: 100%;
     min-width: 0;
     margin-top: 0;
@@ -4183,6 +4181,10 @@
     .lp-revista-blog-hero__aside .lp-revista-widget--event {
       height: auto;
       min-height: 0;
+    }
+
+    .lp-revista-post-main .d-flex.flex-column.flex-lg-row {
+      display: block !important;
     }
 
     .lp-revista-post-content {

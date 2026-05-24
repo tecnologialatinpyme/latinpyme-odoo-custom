@@ -142,6 +142,32 @@
     <xpath expr="//div[@id='o_wblog_post_content']" position="attributes">
       <attribute name="t-attf-class" add="lp-revista-post-content" separator=" "/>
     </xpath>
+    <xpath expr="//div[@id='o_wblog_post_content']" position="after">
+      <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+      <t t-set="lp_note_override" t-value="request.env['latinpyme.revista.blog.post.override'].sudo().get_for_post(blog_post)"/>
+      <t t-set="lp_note_primary_tag" t-value="blog_post.tag_ids[:1]"/>
+      <t t-set="lp_note_section" t-value="request.env['latinpyme.revista.section'].sudo().get_by_tag(lp_note_primary_tag) if lp_note_primary_tag else False"/>
+      <t t-set="lp_default_note_sidebar" t-value="not lp_config or lp_config.show_note_sidebar"/>
+      <t t-set="lp_section_note_sidebar" t-value="lp_note_section.display_mode_enabled('note_sidebar_mode', lp_default_note_sidebar) if lp_note_section else lp_default_note_sidebar"/>
+      <t t-set="lp_show_note_sidebar" t-value="lp_note_override.display_mode_enabled('sidebar_mode', lp_section_note_sidebar) if lp_note_override else lp_section_note_sidebar"/>
+      <t t-set="lp_sidebar_model" t-value="request.env['latinpyme.revista.sidebar.item'].sudo()"/>
+      <t t-set="lp_note_poll_item" t-value="lp_sidebar_model.get_active_item('note', 'poll')"/>
+      <t t-set="lp_note_ad_item" t-value="lp_sidebar_model.get_active_item('note', 'banner')"/>
+      <div t-if="lp_show_note_sidebar" class="lp-revista-blog-post-sidebar lp-revista-blog-post-sidebar--lower">
+        <aside class="lp-revista-sidebar lp-revista-sidebar--note-lower" aria-label="Encuesta y recursos recomendados">
+          <t t-if="lp_note_poll_item">
+            <t t-set="item" t-value="lp_note_poll_item"/>
+            <t t-call="latinpyme_revista_theme.lp_sidebar_item_card"/>
+          </t>
+          <t t-else="" t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
+          <t t-if="lp_note_ad_item">
+            <t t-set="item" t-value="lp_note_ad_item"/>
+            <t t-call="latinpyme_revista_theme.lp_sidebar_item_card"/>
+          </t>
+          <t t-else="" t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
+        </aside>
+      </div>
+    </xpath>
     <xpath expr="//section[@id='o_wblog_post_footer']" position="attributes">
       <attribute name="class" add="lp-revista-post-footer" separator=" "/>
     </xpath>
@@ -202,32 +228,6 @@
             <span t-if="blog_post.post_date" t-field="blog_post.post_date" t-options="{'widget': 'date'}"/>
           </div>
         </div>
-      </div>
-    </xpath>
-    <xpath expr="//div[contains(@t-attf-class, 'o_wblog_post_content_field')]" position="after">
-      <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
-      <t t-set="lp_note_override" t-value="request.env['latinpyme.revista.blog.post.override'].sudo().get_for_post(blog_post)"/>
-      <t t-set="lp_note_primary_tag" t-value="blog_post.tag_ids[:1]"/>
-      <t t-set="lp_note_section" t-value="request.env['latinpyme.revista.section'].sudo().get_by_tag(lp_note_primary_tag) if lp_note_primary_tag else False"/>
-      <t t-set="lp_default_note_sidebar" t-value="not lp_config or lp_config.show_note_sidebar"/>
-      <t t-set="lp_section_note_sidebar" t-value="lp_note_section.display_mode_enabled('note_sidebar_mode', lp_default_note_sidebar) if lp_note_section else lp_default_note_sidebar"/>
-      <t t-set="lp_show_note_sidebar" t-value="lp_note_override.display_mode_enabled('sidebar_mode', lp_section_note_sidebar) if lp_note_override else lp_section_note_sidebar"/>
-      <t t-set="lp_sidebar_model" t-value="request.env['latinpyme.revista.sidebar.item'].sudo()"/>
-      <t t-set="lp_note_poll_item" t-value="lp_sidebar_model.get_active_item('note', 'poll')"/>
-      <t t-set="lp_note_ad_item" t-value="lp_sidebar_model.get_active_item('note', 'banner')"/>
-      <div t-if="lp_show_note_sidebar" class="lp-revista-blog-post-sidebar lp-revista-blog-post-sidebar--lower">
-        <aside class="lp-revista-sidebar lp-revista-sidebar--note-lower" aria-label="Encuesta y recursos recomendados">
-          <t t-if="lp_note_poll_item">
-            <t t-set="item" t-value="lp_note_poll_item"/>
-            <t t-call="latinpyme_revista_theme.lp_sidebar_item_card"/>
-          </t>
-          <t t-else="" t-call="latinpyme_revista_theme.lp_sidebar_poll_card"/>
-          <t t-if="lp_note_ad_item">
-            <t t-set="item" t-value="lp_note_ad_item"/>
-            <t t-call="latinpyme_revista_theme.lp_sidebar_item_card"/>
-          </t>
-          <t t-else="" t-call="latinpyme_revista_theme.lp_sidebar_ad_card"/>
-        </aside>
       </div>
     </xpath>
   </template>
