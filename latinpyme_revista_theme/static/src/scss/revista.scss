@@ -2388,6 +2388,22 @@
   gap: 7px;
 }
 
+.lp-revista-footer__contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+
+  i {
+    flex: 0 0 auto;
+    color: var(--lp-red);
+  }
+
+  &:hover {
+    color: var(--lp-red);
+  }
+}
+
 .lp-revista-footer__brand {
   display: grid;
   align-content: start;

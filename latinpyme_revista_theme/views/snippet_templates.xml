@@ -1172,7 +1172,10 @@
         </button>
         <h3>Contacto</h3>
         <div id="lpFooterContact" class="lp-revista-footer__panel">
-          <p t-if="lp_config and lp_config.phone"><i class="fa fa-whatsapp"/> <t t-out="lp_config.phone"/></p>
+          <a t-if="lp_config and lp_config.phone" href="https://wa.link/i0n10b" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+            <i class="fa fa-whatsapp"/>
+            <t t-out="lp_config.phone"/>
+          </a>
           <p t-if="lp_config and lp_config.city"><i class="fa fa-map-marker"/> <t t-out="lp_config.city"/></p>
           <p t-if="lp_config and lp_config.email"><i class="fa fa-envelope"/> <t t-out="lp_config.email"/></p>
         </div>
@@ -1251,7 +1254,10 @@
         </button>
         <h3>Contacto</h3>
         <div id="lpFooterAdContact" class="lp-revista-footer__panel">
-          <p t-if="lp_config and lp_config.phone"><i class="fa fa-whatsapp"/> <t t-out="lp_config.phone"/></p>
+          <a t-if="lp_config and lp_config.phone" href="https://wa.link/i0n10b" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+            <i class="fa fa-whatsapp"/>
+            <t t-out="lp_config.phone"/>
+          </a>
           <p t-if="lp_config and lp_config.city"><i class="fa fa-map-marker"/> <t t-out="lp_config.city"/></p>
           <p t-if="lp_config and lp_config.email"><i class="fa fa-envelope"/> <t t-out="lp_config.email"/></p>
         </div>
