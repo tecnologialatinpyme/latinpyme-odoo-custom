@@ -171,7 +171,7 @@
 
   <template id="lp_dynamic_banner" name="Revista LatinPyme Dynamic Banner">
     <t t-if="banner">
-      <t t-set="lp_banner_image_only" t-value="banner.display_mode == 'image_only'"/>
+      <t t-set="lp_banner_image_only" t-value="(banner.display_mode or 'image_only') == 'image_only'"/>
       <t t-set="lp_banner_href" t-value="banner.url or (False if lp_banner_image_only else '/contactus')"/>
     </t>
     <a t-if="banner" t-att-href="lp_banner_href" t-att-class="'lp-revista-promo-banner lp-revista-promo-banner--dynamic' + (' lp-revista-promo-banner--image-only' if lp_banner_image_only else '')">

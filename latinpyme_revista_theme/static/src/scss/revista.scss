@@ -6048,8 +6048,13 @@
 }
 
 .lp-revista {
+  .lp-revista-section-hero-banner {
+    margin-bottom: 22px;
+  }
+
   .lp-revista-promo-banner--image-only,
   .lp-revista-home-ads--single .lp-revista-promo-banner--image-only,
+  .lp-revista-section-hero-banner .lp-revista-promo-banner--image-only,
   .lp-revista-ad-row .lp-revista-promo-banner--image-only {
     display: block;
     min-height: 0;

@@ -1159,7 +1159,7 @@ class LatinpymeRevistaBanner(models.Model):
             ("sidebar", "Sidebar"),
             ("footer", "Footer"),
             ("note", "Nota individual"),
-            ("section", "Seccion"),
+            ("section", "Seccion hero superior"),
             ("program_hero", "Programacion anual hero"),
         ],
         string="Ubicacion",
