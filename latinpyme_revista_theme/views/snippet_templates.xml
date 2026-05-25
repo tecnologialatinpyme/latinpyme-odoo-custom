@@ -89,7 +89,7 @@
               </a>
             </t>
           </t>
-          <a t-att-href="lp_subscribe_url" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
+          <a t-att-href="lp_subscribe_url" target="_blank" rel="noopener" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
         </div>
       </nav>
     </header>
@@ -146,7 +146,7 @@
                 <a href="/revista/seccion/flashtraining" class="lp-revista-nav__dropdown-link">Flashtraining</a>
               </div>
             </div>
-            <a t-att-href="lp_subscribe_url" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
+            <a t-att-href="lp_subscribe_url" target="_blank" rel="noopener" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
           </div>
         </nav>
       </header>
