@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="lp_revista_hide_native_website_shell" inherit_id="website.layout" name="Revista LatinPyme Hide Native Website Shell">
+    <xpath expr="//head" position="inside">
+      <style t-if="request.env['latinpyme.revista.config'].sudo().is_current_request_revista_shell()">
+        header#top,
+        footer#bottom,
+        .o_header_standard,
+        .o_footer {
+          display: none !important;
+        }
+      </style>
+    </xpath>
+  </template>
+</odoo>

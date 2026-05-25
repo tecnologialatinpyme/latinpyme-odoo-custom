@@ -236,6 +236,32 @@ class LatinpymeRevistaConfig(models.Model):
             or host.endswith(".odoo.sh")
         )
 
+    @api.model
+    def is_current_host_revista(self):
+        try:
+            host = getattr(http_request, "httprequest", False).host
+        except Exception:
+            host = False
+        host = self._domain_to_host(host) if host else False
+        if not host:
+            return False
+        for config in self.sudo().search([]):
+            if host == config._domain_to_host(config.production_domain):
+                return True
+        return False
+
+    @api.model
+    def is_current_request_revista_shell(self):
+        try:
+            path = getattr(http_request, "httprequest", False).path or ""
+        except Exception:
+            path = ""
+        return self.is_current_host_revista() and (
+            path == "/revista"
+            or path.startswith("/revista/")
+            or path.startswith("/blog/")
+        )
+
 
 class LatinpymeRevistaSection(models.Model):
     _name = "latinpyme.revista.section"

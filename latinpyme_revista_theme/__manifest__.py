@@ -24,6 +24,7 @@ de publicaciones de Blog.
         "security/ir.model.access.csv",
         "data/revista_defaults.xml",
         "views/backend_views.xml",
+        "views/layout_templates.xml",
         "views/snippet_templates.xml",
         "views/snippets.xml",
         "views/home_templates.xml",
