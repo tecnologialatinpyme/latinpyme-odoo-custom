@@ -314,6 +314,7 @@
         <field name="image" widget="image" optional="show"/>
         <field name="name"/>
         <field name="placement"/>
+        <field name="display_mode"/>
         <field name="date_start"/>
         <field name="date_end"/>
         <field name="website_id"/>
@@ -334,6 +335,7 @@
               <field name="sequence"/>
               <field name="name"/>
               <field name="placement"/>
+              <field name="display_mode"/>
               <field name="website_id"/>
               <field name="date_start"/>
               <field name="date_end"/>
@@ -343,6 +345,7 @@
             </group>
           </group>
           <group string="Contenido">
+            <label for="title" string="Los campos de texto solo se muestran si el modo visual es Imagen con texto." colspan="2"/>
             <field name="title"/>
             <field name="text"/>
             <field name="button_label"/>

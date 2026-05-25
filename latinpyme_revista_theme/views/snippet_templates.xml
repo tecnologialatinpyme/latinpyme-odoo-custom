@@ -170,15 +170,21 @@
   </template>
 
   <template id="lp_dynamic_banner" name="Revista LatinPyme Dynamic Banner">
-    <a t-if="banner" t-att-href="banner.url or '/contactus'" class="lp-revista-promo-banner lp-revista-promo-banner--dynamic">
+    <t t-if="banner">
+      <t t-set="lp_banner_image_only" t-value="banner.display_mode == 'image_only'"/>
+      <t t-set="lp_banner_href" t-value="banner.url or (False if lp_banner_image_only else '/contactus')"/>
+    </t>
+    <a t-if="banner" t-att-href="lp_banner_href" t-att-class="'lp-revista-promo-banner lp-revista-promo-banner--dynamic' + (' lp-revista-promo-banner--image-only' if lp_banner_image_only else '')">
       <img t-if="banner.image" class="lp-revista-promo-banner__image" t-att-src="'/revista/media/banner/%s/image' % banner.id" t-att-alt="banner.name" loading="lazy"/>
-      <span class="lp-revista-promo-banner__shade"/>
-      <h2 t-out="banner.title or banner.name"/>
-      <p t-if="banner.text" t-out="banner.text"/>
-      <span class="lp-revista-button">
-        <t t-out="banner.button_label or 'Conoce más'"/> <i class="fa fa-arrow-right"/>
-      </span>
-      <span class="lp-revista-promo-banner__mark">LP</span>
+      <t t-if="not lp_banner_image_only">
+        <span class="lp-revista-promo-banner__shade"/>
+        <h2 t-out="banner.title or banner.name"/>
+        <p t-if="banner.text" t-out="banner.text"/>
+        <span class="lp-revista-button">
+          <t t-out="banner.button_label or 'Conoce más'"/> <i class="fa fa-arrow-right"/>
+        </span>
+        <span class="lp-revista-promo-banner__mark">LP</span>
+      </t>
     </a>
   </template>
 

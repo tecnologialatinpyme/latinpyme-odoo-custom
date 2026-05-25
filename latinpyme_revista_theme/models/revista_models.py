@@ -1152,7 +1152,7 @@ class LatinpymeRevistaBanner(models.Model):
     name = fields.Char(string="Nombre", required=True)
     placement = fields.Selection(
         [
-            ("home_top", "Home superior"),
+            ("home_top", "Home hero superior"),
             ("home_horizontal", "Home horizontal"),
             ("home_news", "Home novedades"),
             ("home_specials", "Home especiales"),
@@ -1165,6 +1165,15 @@ class LatinpymeRevistaBanner(models.Model):
         string="Ubicacion",
         required=True,
         default="sidebar",
+    )
+    display_mode = fields.Selection(
+        [
+            ("image_only", "Solo imagen"),
+            ("text_overlay", "Imagen con texto"),
+        ],
+        string="Modo visual",
+        default="image_only",
+        help="Usa Solo imagen para banners horizontales 1181x161 sin textos, botones ni overlays.",
     )
     image = fields.Image(string="Imagen", max_width=1920, max_height=1080)
     title = fields.Char(string="Titulo")
