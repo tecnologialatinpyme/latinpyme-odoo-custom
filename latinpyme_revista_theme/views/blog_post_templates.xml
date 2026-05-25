@@ -211,7 +211,7 @@
             <strong>
               <t t-out="lp_author_name"/>
             </strong>
-            <p>Autor</p>
+            <p>Redacción</p>
             <span t-if="blog_post.post_date" t-field="blog_post.post_date" t-options="{'widget': 'date'}"/>
           </div>
         </div>
