@@ -272,14 +272,18 @@
                   </t>
                 </t>
                 <t t-set="lp_news_banner" t-value="home_news_banner[:1] if home_news_banner else False"/>
-                <a class="lp-revista-news-banner" t-att-href="lp_news_banner.url if lp_news_banner and lp_news_banner.url else '/contactus'" aria-label="Publicidad LatinPyme">
+                <t t-set="lp_news_banner_image_only" t-value="lp_news_banner and (lp_news_banner.display_mode or 'image_only') == 'image_only'"/>
+                <t t-set="lp_news_banner_href" t-value="lp_news_banner.url if lp_news_banner and lp_news_banner.url else (False if lp_news_banner_image_only else '/contactus')"/>
+                <a t-att-class="'lp-revista-news-banner' + (' lp-revista-news-banner--image-only' if lp_news_banner_image_only else '')" t-att-href="lp_news_banner_href" aria-label="Publicidad LatinPyme">
                   <img t-if="lp_news_banner and lp_news_banner.image" class="lp-revista-news-banner__image" t-att-src="'/revista/media/banner/%s/image' % lp_news_banner.id" t-att-alt="lp_news_banner.name" loading="lazy"/>
-                  <span class="lp-revista-news-banner__shade"/>
-                  <span class="lp-revista-news-banner__label">Publicidad</span>
-                  <strong class="lp-revista-news-banner__title" t-out="lp_news_banner.title if lp_news_banner and lp_news_banner.title else 'Impulsa tu marca con LatinPyme'"/>
-                  <span class="lp-revista-news-banner__cta">
-                    <t t-out="lp_news_banner.button_label if lp_news_banner and lp_news_banner.button_label else 'Conoce más'"/> <i class="fa fa-arrow-right"/>
-                  </span>
+                  <t t-if="not lp_news_banner_image_only">
+                    <span class="lp-revista-news-banner__shade"/>
+                    <span class="lp-revista-news-banner__label">Publicidad</span>
+                    <strong class="lp-revista-news-banner__title" t-out="lp_news_banner.title if lp_news_banner and lp_news_banner.title else 'Impulsa tu marca con LatinPyme'"/>
+                    <span class="lp-revista-news-banner__cta">
+                      <t t-out="lp_news_banner.button_label if lp_news_banner and lp_news_banner.button_label else 'Conoce más'"/> <i class="fa fa-arrow-right"/>
+                    </span>
+                  </t>
                 </a>
               </div>
           </section>

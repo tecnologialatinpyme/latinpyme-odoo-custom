@@ -1154,7 +1154,7 @@ class LatinpymeRevistaBanner(models.Model):
         [
             ("home_top", "Home hero superior"),
             ("home_horizontal", "Home horizontal"),
-            ("home_news", "Home novedades"),
+            ("home_news", "Home novedades publicidad 281x127"),
             ("home_specials", "Home especiales publicidad 384x169"),
             ("sidebar", "Sidebar"),
             ("footer", "Footer"),
@@ -1173,7 +1173,7 @@ class LatinpymeRevistaBanner(models.Model):
         ],
         string="Modo visual",
         default="image_only",
-        help="Usa Solo imagen para banners sin textos, botones ni overlays. Hero: 1181x161. Home especiales: 384x169.",
+        help="Usa Solo imagen para banners sin textos, botones ni overlays. Hero: 1181x161. Home novedades: 281x127. Home especiales: 384x169.",
     )
     image = fields.Image(string="Imagen", max_width=1920, max_height=1080)
     title = fields.Char(string="Titulo")
