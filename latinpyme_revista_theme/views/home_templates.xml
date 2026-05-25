@@ -2,6 +2,10 @@
 <odoo>
   <template id="revista_home_page" name="Revista LatinPyme Home">
     <t t-call="website.layout">
+      <t t-set="no_header" t-value="True"/>
+      <t t-set="no_footer" t-value="True"/>
+      <t t-set="header_visible" t-value="False"/>
+      <t t-set="footer_visible" t-value="False"/>
       <t t-set="title" t-value="'%s | Gerencia, negocios e innovación para pymes' % (lp_config.name if lp_config else 'Revista LatinPyme')"/>
       <t t-set="website_meta_description">Revista LatinPyme: contenidos de gerencia, negocios, inteligencia artificial, finanzas y actualidad para empresarios pyme.</t>
       <t t-set="seo_object" t-value="blog"/>

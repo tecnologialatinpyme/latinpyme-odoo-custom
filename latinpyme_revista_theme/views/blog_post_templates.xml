@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <template id="lp_revista_blog_scope" inherit_id="website_blog.index" name="Revista LatinPyme Blog Scope">
+    <xpath expr="//t[@t-call='website.layout']" position="inside">
+      <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+      <t t-set="lp_host" t-value="request.httprequest.host.split(':', 1)[0].lower()"/>
+      <t t-set="lp_is_revista_host" t-value="lp_config and lp_host in (lp_config.domain_to_host(lp_config.production_domain), lp_config.domain_to_host(lp_config.preproduction_domain))"/>
+      <t t-if="lp_is_revista_host" t-set="no_header" t-value="True"/>
+      <t t-if="lp_is_revista_host" t-set="no_footer" t-value="True"/>
+      <t t-if="lp_is_revista_host" t-set="header_visible" t-value="False"/>
+      <t t-if="lp_is_revista_host" t-set="footer_visible" t-value="False"/>
+    </xpath>
     <xpath expr="//div[@id='wrap']" position="attributes">
       <attribute name="class" add="lp-revista lp-revista--native-blog" separator=" "/>
     </xpath>
