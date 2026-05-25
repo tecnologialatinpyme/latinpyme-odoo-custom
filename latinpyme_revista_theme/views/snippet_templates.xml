@@ -88,13 +88,14 @@
               </a>
             </t>
           </t>
-          <a href="/suscribirse" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
+          <a t-att-href="lp_config.subscribe_url if lp_config and lp_config.subscribe_url else '/suscribirse'" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
         </div>
       </nav>
     </header>
   </template>
 
   <template id="s_lp_revista_header" name="Revista LatinPyme Header Snippet">
+    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <section class="lp-revista s_lp_revista_header" data-snippet="s_lp_revista_header" data-name="LP Revista - Header Editorial">
       <header class="lp-revista-masthead" role="banner">
         <div class="lp-revista-container lp-revista-masthead__top">
@@ -143,7 +144,7 @@
                 <a href="/revista/seccion/flashtraining" class="lp-revista-nav__dropdown-link">Flashtraining</a>
               </div>
             </div>
-            <a href="/suscribirse" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
+            <a t-att-href="lp_config.subscribe_url if lp_config and lp_config.subscribe_url else '/suscribirse'" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
           </div>
         </nav>
       </header>

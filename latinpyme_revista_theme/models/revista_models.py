@@ -100,6 +100,7 @@ class LatinpymeRevistaConfig(models.Model):
     preproduction_domain = fields.Char(string="Dominio de preproduccion", default="revista.latinpyme.com")
     preproduction_noindex = fields.Boolean(string="No indexar preproduccion", default=True)
     footer_text = fields.Char(string="Texto legal del footer", default="© 2026 Revista LatinPyme - Todos los derechos reservados")
+    subscribe_url = fields.Char(string="URL Suscribirse", default="/suscribirse")
     phone = fields.Char(string="Telefono", default="+57 310 123 4567")
     city = fields.Char(string="Ciudad", default="Bogota, Colombia")
     email = fields.Char(string="Correo")
