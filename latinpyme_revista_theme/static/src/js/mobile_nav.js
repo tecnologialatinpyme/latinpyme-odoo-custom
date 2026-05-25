@@ -65,6 +65,36 @@
     }
   }
 
+  function isSubscribeLink(link) {
+    var label = (link.textContent || "").trim().toLowerCase();
+    if (link.classList.contains("lp-revista-button--nav") && label === "suscribirse") {
+      return true;
+    }
+    try {
+      return new URL(link.getAttribute("href") || "", window.location.origin).pathname === "/suscribirse";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function initSubscribeLinks(masthead) {
+    forEachNode(masthead.querySelectorAll("a[href]"), function (link) {
+      if (!isSubscribeLink(link) || link.dataset.lpSubscribeNewTab === "true") {
+        return;
+      }
+      link.dataset.lpSubscribeNewTab = "true";
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener");
+      link.addEventListener("click", function (event) {
+        event.preventDefault();
+        window.open(link.href, "_blank", "noopener");
+        if (mobileQuery.matches) {
+          closeNav(masthead);
+        }
+      });
+    });
+  }
+
   function initMasthead(masthead) {
     var toggle = masthead.querySelector(".lp-revista-mobile-toggle");
     var close = masthead.querySelector(".lp-revista-mobile-close");
@@ -118,6 +148,8 @@
         }
       });
     });
+
+    initSubscribeLinks(masthead);
   }
 
   function init() {
