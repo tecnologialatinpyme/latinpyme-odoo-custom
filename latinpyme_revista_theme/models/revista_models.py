@@ -150,16 +150,28 @@ class LatinpymeRevistaConfig(models.Model):
     @api.model
     def get_active_config(self, website=None):
         website_id = website.id if website else self.env.context.get("website_id")
+        request_host = False
         if not website_id:
             try:
                 request_website = getattr(http_request, "website", False)
+                request_host = getattr(http_request, "httprequest", False).host
             except Exception:
                 request_website = False
             website_id = request_website.id if request_website else False
+        elif not request_host:
+            try:
+                request_host = getattr(http_request, "httprequest", False).host
+            except Exception:
+                request_host = False
         if website_id:
             config = self.search([("website_id", "=", website_id)], limit=1)
             if config:
                 return config
+        request_host = self._domain_to_host(request_host) if request_host else False
+        if request_host:
+            for config in self.search([]):
+                if request_host in (config._domain_to_host(config.production_domain), config._domain_to_host(config.preproduction_domain)):
+                    return config
         return self.search([("website_id", "=", False)], limit=1)
 
     def _domain_to_host(self, domain):
