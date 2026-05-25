@@ -121,6 +121,14 @@ class LatinpymeRevistaController(http.Controller):
             or host.endswith(".odoo.sh")
         )
 
+    def _subscribe_url(self):
+        config = self._config()
+        target = (config.subscribe_url if config else "") or ""
+        target = target.strip()
+        if not target or target == "/suscribirse":
+            return "/revista"
+        return target
+
     def _render(self, template, values):
         config = self._config()
         values.setdefault("sections", self._sections())
@@ -131,6 +139,10 @@ class LatinpymeRevistaController(http.Controller):
         if values["lp_preproduction"]:
             response.headers["X-Robots-Tag"] = "noindex, nofollow"
         return response
+
+    @http.route("/suscribirse", type="http", auth="public", website=True, sitemap=False)
+    def revista_subscribe_redirect(self, **kwargs):
+        return request.redirect(self._subscribe_url(), code=302)
 
     @http.route(
         "/revista/media/banner/<int:banner_id>/image",

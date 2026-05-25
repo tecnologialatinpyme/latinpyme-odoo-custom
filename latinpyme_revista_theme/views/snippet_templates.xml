@@ -11,6 +11,7 @@
 
   <template id="lp_masthead" name="Revista LatinPyme Masthead">
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+    <t t-set="lp_subscribe_url" t-value="lp_config.subscribe_url if lp_config and lp_config.subscribe_url else '/suscribirse'"/>
     <t t-set="lp_masthead_sections" t-value="request.env['latinpyme.revista.section'].sudo().get_nav_sections() or [{'slug': 'gerencia', 'name': 'Gerencia', 'url': '/revista/seccion/gerencia', 'children': []}, {'slug': 'negocios', 'name': 'Negocios', 'url': '/revista/seccion/negocios', 'children': []}, {'slug': 'ia', 'name': 'IA', 'url': '/revista/seccion/ia', 'children': []}, {'slug': 'laboral', 'name': 'Laboral', 'url': '/revista/seccion/laboral', 'children': []}, {'slug': 'finanzas', 'name': 'Finanzas', 'url': '/revista/seccion/finanzas', 'children': []}, {'slug': 'entrevistas', 'name': 'Entrevistas', 'url': '/revista/seccion/entrevistas', 'children': []}, {'slug': 'especiales', 'name': 'Especiales', 'url': '/revista/seccion/especiales', 'children': []}, {'slug': 'mujeres', 'name': 'Mujeres', 'url': '/revista/seccion/mujeres', 'children': []}, {'slug': 'portafolio', 'name': 'Portafolio', 'url': '/revista/seccion/portafolio', 'children': []}, {'slug': 'capacitacion', 'name': 'Capacitación', 'url': False, 'menu_only': True, 'children': [{'slug': 'programacion-anual', 'name': 'Programación anual', 'url': '/revista/seccion/programacion-anual', 'children': []}, {'slug': 'charlas', 'name': 'Charlas', 'url': '/revista/seccion/charlas', 'children': []}, {'slug': 'diplomados', 'name': 'Diplomados', 'url': '/revista/seccion/diplomados', 'children': []}, {'slug': 'flashtraining', 'name': 'Flashtraining', 'url': '/revista/seccion/flashtraining', 'children': []}]}]"/>
     <header class="lp-revista-masthead" role="banner">
       <div class="lp-revista-container lp-revista-masthead__top">
@@ -88,7 +89,7 @@
               </a>
             </t>
           </t>
-          <a t-att-href="lp_config.subscribe_url if lp_config and lp_config.subscribe_url else '/suscribirse'" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
+          <a t-att-href="lp_subscribe_url" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
         </div>
       </nav>
     </header>
@@ -96,6 +97,7 @@
 
   <template id="s_lp_revista_header" name="Revista LatinPyme Header Snippet">
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+    <t t-set="lp_subscribe_url" t-value="lp_config.subscribe_url if lp_config and lp_config.subscribe_url else '/suscribirse'"/>
     <section class="lp-revista s_lp_revista_header" data-snippet="s_lp_revista_header" data-name="LP Revista - Header Editorial">
       <header class="lp-revista-masthead" role="banner">
         <div class="lp-revista-container lp-revista-masthead__top">
@@ -144,7 +146,7 @@
                 <a href="/revista/seccion/flashtraining" class="lp-revista-nav__dropdown-link">Flashtraining</a>
               </div>
             </div>
-            <a t-att-href="lp_config.subscribe_url if lp_config and lp_config.subscribe_url else '/suscribirse'" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
+            <a t-att-href="lp_subscribe_url" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
           </div>
         </nav>
       </header>
