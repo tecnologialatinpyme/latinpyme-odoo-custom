@@ -25,22 +25,6 @@
             </t>
           </section>
 
-          <section class="lp-revista-container">
-            <div class="lp-revista-section-hero" t-att-style="featured_style">
-              <nav aria-label="Miga de pan" class="lp-revista-breadcrumb">
-                <a href="/revista">Inicio</a>
-                <span>/</span>
-                <span t-out="section_name"/>
-              </nav>
-              <h1 t-out="section_name"/>
-              <p>
-                <t t-if="section_description" t-out="section_description"/>
-                <t t-elif="section_tag">Artículos, análisis y recursos editoriales de <t t-out="section_name"/> para empresarios pyme.</t>
-                <t t-else="">Crea la etiqueta <t t-out="section_name"/> en Odoo Blog para activar esta sección editorial.</t>
-              </p>
-            </div>
-          </section>
-
           <section class="lp-revista-container lp-revista-section-layout">
             <div class="lp-revista-section-main">
               <t t-call="latinpyme_revista_theme.lp_section_heading">
@@ -177,28 +161,12 @@
       <div id="wrap" class="lp-revista lp-revista-section lp-revista-program">
         <t t-call="latinpyme_revista_theme.lp_masthead"/>
         <main class="lp-revista-main">
-          <section class="lp-revista-container">
-            <div t-if="program_hero_banner and program_hero_banner.image" class="lp-revista-program-hero-banner">
+          <section t-if="program_hero_banner and program_hero_banner.image" class="lp-revista-container">
+            <div class="lp-revista-program-hero-banner">
               <a t-if="program_hero_banner.url" t-att-href="program_hero_banner.url" class="lp-revista-program-hero-banner__link" target="_blank" rel="noopener" aria-label="Abrir publicidad">
                 <img t-att-src="'/revista/media/banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
               </a>
               <img t-else="" t-att-src="'/revista/media/banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
-            </div>
-            <div t-else="" class="lp-revista-section-hero lp-revista-program-hero" t-att-style="featured_style">
-              <div class="lp-revista-program-hero__content">
-                <nav aria-label="Miga de pan" class="lp-revista-breadcrumb">
-                  <a href="/revista">Inicio</a>
-                  <span>/</span>
-                  <span>Capacitación</span>
-                  <span>/</span>
-                  <span t-out="section_name"/>
-                </nav>
-                <h1>Programación <t t-out="program_year"/></h1>
-                <p>
-                  <t t-if="section_description" t-out="section_description"/>
-                  <t t-else="">Consulta la agenda mensual de charlas, diplomados, flashtraining y foros de LatinPyme.</t>
-                </p>
-              </div>
             </div>
           </section>
 
