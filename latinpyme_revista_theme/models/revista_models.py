@@ -184,6 +184,39 @@ class LatinpymeRevistaConfig(models.Model):
         self.ensure_one()
         return self._domain_to_host(domain)
 
+    def _normalize_url_value(self, url, fallback="/"):
+        target = (url or "").strip()
+        if not target or target == "#":
+            return fallback
+        replacements = (
+            ("https://wa-link/", "https://wa.link/"),
+            ("http://wa-link/", "http://wa.link/"),
+            ("https:/wa.link/", "https://wa.link/"),
+            ("http:/wa.link/", "http://wa.link/"),
+            ("https:/wa-link/", "https://wa.link/"),
+            ("http:/wa-link/", "http://wa.link/"),
+            ("https/wa-link/", "https://wa.link/"),
+            ("http/wa-link/", "http://wa.link/"),
+            ("wa-link/", "https://wa.link/"),
+        )
+        for old, new in replacements:
+            if target.startswith(old):
+                target = target.replace(old, new, 1)
+                break
+        if target.startswith("https//"):
+            target = target.replace("https//", "https://", 1)
+        elif target.startswith("http//"):
+            target = target.replace("http//", "http://", 1)
+        elif target.startswith("//"):
+            target = "https:" + target
+        elif target.startswith("wa.link/"):
+            target = "https://" + target
+        return target or fallback
+
+    def subscribe_target_url(self):
+        self.ensure_one()
+        return self._normalize_url_value(self.subscribe_url, fallback="/suscribirse")
+
     def production_base_url(self):
         self.ensure_one()
         domain = (self.production_domain or "latinpyme.com").strip().rstrip("/")

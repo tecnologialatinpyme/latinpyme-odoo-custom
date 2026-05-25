@@ -8,6 +8,7 @@ from datetime import date, timedelta
 from odoo import fields, http
 from odoo.http import request
 from werkzeug.exceptions import NotFound
+from werkzeug.utils import redirect as werkzeug_redirect
 
 
 REVISTA_BLOG_NAME = "Revista LatinPyme"
@@ -123,8 +124,7 @@ class LatinpymeRevistaController(http.Controller):
 
     def _subscribe_url(self):
         config = self._config()
-        target = (config.subscribe_url if config else "") or ""
-        target = target.strip()
+        target = config.subscribe_target_url() if config else ""
         if not target or target == "/suscribirse":
             return "/revista"
         return target
@@ -142,7 +142,7 @@ class LatinpymeRevistaController(http.Controller):
 
     @http.route("/suscribirse", type="http", auth="public", website=True, sitemap=False)
     def revista_subscribe_redirect(self, **kwargs):
-        return request.redirect(self._subscribe_url(), code=302)
+        return werkzeug_redirect(self._subscribe_url(), code=302)
 
     @http.route(
         "/revista/media/banner/<int:banner_id>/image",
