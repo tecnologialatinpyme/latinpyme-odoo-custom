@@ -710,6 +710,8 @@
   <template id="s_lp_revista_interviews" name="Revista LatinPyme Interviews">
     <section class="lp-revista s_lp_revista_interviews" data-snippet="s_lp_revista_interviews" data-name="LP Revista - Entrevistas">
       <div class="lp-revista-container">
+        <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+        <t t-set="lp_interview_apply_url" t-value="lp_config.interview_apply_target_url() if lp_config else '/contactus'"/>
         <t t-set="lp_snippet_interviews" t-value="request.env['latinpyme.revista.interview'].sudo().get_active_interviews(False, None, 3)"/>
         <t t-call="latinpyme_revista_theme.lp_section_heading">
           <t t-set="title">Entrevistas</t>
@@ -746,7 +748,7 @@
             <div>
               <h3>¿Quieres ser parte de nuestras entrevistas?</h3>
               <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
-              <a href="/contactus" class="lp-revista-button">Postúlate aquí <i class="fa fa-arrow-right"/></a>
+              <a t-att-href="lp_interview_apply_url" class="lp-revista-button" target="_blank" rel="noopener">Postúlate aquí <i class="fa fa-arrow-right"/></a>
             </div>
           </aside>
         </div>

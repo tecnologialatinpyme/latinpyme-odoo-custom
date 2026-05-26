@@ -26,6 +26,7 @@
               <field name="website_id"/>
               <field name="footer_text"/>
               <field name="subscribe_url" placeholder="/suscribirse"/>
+              <field name="interview_apply_url" placeholder="/contactus"/>
               <field name="phone"/>
               <field name="city"/>
               <field name="email"/>

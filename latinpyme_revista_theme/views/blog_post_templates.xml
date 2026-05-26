@@ -253,6 +253,7 @@
     <t t-set="lp_interviews" t-value="request.env['latinpyme.revista.interview'].sudo().get_active_interviews(request.website, lp_note_section, 3)"/>
     <section t-if="lp_interviews" class="lp-revista-block lp-revista-home-interviews lp-revista-note-interviews" aria-labelledby="lp-blog-interviews-title">
       <t t-set="lp_interviews_youtube_url" t-value="'https://www.youtube.com/@revistalatinpyme'"/>
+      <t t-set="lp_interview_apply_url" t-value="lp_config.interview_apply_target_url() if lp_config else '/contactus'"/>
       <t t-call="latinpyme_revista_theme.lp_section_heading">
         <t t-set="title">Entrevistas</t>
         <t t-set="eyebrow" t-value="False"/>
@@ -284,7 +285,7 @@
           <div>
             <h3>¿Quieres ser parte de nuestras entrevistas?</h3>
             <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
-            <a t-att-href="lp_interviews_youtube_url" class="lp-revista-button" target="_blank" rel="noopener">
+            <a t-att-href="lp_interview_apply_url" class="lp-revista-button" target="_blank" rel="noopener">
               Postúlate aquí <i class="fa fa-arrow-right"/>
             </a>
           </div>
