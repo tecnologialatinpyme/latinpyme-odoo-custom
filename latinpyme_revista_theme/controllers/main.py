@@ -436,7 +436,7 @@ class LatinpymeRevistaController(http.Controller):
         if not block:
             return empty_posts
         Assignment = request.env["latinpyme.revista.home.assignment"].sudo()
-        has_scheduled_posts = Assignment.has_active_assignments(block.block_type, website=request.website)
+        has_scheduled_posts = Assignment.has_active_assignments(block.block_type, website=request.website, content_type="post")
         scheduled_posts = Assignment.get_active_posts(
             block.block_type,
             website=request.website,
@@ -466,6 +466,26 @@ class LatinpymeRevistaController(http.Controller):
         if request.website and "website_id" in posts._fields:
             posts = posts.filtered(lambda post: not post.website_id or post.website_id == request.website)
         return posts[:limit]
+
+    def _manual_interviews(self, block, section=None, limit=3):
+        empty_interviews = request.env["latinpyme.revista.interview"].sudo().browse()
+        if not block:
+            return empty_interviews
+        Assignment = request.env["latinpyme.revista.home.assignment"].sudo()
+        has_scheduled_interviews = Assignment.has_active_assignments(
+            block.block_type,
+            website=request.website,
+            content_type="interview",
+        )
+        scheduled_interviews = Assignment.get_active_interviews(
+            block.block_type,
+            website=request.website,
+            section=section,
+            limit=limit,
+        )
+        if has_scheduled_interviews:
+            return scheduled_interviews
+        return empty_interviews
 
     def _home_posts(self, block, blog=None, default_tag=None, default_limit=6, exclude_ids=None, min_limit=0):
         limit = max(self._home_block_limit(block, default_limit), min_limit)
@@ -681,12 +701,18 @@ class LatinpymeRevistaController(http.Controller):
         home_sections = self._sections()
         home_allies = request.env["latinpyme.revista.ally"].sudo().get_active_allies(request.website)
         interviews_block = home_blocks.get("interviews")
+        interviews_limit = self._home_block_limit(interviews_block, 3)
+        manual_interviews = self._manual_interviews(
+            interviews_block,
+            limit=interviews_limit,
+        )
         manual_interview_posts = self._manual_posts(
             interviews_block,
             blog=blog,
-            limit=self._home_block_limit(interviews_block, 3),
+            limit=interviews_limit,
         )
         empty_interviews = request.env["latinpyme.revista.interview"].sudo().browse()
+        empty_posts = request.env["blog.post"].sudo().browse()
         values = {
             "blog": blog,
             "sections": home_sections,
@@ -707,8 +733,8 @@ class LatinpymeRevistaController(http.Controller):
             "highlight_posts": self._home_posts(home_blocks.get("hero"), blog=blog, default_limit=highlight_limit, exclude_ids=exclude_ids),
             "latest_posts": self._home_posts(home_blocks.get("latest"), blog=blog, default_limit=latest_limit, exclude_ids=exclude_ids),
             "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, min_limit=4, exclude_ids=exclude_ids),
-            "interviews": empty_interviews if manual_interview_posts else self._interviews(limit=self._home_block_limit(interviews_block, 3)),
-            "interview_posts": manual_interview_posts or self._home_posts(interviews_block, blog=blog, default_tag=interview_tag, default_limit=3),
+            "interviews": manual_interviews or (empty_interviews if manual_interview_posts else self._interviews(limit=interviews_limit)),
+            "interview_posts": empty_posts if manual_interviews else (manual_interview_posts or self._home_posts(interviews_block, blog=blog, default_tag=interview_tag, default_limit=3)),
             "special_posts": self._home_posts(home_blocks.get("specials"), blog=blog, default_tag=special_tag, default_limit=2),
             "home_banners": home_top_banners,
             "home_mid_banners": self._banners("home_horizontal", limit=self._home_block_limit(home_blocks.get("mid_banners"), 3)),

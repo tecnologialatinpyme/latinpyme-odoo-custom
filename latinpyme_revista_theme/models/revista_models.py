@@ -75,6 +75,10 @@ HOME_ASSIGNMENT_BLOCK_TYPES = [
     ("specials", "Especiales"),
     ("news", "Novedades"),
 ]
+HOME_ASSIGNMENT_CONTENT_TYPES = [
+    ("post", "Nota de blog"),
+    ("interview", "Entrevista"),
+]
 SIDEBAR_PLACEMENTS = [
     ("global", "Global"),
     ("home", "Home"),
@@ -885,18 +889,36 @@ class LatinpymeRevistaHomeAssignment(models.Model):
     active = fields.Boolean(string="Activo", default=True)
     sequence = fields.Integer(string="Orden", default=10)
     block_type = fields.Selection(HOME_ASSIGNMENT_BLOCK_TYPES, string="Bloque destino", required=True, default="hero", index=True)
-    post_id = fields.Many2one("blog.post", string="Nota", required=True, ondelete="cascade")
+    content_type = fields.Selection(HOME_ASSIGNMENT_CONTENT_TYPES, string="Tipo de contenido", required=True, default="post", index=True)
+    post_id = fields.Many2one("blog.post", string="Nota", ondelete="cascade")
+    interview_id = fields.Many2one("latinpyme.revista.interview", string="Entrevista", ondelete="cascade")
     date_start = fields.Datetime(string="Mostrar desde")
     date_end = fields.Datetime(string="Mostrar hasta")
     website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
 
-    @api.depends("block_type", "post_id")
+    @api.depends("block_type", "content_type", "post_id", "interview_id")
     def _compute_name(self):
         labels = dict(HOME_ASSIGNMENT_BLOCK_TYPES)
         for record in self:
             block_label = labels.get(record.block_type, "Home")
-            post_name = record.post_id.name or "Sin nota"
-            record.name = "%s - %s" % (block_label, post_name)
+            content_type = record.content_type or "post"
+            content_name = record.interview_id.name if content_type == "interview" else record.post_id.name
+            record.name = "%s - %s" % (block_label, content_name or "Sin contenido")
+
+    @api.onchange("block_type")
+    def _onchange_block_type(self):
+        for record in self:
+            if record.block_type != "interviews" and record.content_type == "interview":
+                record.content_type = "post"
+                record.interview_id = False
+
+    @api.onchange("content_type")
+    def _onchange_content_type(self):
+        for record in self:
+            if record.content_type == "interview":
+                record.post_id = False
+            else:
+                record.interview_id = False
 
     @api.constrains("date_start", "date_end")
     def _check_dates(self):
@@ -904,8 +926,20 @@ class LatinpymeRevistaHomeAssignment(models.Model):
             if record.date_start and record.date_end and record.date_end < record.date_start:
                 raise ValidationError("La fecha final debe ser posterior a la fecha inicial.")
 
+    @api.constrains("block_type", "content_type", "post_id", "interview_id")
+    def _check_content(self):
+        for record in self:
+            content_type = record.content_type or "post"
+            if content_type == "interview":
+                if record.block_type != "interviews":
+                    raise ValidationError("Las entrevistas solo se pueden programar en el bloque Entrevistas.")
+                if not record.interview_id:
+                    raise ValidationError("Selecciona una entrevista para programar este contenido.")
+            elif not record.post_id:
+                raise ValidationError("Selecciona una nota de blog para programar este contenido.")
+
     @api.model
-    def _active_domain(self, block_type, website=None):
+    def _active_domain(self, block_type, website=None, content_type=None):
         now = fields.Datetime.now()
         domain = [
             ("active", "=", True),
@@ -919,11 +953,16 @@ class LatinpymeRevistaHomeAssignment(models.Model):
         ]
         if website:
             domain.append(("website_id", "in", [False, website.id]))
+        if content_type:
+            if content_type == "post":
+                domain.extend(["|", ("content_type", "=", False), ("content_type", "=", content_type)])
+            else:
+                domain.append(("content_type", "=", content_type))
         return domain
 
     @api.model
-    def has_active_assignments(self, block_type, website=None):
-        return bool(self.search_count(self._active_domain(block_type, website=website)))
+    def has_active_assignments(self, block_type, website=None, content_type=None):
+        return bool(self.search_count(self._active_domain(block_type, website=website, content_type=content_type)))
 
     def _post_is_visible(self, post, website=None, blog=None, exclude_ids=None):
         if not post:
@@ -945,9 +984,20 @@ class LatinpymeRevistaHomeAssignment(models.Model):
             return False
         return True
 
+    def _interview_is_visible(self, interview, website=None, section=None):
+        if not interview:
+            return False
+        if not interview.active:
+            return False
+        if website and interview.website_id and interview.website_id != website:
+            return False
+        if section and interview.section_ids and section not in interview.section_ids:
+            return False
+        return True
+
     @api.model
     def get_active_posts(self, block_type, website=None, blog=None, limit=None, exclude_ids=None):
-        domain = self._active_domain(block_type, website=website)
+        domain = self._active_domain(block_type, website=website, content_type="post")
         assignments = self.search(domain, order="sequence, date_start desc, id desc")
         post_ids = []
         seen = set()
@@ -962,6 +1012,26 @@ class LatinpymeRevistaHomeAssignment(models.Model):
             if limit and len(post_ids) >= limit:
                 break
         return self.env["blog.post"].sudo().browse(post_ids)
+
+    @api.model
+    def get_active_interviews(self, block_type, website=None, section=None, limit=None):
+        if block_type != "interviews":
+            return self.env["latinpyme.revista.interview"].sudo().browse()
+        domain = self._active_domain(block_type, website=website, content_type="interview")
+        assignments = self.search(domain, order="sequence, date_start desc, id desc")
+        interview_ids = []
+        seen = set()
+        for assignment in assignments:
+            interview = assignment.interview_id.sudo()
+            if interview.id in seen:
+                continue
+            if not assignment._interview_is_visible(interview, website=website, section=section):
+                continue
+            interview_ids.append(interview.id)
+            seen.add(interview.id)
+            if limit and len(interview_ids) >= limit:
+                break
+        return self.env["latinpyme.revista.interview"].sudo().browse(interview_ids)
 
 
 class LatinpymeRevistaPortfolioItem(models.Model):

@@ -490,7 +490,9 @@
         <field name="sequence" widget="handle"/>
         <field name="active"/>
         <field name="block_type"/>
+        <field name="content_type"/>
         <field name="post_id" options="{'no_create': True}"/>
+        <field name="interview_id" options="{'no_create': True}"/>
         <field name="date_start"/>
         <field name="date_end"/>
         <field name="website_id"/>
@@ -509,7 +511,9 @@
               <field name="active"/>
               <field name="sequence"/>
               <field name="block_type"/>
+              <field name="content_type"/>
               <field name="post_id" options="{'no_create': True}"/>
+              <field name="interview_id" options="{'no_create': True}"/>
             </group>
             <group string="Vigencia">
               <field name="date_start"/>
@@ -528,10 +532,13 @@
     <field name="arch" type="xml">
       <search string="Buscar programacion Home">
         <field name="post_id"/>
+        <field name="interview_id"/>
         <field name="block_type"/>
+        <field name="content_type"/>
         <filter name="active" string="Activos" domain="[('active', '=', True)]"/>
         <filter name="inactive" string="Inactivos" domain="[('active', '=', False)]"/>
         <filter name="group_block" string="Agrupar por bloque" context="{'group_by': 'block_type'}"/>
+        <filter name="group_content_type" string="Agrupar por tipo" context="{'group_by': 'content_type'}"/>
         <filter name="group_website" string="Agrupar por sitio web" context="{'group_by': 'website_id'}"/>
       </search>
     </field>
