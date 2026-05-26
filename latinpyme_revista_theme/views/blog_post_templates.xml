@@ -57,7 +57,7 @@
     <xpath expr="//section[@id='o_wblog_post_top']" position="before">
       <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
       <t t-call="latinpyme_revista_theme.lp_revista_blog_sections_context"/>
-      <t t-set="lp_nav_primary_tag" t-value="blog_post.tag_ids[:1]"/>
+      <t t-set="lp_nav_primary_tag" t-value="blog_post.lp_revista_display_tag()"/>
       <t t-set="lp_nav_primary_section" t-value="request.env['latinpyme.revista.section'].sudo().get_by_tag(lp_nav_primary_tag) if lp_nav_primary_tag else False"/>
       <t t-set="section_slug" t-value="lp_nav_primary_section.slug if lp_nav_primary_section else False"/>
       <div class="lp-revista-blog-masthead">
@@ -70,7 +70,7 @@
 
     <xpath expr="//section[@id='o_wblog_post_top']" position="replace">
       <section id="o_wblog_post_top" class="lp-revista-blog-hero">
-        <t t-set="lp_primary_tag" t-value="blog_post.tag_ids[:1]"/>
+        <t t-set="lp_primary_tag" t-value="blog_post.lp_revista_display_tag()"/>
         <t t-set="lp_blog_post_public" t-value="blog_post.sudo()"/>
         <t t-set="lp_author_name" t-value="lp_blog_post_public.author_name or 'Equipo LatinPyme'"/>
         <t t-set="lp_section_model" t-value="request.env['latinpyme.revista.section'].sudo()"/>
@@ -166,7 +166,7 @@
     <xpath expr="//section[@id='o_wblog_post_footer']" position="inside">
       <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
       <t t-set="lp_note_override" t-value="request.env['latinpyme.revista.blog.post.override'].sudo().get_for_post(blog_post)"/>
-      <t t-set="lp_note_primary_tag" t-value="blog_post.tag_ids[:1]"/>
+      <t t-set="lp_note_primary_tag" t-value="blog_post.lp_revista_display_tag()"/>
       <t t-set="lp_note_section" t-value="request.env['latinpyme.revista.section'].sudo().get_by_tag(lp_note_primary_tag) if lp_note_primary_tag else False"/>
       <t t-set="lp_default_note_related" t-value="True"/>
       <t t-set="lp_default_note_interviews" t-value="not lp_config or lp_config.show_note_interviews"/>

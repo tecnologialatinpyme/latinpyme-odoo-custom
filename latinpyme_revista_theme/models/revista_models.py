@@ -58,8 +58,8 @@ DISPLAY_MODE_SELECTION = [
 ]
 HOME_BLOCK_TYPES = [
     ("top_banners", "Banners superiores"),
-    ("hero", "Hero y destacados"),
-    ("latest", "De interes"),
+    ("hero", "Actualidad"),
+    ("latest", "De interés"),
     ("sections", "Secciones"),
     ("news", "Novedades"),
     ("interviews", "Entrevistas"),
@@ -67,6 +67,13 @@ HOME_BLOCK_TYPES = [
     ("mid_banners", "Banners intermedios"),
     ("portfolio", "Portafolio"),
     ("allies", "Aliados"),
+]
+HOME_ASSIGNMENT_BLOCK_TYPES = [
+    ("hero", "Actualidad"),
+    ("latest", "De interés"),
+    ("interviews", "Entrevistas"),
+    ("specials", "Especiales"),
+    ("news", "Novedades"),
 ]
 SIDEBAR_PLACEMENTS = [
     ("global", "Global"),
@@ -755,6 +762,26 @@ class LatinpymeRevistaBlogPostOverride(models.Model):
         return default_enabled
 
 
+class BlogPost(models.Model):
+    _inherit = "blog.post"
+
+    def lp_revista_section_tag(self, website=None):
+        self.ensure_one()
+        if not self.tag_ids:
+            return self.env["blog.tag"].sudo().browse()
+        Section = self.env["latinpyme.revista.section"].sudo()
+        sections = Section.get_route_sections(website)
+        for section in sections:
+            tag = section.blog_tag()
+            if tag and tag in self.tag_ids:
+                return tag
+        return self.env["blog.tag"].sudo().browse()
+
+    def lp_revista_display_tag(self, website=None):
+        self.ensure_one()
+        return self.lp_revista_section_tag(website) or self.tag_ids[:1]
+
+
 class LatinpymeRevistaHomeBlock(models.Model):
     _name = "latinpyme.revista.home.block"
     _description = "Bloque del Home Revista LatinPyme"
@@ -817,7 +844,7 @@ class LatinpymeRevistaHomeBlock(models.Model):
     def ensure_default_blocks(self):
         defaults = [
             ("top_banners", "Banners superiores", 5, 2, False, False),
-            ("hero", "Hero y destacados", 10, 3, False, False),
+            ("hero", "Actualidad", 10, 3, False, False),
             ("latest", "De interés", 20, 6, False, "/blog"),
             ("sections", "Secciones", 30, 1, False, False),
             ("news", "Novedades", 40, 5, False, False),
@@ -847,6 +874,94 @@ class LatinpymeRevistaHomeBlock(models.Model):
                 continue
             self.create(dict(values, block_type=block_type, active=True))
         return True
+
+
+class LatinpymeRevistaHomeAssignment(models.Model):
+    _name = "latinpyme.revista.home.assignment"
+    _description = "Programacion editorial del Home Revista LatinPyme"
+    _order = "block_type, sequence, date_start desc, id desc"
+
+    name = fields.Char(string="Nombre", compute="_compute_name", store=True)
+    active = fields.Boolean(string="Activo", default=True)
+    sequence = fields.Integer(string="Orden", default=10)
+    block_type = fields.Selection(HOME_ASSIGNMENT_BLOCK_TYPES, string="Bloque destino", required=True, default="hero", index=True)
+    post_id = fields.Many2one("blog.post", string="Nota", required=True, ondelete="cascade")
+    date_start = fields.Datetime(string="Mostrar desde")
+    date_end = fields.Datetime(string="Mostrar hasta")
+    website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
+
+    @api.depends("block_type", "post_id")
+    def _compute_name(self):
+        labels = dict(HOME_ASSIGNMENT_BLOCK_TYPES)
+        for record in self:
+            block_label = labels.get(record.block_type, "Home")
+            post_name = record.post_id.name or "Sin nota"
+            record.name = "%s - %s" % (block_label, post_name)
+
+    @api.constrains("date_start", "date_end")
+    def _check_dates(self):
+        for record in self:
+            if record.date_start and record.date_end and record.date_end < record.date_start:
+                raise ValidationError("La fecha final debe ser posterior a la fecha inicial.")
+
+    @api.model
+    def _active_domain(self, block_type, website=None):
+        now = fields.Datetime.now()
+        domain = [
+            ("active", "=", True),
+            ("block_type", "=", block_type),
+            "|",
+            ("date_start", "=", False),
+            ("date_start", "<=", now),
+            "|",
+            ("date_end", "=", False),
+            ("date_end", ">=", now),
+        ]
+        if website:
+            domain.append(("website_id", "in", [False, website.id]))
+        return domain
+
+    @api.model
+    def has_active_assignments(self, block_type, website=None):
+        return bool(self.search_count(self._active_domain(block_type, website=website)))
+
+    def _post_is_visible(self, post, website=None, blog=None, exclude_ids=None):
+        if not post:
+            return False
+        exclude_ids = set(exclude_ids or [])
+        if post.id in exclude_ids:
+            return False
+        if blog and post.blog_id != blog:
+            return False
+        if "active" in post._fields and not post.active:
+            return False
+        if "website_published" in post._fields and not post.website_published:
+            return False
+        if "is_published" in post._fields and not post.is_published:
+            return False
+        if "post_date" in post._fields and post.post_date and post.post_date > fields.Datetime.now():
+            return False
+        if website and "website_id" in post._fields and post.website_id and post.website_id != website:
+            return False
+        return True
+
+    @api.model
+    def get_active_posts(self, block_type, website=None, blog=None, limit=None, exclude_ids=None):
+        domain = self._active_domain(block_type, website=website)
+        assignments = self.search(domain, order="sequence, date_start desc, id desc")
+        post_ids = []
+        seen = set()
+        for assignment in assignments:
+            post = assignment.post_id.sudo()
+            if post.id in seen:
+                continue
+            if not assignment._post_is_visible(post, website=website, blog=blog, exclude_ids=exclude_ids):
+                continue
+            post_ids.append(post.id)
+            seen.add(post.id)
+            if limit and len(post_ids) >= limit:
+                break
+        return self.env["blog.post"].sudo().browse(post_ids)
 
 
 class LatinpymeRevistaPortfolioItem(models.Model):

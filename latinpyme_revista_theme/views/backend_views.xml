@@ -482,6 +482,61 @@
     </field>
   </record>
 
+  <record id="view_latinpyme_revista_home_assignment_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.home.assignment.list</field>
+    <field name="model">latinpyme.revista.home.assignment</field>
+    <field name="arch" type="xml">
+      <list string="Programacion Home" editable="bottom" default_order="block_type,sequence,date_start desc,id desc">
+        <field name="sequence" widget="handle"/>
+        <field name="active"/>
+        <field name="block_type"/>
+        <field name="post_id" options="{'no_create': True}"/>
+        <field name="date_start"/>
+        <field name="date_end"/>
+        <field name="website_id"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_home_assignment_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.home.assignment.form</field>
+    <field name="model">latinpyme.revista.home.assignment</field>
+    <field name="arch" type="xml">
+      <form string="Asignacion editorial Home">
+        <sheet>
+          <group>
+            <group string="Contenido">
+              <field name="active"/>
+              <field name="sequence"/>
+              <field name="block_type"/>
+              <field name="post_id" options="{'no_create': True}"/>
+            </group>
+            <group string="Vigencia">
+              <field name="date_start"/>
+              <field name="date_end"/>
+              <field name="website_id"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_home_assignment_search" model="ir.ui.view">
+    <field name="name">latinpyme.revista.home.assignment.search</field>
+    <field name="model">latinpyme.revista.home.assignment</field>
+    <field name="arch" type="xml">
+      <search string="Buscar programacion Home">
+        <field name="post_id"/>
+        <field name="block_type"/>
+        <filter name="active" string="Activos" domain="[('active', '=', True)]"/>
+        <filter name="inactive" string="Inactivos" domain="[('active', '=', False)]"/>
+        <filter name="group_block" string="Agrupar por bloque" context="{'group_by': 'block_type'}"/>
+        <filter name="group_website" string="Agrupar por sitio web" context="{'group_by': 'website_id'}"/>
+      </search>
+    </field>
+  </record>
+
   <record id="view_latinpyme_revista_portfolio_item_list" model="ir.ui.view">
     <field name="name">latinpyme.revista.portfolio.item.list</field>
     <field name="model">latinpyme.revista.portfolio.item</field>
@@ -796,6 +851,18 @@
     <field name="search_view_id" ref="view_latinpyme_revista_home_block_search"/>
   </record>
 
+  <record id="action_latinpyme_revista_home_assignment" model="ir.actions.act_window">
+    <field name="name">Programacion Home</field>
+    <field name="res_model">latinpyme.revista.home.assignment</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_home_assignment_search"/>
+    <field name="context">{'search_default_active': 1, 'search_default_group_block': 1}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">Programa las notas visibles en el home.</p>
+      <p>Selecciona el bloque, la nota, el orden y las fechas de vigencia. Si un bloque no tiene notas vigentes, se usa el fallback automatico por etiqueta/fecha.</p>
+    </field>
+  </record>
+
   <record id="action_latinpyme_revista_section" model="ir.actions.act_window">
     <field name="name">Secciones</field>
     <field name="res_model">latinpyme.revista.section</field>
@@ -859,6 +926,7 @@
   <menuitem id="menu_latinpyme_revista_root" name="Revista LatinPyme" sequence="80" groups="website.group_website_designer"/>
   <menuitem id="menu_latinpyme_revista_config" name="Configuracion" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_config" sequence="10"/>
   <menuitem id="menu_latinpyme_revista_home_blocks" name="Home editorial" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_home_block" sequence="15"/>
+  <menuitem id="menu_latinpyme_revista_home_assignments" name="Programacion Home" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_home_assignment" sequence="16"/>
   <menuitem id="menu_latinpyme_revista_sections" name="Secciones" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_section" sequence="20"/>
   <menuitem id="menu_latinpyme_revista_blog_post_overrides" name="Notas editoriales" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_blog_post_override" sequence="22"/>
   <menuitem id="menu_latinpyme_revista_interviews" name="Entrevistas" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_interview" sequence="23"/>

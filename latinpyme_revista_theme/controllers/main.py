@@ -432,8 +432,22 @@ class LatinpymeRevistaController(http.Controller):
         return default
 
     def _manual_posts(self, block, blog=None, limit=6, exclude_ids=None):
-        if not block or not block.post_ids:
-            return request.env["blog.post"].sudo().browse()
+        empty_posts = request.env["blog.post"].sudo().browse()
+        if not block:
+            return empty_posts
+        Assignment = request.env["latinpyme.revista.home.assignment"].sudo()
+        has_scheduled_posts = Assignment.has_active_assignments(block.block_type, website=request.website)
+        scheduled_posts = Assignment.get_active_posts(
+            block.block_type,
+            website=request.website,
+            blog=blog,
+            limit=limit,
+            exclude_ids=exclude_ids,
+        )
+        if has_scheduled_posts:
+            return scheduled_posts
+        if not block.post_ids:
+            return empty_posts
         posts = block.post_ids.sudo()
         exclude_ids = set(exclude_ids or [])
         if blog:
@@ -666,6 +680,13 @@ class LatinpymeRevistaController(http.Controller):
         home_sidebar_items = request.env["latinpyme.revista.sidebar.item"].sudo().get_active_items("home", request.website)
         home_sections = self._sections()
         home_allies = request.env["latinpyme.revista.ally"].sudo().get_active_allies(request.website)
+        interviews_block = home_blocks.get("interviews")
+        manual_interview_posts = self._manual_posts(
+            interviews_block,
+            blog=blog,
+            limit=self._home_block_limit(interviews_block, 3),
+        )
+        empty_interviews = request.env["latinpyme.revista.interview"].sudo().browse()
         values = {
             "blog": blog,
             "sections": home_sections,
@@ -686,8 +707,8 @@ class LatinpymeRevistaController(http.Controller):
             "highlight_posts": self._home_posts(home_blocks.get("hero"), blog=blog, default_limit=highlight_limit, exclude_ids=exclude_ids),
             "latest_posts": self._home_posts(home_blocks.get("latest"), blog=blog, default_limit=latest_limit, exclude_ids=exclude_ids),
             "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, min_limit=4, exclude_ids=exclude_ids),
-            "interviews": self._interviews(limit=self._home_block_limit(home_blocks.get("interviews"), 3)),
-            "interview_posts": self._home_posts(home_blocks.get("interviews"), blog=blog, default_tag=interview_tag, default_limit=3),
+            "interviews": empty_interviews if manual_interview_posts else self._interviews(limit=self._home_block_limit(interviews_block, 3)),
+            "interview_posts": manual_interview_posts or self._home_posts(interviews_block, blog=blog, default_tag=interview_tag, default_limit=3),
             "special_posts": self._home_posts(home_blocks.get("specials"), blog=blog, default_tag=special_tag, default_limit=2),
             "home_banners": home_top_banners,
             "home_mid_banners": self._banners("home_horizontal", limit=self._home_block_limit(home_blocks.get("mid_banners"), 3)),

@@ -454,7 +454,7 @@
         </t>
       </a>
       <div class="lp-revista-post-card__body">
-        <t t-set="primary_tag" t-value="post.tag_ids[:1]"/>
+        <t t-set="primary_tag" t-value="post.lp_revista_display_tag()"/>
         <span t-if="primary_tag" class="lp-revista-kicker" itemprop="articleSection">
           <t t-out="primary_tag.name"/>
         </span>

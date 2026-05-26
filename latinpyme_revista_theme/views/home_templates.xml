@@ -42,7 +42,7 @@
             </header>
             <div class="lp-revista-hero-card" t-att-style="featured_style">
               <t t-if="featured_post">
-                <t t-set="hero_tag" t-value="featured_post.tag_ids[:1]"/>
+                <t t-set="hero_tag" t-value="featured_post.lp_revista_display_tag()"/>
                 <span t-if="hero_tag" class="lp-revista-kicker">
                   <t t-out="hero_tag.name"/>
                 </span>
