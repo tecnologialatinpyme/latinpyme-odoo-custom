@@ -59,7 +59,7 @@ DISPLAY_MODE_SELECTION = [
 HOME_BLOCK_TYPES = [
     ("top_banners", "Banners superiores"),
     ("hero", "Hero y destacados"),
-    ("latest", "Lo mas reciente"),
+    ("latest", "De interes"),
     ("sections", "Secciones"),
     ("news", "Novedades"),
     ("interviews", "Entrevistas"),
@@ -813,7 +813,7 @@ class LatinpymeRevistaHomeBlock(models.Model):
         defaults = [
             ("top_banners", "Banners superiores", 5, 2, False, False),
             ("hero", "Hero y destacados", 10, 3, False, False),
-            ("latest", "Lo mas reciente", 20, 6, False, "/blog"),
+            ("latest", "De interés", 20, 6, False, "/blog"),
             ("sections", "Secciones", 30, 1, False, False),
             ("news", "Novedades", 40, 5, False, False),
             ("interviews", "Entrevistas", 50, 3, "Entrevistas", "/revista/seccion/entrevistas"),

@@ -36,7 +36,10 @@
             </t>
           </section>
 
-          <section t-if="show_home_hero" class="lp-revista-container lp-revista-hero-grid lp-revista-hero-grid--home" aria-labelledby="lp-home-title" style="order: 20">
+          <section t-if="show_home_hero" class="lp-revista-container lp-revista-hero-grid lp-revista-hero-grid--home" aria-labelledby="lp-home-actualidad-title" style="order: 20">
+            <header class="lp-revista-section-heading lp-revista-section-heading--home-hero">
+              <h2 id="lp-home-actualidad-title">Actualidad</h2>
+            </header>
             <div class="lp-revista-hero-card" t-att-style="featured_style">
               <t t-if="featured_post">
                 <t t-set="hero_tag" t-value="featured_post.tag_ids[:1]"/>
@@ -75,7 +78,8 @@
           <section t-if="show_home_latest or show_home_sections" class="lp-revista-container lp-revista-block lp-revista-latest-layout" aria-labelledby="lp-latest-title" style="order: 30">
             <div class="lp-revista-latest-layout__main">
               <t t-call="latinpyme_revista_theme.lp_section_heading">
-                <t t-set="title" t-value="home_blocks.get('latest').title if home_blocks.get('latest') and home_blocks.get('latest').title else 'Lo más reciente'"/>
+                <t t-set="lp_latest_title" t-value="home_blocks.get('latest').title if home_blocks.get('latest') and home_blocks.get('latest').title else 'De interés'"/>
+                <t t-set="title" t-value="'De interés' if lp_latest_title in ('Lo mas reciente', 'Lo más reciente') else lp_latest_title"/>
                 <t t-set="eyebrow" t-value="False"/>
                 <t t-set="href" t-value="False"/>
                 <t t-set="link_label" t-value="False"/>

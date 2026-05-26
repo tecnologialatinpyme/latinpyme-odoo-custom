@@ -5053,8 +5053,14 @@
 .lp-revista.lp-revista-home {
   .lp-revista-hero-grid--home {
     grid-template-columns: minmax(360px, 1.18fr) minmax(285px, .74fr) minmax(310px, .82fr);
-    gap: 18px;
+    column-gap: 18px;
+    row-gap: 14px;
     align-items: stretch;
+  }
+
+  .lp-revista-hero-grid--home .lp-revista-section-heading--home-hero {
+    grid-column: 1 / -1;
+    margin-bottom: -2px;
   }
 
   .lp-revista-hero-grid--home .lp-revista-hero-card {
