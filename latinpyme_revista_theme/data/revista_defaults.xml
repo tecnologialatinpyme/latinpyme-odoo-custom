@@ -31,15 +31,11 @@
   </record>
   </data>
 
-  <function model="latinpyme.revista.section" name="ensure_default_sections"/>
-  <function model="latinpyme.revista.section" name="ensure_training_menu"/>
-  <function model="latinpyme.revista.section" name="ensure_portfolio_menu"/>
   <function model="latinpyme.revista.program.event" name="migrate_legacy_event_types"/>
   <function model="latinpyme.revista.program.event" name="archive_removed_event_types"/>
   <function model="latinpyme.revista.program.event" name="ensure_program_2026_events"/>
   <function model="latinpyme.revista.home.block" name="ensure_default_blocks"/>
   <function model="latinpyme.revista.portfolio.item" name="ensure_default_items"/>
-  <function model="latinpyme.revista.footer.link" name="ensure_default_links"/>
   <function model="latinpyme.revista.footer.link" name="repair_website_editor_views"/>
   <function model="latinpyme.revista.sidebar.item" name="ensure_default_items"/>
 </odoo>
