@@ -436,6 +436,41 @@ class LatinpymeRevistaSection(models.Model):
         return value.strip("-")
 
     @api.model
+    def ensure_default_sections(self):
+        defaults = [
+            ("Gerencia", "gerencia", 10, "Estrategia, liderazgo y gestion para empresarios pyme."),
+            ("Negocios", "negocios", 20, "Oportunidades, crecimiento y modelos de negocio para pymes."),
+            ("IA", "ia", 30, "Herramientas y tendencias de inteligencia artificial aplicadas a empresas."),
+            ("Laboral", "laboral", 40, "Gestion laboral, talento humano y normatividad empresarial."),
+            ("Finanzas", "finanzas", 50, "Finanzas, productividad y decisiones economicas para pymes."),
+            ("Entrevistas", "entrevistas", 60, "Conversaciones con lideres empresariales y protagonistas del ecosistema pyme."),
+            ("Especiales", "especiales", 70, "Informes, dossiers y coberturas especiales de Revista LatinPyme."),
+            ("Mujeres", "mujeres", 80, "Historias, liderazgo y recursos para mujeres empresarias."),
+            ("Portafolio", "portafolio", 90, "Servicios, formacion, eventos y soluciones de LatinPyme."),
+        ]
+        for name, slug, sequence, description in defaults:
+            section = self.search([("slug", "=", slug), ("website_id", "=", False)], limit=1)
+            if section:
+                values = {}
+                if not section.name:
+                    values["name"] = name
+                if not section.description:
+                    values["description"] = description
+                if values:
+                    section.write(values)
+                continue
+            self.create(
+                {
+                    "name": name,
+                    "slug": slug,
+                    "sequence": sequence,
+                    "description": description,
+                    "active": True,
+                }
+            )
+        return True
+
+    @api.model
     def get_active_sections(self, website=None):
         website = website or _current_website()
         domain = [("active", "=", True)]

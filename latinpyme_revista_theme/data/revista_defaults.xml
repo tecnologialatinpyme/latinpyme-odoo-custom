@@ -29,63 +29,9 @@
     <field name="poll_option_4">Aumento de costos</field>
     <field name="poll_button_label">Votar</field>
   </record>
-
-  <record id="revista_section_gerencia" model="latinpyme.revista.section">
-    <field name="name">Gerencia</field>
-    <field name="slug">gerencia</field>
-    <field name="sequence">10</field>
-    <field name="description">Estrategia, liderazgo y gestion para empresarios pyme.</field>
-  </record>
-  <record id="revista_section_negocios" model="latinpyme.revista.section">
-    <field name="name">Negocios</field>
-    <field name="slug">negocios</field>
-    <field name="sequence">20</field>
-    <field name="description">Oportunidades, crecimiento y modelos de negocio para pymes.</field>
-  </record>
-  <record id="revista_section_ia" model="latinpyme.revista.section">
-    <field name="name">IA</field>
-    <field name="slug">ia</field>
-    <field name="sequence">30</field>
-    <field name="description">Herramientas y tendencias de inteligencia artificial aplicadas a empresas.</field>
-  </record>
-  <record id="revista_section_laboral" model="latinpyme.revista.section">
-    <field name="name">Laboral</field>
-    <field name="slug">laboral</field>
-    <field name="sequence">40</field>
-    <field name="description">Gestion laboral, talento humano y normatividad empresarial.</field>
-  </record>
-  <record id="revista_section_finanzas" model="latinpyme.revista.section">
-    <field name="name">Finanzas</field>
-    <field name="slug">finanzas</field>
-    <field name="sequence">50</field>
-    <field name="description">Finanzas, productividad y decisiones economicas para pymes.</field>
-  </record>
-  <record id="revista_section_entrevistas" model="latinpyme.revista.section">
-    <field name="name">Entrevistas</field>
-    <field name="slug">entrevistas</field>
-    <field name="sequence">60</field>
-    <field name="description">Conversaciones con lideres empresariales y protagonistas del ecosistema pyme.</field>
-  </record>
-  <record id="revista_section_especiales" model="latinpyme.revista.section">
-    <field name="name">Especiales</field>
-    <field name="slug">especiales</field>
-    <field name="sequence">70</field>
-    <field name="description">Informes, dossiers y coberturas especiales de Revista LatinPyme.</field>
-  </record>
-  <record id="revista_section_mujeres" model="latinpyme.revista.section">
-    <field name="name">Mujeres</field>
-    <field name="slug">mujeres</field>
-    <field name="sequence">80</field>
-    <field name="description">Historias, liderazgo y recursos para mujeres empresarias.</field>
-  </record>
-  <record id="revista_section_portafolio" model="latinpyme.revista.section">
-    <field name="name">Portafolio</field>
-    <field name="slug">portafolio</field>
-    <field name="sequence">90</field>
-    <field name="description">Servicios, formacion, eventos y soluciones de LatinPyme.</field>
-  </record>
   </data>
 
+  <function model="latinpyme.revista.section" name="ensure_default_sections"/>
   <function model="latinpyme.revista.section" name="ensure_training_menu"/>
   <function model="latinpyme.revista.section" name="ensure_portfolio_menu"/>
   <function model="latinpyme.revista.program.event" name="migrate_legacy_event_types"/>
