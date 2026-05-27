@@ -1445,30 +1445,95 @@ class LatinpymeRevistaSidebarItem(models.Model):
         return domain
 
     @api.model
+    def _dedupe_items_for_website(self, items, website=None):
+        website = website or _current_website()
+        if not website:
+            return items
+        selected = {}
+        order = []
+        for item in items:
+            key = (item.placement, item.item_type, (item.name or "").strip().lower())
+            if key not in selected:
+                selected[key] = item
+                order.append(key)
+                continue
+            if not selected[key].website_id and item.website_id == website:
+                selected[key] = item
+        return self.browse([selected[key].id for key in order])
+
+    @api.model
     def get_active_items(self, placement="global", website=None):
         placement = placement or "global"
+        website = website or _current_website()
         items = self.search(self._active_domain(placement, website=website), order="sequence, id")
+        items = self._dedupe_items_for_website(items, website=website)
         if items or placement == "global":
             return items
-        return self.search(self._active_domain("global", website=website), order="sequence, id")
+        fallback_items = self.search(self._active_domain("global", website=website), order="sequence, id")
+        return self._dedupe_items_for_website(fallback_items, website=website)
 
     @api.model
     def get_active_item(self, placement="global", item_type=False, website=None):
         placement = placement or "global"
+        website = website or _current_website()
         domain = self._active_domain(placement, website=website)
         if item_type:
             domain.append(("item_type", "=", item_type))
-        item = self.search(domain, order="sequence, id", limit=1)
+        items = self._dedupe_items_for_website(self.search(domain, order="sequence, id"), website=website)
+        item = items[:1]
         if item or placement == "global":
             return item
 
         fallback_domain = self._active_domain("global", website=website)
         if item_type:
             fallback_domain.append(("item_type", "=", item_type))
-        return self.search(fallback_domain, order="sequence, id", limit=1)
+        fallback_items = self._dedupe_items_for_website(self.search(fallback_domain, order="sequence, id"), website=website)
+        return fallback_items[:1]
+
+    @api.model
+    def _seed_sidebar_item(self, values, website):
+        if not website:
+            return self.browse()
+        domain = [
+            ("name", "=ilike", values["name"]),
+            ("placement", "=", values["placement"]),
+            ("item_type", "=", values["item_type"]),
+        ]
+        website_item = self.search(domain + [("website_id", "=", website.id)], limit=1)
+        global_item = self.search(domain + [("website_id", "=", False)], limit=1)
+        if website_item:
+            if global_item:
+                global_item.write({"active": False})
+            return website_item
+        if global_item:
+            global_item.write({"website_id": website.id})
+            return global_item
+        return self.create(dict(values, active=True, website_id=website.id))
+
+    @api.model
+    def _scope_global_sidebar_items(self, website):
+        if not website:
+            return
+        for item in self.search([("website_id", "=", False)]):
+            domain = [
+                ("name", "=ilike", item.name),
+                ("placement", "=", item.placement),
+                ("item_type", "=", item.item_type),
+                ("website_id", "=", website.id),
+            ]
+            website_item = self.search(domain, limit=1)
+            if website_item:
+                item.write({"active": False})
+            else:
+                item.write({"website_id": website.id})
 
     @api.model
     def ensure_default_items(self):
+        website = _revista_seed_website(self.env)
+        if not website:
+            return True
+        self._scope_global_sidebar_items(website)
+
         defaults = [
             {
                 "name": "Proxima conferencia",
@@ -1507,17 +1572,7 @@ class LatinpymeRevistaSidebarItem(models.Model):
             },
         ]
         for values in defaults:
-            item = self.search(
-                [
-                    ("name", "=ilike", values["name"]),
-                    ("placement", "=", values["placement"]),
-                    ("website_id", "=", False),
-                ],
-                limit=1,
-            )
-            if item:
-                continue
-            self.create(dict(values, active=True))
+            self._seed_sidebar_item(values, website)
         return True
 
 
