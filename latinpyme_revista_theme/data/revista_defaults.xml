@@ -40,5 +40,6 @@
   <function model="latinpyme.revista.home.block" name="ensure_default_blocks"/>
   <function model="latinpyme.revista.portfolio.item" name="ensure_default_items"/>
   <function model="latinpyme.revista.footer.link" name="ensure_default_links"/>
+  <function model="latinpyme.revista.footer.link" name="repair_website_editor_views"/>
   <function model="latinpyme.revista.sidebar.item" name="ensure_default_items"/>
 </odoo>

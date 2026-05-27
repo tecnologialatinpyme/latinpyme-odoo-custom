@@ -1195,6 +1195,36 @@ class LatinpymeRevistaFooterLink(models.Model):
     website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
 
     @api.model
+    def repair_website_editor_views(self):
+        replacements = {
+            "get_nav_sections(request.website)": "get_nav_sections()",
+            "get_active_links('sections', request.website)": "get_active_links('sections')",
+            'get_active_links("sections", request.website)': 'get_active_links("sections")',
+            "get_active_links('portfolio', request.website)": "get_active_links('portfolio')",
+            'get_active_links("portfolio", request.website)': 'get_active_links("portfolio")',
+            "get_active_links('legal', request.website)": "get_active_links('legal')",
+            'get_active_links("legal", request.website)': 'get_active_links("legal")',
+        }
+        views = self.env["ir.ui.view"].sudo().search(
+            [
+                "|",
+                ("key", "in", ["latinpyme_revista_theme.lp_masthead", "latinpyme_revista_theme.lp_footer", "latinpyme_revista_theme.lp_footer_with_ad"]),
+                ("arch_db", "ilike", "request.website"),
+            ]
+        )
+        for view in views:
+            arch = view.arch_db or ""
+            patched_arch = arch
+            for old, new in replacements.items():
+                patched_arch = patched_arch.replace(old, new)
+            if patched_arch != arch:
+                view.with_context(lang=None).write({"arch_db": patched_arch})
+        view_model = self.env["ir.ui.view"]
+        if hasattr(view_model, "clear_caches"):
+            view_model.clear_caches()
+        return True
+
+    @api.model
     def get_active_links(self, group_key, website=None):
         website = website or _current_website()
         domain = [("active", "=", True), ("group_key", "=", group_key)]
