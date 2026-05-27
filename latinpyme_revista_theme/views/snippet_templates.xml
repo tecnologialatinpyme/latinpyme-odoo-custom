@@ -1126,6 +1126,10 @@
 
   <template id="lp_footer" name="Revista LatinPyme Footer">
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+    <t t-set="lp_footer_link_model" t-value="request.env['latinpyme.revista.footer.link'].sudo()"/>
+    <t t-set="lp_footer_sections" t-value="lp_footer_link_model.get_active_links('sections', request.website)"/>
+    <t t-set="lp_footer_portfolio" t-value="lp_footer_link_model.get_active_links('portfolio', request.website)"/>
+    <t t-set="lp_footer_legal" t-value="lp_footer_link_model.get_active_links('legal', request.website)"/>
     <footer class="lp-revista-footer">
       <div class="lp-revista-footer__brand">
         <span class="lp-revista-footer__mark">LP</span>
@@ -1141,14 +1145,9 @@
         </button>
         <h3>Secciones</h3>
         <div id="lpFooterSections" class="lp-revista-footer__panel">
-          <a href="/revista/seccion/gerencia">Gerencia</a>
-          <a href="/revista/seccion/negocios">Negocios</a>
-          <a href="/revista/seccion/ia">IA</a>
-          <a href="/revista/seccion/laboral">Laboral</a>
-          <a href="/revista/seccion/finanzas">Finanzas</a>
-          <a href="/revista/seccion/entrevistas">Entrevistas</a>
-          <a href="/revista/seccion/especiales">Especiales</a>
-          <a href="/revista/seccion/mujeres">Mujeres</a>
+          <t t-foreach="lp_footer_sections" t-as="lp_footer_link">
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+          </t>
         </div>
       </nav>
       <nav class="lp-revista-footer__group" aria-label="Footer portafolio">
@@ -1158,10 +1157,9 @@
         </button>
         <h3>Portafolio</h3>
         <div id="lpFooterPortfolio" class="lp-revista-footer__panel">
-          <a href="/revista/seccion/portafolio">Escuela</a>
-          <a href="/revista/seccion/portafolio">Consultoría</a>
-          <a href="/revista/seccion/portafolio">Eventos</a>
-          <a href="/revista/seccion/portafolio">Membresías</a>
+          <t t-foreach="lp_footer_portfolio" t-as="lp_footer_link">
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+          </t>
         </div>
       </nav>
       <nav class="lp-revista-footer__group" aria-label="Footer legal">
@@ -1171,9 +1169,9 @@
         </button>
         <h3>Legal</h3>
         <div id="lpFooterLegal" class="lp-revista-footer__panel">
-          <a href="/privacy">Tratamiento de datos personales</a>
-          <a href="/terms">Términos y condiciones</a>
-          <a href="/contactus">Derechos de autor</a>
+          <t t-foreach="lp_footer_legal" t-as="lp_footer_link">
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+          </t>
         </div>
       </nav>
       <div class="lp-revista-footer__contact lp-revista-footer__group">
@@ -1206,6 +1204,10 @@
   <template id="lp_footer_with_ad" name="Revista LatinPyme Footer With Ad">
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer')"/>
+    <t t-set="lp_footer_link_model" t-value="request.env['latinpyme.revista.footer.link'].sudo()"/>
+    <t t-set="lp_footer_sections" t-value="lp_footer_link_model.get_active_links('sections', request.website)"/>
+    <t t-set="lp_footer_portfolio" t-value="lp_footer_link_model.get_active_links('portfolio', request.website)"/>
+    <t t-set="lp_footer_legal" t-value="lp_footer_link_model.get_active_links('legal', request.website)"/>
     <footer class="lp-revista-footer lp-revista-footer--with-ad">
       <div class="lp-revista-footer__brand">
         <span class="lp-revista-footer__mark">LP</span>
@@ -1221,14 +1223,9 @@
         </button>
         <h3>Secciones</h3>
         <div id="lpFooterAdSections" class="lp-revista-footer__panel">
-          <a href="/revista/seccion/gerencia">Gerencia</a>
-          <a href="/revista/seccion/negocios">Negocios</a>
-          <a href="/revista/seccion/ia">IA</a>
-          <a href="/revista/seccion/laboral">Laboral</a>
-          <a href="/revista/seccion/finanzas">Finanzas</a>
-          <a href="/revista/seccion/entrevistas">Entrevistas</a>
-          <a href="/revista/seccion/especiales">Especiales</a>
-          <a href="/revista/seccion/mujeres">Mujeres</a>
+          <t t-foreach="lp_footer_sections" t-as="lp_footer_link">
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+          </t>
         </div>
       </nav>
       <nav class="lp-revista-footer__group" aria-label="Footer portafolio">
@@ -1238,11 +1235,9 @@
         </button>
         <h3>Portafolio</h3>
         <div id="lpFooterAdPortfolio" class="lp-revista-footer__panel">
-          <a href="/revista/seccion/portafolio">Escuela</a>
-          <a href="/revista/seccion/portafolio">Consultoría</a>
-          <a href="/revista/seccion/portafolio">Eventos</a>
-          <a href="/revista/seccion/portafolio">Membresías</a>
-          <a href="/revista/seccion/portafolio">Portafolio</a>
+          <t t-foreach="lp_footer_portfolio" t-as="lp_footer_link">
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+          </t>
         </div>
       </nav>
       <nav class="lp-revista-footer__group" aria-label="Footer legal">
@@ -1252,10 +1247,9 @@
         </button>
         <h3>Legal</h3>
         <div id="lpFooterAdLegal" class="lp-revista-footer__panel">
-          <a href="/privacy">Tratamiento de datos personales</a>
-          <a href="/terms">Términos y condiciones</a>
-          <a href="/contactus">Derechos de autor</a>
-          <a href="/contactus">Curso 50 y 20 horas SG-SST</a>
+          <t t-foreach="lp_footer_legal" t-as="lp_footer_link">
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+          </t>
         </div>
       </nav>
       <div class="lp-revista-footer__contact lp-revista-footer__group">

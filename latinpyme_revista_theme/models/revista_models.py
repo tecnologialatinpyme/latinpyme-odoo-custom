@@ -91,6 +91,11 @@ SIDEBAR_ITEM_TYPES = [
     ("interview_cta", "CTA entrevistas"),
     ("banner", "Banner lateral"),
 ]
+FOOTER_LINK_GROUPS = [
+    ("sections", "Secciones"),
+    ("portfolio", "Portafolio"),
+    ("legal", "Legal"),
+]
 
 
 def _current_website():
@@ -1098,6 +1103,63 @@ class LatinpymeRevistaPortfolioItem(models.Model):
             if item:
                 continue
             self.create(dict(values, active=True))
+        return True
+
+
+class LatinpymeRevistaFooterLink(models.Model):
+    _name = "latinpyme.revista.footer.link"
+    _description = "Link del footer Revista LatinPyme"
+    _order = "group_key, sequence, name"
+
+    name = fields.Char(string="Texto", required=True)
+    url = fields.Char(string="URL", required=True, default="#")
+    group_key = fields.Selection(FOOTER_LINK_GROUPS, string="Grupo", required=True, default="sections", index=True)
+    active = fields.Boolean(string="Activo", default=True)
+    sequence = fields.Integer(string="Orden", default=10)
+    open_new_tab = fields.Boolean(string="Abrir en nueva pestaña")
+    website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
+
+    @api.model
+    def get_active_links(self, group_key, website=None):
+        website = website or _current_website()
+        domain = [("active", "=", True), ("group_key", "=", group_key)]
+        if website:
+            domain.append(("website_id", "in", [False, website.id]))
+        return self.search(domain, order="sequence, name")
+
+    @api.model
+    def ensure_default_links(self):
+        defaults = [
+            ("sections", "Gerencia", "/revista/seccion/gerencia", 10),
+            ("sections", "Negocios", "/revista/seccion/negocios", 20),
+            ("sections", "IA", "/revista/seccion/ia", 30),
+            ("sections", "Laboral", "/revista/seccion/laboral", 40),
+            ("sections", "Finanzas", "/revista/seccion/finanzas", 50),
+            ("sections", "Entrevistas", "/revista/seccion/entrevistas", 60),
+            ("sections", "Especiales", "/revista/seccion/especiales", 70),
+            ("sections", "Mujeres", "/revista/seccion/mujeres", 80),
+            ("portfolio", "Escuela", "/revista/seccion/portafolio", 10),
+            ("portfolio", "Consultoría", "/revista/seccion/portafolio", 20),
+            ("portfolio", "Eventos", "/revista/seccion/portafolio", 30),
+            ("portfolio", "Membresías", "/revista/seccion/portafolio", 40),
+            ("portfolio", "Portafolio", "/revista/seccion/portafolio", 50),
+            ("legal", "Tratamiento de datos personales", "/privacy", 10),
+            ("legal", "Términos y condiciones", "/terms", 20),
+            ("legal", "Derechos de autor", "/contactus", 30),
+        ]
+        for group_key, name, url, sequence in defaults:
+            link = self.search([("group_key", "=", group_key), ("name", "=ilike", name), ("website_id", "=", False)], limit=1)
+            if link:
+                continue
+            self.create(
+                {
+                    "group_key": group_key,
+                    "name": name,
+                    "url": url,
+                    "sequence": sequence,
+                    "active": True,
+                }
+            )
         return True
 
 

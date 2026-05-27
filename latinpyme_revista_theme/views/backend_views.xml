@@ -615,6 +615,62 @@
     </field>
   </record>
 
+  <record id="view_latinpyme_revista_footer_link_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.footer.link.list</field>
+    <field name="model">latinpyme.revista.footer.link</field>
+    <field name="arch" type="xml">
+      <list string="Footer editorial" editable="bottom" default_order="group_key,sequence,name">
+        <field name="sequence" widget="handle"/>
+        <field name="active"/>
+        <field name="group_key"/>
+        <field name="name"/>
+        <field name="url"/>
+        <field name="open_new_tab"/>
+        <field name="website_id"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_footer_link_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.footer.link.form</field>
+    <field name="model">latinpyme.revista.footer.link</field>
+    <field name="arch" type="xml">
+      <form string="Link del footer">
+        <sheet>
+          <group>
+            <group string="Contenido">
+              <field name="active"/>
+              <field name="sequence"/>
+              <field name="group_key"/>
+              <field name="name"/>
+            </group>
+            <group string="Enlace">
+              <field name="url"/>
+              <field name="open_new_tab"/>
+              <field name="website_id"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_footer_link_search" model="ir.ui.view">
+    <field name="name">latinpyme.revista.footer.link.search</field>
+    <field name="model">latinpyme.revista.footer.link</field>
+    <field name="arch" type="xml">
+      <search string="Buscar links del footer">
+        <field name="name"/>
+        <field name="url"/>
+        <field name="group_key"/>
+        <filter name="active" string="Activos" domain="[('active', '=', True)]"/>
+        <filter name="inactive" string="Inactivos" domain="[('active', '=', False)]"/>
+        <filter name="group_footer" string="Agrupar por grupo" context="{'group_by': 'group_key'}"/>
+        <filter name="group_website" string="Agrupar por sitio web" context="{'group_by': 'website_id'}"/>
+      </search>
+    </field>
+  </record>
+
   <record id="view_latinpyme_revista_interview_list" model="ir.ui.view">
     <field name="name">latinpyme.revista.interview.list</field>
     <field name="model">latinpyme.revista.interview</field>
@@ -870,6 +926,19 @@
     </field>
   </record>
 
+  <record id="action_latinpyme_revista_home_assignment_interviews" model="ir.actions.act_window">
+    <field name="name">Programacion entrevistas</field>
+    <field name="res_model">latinpyme.revista.home.assignment</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_home_assignment_search"/>
+    <field name="domain">[('block_type', '=', 'interviews'), ('content_type', '=', 'interview')]</field>
+    <field name="context">{'default_block_type': 'interviews', 'default_content_type': 'interview', 'search_default_active': 1}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">Programa entrevistas visibles en el home.</p>
+      <p>Selecciona entrevistas existentes, orden y vigencia para el bloque Entrevistas.</p>
+    </field>
+  </record>
+
   <record id="action_latinpyme_revista_section" model="ir.actions.act_window">
     <field name="name">Secciones</field>
     <field name="res_model">latinpyme.revista.section</field>
@@ -888,6 +957,18 @@
     <field name="res_model">latinpyme.revista.portfolio.item</field>
     <field name="view_mode">list,form</field>
     <field name="search_view_id" ref="view_latinpyme_revista_portfolio_item_search"/>
+  </record>
+
+  <record id="action_latinpyme_revista_footer_link" model="ir.actions.act_window">
+    <field name="name">Footer editorial</field>
+    <field name="res_model">latinpyme.revista.footer.link</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_footer_link_search"/>
+    <field name="context">{'search_default_active': 1, 'search_default_group_footer': 1}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">Administra los enlaces del footer.</p>
+      <p>Organiza los enlaces por Secciones, Portafolio y Legal. Puedes definir orden, URL, estado y sitio web.</p>
+    </field>
   </record>
 
   <record id="action_latinpyme_revista_interview" model="ir.actions.act_window">
@@ -934,11 +1015,13 @@
   <menuitem id="menu_latinpyme_revista_config" name="Configuracion" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_config" sequence="10"/>
   <menuitem id="menu_latinpyme_revista_home_blocks" name="Home editorial" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_home_block" sequence="15"/>
   <menuitem id="menu_latinpyme_revista_home_assignments" name="Programacion Home" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_home_assignment" sequence="16"/>
+  <menuitem id="menu_latinpyme_revista_home_assignment_interviews" name="Programacion entrevistas" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_home_assignment_interviews" sequence="17"/>
   <menuitem id="menu_latinpyme_revista_sections" name="Secciones" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_section" sequence="20"/>
   <menuitem id="menu_latinpyme_revista_blog_post_overrides" name="Notas editoriales" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_blog_post_override" sequence="22"/>
   <menuitem id="menu_latinpyme_revista_interviews" name="Entrevistas" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_interview" sequence="23"/>
   <menuitem id="menu_latinpyme_revista_program_event" name="Programacion anual" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_program_event" sequence="25"/>
   <menuitem id="menu_latinpyme_revista_sidebar_items" name="Sidebar editorial" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_sidebar_item" sequence="27"/>
+  <menuitem id="menu_latinpyme_revista_footer_links" name="Footer editorial" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_footer_link" sequence="28"/>
   <menuitem id="menu_latinpyme_revista_allies" name="Aliados" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_ally" sequence="30"/>
   <menuitem id="menu_latinpyme_revista_portfolio_items" name="Portafolio" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_portfolio_item" sequence="35"/>
   <menuitem id="menu_latinpyme_revista_banners" name="Publicidad" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_banner" sequence="40"/>
