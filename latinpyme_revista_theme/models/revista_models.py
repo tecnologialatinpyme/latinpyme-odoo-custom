@@ -450,6 +450,8 @@ class LatinpymeRevistaSection(models.Model):
         ]
         for name, slug, sequence, description in defaults:
             section = self.search([("slug", "=", slug), ("website_id", "=", False)], limit=1)
+            if not section:
+                section = self.search([("slug", "=", slug)], order="website_id, id", limit=1)
             if section:
                 values = {}
                 if not section.name:
@@ -476,7 +478,20 @@ class LatinpymeRevistaSection(models.Model):
         domain = [("active", "=", True)]
         if website:
             domain.append(("website_id", "in", [False, website.id]))
-        return self.search(domain, order="sequence, name")
+        sections = self.search(domain, order="sequence, name")
+        if not website:
+            return sections
+        by_slug = {}
+        ordered_slugs = []
+        for section in sections:
+            slug = section.slug
+            if slug not in by_slug:
+                by_slug[slug] = section
+                ordered_slugs.append(slug)
+                continue
+            if not by_slug[slug].website_id and section.website_id == website:
+                by_slug[slug] = section
+        return self.browse([by_slug[slug].id for slug in ordered_slugs])
 
     @api.model
     def get_route_sections(self, website=None):
