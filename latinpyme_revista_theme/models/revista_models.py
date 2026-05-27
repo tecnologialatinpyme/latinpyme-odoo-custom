@@ -1165,7 +1165,7 @@ class LatinpymeRevistaPortfolioItem(models.Model):
 class LatinpymeRevistaFooterLink(models.Model):
     _name = "latinpyme.revista.footer.link"
     _description = "Link del footer Revista LatinPyme"
-    _order = "group_key, sequence, name"
+    _order = "sequence, group_key, name"
 
     name = fields.Char(string="Texto", required=True)
     url = fields.Char(string="URL", required=True, default="#")

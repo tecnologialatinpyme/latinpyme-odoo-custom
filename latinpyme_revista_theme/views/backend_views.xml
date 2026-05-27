@@ -619,7 +619,7 @@
     <field name="name">latinpyme.revista.footer.link.list</field>
     <field name="model">latinpyme.revista.footer.link</field>
     <field name="arch" type="xml">
-      <list string="Footer editorial" editable="bottom" default_order="group_key,sequence,name">
+      <list string="Footer editorial" editable="bottom" default_order="sequence,group_key,name">
         <field name="sequence" widget="handle"/>
         <field name="active"/>
         <field name="group_key"/>
@@ -964,7 +964,7 @@
     <field name="res_model">latinpyme.revista.footer.link</field>
     <field name="view_mode">list,form</field>
     <field name="search_view_id" ref="view_latinpyme_revista_footer_link_search"/>
-    <field name="context">{'search_default_active': 1, 'search_default_group_footer': 1}</field>
+    <field name="context">{'search_default_active': 1}</field>
     <field name="help" type="html">
       <p class="o_view_nocontent_smiling_face">Administra los enlaces del footer.</p>
       <p>Organiza los enlaces por Secciones, Portafolio y Legal. Puedes definir orden, URL, estado y sitio web.</p>
