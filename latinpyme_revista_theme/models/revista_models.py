@@ -96,6 +96,11 @@ FOOTER_LINK_GROUPS = [
     ("portfolio", "Portafolio"),
     ("legal", "Legal"),
 ]
+BLOG_TAG_TYPES = [
+    ("section", "Seccion Editorial"),
+    ("topic", "Tema"),
+    ("content", "Contenido"),
+]
 
 
 def _current_website():
@@ -846,8 +851,29 @@ class LatinpymeRevistaBlogPostOverride(models.Model):
         return default_enabled
 
 
+class BlogTag(models.Model):
+    _inherit = "blog.tag"
+
+    lp_revista_tag_type = fields.Selection(
+        BLOG_TAG_TYPES,
+        string="Tipo de etiqueta Revista",
+        default="topic",
+        required=True,
+        index=True,
+        help="Define la prioridad editorial cuando una nota tiene varias etiquetas.",
+    )
+    lp_revista_tag_priority = fields.Integer(
+        string="Prioridad Revista",
+        default=10,
+        help="Menor numero = mayor prioridad cuando varias etiquetas tienen el mismo tipo.",
+    )
+
+
 class BlogPost(models.Model):
     _inherit = "blog.post"
+
+    def _lp_revista_sorted_tags(self, tags):
+        return tags.sorted(lambda tag: (tag.lp_revista_tag_priority or 0, tag.name or "", tag.id))
 
     def lp_revista_section_tag(self, website=None):
         self.ensure_one()
@@ -859,11 +885,20 @@ class BlogPost(models.Model):
             tag = section.blog_tag()
             if tag and tag in self.tag_ids:
                 return tag
+        section_tags = self.tag_ids.filtered(lambda tag: tag.lp_revista_tag_type == "section")
+        if section_tags:
+            return self._lp_revista_sorted_tags(section_tags)[:1]
         return self.env["blog.tag"].sudo().browse()
 
     def lp_revista_display_tag(self, website=None):
         self.ensure_one()
-        return self.lp_revista_section_tag(website) or self.tag_ids[:1]
+        section_tag = self.lp_revista_section_tag(website)
+        if section_tag:
+            return section_tag
+        secondary_tags = self.tag_ids.filtered(lambda tag: tag.lp_revista_tag_type in ("topic", "content"))
+        if secondary_tags:
+            return self._lp_revista_sorted_tags(secondary_tags)[:1]
+        return self.tag_ids[:1]
 
 
 class LatinpymeRevistaHomeBlock(models.Model):
@@ -879,7 +914,7 @@ class LatinpymeRevistaHomeBlock(models.Model):
     tag_id = fields.Many2one(
         "blog.tag",
         string="Etiqueta fuente",
-        help="Si se configura, el bloque tomara notas de esta etiqueta.",
+        help="Referencia editorial. Para Actualidad, De interés, Especiales y Novedades se recomienda administrar las notas desde Programacion Home.",
     )
     post_ids = fields.Many2many(
         "blog.post",
@@ -887,7 +922,7 @@ class LatinpymeRevistaHomeBlock(models.Model):
         "block_id",
         "post_id",
         string="Notas seleccionadas",
-        help="Opcional. Si se seleccionan notas, se usan antes que la regla por etiqueta.",
+        help="Notas manuales del bloque. Las asignaciones vigentes de Programacion Home tienen prioridad sobre esta seleccion.",
     )
     limit = fields.Integer(string="Cantidad de notas", default=3)
     link_label = fields.Char(string="Texto del enlace")

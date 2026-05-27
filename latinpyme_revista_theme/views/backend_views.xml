@@ -858,6 +858,49 @@
     </field>
   </record>
 
+  <record id="view_latinpyme_revista_blog_tag_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.blog.tag.list</field>
+    <field name="model">blog.tag</field>
+    <field name="arch" type="xml">
+      <list string="Etiquetas editoriales" default_order="lp_revista_tag_type,lp_revista_tag_priority,name">
+        <field name="name"/>
+        <field name="lp_revista_tag_type"/>
+        <field name="lp_revista_tag_priority"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_blog_tag_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.blog.tag.form</field>
+    <field name="model">blog.tag</field>
+    <field name="arch" type="xml">
+      <form string="Etiqueta editorial">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="lp_revista_tag_type"/>
+            <field name="lp_revista_tag_priority"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_blog_tag_search" model="ir.ui.view">
+    <field name="name">latinpyme.revista.blog.tag.search</field>
+    <field name="model">blog.tag</field>
+    <field name="arch" type="xml">
+      <search string="Buscar etiquetas editoriales">
+        <field name="name"/>
+        <field name="lp_revista_tag_type"/>
+        <filter name="section_tags" string="Seccion Editorial" domain="[('lp_revista_tag_type', '=', 'section')]"/>
+        <filter name="topic_tags" string="Tema" domain="[('lp_revista_tag_type', '=', 'topic')]"/>
+        <filter name="content_tags" string="Contenido" domain="[('lp_revista_tag_type', '=', 'content')]"/>
+        <filter name="group_type" string="Agrupar por tipo" context="{'group_by': 'lp_revista_tag_type'}"/>
+      </search>
+    </field>
+  </record>
+
   <record id="view_latinpyme_revista_blog_post_override_form" model="ir.ui.view">
     <field name="name">latinpyme.revista.blog.post.override.form</field>
     <field name="model">latinpyme.revista.blog.post.override</field>
@@ -922,7 +965,7 @@
     <field name="context">{'search_default_active': 1, 'search_default_group_block': 1}</field>
     <field name="help" type="html">
       <p class="o_view_nocontent_smiling_face">Programa las notas visibles en el home.</p>
-      <p>Selecciona el bloque, la nota, el orden y las fechas de vigencia. Si un bloque no tiene notas vigentes, se usa el fallback automatico por etiqueta/fecha.</p>
+      <p>Selecciona el bloque, la nota, el orden y las fechas de vigencia. Actualidad, De interés, Especiales y Novedades solo muestran notas configuradas manualmente.</p>
     </field>
   </record>
 
@@ -944,6 +987,31 @@
     <field name="res_model">latinpyme.revista.section</field>
     <field name="view_mode">list,form</field>
     <field name="search_view_id" ref="view_latinpyme_revista_section_search"/>
+  </record>
+
+  <record id="action_latinpyme_revista_blog_tag" model="ir.actions.act_window">
+    <field name="name">Etiquetas editoriales</field>
+    <field name="res_model">blog.tag</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_blog_tag_search"/>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">Clasifica las etiquetas del blog.</p>
+      <p>Marca como Seccion Editorial las etiquetas que deben tener prioridad visual en las tarjetas y notas de Revista LatinPyme.</p>
+    </field>
+  </record>
+
+  <record id="action_latinpyme_revista_blog_tag_view_list" model="ir.actions.act_window.view">
+    <field name="sequence" eval="1"/>
+    <field name="view_mode">list</field>
+    <field name="view_id" ref="view_latinpyme_revista_blog_tag_list"/>
+    <field name="act_window_id" ref="action_latinpyme_revista_blog_tag"/>
+  </record>
+
+  <record id="action_latinpyme_revista_blog_tag_view_form" model="ir.actions.act_window.view">
+    <field name="sequence" eval="2"/>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_latinpyme_revista_blog_tag_form"/>
+    <field name="act_window_id" ref="action_latinpyme_revista_blog_tag"/>
   </record>
 
   <record id="action_latinpyme_revista_ally" model="ir.actions.act_window">
@@ -1017,6 +1085,7 @@
   <menuitem id="menu_latinpyme_revista_home_assignments" name="Programacion Home" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_home_assignment" sequence="16"/>
   <menuitem id="menu_latinpyme_revista_home_assignment_interviews" name="Programacion entrevistas" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_home_assignment_interviews" sequence="17"/>
   <menuitem id="menu_latinpyme_revista_sections" name="Secciones" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_section" sequence="20"/>
+  <menuitem id="menu_latinpyme_revista_blog_tags" name="Etiquetas editoriales" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_blog_tag" sequence="21"/>
   <menuitem id="menu_latinpyme_revista_blog_post_overrides" name="Notas editoriales" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_blog_post_override" sequence="22"/>
   <menuitem id="menu_latinpyme_revista_interviews" name="Entrevistas" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_interview" sequence="23"/>
   <menuitem id="menu_latinpyme_revista_program_event" name="Programacion anual" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_program_event" sequence="25"/>

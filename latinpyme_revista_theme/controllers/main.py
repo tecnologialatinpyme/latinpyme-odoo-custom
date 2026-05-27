@@ -487,17 +487,26 @@ class LatinpymeRevistaController(http.Controller):
             return scheduled_interviews
         return empty_interviews
 
-    def _home_posts(self, block, blog=None, default_tag=None, default_limit=6, exclude_ids=None, min_limit=0):
+    def _home_posts(
+        self,
+        block,
+        blog=None,
+        default_tag=None,
+        default_limit=6,
+        exclude_ids=None,
+        min_limit=0,
+        allow_fallback=False,
+    ):
         limit = max(self._home_block_limit(block, default_limit), min_limit)
         manual_posts = self._manual_posts(block, blog=blog, limit=limit, exclude_ids=exclude_ids)
-        if manual_posts:
+        if manual_posts or not allow_fallback:
             return manual_posts
         tag = block.tag_id if block and block.tag_id else default_tag
         return self._posts(blog=blog, tag=tag, limit=limit, exclude_ids=exclude_ids)
 
-    def _home_featured_post(self, block, blog=None):
+    def _home_featured_post(self, block, blog=None, allow_fallback=False):
         manual_post = self._manual_posts(block, blog=blog, limit=1)
-        if manual_post:
+        if manual_post or not allow_fallback:
             return manual_post
         if block and block.tag_id:
             return self._posts(blog=blog, tag=block.tag_id, limit=1)
@@ -734,7 +743,16 @@ class LatinpymeRevistaController(http.Controller):
             "latest_posts": self._home_posts(home_blocks.get("latest"), blog=blog, default_limit=latest_limit, exclude_ids=exclude_ids),
             "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, min_limit=4, exclude_ids=exclude_ids),
             "interviews": manual_interviews or (empty_interviews if manual_interview_posts else self._interviews(limit=interviews_limit)),
-            "interview_posts": empty_posts if manual_interviews else (manual_interview_posts or self._home_posts(interviews_block, blog=blog, default_tag=interview_tag, default_limit=3)),
+            "interview_posts": empty_posts if manual_interviews else (
+                manual_interview_posts
+                or self._home_posts(
+                    interviews_block,
+                    blog=blog,
+                    default_tag=interview_tag,
+                    default_limit=3,
+                    allow_fallback=True,
+                )
+            ),
             "special_posts": self._home_posts(home_blocks.get("specials"), blog=blog, default_tag=special_tag, default_limit=2),
             "home_banners": home_top_banners,
             "home_mid_banners": self._banners("home_horizontal", limit=self._home_block_limit(home_blocks.get("mid_banners"), 3)),

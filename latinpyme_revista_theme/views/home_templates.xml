@@ -198,22 +198,6 @@
                   </div>
                 </article>
               </t>
-              <article t-if="not lp_special_posts" class="lp-revista-special-card lp-revista-special-card--fallback">
-                <span class="lp-revista-special-card__shade"/>
-                <div class="lp-revista-special-card__body">
-                  <span class="lp-revista-special-card__label">Especial</span>
-                  <h3>Historias empresariales que inspiran nuevas decisiones.</h3>
-                  <span class="lp-revista-special-card__date">Próximamente</span>
-                </div>
-              </article>
-              <article t-if="len(lp_special_posts) &lt; 2" class="lp-revista-special-card lp-revista-special-card--fallback lp-revista-special-card--alt">
-                <span class="lp-revista-special-card__shade"/>
-                <div class="lp-revista-special-card__body">
-                  <span class="lp-revista-special-card__label">Especial</span>
-                  <h3>Miradas editoriales para empresas que quieren avanzar.</h3>
-                  <span class="lp-revista-special-card__date">Muy pronto</span>
-                </div>
-              </article>
               <t t-set="lp_specials_banner" t-value="home_specials_banner[:1] if home_specials_banner else False"/>
               <t t-set="lp_specials_banner_image_only" t-value="lp_specials_banner and (lp_specials_banner.display_mode or 'image_only') == 'image_only'"/>
               <t t-set="lp_specials_banner_href" t-value="lp_specials_banner.url if lp_specials_banner and lp_specials_banner.url else (False if lp_specials_banner_image_only else '/contactus')"/>
