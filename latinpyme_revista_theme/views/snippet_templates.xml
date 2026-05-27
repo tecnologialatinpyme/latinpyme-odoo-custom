@@ -12,7 +12,7 @@
   <template id="lp_masthead" name="Revista LatinPyme Masthead">
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <t t-set="lp_subscribe_url" t-value="lp_config.subscribe_target_url() if lp_config else '/suscribirse'"/>
-    <t t-set="lp_masthead_sections" t-value="request.env['latinpyme.revista.section'].sudo().get_nav_sections(request.website)"/>
+    <t t-set="lp_masthead_sections" t-value="request.env['latinpyme.revista.section'].sudo().get_nav_sections()"/>
     <header class="lp-revista-masthead" role="banner">
       <div class="lp-revista-container lp-revista-masthead__top">
         <a href="/revista" class="lp-revista-brand" t-att-aria-label="lp_config.name if lp_config else 'Revista LatinPyme'">
@@ -1127,9 +1127,9 @@
   <template id="lp_footer" name="Revista LatinPyme Footer">
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <t t-set="lp_footer_link_model" t-value="request.env['latinpyme.revista.footer.link'].sudo()"/>
-    <t t-set="lp_footer_sections" t-value="lp_footer_link_model.get_active_links('sections', request.website)"/>
-    <t t-set="lp_footer_portfolio" t-value="lp_footer_link_model.get_active_links('portfolio', request.website)"/>
-    <t t-set="lp_footer_legal" t-value="lp_footer_link_model.get_active_links('legal', request.website)"/>
+    <t t-set="lp_footer_sections" t-value="lp_footer_link_model.get_active_links('sections')"/>
+    <t t-set="lp_footer_portfolio" t-value="lp_footer_link_model.get_active_links('portfolio')"/>
+    <t t-set="lp_footer_legal" t-value="lp_footer_link_model.get_active_links('legal')"/>
     <footer class="lp-revista-footer">
       <div class="lp-revista-footer__brand">
         <span class="lp-revista-footer__mark">LP</span>
@@ -1205,9 +1205,9 @@
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer')"/>
     <t t-set="lp_footer_link_model" t-value="request.env['latinpyme.revista.footer.link'].sudo()"/>
-    <t t-set="lp_footer_sections" t-value="lp_footer_link_model.get_active_links('sections', request.website)"/>
-    <t t-set="lp_footer_portfolio" t-value="lp_footer_link_model.get_active_links('portfolio', request.website)"/>
-    <t t-set="lp_footer_legal" t-value="lp_footer_link_model.get_active_links('legal', request.website)"/>
+    <t t-set="lp_footer_sections" t-value="lp_footer_link_model.get_active_links('sections')"/>
+    <t t-set="lp_footer_portfolio" t-value="lp_footer_link_model.get_active_links('portfolio')"/>
+    <t t-set="lp_footer_legal" t-value="lp_footer_link_model.get_active_links('legal')"/>
     <footer class="lp-revista-footer lp-revista-footer--with-ad">
       <div class="lp-revista-footer__brand">
         <span class="lp-revista-footer__mark">LP</span>
