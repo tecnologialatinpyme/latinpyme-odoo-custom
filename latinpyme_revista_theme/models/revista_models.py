@@ -105,6 +105,11 @@ def _current_website():
         return False
 
 
+def _revista_seed_website(env):
+    config = env["latinpyme.revista.config"].sudo().search([("website_id", "!=", False)], order="id", limit=1)
+    return config.website_id or _current_website()
+
+
 class LatinpymeRevistaConfig(models.Model):
     _name = "latinpyme.revista.config"
     _description = "Configuracion Revista LatinPyme"
@@ -436,7 +441,49 @@ class LatinpymeRevistaSection(models.Model):
         return value.strip("-")
 
     @api.model
+    def _seed_section(self, slug, website, values):
+        if not website:
+            return self.browse()
+
+        values = dict(values, slug=slug)
+        section = self.search([("slug", "=", slug), ("website_id", "=", website.id)], limit=1)
+        global_section = self.search([("slug", "=", slug), ("website_id", "=", False)], limit=1)
+
+        if section:
+            if global_section:
+                global_section.write({"active": False})
+            section.write(values)
+            return section
+
+        values["website_id"] = website.id
+        values.setdefault("active", True)
+        if global_section:
+            global_section.write(values)
+            return global_section
+
+        return self.create(values)
+
+    @api.model
+    def _scope_global_sections(self, website):
+        if not website:
+            return
+        for section in self.search([("website_id", "=", False), ("slug", "!=", False)]):
+            website_section = self.search(
+                [("slug", "=", section.slug), ("website_id", "=", website.id)],
+                limit=1,
+            )
+            if website_section:
+                section.write({"active": False})
+            else:
+                section.write({"website_id": website.id})
+
+    @api.model
     def ensure_default_sections(self):
+        website = _revista_seed_website(self.env)
+        if not website:
+            return True
+        self._scope_global_sections(website)
+
         defaults = [
             ("Gerencia", "gerencia", 10, "Estrategia, liderazgo y gestion para empresarios pyme."),
             ("Negocios", "negocios", 20, "Oportunidades, crecimiento y modelos de negocio para pymes."),
@@ -449,26 +496,15 @@ class LatinpymeRevistaSection(models.Model):
             ("Portafolio", "portafolio", 90, "Servicios, formacion, eventos y soluciones de LatinPyme."),
         ]
         for name, slug, sequence, description in defaults:
-            section = self.search([("slug", "=", slug), ("website_id", "=", False)], limit=1)
-            if not section:
-                section = self.search([("slug", "=", slug)], order="website_id, id", limit=1)
-            if section:
-                values = {}
-                if not section.name:
-                    values["name"] = name
-                if not section.description:
-                    values["description"] = description
-                if values:
-                    section.write(values)
-                continue
-            self.create(
+            self._seed_section(
+                slug,
+                website,
                 {
                     "name": name,
-                    "slug": slug,
                     "sequence": sequence,
                     "description": description,
                     "active": True,
-                }
+                },
             )
         return True
 
@@ -594,19 +630,21 @@ class LatinpymeRevistaSection(models.Model):
 
     @api.model
     def ensure_training_menu(self):
-        parent = self.search([("slug", "=", "capacitacion"), ("website_id", "=", False)], limit=1)
-        if not parent:
-            parent = self.create(
-                {
-                    "name": "Capacitación",
-                    "slug": "capacitacion",
-                    "sequence": 95,
-                    "menu_only": True,
-                    "description": "Capacitaciones, charlas y programas formativos de LatinPyme.",
-                }
-            )
-        elif not parent.menu_only:
-            parent.write({"menu_only": True})
+        website = _revista_seed_website(self.env)
+        if not website:
+            return True
+
+        parent = self._seed_section(
+            "capacitacion",
+            website,
+            {
+                "name": "Capacitación",
+                "sequence": 95,
+                "menu_only": True,
+                "description": "Capacitaciones, charlas y programas formativos de LatinPyme.",
+                "active": True,
+            },
+        )
 
         children = [
             ("Programación anual", "programacion-anual", 96),
@@ -615,46 +653,37 @@ class LatinpymeRevistaSection(models.Model):
             ("Flashtraining", "flashtraining", 99),
         ]
         for name, slug, sequence in children:
-            child = self.search([("slug", "=", slug), ("website_id", "=", False)], limit=1)
-            if child:
-                values = {}
-                if child.parent_id != parent:
-                    values["parent_id"] = parent.id
-                if child.menu_only:
-                    values["menu_only"] = False
-                if values:
-                    child.write(values)
-                continue
-            self.create(
+            self._seed_section(
+                slug,
+                website,
                 {
                     "name": name,
-                    "slug": slug,
                     "sequence": sequence,
                     "parent_id": parent.id,
                     "menu_only": False,
                     "description": "%s de Revista LatinPyme." % name,
-                }
+                    "active": True,
+                },
             )
         return True
 
     @api.model
     def ensure_portfolio_menu(self):
-        parent = self.search([("slug", "=", "portafolio"), ("website_id", "=", False)], limit=1)
-        if not parent:
-            parent = self.create(
-                {
-                    "name": "Portafolio",
-                    "slug": "portafolio",
-                    "sequence": 90,
-                    "menu_only": True,
-                    "description": "Servicios, formacion, eventos y soluciones de LatinPyme.",
-                }
-            )
-        else:
-            values = {"menu_only": True}
-            if not parent.sequence:
-                values["sequence"] = 90
-            parent.write(values)
+        website = _revista_seed_website(self.env)
+        if not website:
+            return True
+
+        parent = self._seed_section(
+            "portafolio",
+            website,
+            {
+                "name": "Portafolio",
+                "sequence": 90,
+                "menu_only": True,
+                "description": "Servicios, formacion, eventos y soluciones de LatinPyme.",
+                "active": True,
+            },
+        )
 
         groups = [
             (
@@ -687,41 +716,31 @@ class LatinpymeRevistaSection(models.Model):
         ]
 
         for group_name, group_slug, group_sequence, children in groups:
-            group = self.search([("slug", "=", group_slug), ("website_id", "=", False)], limit=1)
-            group_values = {
-                "name": group_name,
-                "sequence": group_sequence,
-                "parent_id": parent.id,
-                "menu_only": True,
-            }
-            if group:
-                group.write(group_values)
-            else:
-                group = self.create(
-                    dict(
-                        group_values,
-                        slug=group_slug,
-                        description="%s de Portafolio LatinPyme." % group_name,
-                    )
-                )
+            group = self._seed_section(
+                group_slug,
+                website,
+                {
+                    "name": group_name,
+                    "sequence": group_sequence,
+                    "parent_id": parent.id,
+                    "menu_only": True,
+                    "description": "%s de Portafolio LatinPyme." % group_name,
+                    "active": True,
+                },
+            )
 
             for child_name, child_slug, child_sequence in children:
-                child = self.search([("slug", "=", child_slug), ("website_id", "=", False)], limit=1)
-                child_values = {
-                    "name": child_name,
-                    "sequence": child_sequence,
-                    "parent_id": group.id,
-                    "menu_only": False,
-                }
-                if child:
-                    child.write(child_values)
-                    continue
-                self.create(
-                    dict(
-                        child_values,
-                        slug=child_slug,
-                        description="%s de Revista LatinPyme." % child_name,
-                    )
+                self._seed_section(
+                    child_slug,
+                    website,
+                    {
+                        "name": child_name,
+                        "sequence": child_sequence,
+                        "parent_id": group.id,
+                        "menu_only": False,
+                        "description": "%s de Revista LatinPyme." % child_name,
+                        "active": True,
+                    },
                 )
         return True
 
@@ -1180,11 +1199,60 @@ class LatinpymeRevistaFooterLink(models.Model):
         website = website or _current_website()
         domain = [("active", "=", True), ("group_key", "=", group_key)]
         if website:
-            domain.append(("website_id", "in", [False, website.id]))
-        return self.search(domain, order="sequence, name")
+            website_links = self.search(domain + [("website_id", "=", website.id)], order="sequence, name")
+            if website_links:
+                return website_links
+        return self.search(domain + [("website_id", "=", False)], order="sequence, name")
+
+    @api.model
+    def _seed_footer_link(self, group_key, name, website, values):
+        if not website:
+            return self.browse()
+
+        domain = [("group_key", "=", group_key), ("name", "=ilike", name)]
+        link = self.search(domain + [("website_id", "=", website.id)], limit=1)
+        global_link = self.search(domain + [("website_id", "=", False)], limit=1)
+
+        values = dict(values, group_key=group_key, name=name)
+        if link:
+            if global_link:
+                global_link.write({"active": False})
+            link.write(values)
+            return link
+
+        values["website_id"] = website.id
+        values.setdefault("active", True)
+        if global_link:
+            global_link.write(values)
+            return global_link
+
+        return self.create(values)
+
+    @api.model
+    def _scope_global_links(self, website):
+        if not website:
+            return
+        for link in self.search([("website_id", "=", False)]):
+            website_link = self.search(
+                [
+                    ("group_key", "=", link.group_key),
+                    ("name", "=ilike", link.name),
+                    ("website_id", "=", website.id),
+                ],
+                limit=1,
+            )
+            if website_link:
+                link.write({"active": False})
+            else:
+                link.write({"website_id": website.id})
 
     @api.model
     def ensure_default_links(self):
+        website = _revista_seed_website(self.env)
+        if not website:
+            return True
+        self._scope_global_links(website)
+
         defaults = [
             ("sections", "Gerencia", "/revista/seccion/gerencia", 10),
             ("sections", "Negocios", "/revista/seccion/negocios", 20),
@@ -1204,17 +1272,15 @@ class LatinpymeRevistaFooterLink(models.Model):
             ("legal", "Derechos de autor", "/contactus", 30),
         ]
         for group_key, name, url, sequence in defaults:
-            link = self.search([("group_key", "=", group_key), ("name", "=ilike", name), ("website_id", "=", False)], limit=1)
-            if link:
-                continue
-            self.create(
+            self._seed_footer_link(
+                group_key,
+                name,
+                website,
                 {
-                    "group_key": group_key,
-                    "name": name,
                     "url": url,
                     "sequence": sequence,
                     "active": True,
-                }
+                },
             )
         return True
 
