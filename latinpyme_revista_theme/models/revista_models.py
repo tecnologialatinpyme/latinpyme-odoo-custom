@@ -530,7 +530,13 @@ class LatinpymeRevistaSection(models.Model):
 
     @api.model
     def get_nav_sections(self, website=None):
-        records = self.get_active_sections(website)
+        website = website or _current_website()
+        if not website:
+            return []
+        records = self.search(
+            [("active", "=", True), ("website_id", "=", website.id)],
+            order="sequence, name",
+        )
         if not records:
             return []
         top_sections = records.filtered(lambda section: not section.parent_id)
