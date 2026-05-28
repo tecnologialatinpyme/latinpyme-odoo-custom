@@ -589,6 +589,46 @@ class LatinpymeRevistaSection(models.Model):
         return [self._nav_tree_item(section, records) for section in top_sections]
 
     @api.model
+    def _revista_nav_website_candidates(self, website=None):
+        candidates = []
+        Config = self.env["latinpyme.revista.config"].sudo()
+
+        if website:
+            candidates.append(website)
+
+        active_config = Config.get_active_config(website)
+        if active_config and active_config.website_id:
+            candidates.append(active_config.website_id)
+
+        current_website = _current_website()
+        if current_website:
+            candidates.append(current_website)
+
+        for config in Config.search([("website_id", "!=", False)], order="id desc"):
+            candidates.append(config.website_id)
+
+        Website = self.env["website"].sudo()
+        named_websites = Website.search([("name", "ilike", "Revista Latin")], order="id desc")
+        candidates += list(named_websites)
+
+        unique_candidates = []
+        seen_ids = set()
+        for candidate in candidates:
+            if not candidate or candidate.id in seen_ids:
+                continue
+            seen_ids.add(candidate.id)
+            unique_candidates.append(candidate)
+        return unique_candidates
+
+    @api.model
+    def get_masthead_nav_sections(self, website=None):
+        for candidate in self._revista_nav_website_candidates(website):
+            nav_sections = self.get_nav_sections(candidate)
+            if nav_sections:
+                return nav_sections
+        return []
+
+    @api.model
     def get_by_slug(self, slug, website=None, active=True, routable=False):
         website = website or _current_website()
         slug = (slug or "").strip().lower()
@@ -1237,7 +1277,7 @@ class LatinpymeRevistaFooterLink(models.Model):
     @api.model
     def repair_website_editor_views(self):
         replacements = {
-            "get_nav_sections(request.website)": "get_nav_sections()",
+            "get_nav_sections(request.website)": "get_masthead_nav_sections()",
             "get_active_links('sections', request.website)": "get_active_links('sections')",
             'get_active_links("sections", request.website)': 'get_active_links("sections")',
             "get_active_links('portfolio', request.website)": "get_active_links('portfolio')",

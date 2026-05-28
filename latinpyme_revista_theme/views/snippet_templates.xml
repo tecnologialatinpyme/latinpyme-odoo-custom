@@ -13,7 +13,7 @@
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
     <t t-set="lp_subscribe_url" t-value="lp_config.subscribe_target_url() if lp_config else '/suscribirse'"/>
     <t t-set="lp_website" t-value="lp_config.website_id if lp_config and lp_config.website_id else False"/>
-    <t t-set="lp_masthead_sections" t-value="request.env['latinpyme.revista.section'].sudo().get_nav_sections(lp_website)"/>
+    <t t-set="lp_masthead_sections" t-value="request.env['latinpyme.revista.section'].sudo().get_masthead_nav_sections(lp_website)"/>
     <header class="lp-revista-masthead" role="banner">
       <div class="lp-revista-container lp-revista-masthead__top">
         <a href="/revista" class="lp-revista-brand" t-att-aria-label="lp_config.name if lp_config else 'Revista LatinPyme'">
