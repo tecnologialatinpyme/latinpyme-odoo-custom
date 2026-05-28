@@ -96,60 +96,9 @@
   </template>
 
   <template id="s_lp_revista_header" name="Revista LatinPyme Header Snippet">
-    <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
-    <t t-set="lp_subscribe_url" t-value="lp_config.subscribe_target_url() if lp_config else '/suscribirse'"/>
     <section class="lp-revista s_lp_revista_header" data-snippet="s_lp_revista_header" data-name="LP Revista - Header Editorial">
-      <header class="lp-revista-masthead" role="banner">
-        <div class="lp-revista-container lp-revista-masthead__top">
-          <a href="/revista" class="lp-revista-brand" aria-label="Revista LatinPyme">
-            <span class="lp-revista-brand__mark">LP</span>
-            <span class="lp-revista-brand__text">
-              <span>Revista</span>
-              <strong>LatinPyme</strong>
-            </span>
-          </a>
-          <div class="lp-revista-anniversary">
-            <strong>25 años</strong>
-            <span>Impulsando empresarios en Latinoamérica</span>
-          </div>
-          <form class="lp-revista-search" action="/website/search" method="get" role="search">
-            <input type="search" name="search" placeholder="Buscar noticias, artículos, recursos..." aria-label="Buscar en Revista LatinPyme"/>
-            <button type="submit" aria-label="Buscar">
-              <i class="fa fa-search"/>
-            </button>
-          </form>
-          <div class="lp-revista-social" aria-label="Redes sociales">
-            <t t-call="latinpyme_revista_theme.lp_social_links"/>
-          </div>
-        </div>
-        <nav class="lp-revista-nav" aria-label="Secciones Revista LatinPyme">
-          <div class="lp-revista-container lp-revista-nav__inner">
-            <a href="/revista" class="lp-revista-nav__link is-active">Inicio</a>
-            <a href="/revista/seccion/gerencia" class="lp-revista-nav__link">Gerencia</a>
-            <a href="/revista/seccion/negocios" class="lp-revista-nav__link">Negocios</a>
-            <a href="/revista/seccion/ia" class="lp-revista-nav__link">IA</a>
-            <a href="/revista/seccion/laboral" class="lp-revista-nav__link">Laboral</a>
-            <a href="/revista/seccion/finanzas" class="lp-revista-nav__link">Finanzas</a>
-            <a href="/revista/seccion/entrevistas" class="lp-revista-nav__link">Entrevistas</a>
-            <a href="/revista/seccion/especiales" class="lp-revista-nav__link">Especiales</a>
-            <a href="/revista/seccion/mujeres" class="lp-revista-nav__link">Mujeres</a>
-            <a href="/revista/seccion/portafolio" class="lp-revista-nav__link">Portafolio</a>
-            <div class="lp-revista-nav__item lp-revista-nav__item--dropdown">
-              <button type="button" class="lp-revista-nav__link lp-revista-nav__toggle">
-                <span>Capacitación</span>
-                <i class="fa fa-angle-down" aria-hidden="true"/>
-              </button>
-              <div class="lp-revista-nav__dropdown">
-                <a href="/revista/seccion/programacion-anual" class="lp-revista-nav__dropdown-link">Programación anual</a>
-                <a href="/revista/seccion/charlas" class="lp-revista-nav__dropdown-link">Charlas</a>
-                <a href="/revista/seccion/diplomados" class="lp-revista-nav__dropdown-link">Diplomados</a>
-                <a href="/revista/seccion/flashtraining" class="lp-revista-nav__dropdown-link">Flashtraining</a>
-              </div>
-            </div>
-            <a t-att-href="lp_subscribe_url" target="_blank" rel="noopener" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
-          </div>
-        </nav>
-      </header>
+      <t t-set="section_slug" t-value="False"/>
+      <t t-call="latinpyme_revista_theme.lp_masthead"/>
     </section>
   </template>
 
@@ -1194,10 +1143,10 @@
   </template>
 
   <template id="s_lp_revista_footer" name="Revista LatinPyme Footer Snippet">
-    <section class="lp-revista s_lp_revista_footer" data-snippet="s_lp_revista_footer" data-name="LP Revista - Footer Editorial">
-      <div class="lp-revista-container">
-        <t t-call="latinpyme_revista_theme.lp_footer"/>
-      </div>
+    <section class="lp-revista lp-revista-container lp-revista-block s_lp_revista_footer" data-snippet="s_lp_revista_footer" data-name="LP Revista - Footer Editorial">
+      <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer')"/>
+      <t t-if="lp_footer_banner" t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
+      <t t-else="" t-call="latinpyme_revista_theme.lp_footer"/>
     </section>
   </template>
 
@@ -1276,10 +1225,8 @@
   </template>
 
   <template id="s_lp_revista_footer_ad" name="Revista LatinPyme Footer With Ad Snippet">
-    <section class="lp-revista s_lp_revista_footer_ad" data-snippet="s_lp_revista_footer_ad" data-name="LP Revista - Footer con Publicidad">
-      <div class="lp-revista-container">
-        <t t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
-      </div>
+    <section class="lp-revista lp-revista-container lp-revista-block s_lp_revista_footer_ad" data-snippet="s_lp_revista_footer_ad" data-name="LP Revista - Footer con Publicidad">
+      <t t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
     </section>
   </template>
 </odoo>
