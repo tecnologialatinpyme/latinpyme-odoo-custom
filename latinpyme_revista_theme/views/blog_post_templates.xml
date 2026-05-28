@@ -17,7 +17,7 @@
 
   <template id="lp_revista_blog_sections_context" name="Revista LatinPyme Blog Sections Context">
     <t t-set="lp_section_records" t-value="request.env['latinpyme.revista.section'].sudo().get_active_sections()"/>
-    <t t-set="sections" t-value="[{'slug': section.slug, 'name': section.name, 'url': '/revista/seccion/%s' % section.slug} for section in lp_section_records] or [{'slug': 'gerencia', 'name': 'Gerencia', 'url': '/revista/seccion/gerencia'}, {'slug': 'negocios', 'name': 'Negocios', 'url': '/revista/seccion/negocios'}, {'slug': 'ia', 'name': 'IA', 'url': '/revista/seccion/ia'}, {'slug': 'laboral', 'name': 'Laboral', 'url': '/revista/seccion/laboral'}, {'slug': 'finanzas', 'name': 'Finanzas', 'url': '/revista/seccion/finanzas'}, {'slug': 'entrevistas', 'name': 'Entrevistas', 'url': '/revista/seccion/entrevistas'}, {'slug': 'especiales', 'name': 'Especiales', 'url': '/revista/seccion/especiales'}, {'slug': 'mujeres', 'name': 'Mujeres', 'url': '/revista/seccion/mujeres'}, {'slug': 'portafolio', 'name': 'Portafolio', 'url': '/revista/seccion/portafolio'}]"/>
+    <t t-set="sections" t-value="[{'slug': section.slug, 'name': section.name, 'url': '/revista/seccion/%s' % section.slug} for section in lp_section_records]"/>
     <t t-set="section_slug" t-value="False"/>
   </template>
 

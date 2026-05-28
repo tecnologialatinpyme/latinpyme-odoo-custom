@@ -101,6 +101,13 @@ BLOG_TAG_TYPES = [
     ("topic", "Tema"),
     ("content", "Contenido"),
 ]
+LEGACY_HEADER_MENU_SLUGS = (
+    "negocios",
+    "ia",
+    "laboral",
+    "entrevistas",
+    "especiales",
+)
 
 
 def _current_website():
@@ -263,6 +270,38 @@ class LatinpymeRevistaConfig(models.Model):
 
         ordered_configs = sorted(configs, key=lambda config: (_score(config), config.id))
         return ordered_configs[0] if _score(ordered_configs[0]) < 99 else self.get_active_config()
+
+    def action_cleanup_legacy_header_menu(self):
+        Section = self.env["latinpyme.revista.section"].sudo()
+        Website = self.env["website"].sudo()
+        websites = self.mapped("website_id")
+        primary_config = self.sudo().get_primary_config()
+        if primary_config and primary_config.website_id:
+            websites |= primary_config.website_id
+        websites |= Website.search([("name", "ilike", "Revista")])
+
+        domain = [
+            ("active", "=", True),
+            ("slug", "in", LEGACY_HEADER_MENU_SLUGS),
+        ]
+        if websites:
+            domain += ["|", ("website_id", "in", websites.ids), ("website_id", "=", False)]
+        else:
+            domain.append(("website_id", "=", False))
+
+        sections = Section.search(domain)
+        sections.write({"active": False})
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": "Menu editorial limpiado",
+                "message": "%s secciones legacy fueron desactivadas." % len(sections),
+                "type": "success",
+                "sticky": False,
+            },
+        }
 
     def _domain_to_host(self, domain):
         domain = (domain or "").strip().lower()
@@ -661,16 +700,13 @@ class LatinpymeRevistaSection(models.Model):
         if active_config and active_config.website_id:
             candidates.append(active_config.website_id)
 
+        primary_config = Config.get_primary_config()
+        if primary_config and primary_config.website_id:
+            candidates.append(primary_config.website_id)
+
         current_website = _current_website()
         if current_website:
             candidates.append(current_website)
-
-        for config in Config.search([("website_id", "!=", False)], order="id desc"):
-            candidates.append(config.website_id)
-
-        Website = self.env["website"].sudo()
-        named_websites = Website.search([("name", "ilike", "Revista Latin")], order="id desc")
-        candidates += list(named_websites)
 
         unique_candidates = []
         seen_ids = set()
@@ -1351,15 +1387,15 @@ class LatinpymeRevistaFooterLink(models.Model):
             'get_active_links("legal", request.website)': 'get_active_links("legal")',
         }
         dynamic_header = (
-            '<section class="lp-revista s_lp_revista_header_dynamic_v2" '
-            'data-snippet="s_lp_revista_header_dynamic_v2" '
-            'data-name="LP Revista - Header Dinamico">'
+            '<section class="lp-revista s_lp_revista_header_current" '
+            'data-snippet="s_lp_revista_header_current" '
+            'data-name="LP Revista - Header Actual">'
             '<t t-set="section_slug" t-value="False"/>'
             '<t t-call="latinpyme_revista_theme.lp_masthead"/>'
             "</section>"
         )
         old_header_pattern = re.compile(
-            r"<section\b(?=[^>]*\bs_lp_revista_header(?:_home)?\b)(?=[^>]*\bdata-snippet=)"
+            r"<section\b(?=[^>]*\bs_lp_revista_header(?:_home|_dynamic_v2|_current)?\b)(?=[^>]*\bdata-snippet=)"
             r"[\s\S]*?</section>"
         )
         views = self.env["ir.ui.view"].sudo().search(

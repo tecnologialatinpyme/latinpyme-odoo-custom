@@ -19,6 +19,14 @@
     <field name="model">latinpyme.revista.config</field>
     <field name="arch" type="xml">
       <form string="Configuracion Revista LatinPyme">
+        <header>
+          <button
+            name="action_cleanup_legacy_header_menu"
+            type="object"
+            string="Limpiar menu legacy"
+            class="btn-secondary"
+            confirm="Se desactivaran del menu editorial las secciones legacy: Negocios, IA, Laboral, Entrevistas y Especiales. No se eliminaran registros."/>
+        </header>
         <sheet>
           <group>
             <group string="General">
