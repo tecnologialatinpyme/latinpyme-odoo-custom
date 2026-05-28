@@ -5,7 +5,6 @@
       <t snippet-group="lp_revista" t-snippet="website.s_snippet_group" string="LP Revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_header.svg"/>
     </xpath>
     <xpath expr="//snippets[@id='snippet_structure']" position="inside">
-      <t t-snippet="latinpyme_revista_theme.s_lp_revista_header_dynamic_v2" string="LP Revista - Header Editorial Dinámico" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_header.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_hero_home_double" string="LP Revista - Hero Home Doble" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_hero_home_double.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_featured_current" string="LP Revista - Actualidad Destacada" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_article_cards.svg"/>
       <t t-snippet="latinpyme_revista_theme.s_lp_revista_latest_block" string="LP Revista - Lo Más Reciente" group="lp_revista" t-thumbnail="/latinpyme_revista_theme/static/src/img/snippets/lp_revista_latest_block.svg"/>
