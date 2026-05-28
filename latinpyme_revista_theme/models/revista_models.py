@@ -2,6 +2,7 @@
 
 from datetime import datetime, time, timedelta
 import re
+import unicodedata
 from urllib.parse import urlencode
 
 from odoo import api, fields, models
@@ -1505,9 +1506,11 @@ class LatinpymeRevistaFooterLink(models.Model):
             ("portfolio", "Eventos", "/revista/seccion/portafolio", 30),
             ("portfolio", "Membresías", "/revista/seccion/portafolio", 40),
             ("portfolio", "Portafolio", "/revista/seccion/portafolio", 50),
-            ("legal", "Tratamiento de datos personales", "/privacy", 10),
-            ("legal", "Términos y condiciones", "/terms", 20),
-            ("legal", "Derechos de autor", "/contactus", 30),
+            ("legal", "Términos de Uso", "/revista/sobre-nosotros/terminos-de-uso", 10),
+            ("legal", "Política de Privacidad", "/revista/sobre-nosotros/politica-de-privacidad", 20),
+            ("legal", "Aviso Legal", "/revista/sobre-nosotros/aviso-legal", 30),
+            ("legal", "Política de Cookies", "/revista/sobre-nosotros/politica-de-cookies", 40),
+            ("legal", "Política de Uso de Imágenes", "/revista/sobre-nosotros/politica-de-uso-de-imagenes", 50),
         ]
         for group_key, name, url, sequence in defaults:
             self._seed_footer_link(
@@ -1521,6 +1524,29 @@ class LatinpymeRevistaFooterLink(models.Model):
                 },
             )
         return True
+
+    @api.model
+    def repair_legal_link_urls(self):
+        legal_urls = {
+            "terminos de uso": "/revista/sobre-nosotros/terminos-de-uso",
+            "terminos y condiciones": "/revista/sobre-nosotros/terminos-de-uso",
+            "politica de privacidad": "/revista/sobre-nosotros/politica-de-privacidad",
+            "tratamiento de datos personales": "/revista/sobre-nosotros/politica-de-privacidad",
+            "aviso legal": "/revista/sobre-nosotros/aviso-legal",
+            "derechos de autor": "/revista/sobre-nosotros/aviso-legal",
+            "politica de cookies": "/revista/sobre-nosotros/politica-de-cookies",
+            "politica de uso de imagenes": "/revista/sobre-nosotros/politica-de-uso-de-imagenes",
+        }
+
+        repaired = 0
+        for link in self.search([("group_key", "=", "legal")]):
+            normalized_name = unicodedata.normalize("NFKD", link.name or "")
+            normalized_name = normalized_name.encode("ascii", "ignore").decode("ascii").strip().lower()
+            target_url = legal_urls.get(normalized_name)
+            if target_url and link.url != target_url:
+                link.write({"url": target_url})
+                repaired += 1
+        return repaired
 
 
 class LatinpymeRevistaInterview(models.Model):
