@@ -221,6 +221,47 @@ class LatinpymeRevistaConfig(models.Model):
 
         return self.search([("website_id", "=", False)], limit=1)
 
+    @api.model
+    def get_primary_config(self):
+        configs = self.search([])
+        if not configs:
+            return self.browse()
+
+        def _website_domain(config):
+            if config.website_id and "domain" in config.website_id._fields:
+                return self._domain_to_host(config.website_id.domain)
+            return False
+
+        def _score(config):
+            production_host = config._domain_to_host(config.production_domain)
+            website_host = _website_domain(config)
+            website_name = (config.website_id.name or "").strip().lower() if config.website_id else ""
+            config_name = (config.name or "").strip().lower()
+            is_imported_or_disabled = any(token in website_name for token in ("importado", "no usar", "old"))
+            is_revista = "revista" in website_name or ("revista" in config_name and not website_name)
+
+            if is_imported_or_disabled:
+                return 90
+
+            if website_host and production_host and website_host == production_host and is_revista:
+                return 0
+            if website_host == "latinpyme.com" and is_revista:
+                return 1
+            if production_host == "latinpyme.com" and is_revista:
+                return 2
+            if website_host and production_host and website_host == production_host:
+                return 3
+            if production_host == "latinpyme.com":
+                return 4
+            if is_revista and config.website_id:
+                return 5
+            if config.website_id:
+                return 50
+            return 99
+
+        ordered_configs = sorted(configs, key=lambda config: (_score(config), config.id))
+        return ordered_configs[0] if _score(ordered_configs[0]) < 99 else self.get_active_config()
+
     def _domain_to_host(self, domain):
         domain = (domain or "").strip().lower()
         domain = domain.replace("https://", "").replace("http://", "")
