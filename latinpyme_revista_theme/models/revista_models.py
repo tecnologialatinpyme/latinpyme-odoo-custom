@@ -291,13 +291,18 @@ class LatinpymeRevistaConfig(models.Model):
 
         sections = Section.search(domain)
         sections.write({"active": False})
+        repaired_views = self.env["latinpyme.revista.footer.link"].sudo().repair_website_editor_views()
 
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
                 "title": "Menu editorial limpiado",
-                "message": "%s secciones legacy fueron desactivadas." % len(sections),
+                "message": (
+                    "%s secciones legacy fueron desactivadas. "
+                    "%s vistas/snippets del editor fueron reparados."
+                )
+                % (len(sections), repaired_views or 0),
                 "type": "success",
                 "sticky": False,
             },
@@ -1395,7 +1400,7 @@ class LatinpymeRevistaFooterLink(models.Model):
             "</section>"
         )
         old_header_pattern = re.compile(
-            r"<section\b(?=[^>]*\bs_lp_revista_header(?:_home|_dynamic_v2|_current)?\b)(?=[^>]*\bdata-snippet=)"
+            r"<section\b(?=[^>]*\bs_lp_revista_header(?:_home|_dynamic_v2|_current)?\b)"
             r"[\s\S]*?</section>"
         )
         views = self.env["ir.ui.view"].sudo().search(
@@ -1403,10 +1408,13 @@ class LatinpymeRevistaFooterLink(models.Model):
                 "|",
                 ("key", "in", ["latinpyme_revista_theme.lp_masthead", "latinpyme_revista_theme.lp_footer", "latinpyme_revista_theme.lp_footer_with_ad"]),
                 "|",
+                ("arch_db", "ilike", "lp-revista-masthead"),
+                "|",
                 ("arch_db", "ilike", "request.website"),
                 ("arch_db", "ilike", "s_lp_revista_header"),
             ]
         )
+        repaired_views = 0
         for view in views:
             arch = view.arch_db or ""
             patched_arch = arch
@@ -1415,10 +1423,11 @@ class LatinpymeRevistaFooterLink(models.Model):
             patched_arch = old_header_pattern.sub(dynamic_header, patched_arch)
             if patched_arch != arch:
                 view.with_context(lang=None).write({"arch_db": patched_arch})
+                repaired_views += 1
         view_model = self.env["ir.ui.view"]
         if hasattr(view_model, "clear_caches"):
             view_model.clear_caches()
-        return True
+        return repaired_views
 
     @api.model
     def get_active_links(self, group_key, website=None):
