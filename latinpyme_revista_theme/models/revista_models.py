@@ -1245,11 +1245,25 @@ class LatinpymeRevistaFooterLink(models.Model):
             "get_active_links('legal', request.website)": "get_active_links('legal')",
             'get_active_links("legal", request.website)': 'get_active_links("legal")',
         }
+        dynamic_header = (
+            '<section class="lp-revista s_lp_revista_header_dynamic_v2" '
+            'data-snippet="s_lp_revista_header_dynamic_v2" '
+            'data-name="LP Revista - Header Dinamico">'
+            '<t t-set="section_slug" t-value="False"/>'
+            '<t t-call="latinpyme_revista_theme.lp_masthead"/>'
+            "</section>"
+        )
+        old_header_pattern = re.compile(
+            r"<section\b(?=[^>]*\bs_lp_revista_header(?:_home)?\b)(?=[^>]*\bdata-snippet=)"
+            r"[\s\S]*?</section>"
+        )
         views = self.env["ir.ui.view"].sudo().search(
             [
                 "|",
                 ("key", "in", ["latinpyme_revista_theme.lp_masthead", "latinpyme_revista_theme.lp_footer", "latinpyme_revista_theme.lp_footer_with_ad"]),
+                "|",
                 ("arch_db", "ilike", "request.website"),
+                ("arch_db", "ilike", "s_lp_revista_header"),
             ]
         )
         for view in views:
@@ -1257,6 +1271,7 @@ class LatinpymeRevistaFooterLink(models.Model):
             patched_arch = arch
             for old, new in replacements.items():
                 patched_arch = patched_arch.replace(old, new)
+            patched_arch = old_header_pattern.sub(dynamic_header, patched_arch)
             if patched_arch != arch:
                 view.with_context(lang=None).write({"arch_db": patched_arch})
         view_model = self.env["ir.ui.view"]
