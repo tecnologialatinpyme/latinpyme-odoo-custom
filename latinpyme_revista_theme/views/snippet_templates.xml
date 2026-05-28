@@ -96,11 +96,15 @@
     </header>
   </template>
 
-  <template id="s_lp_revista_header" name="Revista LatinPyme Header Snippet">
-    <section class="lp-revista s_lp_revista_header" data-snippet="s_lp_revista_header" data-name="LP Revista - Header Editorial">
+  <template id="s_lp_revista_header_home" name="Revista LatinPyme Header Home Snippet">
+    <section class="lp-revista s_lp_revista_header_home" data-snippet="s_lp_revista_header_home" data-name="LP Revista - Header Home">
       <t t-set="section_slug" t-value="False"/>
       <t t-call="latinpyme_revista_theme.lp_masthead"/>
     </section>
+  </template>
+
+  <template id="s_lp_revista_header" name="Revista LatinPyme Header Snippet Deprecated">
+    <t t-call="latinpyme_revista_theme.s_lp_revista_header_home"/>
   </template>
 
   <template id="s_lp_revista_hero_home_double" name="LP Revista - Hero Home Doble">
