@@ -177,23 +177,6 @@ class LatinpymeRevistaConfig(models.Model):
     @api.model
     def get_active_config(self, website=None):
         website_id = website.id if website else self.env.context.get("website_id")
-        request_host = False
-        try:
-            request_host = getattr(http_request, "httprequest", False).host
-        except Exception:
-            request_host = False
-        request_host = self._domain_to_host(request_host) if request_host else False
-
-        if request_host:
-            configs = self.search([])
-            ordered_configs = sorted(configs, key=lambda config: 0 if config.website_id else 1)
-            for config in ordered_configs:
-                if request_host in (
-                    config._domain_to_host(config.production_domain),
-                    config._domain_to_host(config.preproduction_domain),
-                ):
-                    return config
-
         if not website_id:
             try:
                 request_website = getattr(http_request, "website", False)
@@ -204,6 +187,38 @@ class LatinpymeRevistaConfig(models.Model):
             config = self.search([("website_id", "=", website_id)], limit=1)
             if config:
                 return config
+
+        request_host = False
+        try:
+            request_host = getattr(http_request, "httprequest", False).host
+        except Exception:
+            request_host = False
+        request_host = self._domain_to_host(request_host) if request_host else False
+
+        if request_host:
+            configs = self.search([])
+            def _config_host_score(config):
+                website_domain = (
+                    self._domain_to_host(config.website_id.domain)
+                    if config.website_id and "domain" in config.website_id._fields
+                    else False
+                )
+                if website_domain and website_domain == request_host:
+                    return 0
+                if request_host == config._domain_to_host(config.production_domain):
+                    return 1
+                if request_host == config._domain_to_host(config.preproduction_domain):
+                    return 2
+                return 99
+
+            ordered_configs = sorted(
+                configs,
+                key=lambda config: (_config_host_score(config), 0 if config.website_id else 1, config.id),
+            )
+            for config in ordered_configs:
+                if _config_host_score(config) < 99:
+                    return config
+
         return self.search([("website_id", "=", False)], limit=1)
 
     def _domain_to_host(self, domain):
@@ -489,6 +504,9 @@ class LatinpymeRevistaSection(models.Model):
 
     @api.model
     def ensure_default_sections(self):
+        # El menu editorial se administra desde backend. No resembrar secciones
+        # fallback en cada upgrade porque duplica o reactiva items eliminados.
+        return True
         website = _revista_seed_website(self.env)
         if not website:
             return True
@@ -680,6 +698,8 @@ class LatinpymeRevistaSection(models.Model):
 
     @api.model
     def ensure_training_menu(self):
+        # El submenu de capacitacion se administra desde backend.
+        return True
         website = _revista_seed_website(self.env)
         if not website:
             return True
@@ -719,6 +739,8 @@ class LatinpymeRevistaSection(models.Model):
 
     @api.model
     def ensure_portfolio_menu(self):
+        # El submenu de portafolio se administra desde backend.
+        return True
         website = _revista_seed_website(self.env)
         if not website:
             return True
@@ -1373,6 +1395,9 @@ class LatinpymeRevistaFooterLink(models.Model):
 
     @api.model
     def ensure_default_links(self):
+        # El footer editorial se administra desde backend. No resembrar links
+        # fallback en upgrades para evitar duplicados.
+        return True
         website = _revista_seed_website(self.env)
         if not website:
             return True
