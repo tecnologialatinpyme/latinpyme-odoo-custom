@@ -240,6 +240,8 @@ class LatinpymeRevistaConfig(models.Model):
             is_imported_or_disabled = any(token in website_name for token in ("importado", "no usar", "old"))
             is_revista = "revista" in website_name or ("revista" in config_name and not website_name)
 
+            if not config.website_id:
+                return 95
             if is_imported_or_disabled:
                 return 90
 
