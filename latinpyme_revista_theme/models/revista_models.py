@@ -420,6 +420,11 @@ class LatinpymeRevistaSection(models.Model):
         string="URL personalizada",
         help="Opcional. Si se deja vacia, el enlace apunta a /revista/seccion/<slug>.",
     )
+    show_in_section_index = fields.Boolean(
+        string="Mostrar en listado de secciones",
+        default=True,
+        help="Si esta activo, la seccion aparece en /revista/seccion.",
+    )
     active = fields.Boolean(string="Activa", default=True)
     sequence = fields.Integer(string="Orden", default=10)
     description = fields.Text(string="Descripcion")
@@ -497,6 +502,15 @@ class LatinpymeRevistaSection(models.Model):
     _sql_constraints = [
         ("slug_unique", "unique(slug, website_id)", "El slug de seccion debe ser unico por sitio web."),
     ]
+
+    def init(self):
+        self.env.cr.execute(
+            """
+            UPDATE latinpyme_revista_section
+               SET show_in_section_index = TRUE
+             WHERE show_in_section_index IS NULL
+            """
+        )
 
     @api.onchange("name")
     def _onchange_name_slug(self):

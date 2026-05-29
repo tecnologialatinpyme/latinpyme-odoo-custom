@@ -771,7 +771,11 @@ class LatinpymeRevistaController(http.Controller):
         query = (search or kwargs.get("q") or "").strip()
         query_lower = query.lower()
         blog = self._revista_blog()
-        section_items = self._sections()
+        section_items = [
+            section
+            for section in self._sections()
+            if not section.get("record") or section["record"].show_in_section_index
+        ]
         if query_lower:
             section_items = [
                 section
