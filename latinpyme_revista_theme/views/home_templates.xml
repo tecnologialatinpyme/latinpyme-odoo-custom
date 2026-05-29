@@ -102,8 +102,11 @@
                       </a>
                     </t>
                   </div>
-                  <a t-att-href="home_blocks.get('sections').link_url if home_blocks.get('sections') and home_blocks.get('sections').link_url else '/blog'" class="lp-revista-inline-link">
-                    <t t-out="home_blocks.get('sections').link_label if home_blocks.get('sections') and home_blocks.get('sections').link_label else 'Ver más secciones'"/> <i class="fa fa-arrow-right"/>
+                  <a href="/revista/seccion" class="lp-revista-inline-link">
+                    Ver más secciones <i class="fa fa-arrow-right"/>
+                  </a>
+                  <a href="/blog/revista-latinpyme-2" class="lp-revista-inline-link">
+                    Ver más artículos <i class="fa fa-arrow-right"/>
                   </a>
                 </aside>
               </div>
