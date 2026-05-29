@@ -765,6 +765,40 @@ class LatinpymeRevistaController(http.Controller):
         }
         return self._render("latinpyme_revista_theme.revista_home_page", values)
 
+    @http.route("/revista/seccion", type="http", auth="public", website=True, sitemap=True)
+    def revista_sections_index(self, search="", **kwargs):
+        query = (search or kwargs.get("q") or "").strip()
+        query_lower = query.lower()
+        blog = self._revista_blog()
+        section_items = self._sections()
+        if query_lower:
+            section_items = [
+                section
+                for section in section_items
+                if query_lower in (section.get("name") or "").lower()
+                or query_lower in (section.get("slug") or "").replace("-", " ").lower()
+                or (
+                    section.get("record")
+                    and query_lower in (section["record"].description or "").lower()
+                )
+            ]
+
+        section_post_counts = {}
+        for section in section_items:
+            tag = section.get("tag")
+            section_post_counts[section["slug"]] = self._posts_count(blog=blog, tag=tag) if tag else 0
+
+        values = {
+            "blog": blog,
+            "section_slug": False,
+            "section_search": query,
+            "section_items": section_items,
+            "section_post_counts": section_post_counts,
+            "section_seo_title": "Secciones | Revista LatinPyme",
+            "section_seo_description": "Explora las secciones editoriales de Revista LatinPyme.",
+        }
+        return self._render("latinpyme_revista_theme.revista_section_index_page", values)
+
     @http.route(
         "/revista/seccion/<string:section_slug>",
         type="http",

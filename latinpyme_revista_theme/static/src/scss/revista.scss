@@ -2809,6 +2809,170 @@
   white-space: nowrap;
 }
 
+.lp-revista {
+  .lp-revista-section-index-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+    gap: 28px;
+    align-items: end;
+    padding: 34px 0 26px;
+  }
+
+  .lp-revista-section-index-hero__copy {
+    display: grid;
+    gap: 10px;
+
+    h1 {
+      margin: 0;
+      color: var(--lp-ink);
+      font-size: 46px;
+      font-weight: 900;
+      line-height: 1.08;
+    }
+
+    p {
+      max-width: 690px;
+      margin: 0;
+      color: #4d5460;
+      font-size: 17px;
+      line-height: 1.55;
+    }
+  }
+
+  .lp-revista-section-index-search {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    min-height: 54px;
+    border: 1px solid #e2e5eb;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(17, 19, 24, .06);
+
+    input {
+      min-width: 0;
+      flex: 1 1 auto;
+      border: 0;
+      padding: 0 18px;
+      color: var(--lp-ink);
+      font-size: 16px;
+      outline: 0;
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 58px;
+      border: 0;
+      color: #fff;
+      background: var(--lp-red);
+      font-size: 20px;
+    }
+  }
+
+  .lp-revista-section-index-results {
+    padding-bottom: 22px;
+  }
+
+  .lp-revista-section-index-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 26px;
+  }
+
+  .lp-revista-section-index-card {
+    display: grid;
+    overflow: hidden;
+    min-width: 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 16px 36px rgba(17, 19, 24, .07);
+  }
+
+  .lp-revista-section-index-card__media {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background:
+      linear-gradient(135deg, rgba(9, 13, 20, .92), rgba(9, 13, 20, .58)),
+      url("/latinpyme_revista_theme/static/src/img/editorial/section-placeholder.svg");
+    background-position: center;
+    background-size: cover;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .22s ease;
+    }
+  }
+
+  .lp-revista-section-index-card:hover .lp-revista-section-index-card__media img {
+    transform: scale(1.03);
+  }
+
+  .lp-revista-section-index-card__placeholder {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    color: rgba(255, 255, 255, .95);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 48px;
+    font-weight: 900;
+  }
+
+  .lp-revista-section-index-card__body {
+    display: grid;
+    gap: 12px;
+    padding: 22px;
+
+    h2 {
+      margin: 0;
+      color: var(--lp-ink);
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1.16;
+
+      a {
+        color: inherit;
+      }
+    }
+
+    p {
+      min-height: 66px;
+      margin: 0;
+      color: #4d5460;
+      font-size: 15px;
+      line-height: 1.48;
+    }
+  }
+
+  .lp-revista-section-index-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 6px;
+    color: #69707d;
+    font-size: 13px;
+    font-weight: 800;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+      color: var(--lp-red);
+      font-weight: 900;
+    }
+  }
+}
+
 .lp-revista-section-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
@@ -4189,6 +4353,10 @@
   }
 
   .lp-revista {
+    .lp-revista-section-index-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .lp-revista-interviews-grid--builder {
       grid-template-columns: 1fr;
     }
@@ -4392,6 +4560,41 @@
   .lp-revista-program-month-grid {
     grid-template-columns: 1fr;
     gap: 26px;
+  }
+
+  .lp-revista {
+    .lp-revista-section-index-hero,
+    .lp-revista-section-index-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .lp-revista-section-index-hero {
+      align-items: stretch;
+      padding: 24px 0 20px;
+    }
+
+    .lp-revista-section-index-hero__copy {
+      h1 {
+        font-size: 34px;
+      }
+
+      p {
+        font-size: 15px;
+      }
+    }
+
+    .lp-revista-section-index-card__body {
+      padding: 20px;
+
+      p {
+        min-height: 0;
+      }
+    }
+
+    .lp-revista-section-index-card__meta {
+      align-items: flex-start;
+      flex-direction: column;
+    }
   }
 
   .lp-revista-program-month-column {

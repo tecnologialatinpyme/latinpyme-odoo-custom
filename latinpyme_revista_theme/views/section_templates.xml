@@ -1,5 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+  <template id="revista_section_index_page" name="Revista LatinPyme Section Index">
+    <t t-call="website.layout">
+      <t t-set="no_header" t-value="True"/>
+      <t t-set="no_footer" t-value="True"/>
+      <t t-set="header_visible" t-value="False"/>
+      <t t-set="footer_visible" t-value="False"/>
+      <t t-set="title" t-value="section_seo_title"/>
+      <t t-set="website_meta_description" t-value="section_seo_description"/>
+      <t t-set="head">
+        <meta t-if="lp_preproduction" name="robots" content="noindex,nofollow"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" t-att-content="title"/>
+        <meta property="og:description" t-att-content="website_meta_description"/>
+        <meta property="og:url" t-att-content="lp_production_url"/>
+      </t>
+      <div id="wrap" class="lp-revista lp-revista-section-index">
+        <t t-set="section_slug" t-value="False"/>
+        <t t-call="latinpyme_revista_theme.lp_masthead"/>
+        <main class="lp-revista-main">
+          <section class="lp-revista-container lp-revista-section-index-hero">
+            <div class="lp-revista-section-index-hero__copy">
+              <nav class="lp-revista-breadcrumb lp-revista-breadcrumb--dark" aria-label="Miga de pan">
+                <a href="/revista">Inicio</a>
+                <span aria-hidden="true">&gt;</span>
+                <span>Secciones</span>
+              </nav>
+              <h1>Secciones</h1>
+              <p>Explora los temas editoriales de Revista LatinPyme y accede al archivo de notas de cada sección.</p>
+            </div>
+            <form class="lp-revista-section-index-search" action="/revista/seccion" method="get" role="search">
+              <input type="search" name="search" t-att-value="section_search" placeholder="Buscar secciones..." aria-label="Buscar secciones"/>
+              <button type="submit" aria-label="Buscar">
+                <i class="fa fa-search"/>
+              </button>
+            </form>
+          </section>
+
+          <section class="lp-revista-container lp-revista-section-index-results">
+            <div t-if="section_items" class="lp-revista-section-index-grid">
+              <article t-foreach="section_items" t-as="section" class="lp-revista-section-index-card">
+                <t t-set="section_record" t-value="section.get('record')"/>
+                <a t-att-href="section['url']" class="lp-revista-section-index-card__media">
+                  <img t-if="section_record and section_record.cover_image" t-att-src="'/revista/media/section/%s/cover' % section_record.id" t-att-alt="section['name']" loading="lazy"/>
+                  <span t-else="" class="lp-revista-section-index-card__placeholder">LP</span>
+                </a>
+                <div class="lp-revista-section-index-card__body">
+                  <span class="lp-revista-kicker">Sección</span>
+                  <h2>
+                    <a t-att-href="section['url']" t-out="section['name']"/>
+                  </h2>
+                  <p t-out="section_record.description if section_record and section_record.description else 'Artículos, análisis y recursos para empresarios pyme.'"/>
+                  <div class="lp-revista-section-index-card__meta">
+                    <span>
+                      <t t-out="section_post_counts.get(section['slug'], 0)"/>
+                      artículos
+                    </span>
+                    <a t-att-href="section['url']">
+                      Ver sección <i class="fa fa-arrow-right"/>
+                    </a>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div t-if="not section_items" class="lp-revista-empty">
+              <h2>No encontramos secciones.</h2>
+              <p>Prueba con otra búsqueda o vuelve al listado completo.</p>
+              <a class="lp-revista-button" href="/revista/seccion">Ver todas</a>
+            </div>
+          </section>
+
+          <section class="lp-revista-container lp-revista-block">
+            <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer')"/>
+            <t t-if="lp_footer_banner" t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
+            <t t-else="" t-call="latinpyme_revista_theme.lp_footer"/>
+          </section>
+        </main>
+      </div>
+    </t>
+  </template>
+
   <template id="revista_section_page" name="Revista LatinPyme Section">
     <t t-call="website.layout">
       <t t-set="no_header" t-value="True"/>
