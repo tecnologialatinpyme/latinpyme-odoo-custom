@@ -3556,6 +3556,13 @@
 }
 
 .lp-revista--native-blog {
+  > #o_wblog_blog_top,
+  > .o_wblog_blog_top,
+  > .o_wblog_cover_container,
+  > .o_record_cover_container:first-child {
+    display: none;
+  }
+
   .lp-revista-blog-masthead {
     background: #fff;
   }

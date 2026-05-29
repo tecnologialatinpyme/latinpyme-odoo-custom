@@ -16,14 +16,22 @@
       <attribute name="class" add="lp-revista lp-revista--native-blog" separator=" "/>
     </xpath>
     <xpath expr="//div[@id='wrap']/*[1]" position="before">
-      <div t-if="lp_is_revista_blog_index" class="lp-revista-blog-masthead">
+      <t t-set="lp_blog_list_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+      <t t-set="lp_blog_list_host" t-value="request.httprequest.host.split(':', 1)[0].lower()"/>
+      <t t-set="lp_blog_list_parts" t-value="request.httprequest.path.strip('/').split('/')"/>
+      <t t-set="lp_show_blog_list_shell" t-value="lp_blog_list_config and lp_blog_list_host in (lp_blog_list_config.domain_to_host(lp_blog_list_config.production_domain), lp_blog_list_config.domain_to_host(lp_blog_list_config.preproduction_domain)) and (len(lp_blog_list_parts) &lt;= 2 or (len(lp_blog_list_parts) &gt;= 3 and lp_blog_list_parts[2] == 'tag'))"/>
+      <div t-if="lp_show_blog_list_shell" class="lp-revista-blog-masthead">
         <t t-call="latinpyme_revista_theme.lp_revista_blog_sections_context"/>
         <t t-set="section_slug" t-value="False"/>
         <t t-call="latinpyme_revista_theme.lp_masthead"/>
       </div>
     </xpath>
     <xpath expr="//div[@id='wrap']" position="inside">
-      <section t-if="lp_is_revista_blog_index" class="lp-revista-container lp-revista-block lp-revista-blog-list-footer">
+      <t t-set="lp_blog_footer_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
+      <t t-set="lp_blog_footer_host" t-value="request.httprequest.host.split(':', 1)[0].lower()"/>
+      <t t-set="lp_blog_footer_parts" t-value="request.httprequest.path.strip('/').split('/')"/>
+      <t t-set="lp_show_blog_footer" t-value="lp_blog_footer_config and lp_blog_footer_host in (lp_blog_footer_config.domain_to_host(lp_blog_footer_config.production_domain), lp_blog_footer_config.domain_to_host(lp_blog_footer_config.preproduction_domain)) and (len(lp_blog_footer_parts) &lt;= 2 or (len(lp_blog_footer_parts) &gt;= 3 and lp_blog_footer_parts[2] == 'tag'))"/>
+      <section t-if="lp_show_blog_footer" class="lp-revista-container lp-revista-block lp-revista-blog-list-footer">
         <t t-set="lp_footer_banner" t-value="request.env['latinpyme.revista.banner'].sudo().get_active_banner('footer')"/>
         <t t-if="lp_footer_banner" t-call="latinpyme_revista_theme.lp_footer_with_ad"/>
         <t t-else="" t-call="latinpyme_revista_theme.lp_footer"/>
