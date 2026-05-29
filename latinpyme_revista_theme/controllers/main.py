@@ -26,6 +26,10 @@ SECTION_LABELS = {
     "portafolio": "Portafolio",
 }
 
+SECTION_TAG_ALIASES = {
+    "especiales": ("Especiales", "Especial"),
+}
+
 ENABLED_SECTIONS_PARAM = "latinpyme_revista_theme.enabled_sections"
 
 HOME_FEATURE_TAGS = (
@@ -279,12 +283,26 @@ class LatinpymeRevistaController(http.Controller):
             tags |= self._tag_by_name(name)
         return tags
 
+    def _section_tag_names(self, section_slug, section=False):
+        names = []
+        if section and section.tag_id:
+            names.append(section.tag_id.name)
+        elif section and section.name:
+            names.append(section.name)
+        label = SECTION_LABELS.get(section_slug)
+        if label:
+            names.append(label)
+        names.extend(SECTION_TAG_ALIASES.get(section_slug, ()))
+        return list(dict.fromkeys(name for name in names if name))
+
     def _section_tag(self, section_slug):
         section = self._section_record(section_slug)
-        if section:
-            return section.blog_tag()
-        label = SECTION_LABELS.get(section_slug)
-        return self._tag_by_name(label) if label else request.env["blog.tag"].sudo().browse()
+        tags = request.env["blog.tag"].sudo().browse()
+        if section and section.tag_id:
+            tags |= section.tag_id
+        for name in self._section_tag_names(section_slug, section=section):
+            tags |= self._tag_by_name(name)
+        return tags
 
     def _section_record(self, section_slug):
         return request.env["latinpyme.revista.section"].sudo().get_by_slug(
@@ -317,7 +335,7 @@ class LatinpymeRevistaController(http.Controller):
                         "slug": record.slug,
                         "name": record.name,
                         "url": "/revista/seccion/%s" % record.slug,
-                        "tag": record.blog_tag(),
+                        "tag": self._section_tag(record.slug),
                         "record": record,
                     }
                 )
@@ -327,7 +345,7 @@ class LatinpymeRevistaController(http.Controller):
                 "slug": slug,
                 "name": name,
                 "url": "/revista/seccion/%s" % slug,
-                "tag": self._tag_by_name(name),
+                "tag": self._section_tag(slug),
                 "record": False,
             }
             for slug, name in SECTION_LABELS.items()
@@ -695,7 +713,7 @@ class LatinpymeRevistaController(http.Controller):
         }
         featured_post = self._home_featured_post(home_blocks.get("hero"), blog=blog)
         exclude_ids = featured_post.ids if featured_post else []
-        special_tag = self._tag_by_name("Especiales")
+        special_tag = self._tags_by_names(("Especiales", "Especial"))
         interview_tag = self._tag_by_name("Entrevistas")
         highlight_limit = config.home_highlight_limit if config else 3
         latest_limit = config.home_latest_limit if config else 6
