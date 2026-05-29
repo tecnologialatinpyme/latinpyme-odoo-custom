@@ -2811,38 +2811,16 @@
 
 .lp-revista {
   .lp-revista-section-index-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
-    gap: 28px;
-    align-items: end;
-    padding: 34px 0 26px;
-  }
-
-  .lp-revista-section-index-hero__copy {
-    display: grid;
-    gap: 10px;
-
-    h1 {
-      margin: 0;
-      color: var(--lp-ink);
-      font-size: 46px;
-      font-weight: 900;
-      line-height: 1.08;
-    }
-
-    p {
-      max-width: 690px;
-      margin: 0;
-      color: #4d5460;
-      font-size: 17px;
-      line-height: 1.55;
-    }
+    display: flex;
+    justify-content: flex-end;
+    padding: 28px 0 24px;
   }
 
   .lp-revista-section-index-search {
     display: flex;
     overflow: hidden;
     width: 100%;
+    max-width: 380px;
     min-height: 54px;
     border: 1px solid #e2e5eb;
     border-radius: 8px;
@@ -4563,24 +4541,16 @@
   }
 
   .lp-revista {
-    .lp-revista-section-index-hero,
     .lp-revista-section-index-grid {
       grid-template-columns: 1fr;
     }
 
     .lp-revista-section-index-hero {
-      align-items: stretch;
       padding: 24px 0 20px;
     }
 
-    .lp-revista-section-index-hero__copy {
-      h1 {
-        font-size: 34px;
-      }
-
-      p {
-        font-size: 15px;
-      }
+    .lp-revista-section-index-search {
+      max-width: none;
     }
 
     .lp-revista-section-index-card__body {

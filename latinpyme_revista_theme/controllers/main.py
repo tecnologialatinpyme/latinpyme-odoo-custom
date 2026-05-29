@@ -4,6 +4,7 @@ import base64
 import calendar as pycalendar
 import json
 from datetime import date, timedelta
+from urllib.parse import urlencode
 
 from odoo import fields, http
 from odoo.http import request
@@ -783,8 +784,29 @@ class LatinpymeRevistaController(http.Controller):
                 )
             ]
 
+        try:
+            current_page = max(int(kwargs.get("page", 1) or 1), 1)
+        except (TypeError, ValueError):
+            current_page = 1
+        per_page = 12
+        total_sections = len(section_items)
+        page_count = max((total_sections + per_page - 1) // per_page, 1)
+        if current_page > page_count:
+            current_page = page_count
+        offset = (current_page - 1) * per_page
+        paginated_sections = section_items[offset:offset + per_page]
+
+        def section_page_url(page_number):
+            params = {}
+            if query:
+                params["search"] = query
+            if page_number > 1:
+                params["page"] = page_number
+            query_string = urlencode(params)
+            return "/revista/seccion%s" % ("?%s" % query_string if query_string else "")
+
         section_post_counts = {}
-        for section in section_items:
+        for section in paginated_sections:
             tag = section.get("tag")
             section_post_counts[section["slug"]] = self._posts_count(blog=blog, tag=tag) if tag else 0
 
@@ -792,8 +814,21 @@ class LatinpymeRevistaController(http.Controller):
             "blog": blog,
             "section_slug": False,
             "section_search": query,
-            "section_items": section_items,
+            "section_items": paginated_sections,
             "section_post_counts": section_post_counts,
+            "section_current_page": current_page,
+            "section_page_count": page_count,
+            "section_total_count": total_sections,
+            "section_prev_page_url": section_page_url(current_page - 1) if current_page > 1 else False,
+            "section_next_page_url": section_page_url(current_page + 1) if current_page < page_count else False,
+            "section_pagination_pages": [
+                {
+                    "number": page_number,
+                    "url": section_page_url(page_number),
+                    "active": page_number == current_page,
+                }
+                for page_number in range(1, page_count + 1)
+            ],
             "section_seo_title": "Secciones | Revista LatinPyme",
             "section_seo_description": "Explora las secciones editoriales de Revista LatinPyme.",
         }

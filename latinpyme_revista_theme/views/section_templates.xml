@@ -20,15 +20,6 @@
         <t t-call="latinpyme_revista_theme.lp_masthead"/>
         <main class="lp-revista-main">
           <section class="lp-revista-container lp-revista-section-index-hero">
-            <div class="lp-revista-section-index-hero__copy">
-              <nav class="lp-revista-breadcrumb lp-revista-breadcrumb--dark" aria-label="Miga de pan">
-                <a href="/revista">Inicio</a>
-                <span aria-hidden="true">&gt;</span>
-                <span>Secciones</span>
-              </nav>
-              <h1>Secciones</h1>
-              <p>Explora los temas editoriales de Revista LatinPyme y accede al archivo de notas de cada sección.</p>
-            </div>
             <form class="lp-revista-section-index-search" action="/revista/seccion" method="get" role="search">
               <input type="search" name="search" t-att-value="section_search" placeholder="Buscar secciones..." aria-label="Buscar secciones"/>
               <button type="submit" aria-label="Buscar">
@@ -63,6 +54,24 @@
                 </div>
               </article>
             </div>
+            <nav t-if="section_page_count &gt; 1" class="lp-revista-pagination" aria-label="Paginación de secciones">
+              <a t-if="section_prev_page_url" t-att-href="section_prev_page_url" aria-label="Página anterior">
+                <i class="fa fa-angle-left"/>
+              </a>
+              <span t-if="not section_prev_page_url" class="is-disabled">
+                <i class="fa fa-angle-left"/>
+              </span>
+              <t t-foreach="section_pagination_pages" t-as="page_item">
+                <span t-if="page_item['active']" class="is-active" t-out="page_item['number']"/>
+                <a t-else="" t-att-href="page_item['url']" t-out="page_item['number']"/>
+              </t>
+              <a t-if="section_next_page_url" t-att-href="section_next_page_url" aria-label="Página siguiente">
+                <i class="fa fa-angle-right"/>
+              </a>
+              <span t-if="not section_next_page_url" class="is-disabled">
+                <i class="fa fa-angle-right"/>
+              </span>
+            </nav>
             <div t-if="not section_items" class="lp-revista-empty">
               <h2>No encontramos secciones.</h2>
               <p>Prueba con otra búsqueda o vuelve al listado completo.</p>
