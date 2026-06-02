@@ -6323,3 +6323,33 @@
     }
   }
 }
+
+.lp-revista {
+  --lp-revista-media-focus-y: 24%;
+
+  // Favor upper framing for editorial media without resizing existing slots.
+  .lp-revista-hero-card,
+  .lp-revista-section-hero,
+  .lp-revista-blog-hero__cover,
+  .lp-revista-blog-hero__image,
+  .lp-revista-blog-hero__image *,
+  .lp-revista-post-card__media,
+  .lp-revista-post-card__media *,
+  .lp-revista-section-index-card__media,
+  .lp-revista-section-index-card__media *,
+  .lp-revista-special-card__media,
+  .lp-revista-special-card__media * {
+    background-position: center var(--lp-revista-media-focus-y) !important;
+  }
+
+  .lp-revista-blog-hero__image,
+  .lp-revista-blog-hero__image img,
+  .lp-revista-post-card__media,
+  .lp-revista-post-card__media img,
+  .lp-revista-section-index-card__media img,
+  .lp-revista-interview-card img,
+  .lp-revista-widget__image,
+  .lp-revista-widget__speaker {
+    object-position: center var(--lp-revista-media-focus-y);
+  }
+}
