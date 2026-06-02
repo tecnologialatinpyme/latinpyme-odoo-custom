@@ -3,6 +3,7 @@
 import base64
 import calendar as pycalendar
 import json
+import uuid
 from datetime import date, timedelta
 from urllib.parse import urlencode
 
@@ -257,6 +258,125 @@ class LatinpymeRevistaController(http.Controller):
         if not item or not item.active or not item.image or not self._website_matches(item):
             raise NotFound()
         return self._image_response(item.image)
+
+    def _poll_session_key(self):
+        session_key = request.session.get("lp_revista_poll_session_key")
+        if not session_key:
+            session_key = uuid.uuid4().hex
+            request.session["lp_revista_poll_session_key"] = session_key
+        return session_key
+
+    def _poll_session_votes(self):
+        votes = request.session.get("lp_revista_poll_votes") or []
+        if isinstance(votes, str):
+            votes = [vote for vote in votes.split(",") if vote]
+        return set(votes)
+
+    def _set_poll_session_votes(self, votes):
+        request.session["lp_revista_poll_votes"] = sorted(votes)
+
+    def _poll_source_data(self, source_type, source_id):
+        source_type = (source_type or "config").strip()
+        if source_type not in ("config", "sidebar"):
+            source_type = "config"
+        try:
+            source_id = int(source_id or 0)
+        except (TypeError, ValueError):
+            source_id = 0
+        website = getattr(request, "website", False)
+
+        if source_type == "sidebar":
+            item = request.env["latinpyme.revista.sidebar.item"].sudo().browse(source_id).exists()
+            if not item or not item.active or item.item_type != "poll" or not self._website_matches(item):
+                return False
+            return {
+                "source_type": "sidebar",
+                "source_id": item.id,
+                "config_id": False,
+                "sidebar_item_id": item.id,
+                "website_id": item.website_id.id if item.website_id else (website.id if website else False),
+                "question": item.title or item.name,
+                "options": {
+                    "option_1": item.poll_option_1,
+                    "option_2": item.poll_option_2,
+                    "option_3": item.poll_option_3,
+                    "option_4": item.poll_option_4,
+                },
+            }
+
+        config = request.env["latinpyme.revista.config"].sudo().browse(source_id).exists() if source_id else self._config()
+        if config and not self._website_matches(config):
+            config = self._config()
+        return {
+            "source_type": "config",
+            "source_id": config.id if config else 0,
+            "config_id": config.id if config else False,
+            "sidebar_item_id": False,
+            "website_id": website.id if website else (config.website_id.id if config and config.website_id else False),
+            "question": config.poll_question if config and config.poll_question else "¿Cuál es el mayor desafío de tu empresa este año?",
+            "options": {
+                "option_1": config.poll_option_1 if config and config.poll_option_1 else "Acceso a financiamiento",
+                "option_2": config.poll_option_2 if config and config.poll_option_2 else "Transformación digital",
+                "option_3": config.poll_option_3 if config and config.poll_option_3 else "Atracción y retención de talento",
+                "option_4": config.poll_option_4 if config and config.poll_option_4 else "Aumento de costos",
+            },
+        }
+
+    @http.route("/revista/poll/vote", type="json", auth="public", website=True, csrf=False, sitemap=False)
+    def revista_poll_vote(self, source_type=None, source_id=None, option_key=None, **kwargs):
+        try:
+            source = self._poll_source_data(source_type, source_id)
+            option_key = (option_key or "").strip()
+            option_label = source and source["options"].get(option_key)
+            if not source or not option_label:
+                return {
+                    "ok": False,
+                    "message": "Selecciona una opcion antes de votar.",
+                }
+
+            session_key = self._poll_session_key()
+            vote_key = "%s:%s" % (source["source_type"], source["source_id"])
+            session_votes = self._poll_session_votes()
+            Vote = request.env["latinpyme.revista.poll.vote"].sudo()
+            vote_domain = [
+                ("source_type", "=", source["source_type"]),
+                ("source_id", "=", source["source_id"]),
+                ("session_key", "=", session_key),
+            ]
+            if vote_key in session_votes or Vote.search(vote_domain, limit=1):
+                session_votes.add(vote_key)
+                self._set_poll_session_votes(session_votes)
+                return {
+                    "ok": True,
+                    "duplicate": True,
+                    "message": "Ya registramos tu voto en esta encuesta.",
+                }
+
+            Vote.create(
+                {
+                    "source_type": source["source_type"],
+                    "source_id": source["source_id"],
+                    "config_id": source["config_id"],
+                    "sidebar_item_id": source["sidebar_item_id"],
+                    "website_id": source["website_id"],
+                    "question": source["question"],
+                    "option_key": option_key,
+                    "option_label": option_label,
+                    "session_key": session_key,
+                    "user_id": request.env.user.id,
+                }
+            )
+            session_votes.add(vote_key)
+            self._set_poll_session_votes(session_votes)
+            return {
+                "ok": True,
+                "message": "¡Gracias! Tu voto ha sido registrado.",
+            }
+        except Exception:
+            return {
+                "ok": False,
+                "message": "No pudimos registrar tu voto en este momento. Intentalo de nuevo mas tarde.",
+            }
 
     def _website_domain(self, model):
         if request.website and "website_id" in model._fields:

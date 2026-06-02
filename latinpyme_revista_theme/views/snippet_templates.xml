@@ -474,14 +474,16 @@
 
   <template id="lp_sidebar_poll_card" name="Revista LatinPyme Poll Card">
     <t t-set="lp_config" t-value="request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
-    <section class="lp-revista-widget lp-revista-widget--poll">
+    <t t-set="lp_poll_config_id" t-value="lp_config.id if lp_config else 0"/>
+    <section class="lp-revista-widget lp-revista-widget--poll" data-lp-poll="1" data-lp-poll-source="config" t-att-data-lp-poll-id="lp_poll_config_id">
       <p class="lp-revista-eyebrow" t-out="lp_config.poll_label if lp_config and lp_config.poll_label else 'Encuesta'"/>
       <h3 t-out="lp_config.poll_question if lp_config and lp_config.poll_question else '¿Cuál es el mayor desafío de tu empresa este año?'"/>
-      <label t-if="not lp_config or lp_config.poll_option_1"><input type="radio" name="lp_poll"/> <t t-out="lp_config.poll_option_1 if lp_config else 'Acceso a financiamiento'"/></label>
-      <label t-if="not lp_config or lp_config.poll_option_2"><input type="radio" name="lp_poll"/> <t t-out="lp_config.poll_option_2 if lp_config else 'Transformación digital'"/></label>
-      <label t-if="not lp_config or lp_config.poll_option_3"><input type="radio" name="lp_poll"/> <t t-out="lp_config.poll_option_3 if lp_config else 'Atracción y retención de talento'"/></label>
-      <label t-if="not lp_config or lp_config.poll_option_4"><input type="radio" name="lp_poll"/> <t t-out="lp_config.poll_option_4 if lp_config else 'Aumento de costos'"/></label>
-      <button type="button" class="lp-revista-button" t-out="lp_config.poll_button_label if lp_config and lp_config.poll_button_label else 'Votar'"/>
+      <label t-if="not lp_config or lp_config.poll_option_1"><input type="radio" t-att-name="'lp_poll_config_%s' % lp_poll_config_id" value="option_1"/> <span t-out="lp_config.poll_option_1 if lp_config else 'Acceso a financiamiento'"/></label>
+      <label t-if="not lp_config or lp_config.poll_option_2"><input type="radio" t-att-name="'lp_poll_config_%s' % lp_poll_config_id" value="option_2"/> <span t-out="lp_config.poll_option_2 if lp_config else 'Transformación digital'"/></label>
+      <label t-if="not lp_config or lp_config.poll_option_3"><input type="radio" t-att-name="'lp_poll_config_%s' % lp_poll_config_id" value="option_3"/> <span t-out="lp_config.poll_option_3 if lp_config else 'Atracción y retención de talento'"/></label>
+      <label t-if="not lp_config or lp_config.poll_option_4"><input type="radio" t-att-name="'lp_poll_config_%s' % lp_poll_config_id" value="option_4"/> <span t-out="lp_config.poll_option_4 if lp_config else 'Aumento de costos'"/></label>
+      <button type="button" class="lp-revista-button" data-lp-poll-submit="1" t-out="lp_config.poll_button_label if lp_config and lp_config.poll_button_label else 'Votar'"/>
+      <p class="lp-revista-poll-message" data-lp-poll-message="1" aria-live="polite" hidden="hidden"/>
     </section>
   </template>
 
@@ -518,13 +520,15 @@
       </section>
     </t>
     <t t-elif="item.item_type == 'poll'">
-      <section class="lp-revista-widget lp-revista-widget--poll">
+      <section class="lp-revista-widget lp-revista-widget--poll" data-lp-poll="1" data-lp-poll-source="sidebar" t-att-data-lp-poll-id="item.id">
         <p class="lp-revista-eyebrow" t-out="item.label or 'Encuesta'"/>
         <h3 t-out="item.title or item.name"/>
-        <t t-foreach="item.poll_options()" t-as="option">
-          <label><input type="radio" t-att-name="'lp_poll_%s' % item.id"/> <t t-out="option"/></label>
-        </t>
-        <button type="button" class="lp-revista-button" t-out="item.button_label or 'Votar'"/>
+        <label t-if="item.poll_option_1"><input type="radio" t-att-name="'lp_poll_sidebar_%s' % item.id" value="option_1"/> <span t-out="item.poll_option_1"/></label>
+        <label t-if="item.poll_option_2"><input type="radio" t-att-name="'lp_poll_sidebar_%s' % item.id" value="option_2"/> <span t-out="item.poll_option_2"/></label>
+        <label t-if="item.poll_option_3"><input type="radio" t-att-name="'lp_poll_sidebar_%s' % item.id" value="option_3"/> <span t-out="item.poll_option_3"/></label>
+        <label t-if="item.poll_option_4"><input type="radio" t-att-name="'lp_poll_sidebar_%s' % item.id" value="option_4"/> <span t-out="item.poll_option_4"/></label>
+        <button type="button" class="lp-revista-button" data-lp-poll-submit="1" t-out="item.button_label or 'Votar'"/>
+        <p class="lp-revista-poll-message" data-lp-poll-message="1" aria-live="polite" hidden="hidden"/>
       </section>
     </t>
     <t t-elif="item.item_type == 'interview_cta'">

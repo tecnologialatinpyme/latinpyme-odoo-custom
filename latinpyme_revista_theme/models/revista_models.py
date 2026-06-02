@@ -92,6 +92,16 @@ SIDEBAR_ITEM_TYPES = [
     ("interview_cta", "CTA entrevistas"),
     ("banner", "Banner lateral"),
 ]
+POLL_SOURCE_TYPES = [
+    ("config", "Configuracion general"),
+    ("sidebar", "Sidebar editorial"),
+]
+POLL_OPTION_KEYS = [
+    ("option_1", "Opcion 1"),
+    ("option_2", "Opcion 2"),
+    ("option_3", "Opcion 3"),
+    ("option_4", "Opcion 4"),
+]
 FOOTER_LINK_GROUPS = [
     ("sections", "Secciones"),
     ("portfolio", "Portafolio"),
@@ -1822,6 +1832,29 @@ class LatinpymeRevistaSidebarItem(models.Model):
         for values in defaults:
             self._seed_sidebar_item(values, website)
         return True
+
+
+class LatinpymeRevistaPollVote(models.Model):
+    _name = "latinpyme.revista.poll.vote"
+    _description = "Voto de encuesta Revista LatinPyme"
+    _order = "create_date desc, id desc"
+
+    name = fields.Char(string="Resumen", compute="_compute_name", store=True)
+    source_type = fields.Selection(POLL_SOURCE_TYPES, string="Origen", required=True, index=True)
+    source_id = fields.Integer(string="ID origen", required=True, default=0, index=True)
+    config_id = fields.Many2one("latinpyme.revista.config", string="Configuracion", ondelete="set null")
+    sidebar_item_id = fields.Many2one("latinpyme.revista.sidebar.item", string="Item sidebar", ondelete="set null")
+    website_id = fields.Many2one("website", string="Sitio web", ondelete="set null")
+    question = fields.Char(string="Pregunta", required=True)
+    option_key = fields.Selection(POLL_OPTION_KEYS, string="Opcion", required=True)
+    option_label = fields.Char(string="Respuesta", required=True)
+    session_key = fields.Char(string="Sesion navegador", required=True, index=True)
+    user_id = fields.Many2one("res.users", string="Usuario", ondelete="set null")
+
+    @api.depends("question", "option_label")
+    def _compute_name(self):
+        for record in self:
+            record.name = "%s - %s" % (record.question or "Encuesta", record.option_label or "Sin respuesta")
 
 
 class LatinpymeRevistaAlly(models.Model):

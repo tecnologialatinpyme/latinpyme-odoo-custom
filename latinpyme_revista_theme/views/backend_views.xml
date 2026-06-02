@@ -845,6 +845,38 @@
     </field>
   </record>
 
+  <record id="view_latinpyme_revista_poll_vote_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.poll.vote.list</field>
+    <field name="model">latinpyme.revista.poll.vote</field>
+    <field name="arch" type="xml">
+      <list string="Votos de encuesta" create="0" edit="0" delete="0" default_order="create_date desc,id desc">
+        <field name="create_date"/>
+        <field name="website_id"/>
+        <field name="source_type"/>
+        <field name="config_id" optional="hide"/>
+        <field name="sidebar_item_id" optional="show"/>
+        <field name="question"/>
+        <field name="option_label"/>
+        <field name="user_id" optional="hide"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_poll_vote_search" model="ir.ui.view">
+    <field name="name">latinpyme.revista.poll.vote.search</field>
+    <field name="model">latinpyme.revista.poll.vote</field>
+    <field name="arch" type="xml">
+      <search string="Buscar votos de encuesta">
+        <field name="question"/>
+        <field name="option_label"/>
+        <field name="website_id"/>
+        <filter name="group_option" string="Agrupar por respuesta" context="{'group_by': 'option_label'}"/>
+        <filter name="group_question" string="Agrupar por pregunta" context="{'group_by': 'question'}"/>
+        <filter name="group_website" string="Agrupar por sitio web" context="{'group_by': 'website_id'}"/>
+      </search>
+    </field>
+  </record>
+
   <record id="view_latinpyme_revista_blog_post_override_list" model="ir.ui.view">
     <field name="name">latinpyme.revista.blog.post.override.list</field>
     <field name="model">latinpyme.revista.blog.post.override</field>
@@ -1072,6 +1104,13 @@
     <field name="search_view_id" ref="view_latinpyme_revista_sidebar_item_search"/>
   </record>
 
+  <record id="action_latinpyme_revista_poll_vote" model="ir.actions.act_window">
+    <field name="name">Votos encuesta</field>
+    <field name="res_model">latinpyme.revista.poll.vote</field>
+    <field name="view_mode">list</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_poll_vote_search"/>
+  </record>
+
   <record id="action_latinpyme_revista_blog_post_override" model="ir.actions.act_window">
     <field name="name">Notas editoriales</field>
     <field name="res_model">latinpyme.revista.blog.post.override</field>
@@ -1105,6 +1144,7 @@
   <menuitem id="menu_latinpyme_revista_interviews" name="Entrevistas" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_interview" sequence="23"/>
   <menuitem id="menu_latinpyme_revista_program_event" name="Programacion anual" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_program_event" sequence="25"/>
   <menuitem id="menu_latinpyme_revista_sidebar_items" name="Sidebar editorial" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_sidebar_item" sequence="27"/>
+  <menuitem id="menu_latinpyme_revista_poll_votes" name="Votos encuesta" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_poll_vote" sequence="28"/>
   <menuitem id="menu_latinpyme_revista_footer_links" name="Footer editorial" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_footer_link" sequence="28"/>
   <menuitem id="menu_latinpyme_revista_allies" name="Aliados" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_ally" sequence="30"/>
   <menuitem id="menu_latinpyme_revista_portfolio_items" name="Portafolio" parent="menu_latinpyme_revista_root" action="action_latinpyme_revista_portfolio_item" sequence="35"/>
