@@ -862,6 +862,30 @@
     </field>
   </record>
 
+  <record id="view_latinpyme_revista_poll_vote_pivot" model="ir.ui.view">
+    <field name="name">latinpyme.revista.poll.vote.pivot</field>
+    <field name="model">latinpyme.revista.poll.vote</field>
+    <field name="arch" type="xml">
+      <pivot string="Estadisticas de encuesta">
+        <field name="option_label" type="row"/>
+        <field name="question" type="col"/>
+        <field name="website_id" type="col"/>
+        <field name="source_type" type="col"/>
+        <field name="create_date" interval="month" type="col"/>
+      </pivot>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_poll_vote_graph" model="ir.ui.view">
+    <field name="name">latinpyme.revista.poll.vote.graph</field>
+    <field name="model">latinpyme.revista.poll.vote</field>
+    <field name="arch" type="xml">
+      <graph string="Votos por respuesta" type="bar">
+        <field name="option_label"/>
+      </graph>
+    </field>
+  </record>
+
   <record id="view_latinpyme_revista_poll_vote_search" model="ir.ui.view">
     <field name="name">latinpyme.revista.poll.vote.search</field>
     <field name="model">latinpyme.revista.poll.vote</field>
@@ -1107,7 +1131,7 @@
   <record id="action_latinpyme_revista_poll_vote" model="ir.actions.act_window">
     <field name="name">Votos encuesta</field>
     <field name="res_model">latinpyme.revista.poll.vote</field>
-    <field name="view_mode">list</field>
+    <field name="view_mode">list,pivot,graph</field>
     <field name="search_view_id" ref="view_latinpyme_revista_poll_vote_search"/>
   </record>
 
