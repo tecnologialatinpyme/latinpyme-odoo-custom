@@ -6353,3 +6353,25 @@
     object-position: center var(--lp-revista-media-focus-y);
   }
 }
+
+.lp-revista.lp-revista--native-blog {
+  --lp-revista-blog-card-focus-y: 12%;
+
+  .o_wblog_post {
+    .o_record_cover_container,
+    .o_record_cover_component,
+    .o_record_cover_image,
+    .o_record_cover_background,
+    .o_wblog_post_cover,
+    [class*="o_record_cover"] {
+      background-position: center var(--lp-revista-blog-card-focus-y) !important;
+    }
+
+    .o_record_cover_container img,
+    .o_record_cover_component img,
+    .o_record_cover_image img,
+    .o_wblog_post_cover img {
+      object-position: center var(--lp-revista-blog-card-focus-y) !important;
+    }
+  }
+}
