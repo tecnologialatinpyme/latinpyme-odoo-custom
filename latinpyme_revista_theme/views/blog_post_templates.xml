@@ -113,9 +113,9 @@
 
         <div class="lp-revista-container lp-revista-note-head lp-revista-blog-hero__inner">
           <nav class="lp-revista-breadcrumb lp-revista-breadcrumb--dark" aria-label="Miga de pan">
-            <a href="/revista">Inicio</a>
+            <a href="/revista" data-analytics-event="click_site_link" data-analytics-link-text="Inicio">Inicio</a>
             <span aria-hidden="true">&gt;</span>
-            <a t-if="lp_primary_section" t-att-href="lp_primary_section_url" t-out="lp_primary_section.name"/>
+            <a t-if="lp_primary_section" t-att-href="lp_primary_section_url" t-out="lp_primary_section.name" data-analytics-event="click_site_link" t-att-data-analytics-link-text="lp_primary_section.name"/>
             <span t-if="not lp_primary_section" t-out="lp_primary_tag_name"/>
             <span aria-hidden="true">&gt;</span>
             <span class="lp-revista-breadcrumb__current" t-out="blog_post.name"/>
@@ -142,10 +142,10 @@
 
               <div class="lp-revista-share lp-revista-share--hero" aria-label="Compartir nota">
                 <strong>Compartir:</strong>
-                <a t-att-href="'https://www.facebook.com/sharer/sharer.php?u=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en Facebook"><i class="fa fa-facebook"/></a>
-                <a t-att-href="'https://www.linkedin.com/sharing/share-offsite/?url=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en LinkedIn"><i class="fa fa-linkedin"/></a>
-                <a t-att-href="'https://twitter.com/intent/tweet?url=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en X"><i class="fa fa-twitter"/></a>
-                <a t-att-href="'mailto:?subject=%s&amp;body=%s' % (blog_post.name, lp_share_url)" aria-label="Compartir por correo"><i class="fa fa-envelope"/></a>
+                <a t-att-href="'https://www.facebook.com/sharer/sharer.php?u=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en Facebook" data-analytics-event="share_article" data-analytics-method="facebook" t-att-data-analytics-article-title="blog_post.name" t-att-data-analytics-article-url="blog_post.website_url"><i class="fa fa-facebook"/></a>
+                <a t-att-href="'https://www.linkedin.com/sharing/share-offsite/?url=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en LinkedIn" data-analytics-event="share_article" data-analytics-method="linkedin" t-att-data-analytics-article-title="blog_post.name" t-att-data-analytics-article-url="blog_post.website_url"><i class="fa fa-linkedin"/></a>
+                <a t-att-href="'https://twitter.com/intent/tweet?url=%s' % lp_share_url" target="_blank" rel="noopener" aria-label="Compartir en X" data-analytics-event="share_article" data-analytics-method="x" t-att-data-analytics-article-title="blog_post.name" t-att-data-analytics-article-url="blog_post.website_url"><i class="fa fa-twitter"/></a>
+                <a t-att-href="'mailto:?subject=%s&amp;body=%s' % (blog_post.name, lp_share_url)" aria-label="Compartir por correo" data-analytics-event="share_article" data-analytics-method="email" t-att-data-analytics-article-title="blog_post.name" t-att-data-analytics-article-url="blog_post.website_url"><i class="fa fa-envelope"/></a>
               </div>
             </div>
 
@@ -207,15 +207,15 @@
         <t t-if="lp_show_note_related" t-call="latinpyme_revista_theme.lp_blog_related_posts"/>
         <t t-if="lp_show_note_interviews" t-call="latinpyme_revista_theme.lp_blog_related_interviews"/>
         <t t-set="lp_note_banner" t-value="lp_note_override.note_banner_id if lp_note_override and lp_note_override.note_banner_id and lp_note_override.note_banner_id.active else (lp_note_section.note_banner_id if lp_note_section and lp_note_section.note_banner_id and lp_note_section.note_banner_id.active else request.env['latinpyme.revista.banner'].sudo().get_active_banner('note'))"/>
-        <section t-if="lp_note_banner" class="lp-revista-block lp-revista-ad-row">
+        <section t-if="lp_note_banner" class="lp-revista-block lp-revista-ad-row" data-analytics-block-name="Banner nota">
           <t t-call="latinpyme_revista_theme.lp_dynamic_banner">
             <t t-set="banner" t-value="lp_note_banner"/>
           </t>
         </section>
-        <section t-if="lp_show_note_portfolio" class="lp-revista-block">
+        <section t-if="lp_show_note_portfolio" class="lp-revista-block" data-analytics-block-name="Portafolio">
           <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
         </section>
-        <section t-if="lp_show_note_allies" class="lp-revista-block lp-revista-home-allies">
+        <section t-if="lp_show_note_allies" class="lp-revista-block lp-revista-home-allies" data-analytics-block-name="Aliados">
           <t t-set="home_allies" t-value="request.env['latinpyme.revista.ally'].sudo().get_active_allies(request.website)"/>
           <t t-call="latinpyme_revista_theme.lp_home_allies_carousel"/>
         </section>
@@ -256,7 +256,7 @@
     <t t-set="lp_post_model" t-value="request.env['blog.post'].sudo()"/>
     <t t-set="lp_publish_domain" t-value="[('website_published', '=', True)] if 'website_published' in lp_post_model._fields else ([('is_published', '=', True)] if 'is_published' in lp_post_model._fields else [])"/>
     <t t-set="lp_related_posts" t-value="lp_post_model.search([('blog_id', '=', blog_post.blog_id.id), ('id', '!=', blog_post.id)] + lp_publish_domain, order='post_date desc, id desc', limit=3)"/>
-    <section t-if="lp_related_posts" class="lp-revista-block lp-revista-blog-related" aria-labelledby="lp-blog-related-title">
+    <section t-if="lp_related_posts" class="lp-revista-block lp-revista-blog-related" aria-labelledby="lp-blog-related-title" data-analytics-block-name="Artículos relacionados">
       <t t-call="latinpyme_revista_theme.lp_section_heading">
         <t t-set="title">Artículos relacionados</t>
         <t t-set="eyebrow" t-value="False"/>
@@ -275,7 +275,7 @@
 
   <template id="lp_blog_related_interviews" name="Revista LatinPyme Related Interviews">
     <t t-set="lp_interviews" t-value="request.env['latinpyme.revista.interview'].sudo().get_active_interviews(request.website, lp_note_section, 3)"/>
-    <section t-if="lp_interviews" class="lp-revista-block lp-revista-home-interviews lp-revista-note-interviews" aria-labelledby="lp-blog-interviews-title">
+    <section t-if="lp_interviews" class="lp-revista-block lp-revista-home-interviews lp-revista-note-interviews" aria-labelledby="lp-blog-interviews-title" data-analytics-block-name="Entrevistas">
       <t t-set="lp_interviews_youtube_url" t-value="'https://www.youtube.com/@revistalatinpyme'"/>
       <t t-set="lp_interview_apply_url" t-value="lp_config.interview_apply_target_url() if lp_config else '/contactus'"/>
       <t t-call="latinpyme_revista_theme.lp_section_heading">
@@ -288,12 +288,12 @@
         <aside class="lp-revista-interview-featured">
           <span>Destacado</span>
           <div class="lp-revista-interview-featured__body">
-            <a t-att-href="lp_interviews_youtube_url" class="lp-revista-interview-featured__play" aria-label="Ver más entrevistas" target="_blank" rel="noopener">
+            <a t-att-href="lp_interviews_youtube_url" class="lp-revista-interview-featured__play" aria-label="Ver más entrevistas" target="_blank" rel="noopener" data-analytics-event="video_interview_play" data-analytics-video-title="Entrevistas Revista LatinPyme" data-analytics-video-provider="youtube" t-att-data-analytics-video-url="lp_interviews_youtube_url">
               <i class="fa fa-play"/>
             </a>
             <p>Explora más entrevistas con líderes que están transformando negocios y comunidades.</p>
           </div>
-          <a t-att-href="lp_interviews_youtube_url" class="lp-revista-inline-link" target="_blank" rel="noopener">
+          <a t-att-href="lp_interviews_youtube_url" class="lp-revista-inline-link" target="_blank" rel="noopener" data-analytics-event="video_interview_play" data-analytics-video-title="Entrevistas Revista LatinPyme" data-analytics-video-provider="youtube" t-att-data-analytics-video-url="lp_interviews_youtube_url">
             Ver más entrevistas <i class="fa fa-arrow-right"/>
           </a>
         </aside>
@@ -309,7 +309,7 @@
           <div>
             <h3>¿Quieres ser parte de nuestras entrevistas?</h3>
             <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
-            <a t-att-href="lp_interview_apply_url" class="lp-revista-button" target="_blank" rel="noopener">
+            <a t-att-href="lp_interview_apply_url" class="lp-revista-button" target="_blank" rel="noopener" data-analytics-event="click_site_link" data-analytics-cta-type="apply" data-analytics-link-text="Postúlate aquí">
               Postúlate aquí <i class="fa fa-arrow-right"/>
             </a>
           </div>

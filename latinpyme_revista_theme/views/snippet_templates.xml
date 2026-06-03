@@ -2,11 +2,11 @@
 <odoo>
   <template id="lp_social_links" name="Revista LatinPyme Social Links">
     <t t-set="lp_social_config" t-value="request.env['latinpyme.revista.config'].sudo().get_primary_config() or request.env['latinpyme.revista.config'].sudo().get_active_config()"/>
-    <a t-if="lp_social_config and lp_social_config.facebook_url and lp_social_config.facebook_url != '#'" t-att-href="lp_social_config.facebook_url" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa fa-facebook"/></a>
-    <a t-if="lp_social_config and lp_social_config.linkedin_url and lp_social_config.linkedin_url != '#'" t-att-href="lp_social_config.linkedin_url" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa fa-linkedin"/></a>
-    <a t-if="lp_social_config and lp_social_config.instagram_url and lp_social_config.instagram_url != '#'" t-att-href="lp_social_config.instagram_url" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa fa-instagram"/></a>
-    <a t-if="lp_social_config and lp_social_config.youtube_url and lp_social_config.youtube_url != '#'" t-att-href="lp_social_config.youtube_url" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa fa-youtube-play"/></a>
-    <a t-if="lp_social_config and lp_social_config.whatsapp_url and lp_social_config.whatsapp_url != '#'" t-att-href="lp_social_config.whatsapp_url" target="_blank" rel="noopener" class="lp-revista-social__whatsapp" aria-label="WhatsApp"><i class="fa fa-whatsapp"/></a>
+    <a t-if="lp_social_config and lp_social_config.facebook_url and lp_social_config.facebook_url != '#'" t-att-href="lp_social_config.facebook_url" target="_blank" rel="noopener" aria-label="Facebook" data-analytics-event="click_social_link" data-analytics-social-network="facebook" data-analytics-link-text="Facebook"><i class="fa fa-facebook"/></a>
+    <a t-if="lp_social_config and lp_social_config.linkedin_url and lp_social_config.linkedin_url != '#'" t-att-href="lp_social_config.linkedin_url" target="_blank" rel="noopener" aria-label="LinkedIn" data-analytics-event="click_social_link" data-analytics-social-network="linkedin" data-analytics-link-text="LinkedIn"><i class="fa fa-linkedin"/></a>
+    <a t-if="lp_social_config and lp_social_config.instagram_url and lp_social_config.instagram_url != '#'" t-att-href="lp_social_config.instagram_url" target="_blank" rel="noopener" aria-label="Instagram" data-analytics-event="click_social_link" data-analytics-social-network="instagram" data-analytics-link-text="Instagram"><i class="fa fa-instagram"/></a>
+    <a t-if="lp_social_config and lp_social_config.youtube_url and lp_social_config.youtube_url != '#'" t-att-href="lp_social_config.youtube_url" target="_blank" rel="noopener" aria-label="YouTube" data-analytics-event="click_social_link" data-analytics-social-network="youtube" data-analytics-link-text="YouTube"><i class="fa fa-youtube-play"/></a>
+    <a t-if="lp_social_config and lp_social_config.whatsapp_url and lp_social_config.whatsapp_url != '#'" t-att-href="lp_social_config.whatsapp_url" target="_blank" rel="noopener" class="lp-revista-social__whatsapp" aria-label="WhatsApp" data-analytics-event="click_whatsapp" data-analytics-cta-type="contact" data-analytics-link-text="WhatsApp"><i class="fa fa-whatsapp"/></a>
   </template>
 
   <template id="lp_masthead" name="Revista LatinPyme Masthead">
@@ -16,7 +16,7 @@
     <t t-set="lp_masthead_sections" t-value="request.env['latinpyme.revista.section'].sudo().get_masthead_nav_sections(lp_website)"/>
     <header class="lp-revista-masthead" role="banner">
       <div class="lp-revista-container lp-revista-masthead__top">
-        <a href="/revista" class="lp-revista-brand" t-att-aria-label="lp_config.name if lp_config else 'Revista LatinPyme'">
+        <a href="/revista" class="lp-revista-brand" t-att-aria-label="lp_config.name if lp_config else 'Revista LatinPyme'" data-analytics-event="click_site_link" data-analytics-link-text="Revista LatinPyme">
           <span class="lp-revista-brand__mark">LP</span>
           <span class="lp-revista-brand__text">
             <span>Revista</span>
@@ -31,7 +31,7 @@
           <strong>25 años</strong>
           <span>Impulsando empresarios en Latinoamérica</span>
         </div>
-        <form class="lp-revista-search" action="/website/search" method="get" role="search">
+        <form class="lp-revista-search" action="/website/search" method="get" role="search" data-analytics-event="search">
           <input type="search" name="search" placeholder="Buscar noticias, artículos, recursos..." aria-label="Buscar en Revista LatinPyme"/>
           <button type="submit" aria-label="Buscar">
             <i class="fa fa-search"/>
@@ -50,7 +50,7 @@
           </button>
         </div>
         <div class="lp-revista-container lp-revista-nav__inner">
-          <a href="/revista" t-attf-class="lp-revista-nav__link #{'is-active' if not section_slug else ''}">Inicio</a>
+          <a href="/revista" t-attf-class="lp-revista-nav__link #{'is-active' if not section_slug else ''}" data-analytics-event="click_site_link" data-analytics-link-text="Inicio">Inicio</a>
           <t t-foreach="lp_masthead_sections" t-as="section">
             <t t-if="section.get('children')">
               <div t-attf-class="lp-revista-nav__item lp-revista-nav__item--dropdown #{'lp-revista-nav__item--align-end' if section.get('slug') == 'portafolio' else ''} #{'is-active' if section_slug in section.get('active_slugs', []) else ''}">
@@ -68,7 +68,7 @@
                         </button>
                         <div class="lp-revista-nav__subdropdown" t-att-id="'lpRevistaSubMenu-%s' % child.get('slug')">
                           <t t-foreach="child.get('children')" t-as="grandchild">
-                            <a t-att-href="grandchild.get('url') or '#'" t-attf-class="lp-revista-nav__dropdown-link lp-revista-nav__dropdown-link--child #{'is-active' if section_slug in grandchild.get('active_slugs', [grandchild.get('slug')]) else ''}">
+                            <a t-att-href="grandchild.get('url') or '#'" t-attf-class="lp-revista-nav__dropdown-link lp-revista-nav__dropdown-link--child #{'is-active' if section_slug in grandchild.get('active_slugs', [grandchild.get('slug')]) else ''}" data-analytics-event="click_site_link" t-att-data-analytics-link-text="grandchild['name']">
                               <t t-out="grandchild['name']"/>
                             </a>
                           </t>
@@ -76,7 +76,7 @@
                       </div>
                     </t>
                     <t t-else="">
-                      <a t-att-href="child.get('url') or '#'" t-attf-class="lp-revista-nav__dropdown-link #{'is-active' if section_slug in child.get('active_slugs', [child.get('slug')]) else ''}">
+                      <a t-att-href="child.get('url') or '#'" t-attf-class="lp-revista-nav__dropdown-link #{'is-active' if section_slug in child.get('active_slugs', [child.get('slug')]) else ''}" data-analytics-event="click_site_link" t-att-data-analytics-link-text="child['name']">
                         <t t-out="child['name']"/>
                       </a>
                     </t>
@@ -85,12 +85,12 @@
               </div>
             </t>
             <t t-else="">
-              <a t-att-href="section.get('url') or '#'" t-attf-class="lp-revista-nav__link #{'is-active' if section_slug in section.get('active_slugs', [section.get('slug')]) else ''}">
+              <a t-att-href="section.get('url') or '#'" t-attf-class="lp-revista-nav__link #{'is-active' if section_slug in section.get('active_slugs', [section.get('slug')]) else ''}" data-analytics-event="click_site_link" t-att-data-analytics-link-text="section['name']">
                 <t t-out="section['name']"/>
               </a>
             </t>
           </t>
-          <a t-att-href="lp_subscribe_url" target="_blank" rel="noopener" class="lp-revista-button lp-revista-button--nav">Suscribirse</a>
+          <a t-att-href="lp_subscribe_url" target="_blank" rel="noopener" class="lp-revista-button lp-revista-button--nav" data-analytics-event="click_site_link" data-analytics-cta-type="subscribe" data-analytics-link-text="Suscribirse">Suscribirse</a>
         </div>
       </nav>
     </header>
@@ -123,11 +123,11 @@
       <div class="lp-revista-container lp-revista-home-ads">
         <div class="lp-revista-promo-banner lp-revista-promo-banner--green">
           <h2>Lideramos conversaciones que impulsan un futuro sostenible y competitivo.</h2>
-          <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
+          <a href="/contactus" class="lp-revista-button" data-analytics-event="click_home_ad_banner" data-analytics-item="banner" data-analytics-banner-name="Banner snippet fallback" data-analytics-banner-position="snippet" data-analytics-link-text="Conoce más">Conoce más <i class="fa fa-arrow-right"/></a>
         </div>
         <div class="lp-revista-promo-banner">
           <h2>Automatiza procesos, optimiza recursos y crece sin límites.</h2>
-          <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
+          <a href="/contactus" class="lp-revista-button" data-analytics-event="click_home_ad_banner" data-analytics-item="banner" data-analytics-banner-name="Banner snippet fallback" data-analytics-banner-position="snippet" data-analytics-link-text="Conoce más">Conoce más <i class="fa fa-arrow-right"/></a>
           <span class="lp-revista-promo-banner__mark">LP</span>
         </div>
       </div>
@@ -139,7 +139,7 @@
       <t t-set="lp_banner_image_only" t-value="(banner.display_mode or 'image_only') == 'image_only'"/>
       <t t-set="lp_banner_href" t-value="banner.url or (False if lp_banner_image_only else '/contactus')"/>
     </t>
-    <a t-if="banner" t-att-href="lp_banner_href" t-att-class="'lp-revista-promo-banner lp-revista-promo-banner--dynamic' + (' lp-revista-promo-banner--image-only' if lp_banner_image_only else '')">
+    <a t-if="banner" t-att-href="lp_banner_href" t-att-class="'lp-revista-promo-banner lp-revista-promo-banner--dynamic' + (' lp-revista-promo-banner--image-only' if lp_banner_image_only else '')" data-analytics-event="click_home_ad_banner" data-analytics-item="banner" t-att-data-analytics-banner-name="banner.name" t-att-data-analytics-banner-position="banner.placement" t-att-data-analytics-link-text="banner.button_label or banner.title or banner.name">
       <img t-if="banner.image" class="lp-revista-promo-banner__image" t-att-src="'/revista/media/banner/%s/image' % banner.id" t-att-alt="banner.name" loading="lazy"/>
       <t t-if="not lp_banner_image_only">
         <span class="lp-revista-promo-banner__shade"/>
@@ -226,7 +226,7 @@
           <span class="lp-revista-kicker">Gestión</span>
           <h1>Estrategias financieras para fortalecer la resiliencia empresarial</h1>
           <p>Las empresas que anticipan escenarios y optimizan sus recursos están mejor preparadas para liderar mañana.</p>
-          <a href="/blog" class="lp-revista-button">Leer nota <i class="fa fa-arrow-right"/></a>
+          <a href="/blog" class="lp-revista-button" data-analytics-event="click_site_link" data-analytics-block-name="Actualidad destacada" data-analytics-link-text="Leer nota">Leer nota <i class="fa fa-arrow-right"/></a>
         </article>
         <div class="lp-revista-featured-editorial__rail">
           <article class="lp-revista-post-card lp-revista-post-card--horizontal">
@@ -266,7 +266,7 @@
               <span class="lp-revista-kicker">Negocios</span>
               <h3 class="lp-revista-post-card__title">Cómo escalar tu negocio en mercados competitivos</h3>
               <p class="lp-revista-post-card__teaser">Análisis y recursos para empresarios pyme.</p>
-              <a href="/blog" class="lp-revista-inline-link">Leer más <i class="fa fa-arrow-right"/></a>
+          <a href="/blog" class="lp-revista-inline-link" data-analytics-event="click_site_link" data-analytics-link-text="Leer más">Leer más <i class="fa fa-arrow-right"/></a>
             </div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--default">
@@ -275,7 +275,7 @@
               <span class="lp-revista-kicker">IA</span>
               <h3 class="lp-revista-post-card__title">Herramientas que transforman empresas</h3>
               <p class="lp-revista-post-card__teaser">Ideas aplicables para equipos y líderes.</p>
-              <a href="/blog" class="lp-revista-inline-link">Leer más <i class="fa fa-arrow-right"/></a>
+          <a href="/blog" class="lp-revista-inline-link" data-analytics-event="click_site_link" data-analytics-link-text="Leer más">Leer más <i class="fa fa-arrow-right"/></a>
             </div>
           </article>
           <article class="lp-revista-post-card lp-revista-post-card--default">
@@ -284,7 +284,7 @@
               <span class="lp-revista-kicker">Finanzas</span>
               <h3 class="lp-revista-post-card__title">Tendencias económicas para pymes</h3>
               <p class="lp-revista-post-card__teaser">Lectura clara del contexto empresarial.</p>
-              <a href="/blog" class="lp-revista-inline-link">Leer más <i class="fa fa-arrow-right"/></a>
+          <a href="/blog" class="lp-revista-inline-link" data-analytics-event="click_site_link" data-analytics-link-text="Leer más">Leer más <i class="fa fa-arrow-right"/></a>
             </div>
           </article>
         </div>
@@ -391,7 +391,7 @@
         <h3 class="lp-revista-post-card__title">Claves para una gestión empresarial ágil y eficiente</h3>
         <p class="lp-revista-post-card__teaser">Resumen breve del artículo para orientar al lector.</p>
         <time class="lp-revista-date">12 junio 2024</time>
-        <a href="/blog" class="lp-revista-inline-link">Leer nota <i class="fa fa-arrow-right"/></a>
+        <a href="/blog" class="lp-revista-inline-link" data-analytics-event="click_site_link" data-analytics-link-text="Leer nota">Leer nota <i class="fa fa-arrow-right"/></a>
       </div>
     </section>
   </template>
@@ -400,7 +400,7 @@
     <header class="lp-revista-section-heading">
       <p t-if="eyebrow" class="lp-revista-eyebrow" t-out="eyebrow"/>
       <h2 t-out="title"/>
-      <a t-if="href" t-att-href="href" class="lp-revista-section-heading__link">
+      <a t-if="href" t-att-href="href" class="lp-revista-section-heading__link" data-analytics-event="click_site_link" t-att-data-analytics-block-name="title" t-att-data-analytics-link-text="link_label or 'Ver más'">
         <span t-out="link_label or 'Ver más'"/>
         <i class="fa fa-arrow-right"/>
       </a>
@@ -409,8 +409,8 @@
 
   <template id="lp_post_card" name="Revista LatinPyme Post Card">
     <t t-set="variant" t-value="variant or 'card'"/>
-    <article t-if="post" t-attf-class="lp-revista-post-card lp-revista-post-card--#{variant}" itemscope="itemscope" itemtype="https://schema.org/Article">
-      <a class="lp-revista-post-card__media-link" t-att-href="post.website_url" t-att-title="post.name">
+    <article t-if="post" t-attf-class="lp-revista-post-card lp-revista-post-card--#{variant}" itemscope="itemscope" itemtype="https://schema.org/Article" data-analytics-item="article">
+      <a class="lp-revista-post-card__media-link" t-att-href="post.website_url" t-att-title="post.name" data-analytics-event="click_article" t-att-data-analytics-article-title="post.name" t-att-data-analytics-article-url="post.website_url">
         <t t-call="website.record_cover">
           <t t-set="_record" t-value="post"/>
           <t t-set="use_filters" t-value="True"/>
@@ -424,7 +424,7 @@
           <t t-out="primary_tag.name"/>
         </span>
         <h3 class="lp-revista-post-card__title" itemprop="headline">
-          <a t-att-href="post.website_url" t-out="post.name"/>
+          <a t-att-href="post.website_url" t-out="post.name" data-analytics-event="click_article" t-att-data-analytics-article-title="post.name" t-att-data-analytics-article-url="post.website_url"/>
         </h3>
         <p t-if="variant in ('hero', 'feature', 'default', 'wide')" class="lp-revista-post-card__teaser" t-out="post.subtitle or post.teaser"/>
         <time t-if="post.post_date" class="lp-revista-date" itemprop="datePublished" t-att-datetime="post.post_date.isoformat()">
@@ -435,8 +435,8 @@
   </template>
 
   <template id="lp_interview_card" name="Revista LatinPyme Interview Card">
-    <article t-if="interview" class="lp-revista-interview-card" itemscope="itemscope" itemtype="https://schema.org/VideoObject">
-      <a t-att-href="interview.target_url()" t-att-title="interview.name" t-att-target="'_blank' if interview.youtube_url else None" t-att-rel="'noopener' if interview.youtube_url else None">
+    <article t-if="interview" class="lp-revista-interview-card" itemscope="itemscope" itemtype="https://schema.org/VideoObject" data-analytics-item="video">
+      <a t-att-href="interview.target_url()" t-att-title="interview.name" t-att-target="'_blank' if interview.youtube_url else None" t-att-rel="'noopener' if interview.youtube_url else None" data-analytics-event="video_interview_play" t-att-data-analytics-video-title="interview.name" t-att-data-analytics-video-provider="'youtube' if interview.youtube_url else 'latinpyme'" t-att-data-analytics-video-url="interview.target_url()">
         <img t-if="interview.image" t-att-src="'/revista/media/interview/%s/image' % interview.id" t-att-alt="interview.name" loading="lazy"/>
         <img t-elif="interview.youtube_thumbnail_url()" t-att-src="interview.youtube_thumbnail_url()" t-att-alt="interview.name" loading="lazy"/>
         <img t-else="" src="/latinpyme_revista_theme/static/src/img/editorial/interview-placeholder.svg" t-att-alt="interview.name" loading="lazy"/>
@@ -445,7 +445,7 @@
       <div>
         <span class="lp-revista-kicker" t-out="interview.section_label()"/>
         <h3>
-          <a t-att-href="interview.target_url()" t-att-target="'_blank' if interview.youtube_url else None" t-att-rel="'noopener' if interview.youtube_url else None" t-out="interview.name"/>
+          <a t-att-href="interview.target_url()" t-att-target="'_blank' if interview.youtube_url else None" t-att-rel="'noopener' if interview.youtube_url else None" t-out="interview.name" data-analytics-event="video_interview_play" t-att-data-analytics-video-title="interview.name" t-att-data-analytics-video-provider="'youtube' if interview.youtube_url else 'latinpyme'" t-att-data-analytics-video-url="interview.target_url()"/>
         </h3>
         <p class="lp-revista-interview-card__person" t-out="interview.person_label()"/>
         <span t-if="interview.meta_label()" class="lp-revista-interview-card__meta" t-out="interview.meta_label()"/>
@@ -465,7 +465,7 @@
           <li t-if="not lp_config or lp_config.conference_location"><i class="fa fa-map-marker"/><t t-out="lp_config.conference_location if lp_config else 'Bogotá, Colombia'"/></li>
           <li t-if="not lp_config or lp_config.conference_time"><i class="fa fa-clock-o"/><t t-out="lp_config.conference_time if lp_config else '9:00 a.m. - 12:00 m.'"/></li>
         </ul>
-        <a t-att-href="lp_config.conference_url if lp_config and lp_config.conference_url else '/event'" class="lp-revista-button">
+        <a t-att-href="lp_config.conference_url if lp_config and lp_config.conference_url else '/event'" class="lp-revista-button" data-analytics-event="click_site_link" data-analytics-cta-type="event" t-att-data-analytics-link-text="lp_config.conference_button_label if lp_config and lp_config.conference_button_label else 'Más información'">
           <t t-out="lp_config.conference_button_label if lp_config and lp_config.conference_button_label else 'Más información'"/> <i class="fa fa-arrow-right"/>
         </a>
       </div>
@@ -494,7 +494,7 @@
       <span class="lp-revista-widget__shade"/>
       <h3 t-out="lp_sidebar_banner.title if lp_sidebar_banner and lp_sidebar_banner.title else 'Automatiza procesos, optimiza recursos y crece sin límites.'"/>
       <p t-if="lp_sidebar_banner and lp_sidebar_banner.text" t-out="lp_sidebar_banner.text"/>
-      <a t-att-href="lp_sidebar_banner.url if lp_sidebar_banner and lp_sidebar_banner.url else '/contactus'" class="lp-revista-button lp-revista-button--small">
+      <a t-att-href="lp_sidebar_banner.url if lp_sidebar_banner and lp_sidebar_banner.url else '/contactus'" class="lp-revista-button lp-revista-button--small" data-analytics-event="click_home_ad_banner" data-analytics-item="banner" t-att-data-analytics-banner-name="lp_sidebar_banner.name if lp_sidebar_banner else 'Banner lateral'" data-analytics-banner-position="sidebar" t-att-data-analytics-link-text="lp_sidebar_banner.button_label if lp_sidebar_banner and lp_sidebar_banner.button_label else 'Conoce más'">
         <t t-out="lp_sidebar_banner.button_label if lp_sidebar_banner and lp_sidebar_banner.button_label else 'Conoce más'"/> <i class="fa fa-arrow-right"/>
       </a>
       <span class="lp-revista-widget__lp">LP</span>
@@ -512,7 +512,7 @@
             <li t-if="item.location_text"><i class="fa fa-map-marker"/><t t-out="item.location_text"/></li>
             <li t-if="item.time_text"><i class="fa fa-clock-o"/><t t-out="item.time_text"/></li>
           </ul>
-          <a t-if="item.url" t-att-href="item.url" class="lp-revista-button">
+          <a t-if="item.url" t-att-href="item.url" class="lp-revista-button" data-analytics-event="click_site_link" data-analytics-cta-type="event" t-att-data-analytics-link-text="item.button_label or 'Más información'">
             <t t-out="item.button_label or 'Más información'"/> <i class="fa fa-arrow-right"/>
           </a>
         </div>
@@ -536,7 +536,7 @@
         <p t-if="item.label" class="lp-revista-eyebrow" t-out="item.label"/>
         <h3 t-out="item.title or item.name"/>
         <p t-if="item.text" t-out="item.text"/>
-        <a t-if="item.url" t-att-href="item.url" class="lp-revista-button">
+        <a t-if="item.url" t-att-href="item.url" class="lp-revista-button" data-analytics-event="click_site_link" data-analytics-cta-type="apply" t-att-data-analytics-link-text="item.button_label or 'Postúlate aquí'">
           <t t-out="item.button_label or 'Postúlate aquí'"/> <i class="fa fa-arrow-right"/>
         </a>
       </section>
@@ -549,7 +549,7 @@
         <span class="lp-revista-widget__shade"/>
         <h3 t-out="item.title or (item_banner.title if item_banner else item.name)"/>
         <p t-if="item.text or (item_banner and item_banner.text)" t-out="item.text or item_banner.text"/>
-        <a t-if="item.url or (item_banner and item_banner.url)" t-att-href="item.url or item_banner.url" class="lp-revista-button lp-revista-button--small">
+        <a t-if="item.url or (item_banner and item_banner.url)" t-att-href="item.url or item_banner.url" class="lp-revista-button lp-revista-button--small" data-analytics-event="click_home_ad_banner" data-analytics-item="banner" t-att-data-analytics-banner-name="item.name" data-analytics-banner-position="sidebar" t-att-data-analytics-link-text="item.button_label or (item_banner.button_label if item_banner else 'Conoce más')">
           <t t-out="item.button_label or (item_banner.button_label if item_banner else 'Conoce más')"/> <i class="fa fa-arrow-right"/>
         </a>
         <span class="lp-revista-widget__lp">LP</span>
@@ -623,7 +623,7 @@
         </t>
         <div t-else="" class="lp-revista-promo-banner">
           <h2>Automatiza procesos, optimiza recursos y crece sin límites.</h2>
-          <a href="/contactus" class="lp-revista-button">Conoce más <i class="fa fa-arrow-right"/></a>
+          <a href="/contactus" class="lp-revista-button" data-analytics-event="click_home_ad_banner" data-analytics-item="banner" data-analytics-banner-name="Banner publicitario snippet" data-analytics-banner-position="snippet" data-analytics-link-text="Conoce más">Conoce más <i class="fa fa-arrow-right"/></a>
           <span class="lp-revista-promo-banner__mark">LP</span>
         </div>
       </div>
@@ -652,7 +652,7 @@
                 <h3 t-out="event.name"/>
                 <p><i class="fa fa-calendar"/> <t t-out="event.date_label()"/></p>
                 <p><i class="fa fa-clock-o"/> <t t-out="event.time_label()"/></p>
-                <a t-if="event.registration_url" t-att-href="event.registration_url" class="lp-revista-button lp-revista-button--small" target="_blank" rel="noopener">
+                <a t-if="event.registration_url" t-att-href="event.registration_url" class="lp-revista-button lp-revista-button--small" target="_blank" rel="noopener" data-analytics-event="click_site_link" data-analytics-cta-type="apply" data-analytics-block-name="Programación" t-att-data-analytics-link-text="event.button_label or 'Inscribirme'">
                   <t t-out="event.button_label or 'Inscribirme'"/> <i class="fa fa-arrow-right"/>
                 </a>
               </div>
@@ -692,12 +692,12 @@
           <aside class="lp-revista-interview-featured">
             <span>Destacado</span>
             <div class="lp-revista-interview-featured__body">
-              <a href="/revista/seccion/entrevistas" class="lp-revista-interview-featured__play" aria-label="Ver más entrevistas">
+              <a href="/revista/seccion/entrevistas" class="lp-revista-interview-featured__play" aria-label="Ver más entrevistas" data-analytics-event="click_site_link" data-analytics-block-name="Entrevistas" data-analytics-link-text="Ver más entrevistas">
                 <i class="fa fa-play"/>
               </a>
               <p>Explora más entrevistas con líderes que están transformando negocios y comunidades.</p>
             </div>
-            <a href="/revista/seccion/entrevistas" class="lp-revista-inline-link">Ver más entrevistas <i class="fa fa-arrow-right"/></a>
+            <a href="/revista/seccion/entrevistas" class="lp-revista-inline-link" data-analytics-event="click_site_link" data-analytics-block-name="Entrevistas" data-analytics-link-text="Ver más entrevistas">Ver más entrevistas <i class="fa fa-arrow-right"/></a>
           </aside>
           <div class="lp-revista-interviews-grid__cards">
             <t t-if="lp_snippet_interviews">
@@ -717,7 +717,7 @@
             <div>
               <h3>¿Quieres ser parte de nuestras entrevistas?</h3>
               <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
-              <a t-att-href="lp_interview_apply_url" class="lp-revista-button" target="_blank" rel="noopener">Postúlate aquí <i class="fa fa-arrow-right"/></a>
+              <a t-att-href="lp_interview_apply_url" class="lp-revista-button" target="_blank" rel="noopener" data-analytics-event="click_site_link" data-analytics-cta-type="apply" data-analytics-link-text="Postúlate aquí">Postúlate aquí <i class="fa fa-arrow-right"/></a>
             </div>
           </aside>
         </div>
@@ -927,7 +927,7 @@
       <div class="lp-revista-portfolio__grid">
         <t t-if="lp_portfolio_items">
           <t t-foreach="lp_portfolio_items" t-as="portfolio_item">
-            <article class="lp-revista-service-card">
+            <article class="lp-revista-service-card" data-analytics-item="portfolio">
               <h3 t-out="portfolio_item.name"/>
               <img t-if="portfolio_item.image" t-att-src="'/revista/media/portfolio/%s/image' % portfolio_item.id" t-att-alt="portfolio_item.name" loading="lazy"/>
               <i t-else="" t-att-class="portfolio_item.icon_class or 'fa fa-graduation-cap'"/>
@@ -937,14 +937,14 @@
                 </t>
               </ul>
               <div>
-                <a t-if="portfolio_item.contact_url" t-att-href="portfolio_item.contact_url"><i class="fa fa-whatsapp"/> <t t-out="portfolio_item.contact_label or 'Contáctanos'"/></a>
-                <a t-if="portfolio_item.agenda_url" t-att-href="portfolio_item.agenda_url"><i class="fa fa-calendar"/> <t t-out="portfolio_item.agenda_label or 'Agenda una cita'"/></a>
+                <a t-if="portfolio_item.contact_url" t-att-href="portfolio_item.contact_url" data-analytics-event="click_site_link" data-analytics-cta-type="contact" t-att-data-analytics-link-text="portfolio_item.contact_label or 'Contáctanos'"><i class="fa fa-whatsapp"/> <t t-out="portfolio_item.contact_label or 'Contáctanos'"/></a>
+                <a t-if="portfolio_item.agenda_url" t-att-href="portfolio_item.agenda_url" data-analytics-event="click_site_link" data-analytics-cta-type="apply" t-att-data-analytics-link-text="portfolio_item.agenda_label or 'Agenda una cita'"><i class="fa fa-calendar"/> <t t-out="portfolio_item.agenda_label or 'Agenda una cita'"/></a>
               </div>
             </article>
           </t>
         </t>
         <t t-else="">
-          <article class="lp-revista-service-card">
+          <article class="lp-revista-service-card" data-analytics-item="portfolio">
             <h3>Aprendizaje empresarial</h3>
             <i class="fa fa-graduation-cap"/>
             <ul>
@@ -953,11 +953,11 @@
               <li>Cursos de actualización</li>
             </ul>
             <div>
-              <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
-              <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
+              <a href="/contactus" data-analytics-event="click_site_link" data-analytics-cta-type="contact" data-analytics-link-text="Contáctanos"><i class="fa fa-whatsapp"/> Contáctanos</a>
+              <a href="/appointment" data-analytics-event="click_site_link" data-analytics-cta-type="apply" data-analytics-link-text="Agenda una cita"><i class="fa fa-calendar"/> Agenda una cita</a>
             </div>
           </article>
-          <article class="lp-revista-service-card">
+          <article class="lp-revista-service-card" data-analytics-item="portfolio">
             <h3>Tecnología: salones y espacios</h3>
             <i class="fa fa-calendar-o"/>
             <ul>
@@ -965,19 +965,19 @@
               <li>Salón de Eventos</li>
             </ul>
             <div>
-              <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
-              <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
+              <a href="/contactus" data-analytics-event="click_site_link" data-analytics-cta-type="contact" data-analytics-link-text="Contáctanos"><i class="fa fa-whatsapp"/> Contáctanos</a>
+              <a href="/appointment" data-analytics-event="click_site_link" data-analytics-cta-type="apply" data-analytics-link-text="Agenda una cita"><i class="fa fa-calendar"/> Agenda una cita</a>
             </div>
           </article>
-          <article class="lp-revista-service-card">
+          <article class="lp-revista-service-card" data-analytics-item="portfolio">
             <h3>Inteligencia artificial</h3>
             <i class="fa fa-microchip"/>
             <ul>
               <li>Automatización de procesos con IA</li>
             </ul>
             <div>
-              <a href="/contactus"><i class="fa fa-whatsapp"/> Contáctanos</a>
-              <a href="/appointment"><i class="fa fa-calendar"/> Agenda una cita</a>
+              <a href="/contactus" data-analytics-event="click_site_link" data-analytics-cta-type="contact" data-analytics-link-text="Contáctanos"><i class="fa fa-whatsapp"/> Contáctanos</a>
+              <a href="/appointment" data-analytics-event="click_site_link" data-analytics-cta-type="apply" data-analytics-link-text="Agenda una cita"><i class="fa fa-calendar"/> Agenda una cita</a>
             </div>
           </article>
         </t>
@@ -1010,7 +1010,7 @@
               <div class="lp-revista-allies__track">
                 <t t-foreach="ally_slide" t-as="ally">
                   <figure class="lp-revista-ally-logo">
-                    <a t-if="ally.url" t-att-href="ally.url" target="_blank" rel="noopener" t-att-aria-label="ally.name">
+                    <a t-if="ally.url" t-att-href="ally.url" target="_blank" rel="noopener" t-att-aria-label="ally.name" data-analytics-event="click_site_link" data-analytics-block-name="Aliados" t-att-data-analytics-link-text="ally.name">
                       <img t-if="ally.logo" t-att-src="'/revista/media/ally/%s/logo' % ally.id" t-att-alt="ally.name" loading="lazy"/>
                       <span t-else="" t-out="ally.name"/>
                     </a>
@@ -1056,7 +1056,7 @@
           <div class="lp-revista-home-allies__group">
             <t t-foreach="home_allies" t-as="ally">
               <figure class="lp-revista-home-ally-card">
-                <a t-if="ally.url" class="lp-revista-home-ally-card__link" t-att-href="ally.url" target="_blank" rel="noopener" t-att-title="ally.name" t-att-aria-label="ally.name">
+                <a t-if="ally.url" class="lp-revista-home-ally-card__link" t-att-href="ally.url" target="_blank" rel="noopener" t-att-title="ally.name" t-att-aria-label="ally.name" data-analytics-event="click_site_link" data-analytics-block-name="Aliados" t-att-data-analytics-link-text="ally.name">
                   <img t-if="ally.logo" t-att-src="'/revista/media/ally/%s/logo' % ally.id" t-att-alt="ally.name" loading="lazy"/>
                   <span t-else="" t-out="ally.name"/>
                 </a>
@@ -1116,7 +1116,7 @@
         <h3>Secciones</h3>
         <div id="lpFooterSections" class="lp-revista-footer__panel">
           <t t-foreach="lp_footer_sections" t-as="lp_footer_link">
-            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name" data-analytics-event="click_site_link" data-analytics-block-name="Footer secciones" t-att-data-analytics-link-text="lp_footer_link.name"/>
           </t>
         </div>
       </nav>
@@ -1128,7 +1128,7 @@
         <h3>Portafolio</h3>
         <div id="lpFooterPortfolio" class="lp-revista-footer__panel">
           <t t-foreach="lp_footer_portfolio" t-as="lp_footer_link">
-            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name" data-analytics-event="click_site_link" data-analytics-block-name="Footer portafolio" t-att-data-analytics-link-text="lp_footer_link.name"/>
           </t>
         </div>
       </nav>
@@ -1140,7 +1140,7 @@
         <h3>Legal</h3>
         <div id="lpFooterLegal" class="lp-revista-footer__panel">
           <t t-foreach="lp_footer_legal" t-as="lp_footer_link">
-            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name" data-analytics-event="click_site_link" data-analytics-block-name="Footer legal" t-att-data-analytics-link-text="lp_footer_link.name"/>
           </t>
         </div>
       </nav>
@@ -1151,7 +1151,7 @@
         </button>
         <h3>Contacto</h3>
         <div id="lpFooterContact" class="lp-revista-footer__panel">
-          <a t-if="lp_config and lp_config.phone" href="https://wa.link/i0n10b" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+          <a t-if="lp_config and lp_config.phone" href="https://wa.link/i0n10b" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp" data-analytics-event="click_whatsapp" data-analytics-cta-type="contact" data-analytics-link-text="Contactar por WhatsApp">
             <i class="fa fa-whatsapp"/>
             <t t-out="lp_config.phone"/>
           </a>
@@ -1197,7 +1197,7 @@
         <h3>Secciones</h3>
         <div id="lpFooterAdSections" class="lp-revista-footer__panel">
           <t t-foreach="lp_footer_sections" t-as="lp_footer_link">
-            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name" data-analytics-event="click_site_link" data-analytics-block-name="Footer secciones" t-att-data-analytics-link-text="lp_footer_link.name"/>
           </t>
         </div>
       </nav>
@@ -1209,7 +1209,7 @@
         <h3>Portafolio</h3>
         <div id="lpFooterAdPortfolio" class="lp-revista-footer__panel">
           <t t-foreach="lp_footer_portfolio" t-as="lp_footer_link">
-            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name" data-analytics-event="click_site_link" data-analytics-block-name="Footer portafolio" t-att-data-analytics-link-text="lp_footer_link.name"/>
           </t>
         </div>
       </nav>
@@ -1221,7 +1221,7 @@
         <h3>Legal</h3>
         <div id="lpFooterAdLegal" class="lp-revista-footer__panel">
           <t t-foreach="lp_footer_legal" t-as="lp_footer_link">
-            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name"/>
+            <a t-att-href="lp_footer_link.url" t-att-target="'_blank' if lp_footer_link.open_new_tab else None" t-att-rel="'noopener' if lp_footer_link.open_new_tab else None" t-out="lp_footer_link.name" data-analytics-event="click_site_link" data-analytics-block-name="Footer legal" t-att-data-analytics-link-text="lp_footer_link.name"/>
           </t>
         </div>
       </nav>
@@ -1232,7 +1232,7 @@
         </button>
         <h3>Contacto</h3>
         <div id="lpFooterAdContact" class="lp-revista-footer__panel">
-          <a t-if="lp_config and lp_config.phone" href="https://wa.link/i0n10b" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+          <a t-if="lp_config and lp_config.phone" href="https://wa.link/i0n10b" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp" data-analytics-event="click_whatsapp" data-analytics-cta-type="contact" data-analytics-link-text="Contactar por WhatsApp">
             <i class="fa fa-whatsapp"/>
             <t t-out="lp_config.phone"/>
           </a>
@@ -1240,7 +1240,7 @@
           <p t-if="lp_config and lp_config.email"><i class="fa fa-envelope"/> <t t-out="lp_config.email"/></p>
         </div>
       </div>
-      <a class="lp-revista-footer__ad" t-att-href="lp_footer_banner.url if lp_footer_banner and lp_footer_banner.url else '/contactus'" aria-label="Publicidad Revista LatinPyme">
+      <a class="lp-revista-footer__ad" t-att-href="lp_footer_banner.url if lp_footer_banner and lp_footer_banner.url else '/contactus'" aria-label="Publicidad Revista LatinPyme" data-analytics-event="click_home_ad_banner" data-analytics-item="banner" t-att-data-analytics-banner-name="lp_footer_banner.name if lp_footer_banner else 'Banner footer'" data-analytics-banner-position="footer" data-analytics-link-text="Publicidad Revista LatinPyme">
         <img t-if="lp_footer_banner and lp_footer_banner.image" t-att-src="'/revista/media/banner/%s/image' % lp_footer_banner.id" t-att-alt="lp_footer_banner.name" loading="lazy"/>
         <img t-else="" src="/latinpyme_revista_theme/static/src/img/editorial/footer-ad-placeholder.svg" alt="Publicidad Revista LatinPyme" loading="lazy"/>
       </a>

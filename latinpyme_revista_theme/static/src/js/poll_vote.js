@@ -46,6 +46,29 @@
     }
   }
 
+  function selectedOptionLabel(selected) {
+    var label = selected ? selected.closest("label") : null;
+    var text = label ? label.querySelector("span") : null;
+    return text ? text.textContent : "";
+  }
+
+  function pollQuestion(poll) {
+    var question = poll.querySelector("h3");
+    return question ? question.textContent : "";
+  }
+
+  function trackPollVote(poll, selected) {
+    if (!window.lpRevistaAnalytics || typeof window.lpRevistaAnalytics.track !== "function") {
+      return;
+    }
+    window.lpRevistaAnalytics.track("poll_vote", {
+      question: pollQuestion(poll),
+      option_label: selectedOptionLabel(selected),
+      source_type: poll.dataset.lpPollSource || "config",
+      page_path: window.location.pathname || "/",
+    });
+  }
+
   function submitVote(poll, button) {
     var selected = poll.querySelector("input[type='radio']:checked");
     if (!selected) {
@@ -81,6 +104,9 @@
           rememberVote(poll);
           setSubmitted(poll, true);
           setMessage(poll, result.message || "¡Gracias! Tu voto ha sido registrado.", "success");
+          if (!result.duplicate) {
+            trackPollVote(poll, selected);
+          }
           return;
         }
         button.disabled = false;

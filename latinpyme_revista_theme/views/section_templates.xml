@@ -20,7 +20,7 @@
         <t t-call="latinpyme_revista_theme.lp_masthead"/>
         <main class="lp-revista-main">
           <section class="lp-revista-container lp-revista-section-index-hero">
-            <form class="lp-revista-section-index-search" action="/revista/seccion" method="get" role="search">
+            <form class="lp-revista-section-index-search" action="/revista/seccion" method="get" role="search" data-analytics-event="search">
               <input type="search" name="search" t-att-value="section_search" placeholder="Buscar secciones..." aria-label="Buscar secciones"/>
               <button type="submit" aria-label="Buscar">
                 <i class="fa fa-search"/>
@@ -32,14 +32,14 @@
             <div t-if="section_items" class="lp-revista-section-index-grid">
               <article t-foreach="section_items" t-as="section" class="lp-revista-section-index-card">
                 <t t-set="section_record" t-value="section.get('record')"/>
-                <a t-att-href="section['url']" class="lp-revista-section-index-card__media">
+                <a t-att-href="section['url']" class="lp-revista-section-index-card__media" data-analytics-event="click_site_link" data-analytics-block-name="Índice de secciones" t-att-data-analytics-link-text="section['name']">
                   <img t-if="section_record and section_record.cover_image" t-att-src="'/revista/media/section/%s/cover' % section_record.id" t-att-alt="section['name']" loading="lazy"/>
                   <span t-else="" class="lp-revista-section-index-card__placeholder">LP</span>
                 </a>
                 <div class="lp-revista-section-index-card__body">
                   <span class="lp-revista-kicker">Sección</span>
                   <h2>
-                    <a t-att-href="section['url']" t-out="section['name']"/>
+                    <a t-att-href="section['url']" t-out="section['name']" data-analytics-event="click_site_link" data-analytics-block-name="Índice de secciones" t-att-data-analytics-link-text="section['name']"/>
                   </h2>
                   <p t-out="section_record.description if section_record and section_record.description else 'Artículos, análisis y recursos para empresarios pyme.'"/>
                   <div class="lp-revista-section-index-card__meta">
@@ -47,7 +47,7 @@
                       <t t-out="section_post_counts.get(section['slug'], 0)"/>
                       artículos
                     </span>
-                    <a t-att-href="section['url']">
+                    <a t-att-href="section['url']" data-analytics-event="click_site_link" data-analytics-block-name="Índice de secciones" t-att-data-analytics-link-text="'Ver sección: %s' % section['name']">
                       Ver sección <i class="fa fa-arrow-right"/>
                     </a>
                   </div>
@@ -75,7 +75,7 @@
             <div t-if="not section_items" class="lp-revista-empty">
               <h2>No encontramos secciones.</h2>
               <p>Prueba con otra búsqueda o vuelve al listado completo.</p>
-              <a class="lp-revista-button" href="/revista/seccion">Ver todas</a>
+              <a class="lp-revista-button" href="/revista/seccion" data-analytics-event="click_site_link" data-analytics-link-text="Ver todas">Ver todas</a>
             </div>
           </section>
 
@@ -108,13 +108,13 @@
       <div id="wrap" class="lp-revista lp-revista-section">
         <t t-call="latinpyme_revista_theme.lp_masthead"/>
         <main class="lp-revista-main">
-          <section t-if="section_banners" class="lp-revista-container lp-revista-section-hero-banner" aria-label="Banner superior de sección">
+          <section t-if="section_banners" class="lp-revista-container lp-revista-section-hero-banner" aria-label="Banner superior de sección" data-analytics-block-name="Banner sección">
             <t t-foreach="section_banners" t-as="banner">
               <t t-call="latinpyme_revista_theme.lp_dynamic_banner"/>
             </t>
           </section>
 
-          <section class="lp-revista-container lp-revista-section-layout">
+          <section class="lp-revista-container lp-revista-section-layout" t-att-data-analytics-block-name="section_name">
             <div class="lp-revista-section-main">
               <t t-call="latinpyme_revista_theme.lp_section_heading">
                 <t t-set="title" t-value="'Lo más reciente en ' + section_name"/>
@@ -155,7 +155,7 @@
             </t>
           </section>
 
-          <section t-if="section_show_related" class="lp-revista-container lp-revista-block">
+          <section t-if="section_show_related" class="lp-revista-container lp-revista-block" data-analytics-block-name="También puede interesarte">
             <t t-call="latinpyme_revista_theme.lp_section_heading">
               <t t-set="title">También puede interesarte</t>
               <t t-set="eyebrow" t-value="False"/>
@@ -171,7 +171,7 @@
             </div>
           </section>
 
-          <section t-if="section_show_interviews and section_interviews" class="lp-revista-container lp-revista-block lp-revista-home-interviews lp-revista-section-interviews" aria-labelledby="lp-section-interviews-title">
+          <section t-if="section_show_interviews and section_interviews" class="lp-revista-container lp-revista-block lp-revista-home-interviews lp-revista-section-interviews" aria-labelledby="lp-section-interviews-title" data-analytics-block-name="Entrevistas">
             <t t-set="lp_interviews_youtube_url" t-value="'https://www.youtube.com/@revistalatinpyme'"/>
             <t t-set="lp_interview_apply_url" t-value="lp_config.interview_apply_target_url() if lp_config else '/contactus'"/>
             <t t-call="latinpyme_revista_theme.lp_section_heading">
@@ -184,12 +184,12 @@
               <aside class="lp-revista-interview-featured">
                 <span>Destacado</span>
                 <div class="lp-revista-interview-featured__body">
-                  <a t-att-href="lp_interviews_youtube_url" class="lp-revista-interview-featured__play" aria-label="Ver más entrevistas" target="_blank" rel="noopener">
+                  <a t-att-href="lp_interviews_youtube_url" class="lp-revista-interview-featured__play" aria-label="Ver más entrevistas" target="_blank" rel="noopener" data-analytics-event="video_interview_play" data-analytics-video-title="Entrevistas Revista LatinPyme" data-analytics-video-provider="youtube" t-att-data-analytics-video-url="lp_interviews_youtube_url">
                     <i class="fa fa-play"/>
                   </a>
                   <p>Explora más entrevistas con líderes que están transformando negocios y comunidades.</p>
                 </div>
-                <a t-att-href="lp_interviews_youtube_url" class="lp-revista-inline-link" target="_blank" rel="noopener">
+                <a t-att-href="lp_interviews_youtube_url" class="lp-revista-inline-link" target="_blank" rel="noopener" data-analytics-event="video_interview_play" data-analytics-video-title="Entrevistas Revista LatinPyme" data-analytics-video-provider="youtube" t-att-data-analytics-video-url="lp_interviews_youtube_url">
                   Ver más entrevistas <i class="fa fa-arrow-right"/>
                 </a>
               </aside>
@@ -205,7 +205,7 @@
                 <div>
                   <h3>¿Quieres ser parte de nuestras entrevistas?</h3>
                   <p>Comparte tu experiencia y conecta con nuestra audiencia empresarial.</p>
-                  <a t-att-href="lp_interview_apply_url" class="lp-revista-button" target="_blank" rel="noopener">
+                  <a t-att-href="lp_interview_apply_url" class="lp-revista-button" target="_blank" rel="noopener" data-analytics-event="click_site_link" data-analytics-cta-type="apply" data-analytics-link-text="Postúlate aquí">
                     Postúlate aquí <i class="fa fa-arrow-right"/>
                   </a>
                 </div>
@@ -213,11 +213,11 @@
             </div>
           </section>
 
-          <section t-if="section_show_portfolio" class="lp-revista-container lp-revista-block">
+          <section t-if="section_show_portfolio" class="lp-revista-container lp-revista-block" data-analytics-block-name="Portafolio">
             <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
           </section>
 
-          <section t-if="section_show_allies" class="lp-revista-container lp-revista-block lp-revista-home-allies">
+          <section t-if="section_show_allies" class="lp-revista-container lp-revista-block lp-revista-home-allies" data-analytics-block-name="Aliados">
             <t t-set="home_allies" t-value="request.env['latinpyme.revista.ally'].sudo().get_active_allies(request.website)"/>
             <t t-call="latinpyme_revista_theme.lp_home_allies_carousel"/>
           </section>
@@ -253,7 +253,7 @@
         <main class="lp-revista-main">
           <section t-if="program_hero_banner and program_hero_banner.image" class="lp-revista-container">
             <div class="lp-revista-program-hero-banner">
-              <a t-if="program_hero_banner.url" t-att-href="program_hero_banner.url" class="lp-revista-program-hero-banner__link" target="_blank" rel="noopener" aria-label="Abrir publicidad">
+              <a t-if="program_hero_banner.url" t-att-href="program_hero_banner.url" class="lp-revista-program-hero-banner__link" target="_blank" rel="noopener" aria-label="Abrir publicidad" data-analytics-event="click_home_ad_banner" data-analytics-item="banner" t-att-data-analytics-banner-name="program_hero_banner.name" data-analytics-banner-position="program_hero">
                 <img t-att-src="'/revista/media/banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
               </a>
               <img t-else="" t-att-src="'/revista/media/banner/%s/image' % program_hero_banner.id" t-att-alt="program_hero_banner.name" loading="lazy"/>
@@ -297,16 +297,16 @@
                       <span t-out="event.time_label()"/>
                     </p>
                     <div class="lp-revista-program-month-event__actions">
-                      <a t-if="event.location_url()" t-att-href="event.location_url()" target="_blank" rel="noopener">Ver</a>
-                      <a t-if="event.registration_url" class="lp-revista-program-month-event__register" t-att-href="event.registration_url" target="_blank" rel="noopener">Inscribirse</a>
+                      <a t-if="event.location_url()" t-att-href="event.location_url()" target="_blank" rel="noopener" data-analytics-event="click_site_link" data-analytics-block-name="Programación" t-att-data-analytics-link-text="'Ver: %s' % event.name">Ver</a>
+                      <a t-if="event.registration_url" class="lp-revista-program-month-event__register" t-att-href="event.registration_url" target="_blank" rel="noopener" data-analytics-event="click_site_link" data-analytics-cta-type="apply" data-analytics-block-name="Programación" t-att-data-analytics-link-text="'Inscribirse: %s' % event.name">Inscribirse</a>
                       <t t-set="calendar_links" t-value="event.calendar_links()"/>
                       <details class="lp-revista-calendar-picker lp-revista-calendar-picker--compact">
                         <summary>Calendario <i class="fa fa-angle-down"/></summary>
                         <div>
-                          <a t-att-href="calendar_links['google']" target="_blank" rel="noopener"><i class="fa fa-google"/> Google Calendar</a>
-                          <a t-att-href="calendar_links['outlook']" target="_blank" rel="noopener"><i class="fa fa-windows"/> Outlook / Microsoft 365</a>
-                          <a t-att-href="calendar_links['apple']"><i class="fa fa-apple"/> Apple Calendar</a>
-                          <a t-att-href="calendar_links['ics']"><i class="fa fa-download"/> Descargar .ics</a>
+                          <a t-att-href="calendar_links['google']" target="_blank" rel="noopener" data-analytics-event="click_site_link" data-analytics-block-name="Programación" t-att-data-analytics-link-text="'Google Calendar: %s' % event.name"><i class="fa fa-google"/> Google Calendar</a>
+                          <a t-att-href="calendar_links['outlook']" target="_blank" rel="noopener" data-analytics-event="click_site_link" data-analytics-block-name="Programación" t-att-data-analytics-link-text="'Outlook: %s' % event.name"><i class="fa fa-windows"/> Outlook / Microsoft 365</a>
+                          <a t-att-href="calendar_links['apple']" data-analytics-event="click_site_link" data-analytics-block-name="Programación" t-att-data-analytics-link-text="'Apple Calendar: %s' % event.name"><i class="fa fa-apple"/> Apple Calendar</a>
+                          <a t-att-href="calendar_links['ics']" data-analytics-event="download_media_kit" data-analytics-block-name="Programación" t-att-data-analytics-file-name="event.ics_filename()" t-att-data-analytics-file-url="calendar_links['ics']"><i class="fa fa-download"/> Descargar .ics</a>
                         </div>
                       </details>
                     </div>
@@ -316,11 +316,11 @@
             </div>
           </section>
 
-          <section class="lp-revista-container lp-revista-block">
+          <section class="lp-revista-container lp-revista-block" data-analytics-block-name="Portafolio">
             <t t-call="latinpyme_revista_theme.lp_portfolio_strip"/>
           </section>
 
-          <section class="lp-revista-container lp-revista-block lp-revista-home-allies">
+          <section class="lp-revista-container lp-revista-block lp-revista-home-allies" data-analytics-block-name="Aliados">
             <t t-set="home_allies" t-value="request.env['latinpyme.revista.ally'].sudo().get_active_allies(request.website)"/>
             <t t-call="latinpyme_revista_theme.lp_home_allies_carousel"/>
           </section>
