@@ -944,6 +944,17 @@ class LatinpymeRevistaBlogPostOverride(models.Model):
         default=True,
         help="Si esta desactivado, la nota usa la configuracion de su seccion o la configuracion global.",
     )
+    hide_header_image = fields.Boolean(
+        string="Ocultar imagen en cabecera",
+        default=False,
+        help="Control interno para ocultar solo la imagen grande de cabecera en la nota individual.",
+    )
+    show_header_image = fields.Boolean(
+        string="Mostrar imagen en cabecera",
+        compute="_compute_show_header_image",
+        inverse="_inverse_show_header_image",
+        help="Desactiva esta opcion para ocultar la imagen grande junto al titulo sin afectar miniaturas, SEO u Open Graph.",
+    )
     sidebar_mode = fields.Selection(
         DISPLAY_MODE_SELECTION,
         string="Sidebar",
@@ -1008,6 +1019,15 @@ class LatinpymeRevistaBlogPostOverride(models.Model):
             url = (record.canonical_url or "").strip()
             if url and not url.startswith(("https://", "http://")):
                 raise ValidationError("La URL final SEO debe iniciar con http:// o https://.")
+
+    @api.depends("hide_header_image")
+    def _compute_show_header_image(self):
+        for record in self:
+            record.show_header_image = not record.hide_header_image
+
+    def _inverse_show_header_image(self):
+        for record in self:
+            record.hide_header_image = not record.show_header_image
 
     @api.model
     def get_for_post(self, post):

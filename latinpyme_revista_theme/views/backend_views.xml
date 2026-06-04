@@ -981,6 +981,7 @@
           <group>
             <group string="Nota">
               <field name="active"/>
+              <field name="show_header_image"/>
               <field name="post_id" options="{'no_create': True}"/>
               <field name="name" readonly="1"/>
             </group>

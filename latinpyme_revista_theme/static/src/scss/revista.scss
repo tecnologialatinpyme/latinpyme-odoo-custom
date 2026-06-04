@@ -3761,6 +3761,14 @@
     gap: 32px;
   }
 
+  .lp-revista-blog-hero__grid--no-cover {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lp-revista-blog-hero__grid--with-aside.lp-revista-blog-hero__grid--no-cover {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+  }
+
   .lp-revista-blog-hero__copy {
     display: grid;
     align-content: center;

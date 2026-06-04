@@ -110,6 +110,7 @@
         <t t-set="lp_sidebar_model" t-value="request.env['latinpyme.revista.sidebar.item'].sudo()"/>
         <t t-set="lp_note_conference_item" t-value="lp_sidebar_model.get_active_item('note', 'conference')"/>
         <t t-set="lp_show_note_conference" t-value="lp_show_note_sidebar and (lp_note_conference_item or not lp_config or lp_config.show_sidebar_conference)"/>
+        <t t-set="lp_show_header_image" t-value="lp_note_override.show_header_image if lp_note_override else True"/>
 
         <div class="lp-revista-container lp-revista-note-head lp-revista-blog-hero__inner">
           <nav class="lp-revista-breadcrumb lp-revista-breadcrumb--dark" aria-label="Miga de pan">
@@ -121,7 +122,7 @@
             <span class="lp-revista-breadcrumb__current" t-out="blog_post.name"/>
           </nav>
 
-          <div t-attf-class="lp-revista-blog-hero__grid #{'lp-revista-blog-hero__grid--with-aside' if lp_show_note_conference else ''}">
+          <div t-attf-class="lp-revista-blog-hero__grid #{'lp-revista-blog-hero__grid--with-aside' if lp_show_note_conference else ''} #{'lp-revista-blog-hero__grid--no-cover' if not lp_show_header_image else ''}">
             <div class="lp-revista-blog-hero__copy">
               <span t-if="lp_primary_tag" class="lp-revista-kicker" itemprop="articleSection" t-out="lp_primary_tag_name"/>
 
@@ -149,7 +150,7 @@
               </div>
             </div>
 
-            <div class="lp-revista-blog-hero__cover" aria-label="Imagen principal">
+            <div t-if="lp_show_header_image" class="lp-revista-blog-hero__cover" aria-label="Imagen principal">
               <t t-call="website.record_cover">
                 <t t-set="_record" t-value="blog_post"/>
                 <t t-set="snippet_autofocus" t-value="True"/>
