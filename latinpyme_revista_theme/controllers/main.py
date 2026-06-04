@@ -575,6 +575,8 @@ class LatinpymeRevistaController(http.Controller):
         if not block:
             return empty_posts
         Assignment = request.env["latinpyme.revista.home.assignment"].sudo()
+        if block.block_type == "news":
+            exclude_ids = None
         has_scheduled_posts = Assignment.has_active_assignments(block.block_type, website=request.website, content_type="post")
         scheduled_posts = Assignment.get_active_posts(
             block.block_type,
@@ -880,7 +882,7 @@ class LatinpymeRevistaController(http.Controller):
             "featured_style": self._cover_style(featured_post),
             "highlight_posts": self._home_posts(home_blocks.get("hero"), blog=blog, default_limit=highlight_limit, exclude_ids=exclude_ids),
             "latest_posts": self._home_posts(home_blocks.get("latest"), blog=blog, default_limit=latest_limit, exclude_ids=exclude_ids),
-            "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, min_limit=4, exclude_ids=exclude_ids),
+            "new_posts": self._home_posts(home_blocks.get("news"), blog=blog, default_limit=new_limit, min_limit=4),
             "interviews": manual_interviews or (empty_interviews if manual_interview_posts else self._interviews(limit=interviews_limit)),
             "interview_posts": empty_posts if manual_interviews else (
                 manual_interview_posts
