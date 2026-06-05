@@ -435,7 +435,7 @@
   </template>
 
   <template id="lp_interview_card" name="Revista LatinPyme Interview Card">
-    <article t-if="interview" class="lp-revista-interview-card" itemscope="itemscope" itemtype="https://schema.org/VideoObject" data-analytics-item="video">
+    <article t-if="interview" class="lp-revista-interview-card" data-analytics-item="video">
       <a t-att-href="interview.target_url()" t-att-title="interview.name" t-att-target="'_blank' if interview.youtube_url else None" t-att-rel="'noopener' if interview.youtube_url else None" data-analytics-event="video_interview_play" t-att-data-analytics-video-title="interview.name" t-att-data-analytics-video-provider="'youtube' if interview.youtube_url else 'latinpyme'" t-att-data-analytics-video-url="interview.target_url()">
         <img t-if="interview.image" t-att-src="'/revista/media/interview/%s/image' % interview.id" t-att-alt="interview.name" loading="lazy"/>
         <img t-elif="interview.youtube_thumbnail_url()" t-att-src="interview.youtube_thumbnail_url()" t-att-alt="interview.name" loading="lazy"/>
