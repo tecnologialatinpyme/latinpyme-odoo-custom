@@ -573,7 +573,7 @@ class LatinpymeRevistaSeoRedirect(models.Model):
         return self._notification(title, message, "warning" if error_messages else "success")
 
     @api.model
-    def action_sync_posts(self):
+    def action_sync_posts(self, _selected_ids=None):
         website = self._revista_website()
         if not website:
             raise UserError("No se encontro el sitio web configurado para Revista LatinPyme.")
