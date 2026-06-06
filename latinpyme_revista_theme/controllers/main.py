@@ -132,7 +132,7 @@ class LatinpymeRevistaController(http.Controller):
         config = self._config()
         target = config.subscribe_target_url() if config else ""
         if not target or target == "/suscribirse":
-            return "/revista"
+            return "/"
         return target
 
     def _render(self, template, values):
@@ -816,8 +816,17 @@ class LatinpymeRevistaController(http.Controller):
         }
         return self._render("latinpyme_revista_theme.revista_program_page", values)
 
-    @http.route("/revista", type="http", auth="public", website=True, sitemap=True)
-    def revista_home(self, **kwargs):
+    @http.route(
+        ["/revista", "/revista/"],
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def revista_home_redirect(self, **kwargs):
+        return werkzeug_redirect("/", code=301)
+
+    def _revista_home_response(self):
         config = self._config()
         blog = self._revista_blog()
         home_blocks = self._home_blocks_map()

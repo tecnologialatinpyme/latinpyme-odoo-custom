@@ -16,7 +16,7 @@
     <t t-set="lp_masthead_sections" t-value="request.env['latinpyme.revista.section'].sudo().get_masthead_nav_sections(lp_website)"/>
     <header class="lp-revista-masthead" role="banner">
       <div class="lp-revista-container lp-revista-masthead__top">
-        <a href="/revista" class="lp-revista-brand" t-att-aria-label="lp_config.name if lp_config else 'Revista LatinPyme'" data-analytics-event="click_site_link" data-analytics-link-text="Revista LatinPyme">
+        <a href="/" class="lp-revista-brand" t-att-aria-label="lp_config.name if lp_config else 'Revista LatinPyme'" data-analytics-event="click_site_link" data-analytics-link-text="Revista LatinPyme">
           <span class="lp-revista-brand__mark">LP</span>
           <span class="lp-revista-brand__text">
             <span>Revista</span>
@@ -50,7 +50,7 @@
           </button>
         </div>
         <div class="lp-revista-container lp-revista-nav__inner">
-          <a href="/revista" t-attf-class="lp-revista-nav__link #{'is-active' if not section_slug else ''}" data-analytics-event="click_site_link" data-analytics-link-text="Inicio">Inicio</a>
+          <a href="/" t-attf-class="lp-revista-nav__link #{'is-active' if not section_slug else ''}" data-analytics-event="click_site_link" data-analytics-link-text="Inicio">Inicio</a>
           <t t-foreach="lp_masthead_sections" t-as="section">
             <t t-if="section.get('children')">
               <div t-attf-class="lp-revista-nav__item lp-revista-nav__item--dropdown #{'lp-revista-nav__item--align-end' if section.get('slug') == 'portafolio' else ''} #{'is-active' if section_slug in section.get('active_slugs', []) else ''}">
@@ -349,7 +349,7 @@
       <div class="lp-revista-container">
         <div class="lp-revista-section-hero">
           <nav aria-label="Miga de pan" class="lp-revista-breadcrumb">
-            <a href="/revista">Inicio</a><span>/</span><span>Gerencia</span>
+            <a href="/">Inicio</a><span>/</span><span>Gerencia</span>
           </nav>
           <h1>Gerencia</h1>
           <p>Estrategias, liderazgo y mejores prácticas para la gestión empresarial.</p>
@@ -788,7 +788,7 @@
     <section class="lp-revista s_lp_revista_note_header" data-snippet="s_lp_revista_note_header" data-name="LP Revista - Cabecera de Nota">
       <div class="lp-revista-container lp-revista-note-head">
         <nav class="lp-revista-breadcrumb lp-revista-breadcrumb--dark" aria-label="Miga de pan">
-          <a href="/revista">Inicio</a><span>/</span><a href="/revista/seccion/finanzas">Finanzas</a>
+          <a href="/">Inicio</a><span>/</span><a href="/revista/seccion/finanzas">Finanzas</a>
         </nav>
         <span class="lp-revista-kicker">Gestión</span>
         <h1>Estrategias financieras para fortalecer la resiliencia empresarial en tiempos de cambio</h1>

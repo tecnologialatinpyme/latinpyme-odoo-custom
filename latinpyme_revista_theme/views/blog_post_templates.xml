@@ -100,7 +100,7 @@
         <t t-set="lp_section_model" t-value="request.env['latinpyme.revista.section'].sudo()"/>
         <t t-set="lp_primary_section" t-value="lp_section_model.get_by_tag(lp_primary_tag) if lp_primary_tag else False"/>
         <t t-set="lp_primary_tag_name" t-value="lp_primary_tag.name if lp_primary_tag else 'Revista'"/>
-        <t t-set="lp_primary_section_url" t-value="'/revista/seccion/%s' % lp_primary_section.slug if lp_primary_section else '/revista'"/>
+        <t t-set="lp_primary_section_url" t-value="'/revista/seccion/%s' % lp_primary_section.slug if lp_primary_section else '/'"/>
         <t t-set="lp_share_host" t-value="request.httprequest.host.split(':', 1)[0].lower()"/>
         <t t-set="lp_share_url" t-value="'%s%s' % ((lp_config.production_base_url() if lp_config else 'https://latinpyme.com'), blog_post.website_url) if lp_config and lp_share_host == lp_config.domain_to_host(lp_config.production_domain) else '%s%s' % (request.httprequest.url_root.rstrip('/'), blog_post.website_url)"/>
         <t t-set="lp_note_override" t-value="request.env['latinpyme.revista.blog.post.override'].sudo().get_for_post(blog_post)"/>
@@ -114,7 +114,7 @@
 
         <div class="lp-revista-container lp-revista-note-head lp-revista-blog-hero__inner">
           <nav class="lp-revista-breadcrumb lp-revista-breadcrumb--dark" aria-label="Miga de pan">
-            <a href="/revista" data-analytics-event="click_site_link" data-analytics-link-text="Inicio">Inicio</a>
+            <a href="/" data-analytics-event="click_site_link" data-analytics-link-text="Inicio">Inicio</a>
             <span aria-hidden="true">&gt;</span>
             <a t-if="lp_primary_section" t-att-href="lp_primary_section_url" t-out="lp_primary_section.name" data-analytics-event="click_site_link" t-att-data-analytics-link-text="lp_primary_section.name"/>
             <span t-if="not lp_primary_section" t-out="lp_primary_tag_name"/>
