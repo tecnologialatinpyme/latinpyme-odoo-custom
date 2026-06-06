@@ -2,7 +2,7 @@
 
 {
     "name": "Revista LatinPyme Theme",
-    "version": "19.0.1.0.0",
+    "version": "19.0.2.0.0",
     "category": "Website",
     "summary": "Tema editorial administrable para Revista LatinPyme sobre Odoo Website y Blog",
     "description": """
@@ -24,6 +24,7 @@ de publicaciones de Blog.
         "security/ir.model.access.csv",
         "data/revista_defaults.xml",
         "views/backend_views.xml",
+        "views/seo_redirect_views.xml",
         "views/layout_templates.xml",
         "views/snippet_templates.xml",
         "views/snippets.xml",

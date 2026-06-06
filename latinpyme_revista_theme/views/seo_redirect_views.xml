@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_latinpyme_revista_seo_redirect_list" model="ir.ui.view">
+    <field name="name">latinpyme.revista.seo.redirect.list</field>
+    <field name="model">latinpyme.revista.seo.redirect</field>
+    <field name="arch" type="xml">
+      <list
+        string="Redirecciones SEO de notas"
+        editable="bottom"
+        multi_edit="1"
+        default_order="priority_sequence,post_title"
+        decoration-success="state == 'validated'"
+        decoration-danger="state == 'error'"
+        decoration-muted="state == 'disabled'"
+        decoration-warning="state == 'draft'">
+        <header>
+          <button name="action_sync_posts" type="object" string="Sincronizar notas Odoo" class="btn-secondary" display="always"/>
+          <button name="action_activate_301" type="object" string="Activar 301" class="btn-primary"/>
+          <button name="action_validate_redirect" type="object" string="Validar seleccionadas" class="btn-secondary"/>
+          <button name="action_disable_redirect" type="object" string="Desactivar" class="btn-secondary"/>
+        </header>
+        <field name="priority"/>
+        <field name="priority_sequence" column_invisible="True"/>
+        <field name="post_id" options="{'no_create': True}"/>
+        <field name="post_title" readonly="1" optional="hide"/>
+        <field name="new_path" readonly="1"/>
+        <field name="old_url" placeholder="/url-antigua-wordpress/"/>
+        <field name="old_path" readonly="1"/>
+        <field name="redirect_active" readonly="1"/>
+        <field name="state" readonly="1"/>
+        <field name="validation_status" readonly="1"/>
+        <field name="old_http_code" readonly="1" optional="show"/>
+        <field name="new_http_code" readonly="1" optional="show"/>
+        <field name="last_validation" readonly="1" optional="show"/>
+        <field name="validation_message" readonly="1" optional="show"/>
+        <field name="search_console_clicks" optional="hide"/>
+        <field name="search_console_impressions" optional="hide"/>
+        <field name="website_id" optional="hide"/>
+        <field name="notes" optional="hide"/>
+        <button name="action_activate_301" type="object" icon="fa-link" title="Activar redireccion 301"/>
+        <button name="action_validate_redirect" type="object" icon="fa-check-circle" title="Validar redireccion"/>
+        <button name="action_disable_redirect" type="object" icon="fa-ban" title="Desactivar redireccion" invisible="not redirect_active"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_seo_redirect_form" model="ir.ui.view">
+    <field name="name">latinpyme.revista.seo.redirect.form</field>
+    <field name="model">latinpyme.revista.seo.redirect</field>
+    <field name="arch" type="xml">
+      <form string="Redireccion SEO de nota">
+        <header>
+          <button name="action_activate_301" type="object" string="Activar redireccion 301" class="btn-primary" invisible="redirect_active"/>
+          <button name="action_validate_redirect" type="object" string="Validar redireccion" class="btn-secondary" invisible="not redirect_active"/>
+          <button name="action_disable_redirect" type="object" string="Desactivar redireccion" class="btn-secondary" invisible="not redirect_active"/>
+          <field name="state" widget="statusbar" statusbar_visible="draft,active,validated,error,disabled"/>
+        </header>
+        <sheet>
+          <group>
+            <group string="Nota Odoo">
+              <field name="post_id" options="{'no_create': True}"/>
+              <field name="post_title" readonly="1"/>
+              <field name="new_path" readonly="1"/>
+              <field name="new_url" readonly="1" widget="url"/>
+              <field name="website_id" options="{'no_create': True}"/>
+            </group>
+            <group string="URL antigua WordPress">
+              <field name="old_url" placeholder="https://latinpyme.com/url-antigua/"/>
+              <field name="old_path" readonly="1"/>
+              <field name="priority"/>
+              <field name="redirect_active" readonly="1"/>
+              <field name="rewrite_id" readonly="1" groups="base.group_system"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Validacion">
+              <group>
+                <group>
+                  <field name="validation_status" readonly="1"/>
+                  <field name="old_http_code" readonly="1"/>
+                  <field name="new_http_code" readonly="1"/>
+                  <field name="last_validation" readonly="1"/>
+                </group>
+                <group>
+                  <field name="validation_message" readonly="1"/>
+                </group>
+              </group>
+            </page>
+            <page string="Search Console">
+              <group>
+                <field name="search_console_clicks"/>
+                <field name="search_console_impressions"/>
+              </group>
+            </page>
+            <page string="Observaciones">
+              <field name="notes" placeholder="Contexto de migracion, prioridad editorial o incidencias."/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_revista_seo_redirect_search" model="ir.ui.view">
+    <field name="name">latinpyme.revista.seo.redirect.search</field>
+    <field name="model">latinpyme.revista.seo.redirect</field>
+    <field name="arch" type="xml">
+      <search string="Buscar redirecciones SEO">
+        <field name="post_title"/>
+        <field name="post_id"/>
+        <field name="old_url"/>
+        <field name="old_path"/>
+        <field name="new_path"/>
+        <filter name="pending" string="Pendiente" domain="[('state', '=', 'draft')]"/>
+        <filter name="active" string="Activa" domain="[('state', '=', 'active')]"/>
+        <filter name="validated" string="Validada" domain="[('state', '=', 'validated')]"/>
+        <filter name="error" string="Error" domain="[('state', '=', 'error')]"/>
+        <filter name="without_old_url" string="Sin URL antigua" domain="[('old_path', '=', False)]"/>
+        <filter name="high_priority" string="Alta prioridad" domain="[('priority', '=', 'high')]"/>
+        <separator/>
+        <filter name="group_state" string="Agrupar por estado" context="{'group_by': 'state'}"/>
+        <filter name="group_validation" string="Agrupar por validacion" context="{'group_by': 'validation_status'}"/>
+        <filter name="group_priority" string="Agrupar por prioridad" context="{'group_by': 'priority'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_latinpyme_revista_seo_redirect" model="ir.actions.act_window">
+    <field name="name">Redirecciones de notas</field>
+    <field name="res_model">latinpyme.revista.seo.redirect</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_revista_seo_redirect_search"/>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">Sincroniza las notas publicadas de Revista LatinPyme.</p>
+      <p>Ingresa el path antiguo de WordPress, activa la regla 301 y valida que el destino responda correctamente.</p>
+    </field>
+  </record>
+
+  <record id="server_action_latinpyme_revista_seo_redirect_activate" model="ir.actions.server">
+    <field name="name">Activar redirecciones 301 seleccionadas</field>
+    <field name="model_id" ref="model_latinpyme_revista_seo_redirect"/>
+    <field name="binding_model_id" ref="model_latinpyme_revista_seo_redirect"/>
+    <field name="binding_view_types">list</field>
+    <field name="state">code</field>
+    <field name="code">action = records.action_activate_301()</field>
+  </record>
+
+  <record id="server_action_latinpyme_revista_seo_redirect_validate" model="ir.actions.server">
+    <field name="name">Validar redirecciones seleccionadas</field>
+    <field name="model_id" ref="model_latinpyme_revista_seo_redirect"/>
+    <field name="binding_model_id" ref="model_latinpyme_revista_seo_redirect"/>
+    <field name="binding_view_types">list</field>
+    <field name="state">code</field>
+    <field name="code">action = records.action_validate_redirect()</field>
+  </record>
+
+  <record id="server_action_latinpyme_revista_seo_redirect_disable" model="ir.actions.server">
+    <field name="name">Desactivar redirecciones seleccionadas</field>
+    <field name="model_id" ref="model_latinpyme_revista_seo_redirect"/>
+    <field name="binding_model_id" ref="model_latinpyme_revista_seo_redirect"/>
+    <field name="binding_view_types">list</field>
+    <field name="state">code</field>
+    <field name="code">action = records.action_disable_redirect()</field>
+  </record>
+
+  <menuitem
+    id="menu_latinpyme_revista_seo_migration"
+    name="Migracion SEO"
+    parent="latinpyme_revista_theme.menu_latinpyme_revista_root"
+    sequence="45"/>
+  <menuitem
+    id="menu_latinpyme_revista_seo_redirect"
+    name="Redirecciones de notas"
+    parent="menu_latinpyme_revista_seo_migration"
+    action="action_latinpyme_revista_seo_redirect"
+    sequence="10"/>
+</odoo>

@@ -12,6 +12,7 @@ access_latinpyme_revista_interview_designer,latinpyme.revista.interview designer
 access_latinpyme_revista_sidebar_item_designer,latinpyme.revista.sidebar.item designer,model_latinpyme_revista_sidebar_item,website.group_website_designer,1,1,1,1
 access_latinpyme_revista_blog_post_override_designer,latinpyme.revista.blog.post.override designer,model_latinpyme_revista_blog_post_override,website.group_website_designer,1,1,1,1
 access_latinpyme_revista_poll_vote_designer,latinpyme.revista.poll.vote designer,model_latinpyme_revista_poll_vote,website.group_website_designer,1,0,0,0
+access_latinpyme_revista_seo_redirect_designer,latinpyme.revista.seo.redirect designer,model_latinpyme_revista_seo_redirect,website.group_website_designer,1,1,1,1
 access_latinpyme_revista_config_system,latinpyme.revista.config system,model_latinpyme_revista_config,base.group_system,1,1,1,1
 access_latinpyme_revista_section_system,latinpyme.revista.section system,model_latinpyme_revista_section,base.group_system,1,1,1,1
 access_latinpyme_revista_ally_system,latinpyme.revista.ally system,model_latinpyme_revista_ally,base.group_system,1,1,1,1
@@ -25,3 +26,4 @@ access_latinpyme_revista_interview_system,latinpyme.revista.interview system,mod
 access_latinpyme_revista_sidebar_item_system,latinpyme.revista.sidebar.item system,model_latinpyme_revista_sidebar_item,base.group_system,1,1,1,1
 access_latinpyme_revista_blog_post_override_system,latinpyme.revista.blog.post.override system,model_latinpyme_revista_blog_post_override,base.group_system,1,1,1,1
 access_latinpyme_revista_poll_vote_system,latinpyme.revista.poll.vote system,model_latinpyme_revista_poll_vote,base.group_system,1,1,1,1
+access_latinpyme_revista_seo_redirect_system,latinpyme.revista.seo.redirect system,model_latinpyme_revista_seo_redirect,base.group_system,1,1,1,1
