@@ -509,9 +509,10 @@ class LatinpymeRevistaSection(models.Model):
     seo_description = fields.Text(string="Descripcion SEO")
     website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
 
-    _sql_constraints = [
-        ("slug_unique", "unique(slug, website_id)", "El slug de seccion debe ser unico por sitio web."),
-    ]
+    _slug_unique = models.Constraint(
+        "UNIQUE(slug, website_id)",
+        "El slug de seccion debe ser unico por sitio web.",
+    )
 
     def init(self):
         self.env.cr.execute(
@@ -1009,9 +1010,10 @@ class LatinpymeRevistaBlogPostOverride(models.Model):
         help="Opcional. Usar solo cuando SEO defina una URL absoluta validada para esta nota.",
     )
 
-    _sql_constraints = [
-        ("post_unique", "unique(post_id)", "Cada nota solo puede tener un control editorial activo o inactivo."),
-    ]
+    _post_unique = models.Constraint(
+        "UNIQUE(post_id)",
+        "Cada nota solo puede tener un control editorial activo o inactivo.",
+    )
 
     @api.constrains("canonical_url")
     def _check_canonical_url(self):

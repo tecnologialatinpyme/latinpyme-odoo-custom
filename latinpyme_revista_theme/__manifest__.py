@@ -2,7 +2,7 @@
 
 {
     "name": "Revista LatinPyme Theme",
-    "version": "19.0.2.1.1",
+    "version": "19.0.2.1.2",
     "category": "Website",
     "summary": "Tema editorial administrable para Revista LatinPyme sobre Odoo Website y Blog",
     "description": """

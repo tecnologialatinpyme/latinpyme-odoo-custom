@@ -322,7 +322,7 @@ class LatinpymeRevistaController(http.Controller):
             },
         }
 
-    @http.route("/revista/poll/vote", type="json", auth="public", website=True, csrf=False, sitemap=False)
+    @http.route("/revista/poll/vote", type="jsonrpc", auth="public", website=True, csrf=False, sitemap=False)
     def revista_poll_vote(self, source_type=None, source_id=None, option_key=None, **kwargs):
         try:
             source = self._poll_source_data(source_type, source_id)

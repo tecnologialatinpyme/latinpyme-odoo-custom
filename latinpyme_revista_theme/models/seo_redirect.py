@@ -151,18 +151,14 @@ class LatinpymeRevistaSeoRedirect(models.Model):
     search_console_impressions = fields.Integer(string="Impresiones Search Console")
     notes = fields.Text(string="Observaciones")
 
-    _sql_constraints = [
-        (
-            "post_unique",
-            "unique(post_id)",
-            "Cada nota Odoo solo puede tener una fila en la matriz de redirecciones.",
-        ),
-        (
-            "old_path_website_unique",
-            "unique(old_path, website_id)",
-            "Ya existe una redireccion con ese path antiguo para este sitio web.",
-        ),
-    ]
+    _post_unique = models.Constraint(
+        "UNIQUE(post_id)",
+        "Cada nota Odoo solo puede tener una fila en la matriz de redirecciones.",
+    )
+    _old_path_website_unique = models.Constraint(
+        "UNIQUE(old_path, website_id)",
+        "Ya existe una redireccion con ese path antiguo para este sitio web.",
+    )
 
     @api.model
     def _default_website_id(self):
