@@ -824,6 +824,8 @@ class LatinpymeRevistaController(http.Controller):
         sitemap=False,
     )
     def revista_home_redirect(self, **kwargs):
+        if request.httprequest.path == "/":
+            return self._revista_home_response()
         return werkzeug_redirect("/", code=301)
 
     def _revista_home_response(self):
