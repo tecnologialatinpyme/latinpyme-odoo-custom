@@ -8,21 +8,24 @@
         string="Redirecciones SEO de notas"
         editable="bottom"
         multi_edit="1"
-        default_order="priority_sequence,post_title"
+        default_order="publication_date desc,post_title"
         decoration-success="state == 'validated'"
         decoration-danger="state == 'error'"
-        decoration-muted="state == 'disabled'"
+        decoration-muted="state in ('disabled', 'not_applicable')"
         decoration-warning="state == 'draft'">
         <header>
           <button name="action_sync_posts" type="object" string="Sincronizar notas Odoo" class="btn-secondary" display="always"/>
           <button name="action_activate_301" type="object" string="Activar 301" class="btn-primary"/>
           <button name="action_validate_redirect" type="object" string="Validar seleccionadas" class="btn-secondary"/>
+          <button name="action_mark_not_applicable" type="object" string="Marcar No aplica" class="btn-secondary"/>
+          <button name="action_restore_pending" type="object" string="Volver a pendiente" class="btn-secondary"/>
           <button name="action_disable_redirect" type="object" string="Desactivar" class="btn-secondary"/>
         </header>
         <field name="priority"/>
         <field name="priority_sequence" column_invisible="True"/>
         <field name="post_id" options="{'no_create': True}"/>
         <field name="post_title" readonly="1" optional="hide"/>
+        <field name="publication_date" readonly="1"/>
         <field name="new_path" readonly="1"/>
         <field name="old_url" placeholder="/url-antigua-wordpress/"/>
         <field name="old_path" readonly="1"/>
@@ -39,6 +42,8 @@
         <field name="notes" optional="hide"/>
         <button name="action_activate_301" type="object" icon="fa-link" title="Activar redireccion 301"/>
         <button name="action_validate_redirect" type="object" icon="fa-check-circle" title="Validar redireccion"/>
+        <button name="action_mark_not_applicable" type="object" icon="fa-minus-circle" title="Marcar No aplica" invisible="state == 'not_applicable'"/>
+        <button name="action_restore_pending" type="object" icon="fa-undo" title="Volver a pendiente" invisible="state != 'not_applicable'"/>
         <button name="action_disable_redirect" type="object" icon="fa-ban" title="Desactivar redireccion" invisible="not redirect_active"/>
       </list>
     </field>
@@ -52,14 +57,17 @@
         <header>
           <button name="action_activate_301" type="object" string="Activar redireccion 301" class="btn-primary" invisible="redirect_active"/>
           <button name="action_validate_redirect" type="object" string="Validar redireccion" class="btn-secondary" invisible="not redirect_active"/>
+          <button name="action_mark_not_applicable" type="object" string="Marcar No aplica" class="btn-secondary" invisible="state == 'not_applicable'"/>
+          <button name="action_restore_pending" type="object" string="Volver a pendiente" class="btn-secondary" invisible="state != 'not_applicable'"/>
           <button name="action_disable_redirect" type="object" string="Desactivar redireccion" class="btn-secondary" invisible="not redirect_active"/>
-          <field name="state" widget="statusbar" statusbar_visible="draft,active,validated,error,disabled"/>
+          <field name="state" widget="statusbar" statusbar_visible="draft,active,validated,error,disabled,not_applicable"/>
         </header>
         <sheet>
           <group>
             <group string="Nota Odoo">
               <field name="post_id" options="{'no_create': True}"/>
               <field name="post_title" readonly="1"/>
+              <field name="publication_date" readonly="1"/>
               <field name="new_path" readonly="1"/>
               <field name="new_url" readonly="1" widget="url"/>
               <field name="website_id" options="{'no_create': True}"/>
@@ -108,6 +116,7 @@
       <search string="Buscar redirecciones SEO">
         <field name="post_title"/>
         <field name="post_id"/>
+        <field name="publication_date"/>
         <field name="old_url"/>
         <field name="old_path"/>
         <field name="new_path"/>
@@ -115,12 +124,14 @@
         <filter name="active" string="Activa" domain="[('state', '=', 'active')]"/>
         <filter name="validated" string="Validada" domain="[('state', '=', 'validated')]"/>
         <filter name="error" string="Error" domain="[('state', '=', 'error')]"/>
+        <filter name="not_applicable" string="No aplica" domain="[('state', '=', 'not_applicable')]"/>
         <filter name="without_old_url" string="Sin URL antigua" domain="[('old_path', '=', False)]"/>
         <filter name="high_priority" string="Alta prioridad" domain="[('priority', '=', 'high')]"/>
         <separator/>
         <filter name="group_state" string="Agrupar por estado" context="{'group_by': 'state'}"/>
         <filter name="group_validation" string="Agrupar por validacion" context="{'group_by': 'validation_status'}"/>
         <filter name="group_priority" string="Agrupar por prioridad" context="{'group_by': 'priority'}"/>
+        <filter name="group_publication_date" string="Agrupar por fecha" context="{'group_by': 'publication_date:month'}"/>
       </search>
     </field>
   </record>
@@ -161,6 +172,24 @@
     <field name="binding_view_types">list</field>
     <field name="state">code</field>
     <field name="code">action = records.action_disable_redirect()</field>
+  </record>
+
+  <record id="server_action_latinpyme_revista_seo_redirect_not_applicable" model="ir.actions.server">
+    <field name="name">Marcar seleccionadas como No aplica</field>
+    <field name="model_id" ref="model_latinpyme_revista_seo_redirect"/>
+    <field name="binding_model_id" ref="model_latinpyme_revista_seo_redirect"/>
+    <field name="binding_view_types">list</field>
+    <field name="state">code</field>
+    <field name="code">action = records.action_mark_not_applicable()</field>
+  </record>
+
+  <record id="server_action_latinpyme_revista_seo_redirect_restore_pending" model="ir.actions.server">
+    <field name="name">Volver seleccionadas a Pendiente</field>
+    <field name="model_id" ref="model_latinpyme_revista_seo_redirect"/>
+    <field name="binding_model_id" ref="model_latinpyme_revista_seo_redirect"/>
+    <field name="binding_view_types">list</field>
+    <field name="state">code</field>
+    <field name="code">action = records.action_restore_pending()</field>
   </record>
 
   <menuitem

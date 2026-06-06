@@ -52,6 +52,13 @@ class LatinpymeRevistaSeoRedirect(models.Model):
         store=True,
         readonly=True,
     )
+    publication_date = fields.Datetime(
+        string="Fecha de publicacion",
+        related="post_id.post_date",
+        store=True,
+        readonly=True,
+        index=True,
+    )
     new_path = fields.Char(
         string="URL nueva Odoo",
         compute="_compute_new_urls",
@@ -100,6 +107,7 @@ class LatinpymeRevistaSeoRedirect(models.Model):
             ("validated", "Validada correctamente"),
             ("error", "Error"),
             ("disabled", "Desactivada"),
+            ("not_applicable", "No aplica"),
         ],
         string="Estado",
         default="draft",
@@ -421,6 +429,41 @@ class LatinpymeRevistaSeoRedirect(models.Model):
         return self._notification(
             "Redirecciones desactivadas",
             "%s redirecciones fueron desactivadas." % disabled_count,
+            "success",
+        )
+
+    def action_mark_not_applicable(self):
+        marked_count = 0
+        for record in self:
+            if record.rewrite_id:
+                record.rewrite_id.sudo().write({"active": False})
+            record.with_context(lp_seo_redirect_internal=True).write({
+                "state": "not_applicable",
+                "validation_status": "pending",
+                "old_http_code": 0,
+                "new_http_code": 0,
+                "last_validation": False,
+                "validation_message": (
+                    "No aplica redireccion: la nota corresponde a una URL nueva del portal Odoo."
+                ),
+            })
+            marked_count += 1
+        return self._notification(
+            "Notas marcadas como No aplica",
+            "%s notas fueron excluidas del trabajo pendiente de redirecciones." % marked_count,
+            "success",
+        )
+
+    def action_restore_pending(self):
+        restored = self.filtered(lambda record: record.state == "not_applicable")
+        restored.with_context(lp_seo_redirect_internal=True).write({
+            "state": "draft",
+            "validation_status": "pending",
+            "validation_message": "Pendiente de evaluar si requiere una redireccion.",
+        })
+        return self._notification(
+            "Notas restauradas",
+            "%s notas volvieron al estado Pendiente." % len(restored),
             "success",
         )
 
