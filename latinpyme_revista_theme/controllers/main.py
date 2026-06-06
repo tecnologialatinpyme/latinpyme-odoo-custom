@@ -5,7 +5,7 @@ import calendar as pycalendar
 import json
 import uuid
 from datetime import date, timedelta
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlsplit
 
 from odoo import fields, http
 from odoo.http import request
@@ -824,7 +824,9 @@ class LatinpymeRevistaController(http.Controller):
         sitemap=False,
     )
     def revista_home_redirect(self, **kwargs):
-        if request.httprequest.path == "/":
+        request_uri = request.httprequest.environ.get("REQUEST_URI")
+        original_path = urlsplit(request_uri).path if request_uri else request.httprequest.path
+        if original_path == "/":
             return self._revista_home_response()
         return werkzeug_redirect("/", code=301)
 
