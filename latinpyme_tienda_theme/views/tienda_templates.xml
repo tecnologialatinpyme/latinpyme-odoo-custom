@@ -1,50 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <template id="lp_tienda_base_layout" name="Tienda LatinPyme Base Layout">
-    <section class="lp-tienda lp-tienda-base" data-lp-tienda-phase="1">
-      <div class="lp-tienda__container">
-        <t t-out="0"/>
-      </div>
-    </section>
+  <template id="lp_tienda_social_links" name="Tienda LatinPyme Social Links">
+    <div class="lp-tienda-social" aria-label="Redes sociales">
+      <a
+        t-foreach="social_links"
+        t-as="social"
+        t-att-href="social['href']"
+        t-att-aria-label="social['label']"
+        t-att-title="social['label']"
+        t-attf-class="lp-tienda-social__link #{'lp-tienda-social__link--whatsapp' if social.get('variant') == 'whatsapp' else ''}"
+        target="_blank"
+        rel="noopener">
+        <i t-attf-class="fa #{social['icon']}" aria-hidden="true"/>
+      </a>
+    </div>
   </template>
 
-  <template id="lp_tienda_storefront_intro" name="Tienda LatinPyme Storefront Intro">
-    <t t-call="latinpyme_tienda_theme.lp_tienda_base_layout">
-      <div class="lp-tienda-shop-hero" aria-labelledby="lp-tienda-shop-hero-title">
-        <div class="lp-tienda-shop-hero__content">
-          <p class="lp-tienda-shop-hero__eyebrow">Tienda LatinPyme</p>
-          <h1 id="lp-tienda-shop-hero-title">Soluciones empresariales para crecer con foco</h1>
-          <p class="lp-tienda-shop-hero__lead">
-            Encuentra cursos, herramientas y servicios pensados para fortalecer equipos, ventas y decisiones empresariales.
-          </p>
-          <div class="lp-tienda-shop-hero__actions">
-            <a class="lp-tienda-button lp-tienda-button--primary" href="/shop">Explorar tienda</a>
-            <a class="lp-tienda-button lp-tienda-button--secondary" href="/contactus">Hablar con un asesor</a>
-          </div>
+  <template id="lp_tienda_masthead" name="Tienda LatinPyme Masthead">
+    <header class="lp-tienda-masthead">
+      <div class="lp-tienda-container lp-tienda-masthead__top">
+        <a class="lp-tienda-brand" href="/tienda" aria-label="Tienda LatinPyme">
+          <span class="lp-tienda-brand__mark">LP</span>
+          <span class="lp-tienda-brand__text">
+            <span>Tienda</span>
+            <strong>LatinPyme</strong>
+          </span>
+        </a>
+        <div class="lp-tienda-anniversary">
+          <strong>25 años</strong>
+          <span>Impulsando empresarios en Latinoamérica</span>
         </div>
-        <div class="lp-tienda-shop-hero__panel" aria-label="Lineas principales de la tienda">
-          <article class="lp-tienda-shop-hero__item">
-            <span>Cursos</span>
-            <strong>Formacion practica para empresas</strong>
-          </article>
-          <article class="lp-tienda-shop-hero__item">
-            <span>Soluciones</span>
-            <strong>Servicios para equipos y lideres</strong>
-          </article>
-          <article class="lp-tienda-shop-hero__item">
-            <span>Eventos</span>
-            <strong>Experiencias y contenido ejecutivo</strong>
-          </article>
+        <form class="lp-tienda-search" action="/shop" method="get" role="search">
+          <label class="visually-hidden" for="lp-tienda-search-input">Buscar en Tienda LatinPyme</label>
+          <input id="lp-tienda-search-input" name="search" type="search" placeholder="Buscar soluciones, cursos, herramientas y más"/>
+          <button type="submit" aria-label="Buscar">
+            <i class="fa fa-search" aria-hidden="true"/>
+          </button>
+        </form>
+        <t t-call="latinpyme_tienda_theme.lp_tienda_social_links"/>
+      </div>
+      <nav class="lp-tienda-nav" aria-label="Navegacion principal de Tienda">
+        <div class="lp-tienda-container lp-tienda-nav__inner">
+          <a href="/shop?search=portafolio">Portafolio</a>
+          <a href="/shop?search=capacitacion">Capacitación</a>
+          <a href="https://latinpyme.com/" target="_blank" rel="noopener">Revista</a>
+        </div>
+      </nav>
+    </header>
+  </template>
+
+  <template id="lp_tienda_section_heading" name="Tienda LatinPyme Section Heading">
+    <header class="lp-tienda-section-heading">
+      <span aria-hidden="true"/>
+      <h2 t-out="title"/>
+    </header>
+  </template>
+
+  <template id="lp_tienda_category_card" name="Tienda LatinPyme Category Card">
+    <a class="lp-tienda-category-card" t-att-href="item['href']">
+      <span class="lp-tienda-category-card__icon">
+        <i t-attf-class="fa #{item['icon']}" aria-hidden="true"/>
+      </span>
+      <span class="lp-tienda-category-card__body">
+        <strong t-out="item['title']"/>
+        <span t-out="item['summary']"/>
+        <em>Ver más <i class="fa fa-arrow-right" aria-hidden="true"/></em>
+      </span>
+    </a>
+  </template>
+
+  <template id="lp_tienda_solution_card" name="Tienda LatinPyme Solution Card">
+    <article class="lp-tienda-solution-card">
+      <a class="lp-tienda-solution-card__media" t-att-href="item['href']" t-att-aria-label="item['title']">
+        <i t-attf-class="fa #{item['icon']}" aria-hidden="true"/>
+      </a>
+      <div class="lp-tienda-solution-card__body">
+        <h3 t-out="item['title']"/>
+        <p class="lp-tienda-solution-card__subtitle" t-if="item.get('subtitle')" t-out="item['subtitle']"/>
+        <p t-out="item['summary']"/>
+        <ul t-if="item.get('bullets')">
+          <li t-foreach="item['bullets']" t-as="bullet" t-out="bullet"/>
+        </ul>
+        <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="item['href']">Ver más</a>
+      </div>
+    </article>
+  </template>
+
+  <template id="lp_tienda_ad_slot" name="Tienda LatinPyme Ad Slot">
+    <aside class="lp-tienda-ad-slot" aria-label="Publicidad">
+      <span>Publicidad</span>
+      <div>
+        <strong>Espacio publicitario prémium</strong>
+      </div>
+    </aside>
+  </template>
+
+  <template id="lp_tienda_footer" name="Tienda LatinPyme Footer">
+    <footer class="lp-tienda-footer">
+      <div class="lp-tienda-container lp-tienda-footer__inner">
+        <div class="lp-tienda-footer__brand">
+          <span class="lp-tienda-footer__mark">LP</span>
+          <p>Soluciones, capacitación y herramientas para pymes en Latinoamérica.</p>
+          <t t-call="latinpyme_tienda_theme.lp_tienda_social_links"/>
+        </div>
+        <div class="lp-tienda-footer__column" t-foreach="footer_columns" t-as="column">
+          <h3 t-out="column['title']"/>
+          <a t-foreach="column['links']" t-as="link" t-att-href="link[1]" t-out="link[0]"/>
+        </div>
+        <div class="lp-tienda-footer__column lp-tienda-footer__contact">
+          <h3>Contacto</h3>
+          <a t-att-href="whatsapp_url" target="_blank" rel="noopener">
+            <i class="fa fa-whatsapp" aria-hidden="true"/> +57 3162336085
+          </a>
+          <span><i class="fa fa-map-marker" aria-hidden="true"/> Bogotá, Colombia</span>
         </div>
       </div>
-    </t>
+      <div class="lp-tienda-footer__copy">
+        <span>© <t t-out="current_year"/> Tienda LatinPyme - Todos los derechos reservados</span>
+      </div>
+    </footer>
   </template>
 
   <template id="lp_tienda_home_page" name="Tienda LatinPyme Home Page">
     <t t-call="website.layout">
-      <main id="wrap" class="lp-tienda-page">
-        <t t-call="latinpyme_tienda_theme.lp_tienda_storefront_intro"/>
-      </main>
+      <t t-set="no_header" t-value="True"/>
+      <t t-set="no_footer" t-value="True"/>
+      <t t-set="header_visible" t-value="False"/>
+      <t t-set="footer_visible" t-value="False"/>
+      <t t-set="title" t-value="'Tienda LatinPyme | Capacitación, tecnología y soluciones empresariales'"/>
+      <t t-set="website_meta_description">Tienda LatinPyme: cursos, capacitaciones, tecnología, inteligencia artificial y soluciones para equipos empresariales.</t>
+      <div id="wrap" class="lp-tienda lp-tienda-home">
+        <t t-call="latinpyme_tienda_theme.lp_tienda_masthead"/>
+        <main class="lp-tienda-main">
+          <section class="lp-tienda-container lp-tienda-hero" aria-labelledby="lp-tienda-hero-title">
+            <div class="lp-tienda-hero__panel">
+              <div class="lp-tienda-hero__copy">
+                <p t-out="hero['eyebrow']"/>
+                <h1 id="lp-tienda-hero-title" t-out="hero['title']"/>
+                <span t-out="hero['lead']"/>
+                <div class="lp-tienda-hero__actions">
+                  <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="hero['primary_url']" t-out="hero['primary_label']"/>
+                  <a class="lp-tienda-button lp-tienda-button--secondary" t-att-href="hero['secondary_url']" target="_blank" rel="noopener" t-out="hero['secondary_label']"/>
+                </div>
+              </div>
+              <div class="lp-tienda-hero__visual" aria-hidden="true">
+                <span/>
+                <span/>
+                <span/>
+              </div>
+            </div>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block lp-tienda-categories">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
+              <t t-set="title">Cursos de actualidad</t>
+            </t>
+            <p class="lp-tienda-block__lead">Estos cursos son certificados</p>
+            <div class="lp-tienda-categories__grid">
+              <t t-foreach="course_categories" t-as="item">
+                <t t-call="latinpyme_tienda_theme.lp_tienda_category_card"/>
+              </t>
+            </div>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
+              <t t-set="title">Capacitación</t>
+            </t>
+            <div class="lp-tienda-solution-grid lp-tienda-solution-grid--three">
+              <t t-foreach="training_cards" t-as="item">
+                <t t-call="latinpyme_tienda_theme.lp_tienda_solution_card"/>
+              </t>
+            </div>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block lp-tienda-ad-horizontal">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
+              <t t-set="title">Tecnología e innovación</t>
+            </t>
+            <div class="lp-tienda-tech-layout">
+              <div class="lp-tienda-solution-grid lp-tienda-solution-grid--two">
+                <t t-foreach="technology_cards" t-as="item">
+                  <t t-call="latinpyme_tienda_theme.lp_tienda_solution_card"/>
+                </t>
+              </div>
+              <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
+            </div>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
+              <t t-set="title">Inteligencia artificial</t>
+            </t>
+            <div class="lp-tienda-solution-grid lp-tienda-solution-grid--three">
+              <t t-foreach="ai_cards" t-as="item">
+                <t t-call="latinpyme_tienda_theme.lp_tienda_solution_card"/>
+              </t>
+            </div>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block lp-tienda-allies" aria-labelledby="lp-aliados-title">
+            <header class="lp-tienda-allies__heading">
+              <h2 id="lp-aliados-title">Aliados</h2>
+            </header>
+            <div class="lp-tienda-allies__viewport">
+              <span class="lp-tienda-allies__control" aria-hidden="true"><i class="fa fa-angle-left"/></span>
+              <div class="lp-tienda-allies__track">
+                <div class="lp-tienda-ally-card" t-foreach="allies" t-as="ally">
+                  <span t-out="ally"/>
+                </div>
+              </div>
+              <span class="lp-tienda-allies__control" aria-hidden="true"><i class="fa fa-angle-right"/></span>
+            </div>
+          </section>
+        </main>
+        <t t-call="latinpyme_tienda_theme.lp_tienda_footer"/>
+      </div>
     </t>
   </template>
 </odoo>
