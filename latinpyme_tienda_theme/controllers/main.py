@@ -52,6 +52,12 @@ class LatinpymeTiendaController(Website):
                 "secondary_label": "Hablar con un asesor",
                 "secondary_url": whatsapp_url,
             },
+            "hero_banner": {
+                "name": "Banner principal Tienda LatinPyme",
+                "image_url": "https://latinpyme.com/revista/media/banner/3/image",
+                "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
+                "url": shop_url,
+            },
             "course_categories": [
                 {
                     "title": "Cursos de Auditor en SG-SST",
@@ -150,14 +156,53 @@ class LatinpymeTiendaController(Website):
                 },
             ],
             "allies": [
-                "Proteccion",
-                "Coomeva Fundacion",
-                "Enlace Operativo",
-                "Ceniporcino",
-                "Asopagos",
-                "Banco de Occidente",
+                {
+                    "name": "Banco de Occidente",
+                    "logo_url": "https://latinpyme.com/revista/media/ally/2/logo",
+                },
+                {
+                    "name": "Aportes en Línea",
+                    "logo_url": "https://latinpyme.com/revista/media/ally/1/logo",
+                },
+                {
+                    "name": "Escuela Unipymes",
+                    "logo_url": "https://latinpyme.com/revista/media/ally/3/logo",
+                },
+                {
+                    "name": "Campus Virtual ACH Colombia",
+                    "logo_url": "https://latinpyme.com/revista/media/ally/4/logo",
+                },
+                {
+                    "name": "Universidad Protección",
+                    "logo_url": "https://latinpyme.com/revista/media/ally/5/logo",
+                },
+                {
+                    "name": "EduFundación Coomeva",
+                    "logo_url": "https://latinpyme.com/revista/media/ally/6/logo",
+                },
+                {
+                    "name": "Enlace",
+                    "logo_url": "https://latinpyme.com/revista/media/ally/7/logo",
+                },
+                {
+                    "name": "PorkColombia",
+                    "logo_url": "https://latinpyme.com/revista/media/ally/8/logo",
+                },
+                {
+                    "name": "Aula Asopagos",
+                    "logo_url": "https://latinpyme.com/revista/media/ally/9/logo",
+                },
             ],
             "footer_columns": [
+                {
+                    "title": "Secciones",
+                    "links": [
+                        ("Cursos", "/shop?search=cursos"),
+                        ("Capacitación", "/shop?search=capacitacion"),
+                        ("Tecnología", "/shop?search=tecnologia"),
+                        ("Inteligencia artificial", "/shop?search=inteligencia%20artificial"),
+                    ],
+                },
                 {
                     "title": "Portafolio",
                     "links": [
@@ -165,15 +210,6 @@ class LatinpymeTiendaController(Website):
                         ("Escuela", "/shop?search=escuela"),
                         ("Eventos", "/shop?search=eventos"),
                         ("Curso 50 y 20 horas", "/shop?search=50%2020"),
-                    ],
-                },
-                {
-                    "title": "Capacitación",
-                    "links": [
-                        ("Cursos online", "/shop?search=online"),
-                        ("Inhouse", "/shop?search=inhouse"),
-                        ("Inteligencia artificial", "/shop?search=inteligencia%20artificial"),
-                        ("Seguridad vial", "/shop?search=seguridad%20vial"),
                     ],
                 },
                 {

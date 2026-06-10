@@ -105,18 +105,22 @@
         </div>
         <div class="lp-tienda-footer__column" t-foreach="footer_columns" t-as="column">
           <h3 t-out="column['title']"/>
-          <a t-foreach="column['links']" t-as="link" t-att-href="link[1]" t-out="link[0]"/>
+          <div class="lp-tienda-footer__panel">
+            <a t-foreach="column['links']" t-as="link" t-att-href="link[1]" t-out="link[0]"/>
+          </div>
         </div>
         <div class="lp-tienda-footer__column lp-tienda-footer__contact">
           <h3>Contacto</h3>
-          <a t-att-href="whatsapp_url" target="_blank" rel="noopener">
-            <i class="fa fa-whatsapp" aria-hidden="true"/> +57 3162336085
-          </a>
-          <span><i class="fa fa-map-marker" aria-hidden="true"/> Bogotá, Colombia</span>
+          <div class="lp-tienda-footer__panel">
+            <a t-att-href="whatsapp_url" target="_blank" rel="noopener">
+              <i class="fa fa-whatsapp" aria-hidden="true"/> +57 3162336085
+            </a>
+            <span><i class="fa fa-map-marker" aria-hidden="true"/> Bogotá, Colombia</span>
+          </div>
         </div>
-      </div>
-      <div class="lp-tienda-footer__copy">
-        <span>© <t t-out="current_year"/> Tienda LatinPyme - Todos los derechos reservados</span>
+        <div class="lp-tienda-footer__copy">
+          <span>© <t t-out="current_year"/> Tienda LatinPyme - Todos los derechos reservados</span>
+        </div>
       </div>
     </footer>
   </template>
@@ -132,23 +136,20 @@
       <div id="wrap" class="lp-tienda lp-tienda-home">
         <t t-call="latinpyme_tienda_theme.lp_tienda_masthead"/>
         <main class="lp-tienda-main">
-          <section class="lp-tienda-container lp-tienda-hero" aria-labelledby="lp-tienda-hero-title">
-            <div class="lp-tienda-hero__panel">
-              <div class="lp-tienda-hero__copy">
-                <p t-out="hero['eyebrow']"/>
-                <h1 id="lp-tienda-hero-title" t-out="hero['title']"/>
-                <span t-out="hero['lead']"/>
-                <div class="lp-tienda-hero__actions">
-                  <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="hero['primary_url']" t-out="hero['primary_label']"/>
-                  <a class="lp-tienda-button lp-tienda-button--secondary" t-att-href="hero['secondary_url']" target="_blank" rel="noopener" t-out="hero['secondary_label']"/>
-                </div>
-              </div>
-              <div class="lp-tienda-hero__visual" aria-hidden="true">
-                <span/>
-                <span/>
-                <span/>
-              </div>
-            </div>
+          <section class="lp-tienda-container lp-tienda-hero" aria-label="Banner principal Tienda LatinPyme">
+            <a
+              class="lp-tienda-promo-banner lp-tienda-promo-banner--image-only"
+              t-att-href="hero_banner['url']"
+              t-att-aria-label="hero_banner['name']"
+              data-analytics-event="click_home_ad_banner"
+              t-att-data-analytics-banner-name="hero_banner['name']"
+              data-analytics-banner-position="hero">
+              <img
+                class="lp-tienda-promo-banner__image"
+                t-att-src="hero_banner['image_url']"
+                t-att-alt="hero_banner['alt']"
+                loading="eager"/>
+            </a>
           </section>
 
           <section class="lp-tienda-container lp-tienda-block lp-tienda-categories">
@@ -203,15 +204,24 @@
             </div>
           </section>
 
-          <section class="lp-tienda-container lp-tienda-block lp-tienda-allies" aria-labelledby="lp-aliados-title">
-            <header class="lp-tienda-allies__heading">
-              <h2 id="lp-aliados-title">Aliados</h2>
-            </header>
+          <section class="lp-tienda-container lp-tienda-block lp-tienda-allies" aria-label="Aliados">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
+              <t t-set="title">Aliados</t>
+            </t>
             <div class="lp-tienda-allies__viewport">
               <span class="lp-tienda-allies__control" aria-hidden="true"><i class="fa fa-angle-left"/></span>
-              <div class="lp-tienda-allies__track">
-                <div class="lp-tienda-ally-card" t-foreach="allies" t-as="ally">
-                  <span t-out="ally"/>
+              <div class="lp-tienda-allies__marquee" aria-label="Aliados Tienda LatinPyme">
+                <div class="lp-tienda-allies__group">
+                  <figure class="lp-tienda-ally-card" t-foreach="allies" t-as="ally">
+                    <img t-if="ally.get('logo_url')" t-att-src="ally['logo_url']" t-att-alt="ally['name']" loading="lazy"/>
+                    <span t-else="" t-out="ally['name']"/>
+                  </figure>
+                </div>
+                <div class="lp-tienda-allies__group" aria-hidden="true">
+                  <figure class="lp-tienda-ally-card" t-foreach="allies" t-as="ally">
+                    <img t-if="ally.get('logo_url')" t-att-src="ally['logo_url']" t-att-alt="ally['name']" loading="lazy"/>
+                    <span t-else="" t-out="ally['name']"/>
+                  </figure>
                 </div>
               </div>
               <span class="lp-tienda-allies__control" aria-hidden="true"><i class="fa fa-angle-right"/></span>
