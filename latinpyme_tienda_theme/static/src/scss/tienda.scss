@@ -236,6 +236,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
   max-width: 660px;
   padding: 28px;
 
@@ -254,9 +255,12 @@
     font-size: 34px;
     font-weight: 900;
     line-height: 1.04;
+    overflow-wrap: break-word;
   }
 
   span {
+    display: block;
+    min-width: 0;
     max-width: 560px;
     color: #4f5662;
     font-size: 16px;
@@ -808,7 +812,16 @@
     padding: 24px;
 
     h1 {
-      font-size: 30px;
+      font-size: 28px;
+    }
+  }
+
+  .lp-tienda-hero__actions {
+    flex-direction: column;
+
+    .lp-tienda-button {
+      width: 100%;
+      max-width: none;
     }
   }
 
