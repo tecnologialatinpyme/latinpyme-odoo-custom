@@ -3,10 +3,11 @@
 from datetime import date
 
 from odoo import http
+from odoo.addons.website.controllers.main import Website
 from odoo.http import request
 
 
-class LatinpymeTiendaController(http.Controller):
+class LatinpymeTiendaController(Website):
     def _home_values(self):
         """Temporary storefront data, grouped for a future backend-managed phase."""
         shop_url = "/shop"
@@ -187,7 +188,26 @@ class LatinpymeTiendaController(http.Controller):
             "whatsapp_url": whatsapp_url,
         }
 
+    def _is_tienda_website(self):
+        website = getattr(request, "website", False)
+        host = (request.httprequest.host or "").split(":", 1)[0].lower()
+        website_domain = (getattr(website, "domain", "") or "").split(":", 1)[0].lower()
+        website_name = (getattr(website, "name", "") or "").lower()
+
+        if host == "tienda.latinpyme.com" or website_domain == "tienda.latinpyme.com":
+            return True
+        return "tienda" in website_name and "latinpyme" in website_name
+
+    def _render_tienda_home(self):
+        return request.render("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
+
+    @http.route("/", type="http", auth="public", website=True, sitemap=True)
+    def index(self, **kwargs):
+        if self._is_tienda_website():
+            return self._render_tienda_home()
+        return super().index(**kwargs)
+
     @http.route("/tienda", type="http", auth="public", website=True, sitemap=True)
     def tienda_home(self, **kwargs):
-        return request.render("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
+        return self._render_tienda_home()
 
