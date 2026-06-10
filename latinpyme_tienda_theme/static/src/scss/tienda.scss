@@ -37,6 +37,10 @@
   }
 }
 
+#wrapwrap:has(.lp-tienda-home) > .lp-header {
+  display: none !important;
+}
+
 .lp-tienda-container {
   width: calc(100% - 32px);
   max-width: 1180px;
