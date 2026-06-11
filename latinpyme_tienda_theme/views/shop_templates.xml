@@ -51,11 +51,25 @@
         <nav class="lp-shop-catalog-chips" aria-label="Categorias destacadas">
           <a href="/shop?search=capacitacion">Capacitacion</a>
           <a href="/shop?search=cursos">Cursos</a>
+          <a href="/shop?search=auditoria">Auditoria</a>
           <a href="/shop?search=diplomado">Diplomados</a>
           <a href="/shop?search=seguridad%20vial">Seguridad vial</a>
-          <a href="/shop?search=inteligencia%20artificial">Inteligencia artificial</a>
+          <a href="/shop?search=inteligencia%20artificial">IA</a>
+          <a href="/shop?search=flashtraining">FlashTraining</a>
         </nav>
       </section>
+    </xpath>
+  </template>
+
+  <template id="lp_tienda_shop_product_card_cta" name="Tienda LatinPyme Product Card CTA" inherit_id="website_sale.products_item">
+    <xpath expr="//div[hasclass('o_wsale_product_information')]" position="inside">
+      <a
+        t-if="request and request.httprequest and request.httprequest.path.startswith('/shop')"
+        class="lp-shop-product-cta"
+        t-att-href="product_href">
+        Ver detalle
+        <i class="fa fa-arrow-right" aria-hidden="true"/>
+      </a>
     </xpath>
   </template>
 </odoo>
