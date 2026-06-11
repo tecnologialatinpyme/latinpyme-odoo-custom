@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <template id="lp_tienda_shop_products_layout" name="Tienda LatinPyme Shop Catalog" inherit_id="website_sale.products">
+    <xpath expr="//div[@id='wrap']" position="attributes">
+      <attribute name="class" add="lp-tienda lp-tienda-shop lp-shop-page" separator=" "/>
+    </xpath>
+
     <xpath expr="//div[@id='o_wsale_container']" position="attributes">
       <attribute name="class" add="lp-tienda lp-tienda-shop lp-shop-catalog__layout" separator=" "/>
     </xpath>
@@ -20,7 +24,7 @@
     <xpath expr="//div[@id='o_wsale_container']" position="before">
       <section class="lp-tienda lp-tienda-shop lp-shop-catalog-hero" aria-label="Catalogo Tienda LatinPyme">
         <div class="lp-shop-catalog-hero__content">
-          <p class="lp-shop-catalog-hero__eyebrow">Tienda LatinPyme</p>
+          <p class="lp-shop-catalog-hero__eyebrow">Catalogo</p>
           <h1>
             <t t-if="category">
               <span t-field="category.name"/>
@@ -28,11 +32,8 @@
             <t t-elif="search">
               Resultados para "<span t-out="search"/>"
             </t>
-            <t t-else="">Cursos, capacitaciones y soluciones empresariales</t>
+            <t t-else="">Tienda LatinPyme</t>
           </h1>
-          <p>
-            Explora programas y servicios para fortalecer gestion, tecnologia, ventas y productividad en tu empresa.
-          </p>
         </div>
         <form class="lp-shop-catalog-search" action="/shop" method="get" role="search">
           <label class="visually-hidden" for="lp-shop-catalog-search-input">Buscar en Tienda LatinPyme</label>
@@ -41,7 +42,7 @@
             name="search"
             type="search"
             t-att-value="search or ''"
-            placeholder="Buscar cursos, diplomados, tecnologia o IA"/>
+            placeholder="Buscar cursos, diplomados o soluciones"/>
           <button type="submit">
             <i class="fa fa-search" aria-hidden="true"/>
             <span>Buscar</span>
