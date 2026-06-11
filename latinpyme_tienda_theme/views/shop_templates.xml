@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="lp_tienda_shop_products_layout" name="Tienda LatinPyme Shop Catalog" inherit_id="website_sale.products">
+    <xpath expr="//div[@id='o_wsale_container']" position="attributes">
+      <attribute name="class" add="lp-tienda lp-tienda-shop lp-shop-catalog__layout" separator=" "/>
+    </xpath>
+
+    <xpath expr="//div[@id='products_grid']" position="attributes">
+      <attribute name="class" add="lp-shop-catalog__products" separator=" "/>
+    </xpath>
+
+    <xpath expr="//header[@id='o_wsale_products_header']" position="attributes">
+      <attribute name="class" add="lp-shop-catalog__header" separator=" "/>
+    </xpath>
+
+    <xpath expr="//section[@id='o_wsale_products_grid']" position="attributes">
+      <attribute name="class" add="lp-store-products" separator=" "/>
+    </xpath>
+
+    <xpath expr="//div[@id='o_wsale_container']" position="before">
+      <section class="lp-tienda lp-tienda-shop lp-shop-catalog-hero" aria-label="Catalogo Tienda LatinPyme">
+        <div class="lp-shop-catalog-hero__content">
+          <p class="lp-shop-catalog-hero__eyebrow">Tienda LatinPyme</p>
+          <h1>
+            <t t-if="category">
+              <span t-field="category.name"/>
+            </t>
+            <t t-elif="search">
+              Resultados para "<span t-out="search"/>"
+            </t>
+            <t t-else="">Cursos, capacitaciones y soluciones empresariales</t>
+          </h1>
+          <p>
+            Explora programas y servicios para fortalecer gestion, tecnologia, ventas y productividad en tu empresa.
+          </p>
+        </div>
+        <form class="lp-shop-catalog-search" action="/shop" method="get" role="search">
+          <label class="visually-hidden" for="lp-shop-catalog-search-input">Buscar en Tienda LatinPyme</label>
+          <input
+            id="lp-shop-catalog-search-input"
+            name="search"
+            type="search"
+            t-att-value="search or ''"
+            placeholder="Buscar cursos, diplomados, tecnologia o IA"/>
+          <button type="submit">
+            <i class="fa fa-search" aria-hidden="true"/>
+            <span>Buscar</span>
+          </button>
+        </form>
+        <nav class="lp-shop-catalog-chips" aria-label="Categorias destacadas">
+          <a href="/shop?search=capacitacion">Capacitacion</a>
+          <a href="/shop?search=cursos">Cursos</a>
+          <a href="/shop?search=diplomado">Diplomados</a>
+          <a href="/shop?search=seguridad%20vial">Seguridad vial</a>
+          <a href="/shop?search=inteligencia%20artificial">Inteligencia artificial</a>
+        </nav>
+      </section>
+    </xpath>
+  </template>
+</odoo>

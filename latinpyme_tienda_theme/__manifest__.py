@@ -20,6 +20,7 @@ minimos para iniciar el desarrollo visual en fases posteriores.
     ],
     "data": [
         "views/tienda_templates.xml",
+        "views/shop_templates.xml",
     ],
     "assets": {
         "web.assets_frontend": [
