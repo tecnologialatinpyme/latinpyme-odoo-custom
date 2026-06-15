@@ -2,7 +2,7 @@
 
 {
     "name": "Tienda LatinPyme Theme",
-    "version": "19.0.1.2.0",
+    "version": "19.0.1.3.0",
     "category": "Website/eCommerce",
     "summary": "Base visual instalable para la futura tienda LatinPyme sobre Odoo Website Sale",
     "description": """
@@ -34,5 +34,5 @@ minimos para iniciar el desarrollo visual en fases posteriores.
         ],
     },
     "installable": True,
-    "application": False,
+    "application": True,
 }
