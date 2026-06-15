@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
 {
-    "name": "Tienda LatinPyme Theme",
-    "version": "19.0.1.3.0",
+    "name": "Tienda LatinPyme",
+    "version": "19.0.1.4.0",
     "category": "Website/eCommerce",
-    "summary": "Base visual instalable para la futura tienda LatinPyme sobre Odoo Website Sale",
+    "summary": "Administracion personalizada de Tienda LatinPyme",
     "description": """
-Tema base para preparar la futura experiencia de Tienda LatinPyme en Odoo 19.
+Aplicacion administrable para la experiencia de Tienda LatinPyme en Odoo 19.
 
-Esta primera version instalable solo registra una base QWeb segura y assets
-minimos para iniciar el desarrollo visual en fases posteriores.
+Incluye configuracion de header, menu, footer, banners y home de tienda,
+manteniendo separacion con Revista LatinPyme y sin tocar checkout ni pagos.
     """,
     "author": "LatinPyme",
     "website": "https://latinpyme.com",

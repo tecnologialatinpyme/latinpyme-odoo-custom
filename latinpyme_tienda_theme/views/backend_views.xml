@@ -266,7 +266,7 @@
     id="menu_latinpyme_tienda_root"
     name="Tienda LatinPyme"
     sequence="82"
-    groups="website.group_website_designer"
+    action="action_latinpyme_tienda_config"
     web_icon="website_sale,static/description/icon.png"/>
   <menuitem id="menu_latinpyme_tienda_config" name="Configuracion" parent="menu_latinpyme_tienda_root" action="action_latinpyme_tienda_config" sequence="10"/>
   <menuitem id="menu_latinpyme_tienda_menu_links" name="Menu" parent="menu_latinpyme_tienda_root" action="action_latinpyme_tienda_menu_link" sequence="20"/>
