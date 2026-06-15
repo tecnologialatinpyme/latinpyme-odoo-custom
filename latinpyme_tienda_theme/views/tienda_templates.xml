@@ -19,20 +19,24 @@
   <template id="lp_tienda_masthead" name="Tienda LatinPyme Masthead">
     <header class="lp-tienda-masthead">
       <div class="lp-tienda-container lp-tienda-masthead__top">
-        <a class="lp-tienda-brand" href="/tienda" aria-label="Tienda LatinPyme">
+        <a class="lp-tienda-brand" href="/" t-att-aria-label="lp_config.name if lp_config else 'Tienda LatinPyme'">
           <span class="lp-tienda-brand__mark">LP</span>
           <span class="lp-tienda-brand__text">
-            <span>Tienda</span>
-            <strong>LatinPyme</strong>
+            <span t-out="lp_config.brand_label if lp_config and lp_config.brand_label else 'Tienda'"/>
+            <strong t-out="lp_config.brand_name if lp_config and lp_config.brand_name else 'LatinPyme'"/>
           </span>
         </a>
         <div class="lp-tienda-anniversary">
-          <strong>25 años</strong>
-          <span>Impulsando empresarios en Latinoamérica</span>
+          <strong t-out="lp_config.anniversary_title if lp_config and lp_config.anniversary_title else '25 anos'"/>
+          <span t-out="lp_config.anniversary_text if lp_config and lp_config.anniversary_text else 'Impulsando empresarios en Latinoamerica'"/>
         </div>
         <form class="lp-tienda-search" action="/shop" method="get" role="search">
           <label class="visually-hidden" for="lp-tienda-search-input">Buscar en Tienda LatinPyme</label>
-          <input id="lp-tienda-search-input" name="search" type="search" placeholder="Buscar soluciones, cursos, herramientas y más"/>
+          <input
+            id="lp-tienda-search-input"
+            name="search"
+            type="search"
+            t-att-placeholder="lp_config.search_placeholder if lp_config and lp_config.search_placeholder else 'Buscar soluciones, cursos, herramientas y mas'"/>
           <button type="submit" aria-label="Buscar">
             <i class="fa fa-search" aria-hidden="true"/>
           </button>
@@ -41,9 +45,13 @@
       </div>
       <nav class="lp-tienda-nav" aria-label="Navegacion principal de Tienda">
         <div class="lp-tienda-container lp-tienda-nav__inner">
-          <a href="/shop?search=portafolio">Portafolio</a>
-          <a href="/shop?search=capacitacion">Capacitación</a>
-          <a href="https://latinpyme.com/" target="_blank" rel="noopener">Revista</a>
+          <a
+            t-foreach="menu_links"
+            t-as="link"
+            t-att-href="link.url"
+            t-att-target="'_blank' if link.open_new_tab else None"
+            t-att-rel="'noopener' if link.open_new_tab else None"
+            t-out="link.name"/>
         </div>
       </nav>
     </header>
@@ -64,35 +72,44 @@
       <span class="lp-tienda-category-card__body">
         <strong t-out="item['title']"/>
         <span t-out="item['summary']"/>
-        <em>Ver más <i class="fa fa-arrow-right" aria-hidden="true"/></em>
+        <em>Ver mas <i class="fa fa-arrow-right" aria-hidden="true"/></em>
       </span>
     </a>
   </template>
 
   <template id="lp_tienda_solution_card" name="Tienda LatinPyme Solution Card">
     <article class="lp-tienda-solution-card">
+      <h3 t-out="item['title']"/>
       <a class="lp-tienda-solution-card__media" t-att-href="item['href']" t-att-aria-label="item['title']">
         <i t-attf-class="fa #{item['icon']}" aria-hidden="true"/>
       </a>
       <div class="lp-tienda-solution-card__body">
-        <h3 t-out="item['title']"/>
         <p class="lp-tienda-solution-card__subtitle" t-if="item.get('subtitle')" t-out="item['subtitle']"/>
         <p t-out="item['summary']"/>
         <ul t-if="item.get('bullets')">
           <li t-foreach="item['bullets']" t-as="bullet" t-out="bullet"/>
         </ul>
-        <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="item['href']">Ver más</a>
+        <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="item['href']">Ver mas</a>
       </div>
     </article>
   </template>
 
   <template id="lp_tienda_ad_slot" name="Tienda LatinPyme Ad Slot">
-    <aside class="lp-tienda-ad-slot" aria-label="Publicidad">
-      <span>Publicidad</span>
-      <div>
-        <strong>Espacio publicitario prémium</strong>
+    <t t-if="banner and banner.image">
+      <a
+        t-if="banner.url"
+        class="lp-tienda-ad-slot lp-tienda-ad-slot--image"
+        t-att-href="banner.url"
+        t-att-aria-label="banner.alt_text or banner.name">
+        <img t-att-src="banner.image_src()" t-att-alt="banner.alt_text or banner.name" loading="lazy"/>
+      </a>
+      <div
+        t-else=""
+        class="lp-tienda-ad-slot lp-tienda-ad-slot--image"
+        t-att-aria-label="banner.alt_text or banner.name">
+        <img t-att-src="banner.image_src()" t-att-alt="banner.alt_text or banner.name" loading="lazy"/>
       </div>
-    </aside>
+    </t>
   </template>
 
   <template id="lp_tienda_footer" name="Tienda LatinPyme Footer">
@@ -100,26 +117,36 @@
       <div class="lp-tienda-container lp-tienda-footer__inner">
         <div class="lp-tienda-footer__brand">
           <span class="lp-tienda-footer__mark">LP</span>
-          <p>Soluciones, capacitación y herramientas para pymes en Latinoamérica.</p>
+          <p t-out="lp_config.footer_summary if lp_config and lp_config.footer_summary else 'Soluciones, capacitacion y herramientas para pymes en Latinoamerica.'"/>
           <t t-call="latinpyme_tienda_theme.lp_tienda_social_links"/>
         </div>
         <div class="lp-tienda-footer__column" t-foreach="footer_columns" t-as="column">
           <h3 t-out="column['title']"/>
           <div class="lp-tienda-footer__panel">
-            <a t-foreach="column['links']" t-as="link" t-att-href="link[1]" t-out="link[0]"/>
+            <a
+              t-foreach="column['links']"
+              t-as="link"
+              t-att-href="link.url"
+              t-att-target="'_blank' if link.open_new_tab else None"
+              t-att-rel="'noopener' if link.open_new_tab else None"
+              t-out="link.name"/>
           </div>
         </div>
         <div class="lp-tienda-footer__column lp-tienda-footer__contact">
           <h3>Contacto</h3>
           <div class="lp-tienda-footer__panel">
             <a t-att-href="whatsapp_url" target="_blank" rel="noopener">
-              <i class="fa fa-whatsapp" aria-hidden="true"/> +57 3162336085
+              <i class="fa fa-whatsapp" aria-hidden="true"/> <t t-out="lp_config.phone if lp_config and lp_config.phone else '+57 3162336085'"/>
             </a>
-            <span><i class="fa fa-map-marker" aria-hidden="true"/> Bogotá, Colombia</span>
+            <span><i class="fa fa-map-marker" aria-hidden="true"/> <t t-out="lp_config.city if lp_config and lp_config.city else 'Bogota, Colombia'"/></span>
           </div>
         </div>
+        <div t-if="footer_banner and footer_banner.image" class="lp-tienda-footer__banner">
+          <t t-set="banner" t-value="footer_banner"/>
+          <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
+        </div>
         <div class="lp-tienda-footer__copy">
-          <span>© <t t-out="current_year"/> Tienda LatinPyme - Todos los derechos reservados</span>
+          <span t-out="lp_config.footer_text if lp_config and lp_config.footer_text else ('%s Tienda LatinPyme - Todos los derechos reservados' % current_year)"/>
         </div>
       </div>
     </footer>
@@ -131,8 +158,8 @@
       <t t-set="no_footer" t-value="True"/>
       <t t-set="header_visible" t-value="False"/>
       <t t-set="footer_visible" t-value="False"/>
-      <t t-set="title" t-value="'Tienda LatinPyme | Capacitación, tecnología y soluciones empresariales'"/>
-      <t t-set="website_meta_description">Tienda LatinPyme: cursos, capacitaciones, tecnología, inteligencia artificial y soluciones para equipos empresariales.</t>
+      <t t-set="title" t-value="'Tienda LatinPyme | Capacitacion, tecnologia y soluciones empresariales'"/>
+      <t t-set="website_meta_description">Tienda LatinPyme: cursos, capacitaciones, tecnologia, inteligencia artificial y soluciones para equipos empresariales.</t>
       <div id="wrap" class="lp-tienda lp-tienda-home">
         <t t-call="latinpyme_tienda_theme.lp_tienda_masthead"/>
         <main class="lp-tienda-main">
@@ -166,7 +193,7 @@
 
           <section class="lp-tienda-container lp-tienda-block">
             <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
-              <t t-set="title">Capacitación</t>
+              <t t-set="title">Capacitacion</t>
             </t>
             <div class="lp-tienda-solution-grid lp-tienda-solution-grid--three">
               <t t-foreach="training_cards" t-as="item">
@@ -175,21 +202,25 @@
             </div>
           </section>
 
-          <section class="lp-tienda-container lp-tienda-block lp-tienda-ad-horizontal">
+          <section t-if="home_horizontal_banner and home_horizontal_banner.image" class="lp-tienda-container lp-tienda-block lp-tienda-ad-horizontal">
+            <t t-set="banner" t-value="home_horizontal_banner"/>
             <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
           </section>
 
           <section class="lp-tienda-container lp-tienda-block">
             <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
-              <t t-set="title">Tecnología e innovación</t>
+              <t t-set="title">Tecnologia e innovacion</t>
             </t>
-            <div class="lp-tienda-tech-layout">
+            <div t-attf-class="lp-tienda-tech-layout #{'lp-tienda-tech-layout--with-ad' if tech_sidebar_banner and tech_sidebar_banner.image else ''}">
               <div class="lp-tienda-solution-grid lp-tienda-solution-grid--two">
                 <t t-foreach="technology_cards" t-as="item">
                   <t t-call="latinpyme_tienda_theme.lp_tienda_solution_card"/>
                 </t>
               </div>
-              <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
+              <t t-if="tech_sidebar_banner and tech_sidebar_banner.image">
+                <t t-set="banner" t-value="tech_sidebar_banner"/>
+                <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
+              </t>
             </div>
           </section>
 

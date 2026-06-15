@@ -1,73 +1,86 @@
 # -*- coding: utf-8 -*-
 
+import base64
 from datetime import date
 
-from odoo import http
+from odoo import fields, http
 from odoo.addons.website.controllers.main import Website
 from odoo.http import request
+from werkzeug.exceptions import NotFound
+from werkzeug.utils import redirect as werkzeug_redirect
 
 
 class LatinpymeTiendaController(Website):
+    def _image_response(self, image):
+        if not image:
+            raise NotFound()
+        content = base64.b64decode(image)
+        mimetype = "image/png"
+        if content.startswith(b"\xff\xd8"):
+            mimetype = "image/jpeg"
+        elif content.startswith(b"\x89PNG\r\n\x1a\n"):
+            mimetype = "image/png"
+        elif content.startswith(b"GIF"):
+            mimetype = "image/gif"
+        elif content.startswith(b"RIFF") and content[8:12] == b"WEBP":
+            mimetype = "image/webp"
+        return request.make_response(
+            content,
+            headers=[
+                ("Content-Type", mimetype),
+                ("Cache-Control", "public, max-age=86400"),
+            ],
+        )
+
+    def _website_matches(self, record):
+        website = getattr(request, "website", False)
+        return not record.website_id or not website or record.website_id == website
+
     def _home_values(self):
-        """Temporary storefront data, grouped for a future backend-managed phase."""
+        """Storefront data with backend-managed header, menu, footer and banners."""
         shop_url = "/shop"
-        whatsapp_url = "https://wa.link/i0n10b"
-        social_links = [
-            {
-                "label": "Facebook",
-                "href": "https://www.facebook.com/revistalatinpyme",
-                "icon": "fa-facebook",
-            },
-            {
-                "label": "LinkedIn",
-                "href": "https://co.linkedin.com/company/latinpyme/",
-                "icon": "fa-linkedin",
-            },
-            {
-                "label": "Instagram",
-                "href": "https://www.instagram.com/revistalatinpyme",
-                "icon": "fa-instagram",
-            },
-            {
-                "label": "YouTube",
-                "href": "https://www.youtube.com/@revistalatinpyme",
-                "icon": "fa-youtube-play",
-            },
-            {
-                "label": "WhatsApp",
-                "href": whatsapp_url,
-                "icon": "fa-whatsapp",
-                "variant": "whatsapp",
-            },
-        ]
+        website = getattr(request, "website", False)
+        Config = request.env["latinpyme.tienda.config"].sudo()
+        Menu = request.env["latinpyme.tienda.menu.link"].sudo()
+        Footer = request.env["latinpyme.tienda.footer.link"].sudo()
+        Banner = request.env["latinpyme.tienda.banner"].sudo()
+
+        config = Config.get_active_config(website)
+        whatsapp_url = config.whatsapp_url if config and config.whatsapp_url else "https://wa.link/i0n10b"
+        hero_banner_record = Banner.get_active_banner("hero", website=website)
+        hero_banner = {
+            "name": "Banner principal Tienda LatinPyme",
+            "image_url": "https://latinpyme.com/revista/media/banner/3/image",
+            "alt": "Banner principal Tienda LatinPyme",
+            "url": shop_url,
+        }
+        if hero_banner_record and hero_banner_record.image:
+            hero_banner = {
+                "name": hero_banner_record.name,
+                "image_url": hero_banner_record.image_src(),
+                "alt": hero_banner_record.alt_text or hero_banner_record.name,
+                "url": hero_banner_record.url or shop_url,
+            }
+
         return {
             "current_year": date.today().year,
-            "social_links": social_links,
-            "hero": {
-                "eyebrow": "Tienda LatinPyme",
-                "title": "Capacitación y soluciones empresariales para equipos que avanzan",
-                "lead": "Cursos, herramientas y servicios diseñados para fortalecer gestión, tecnología, ventas y productividad en pymes latinoamericanas.",
-                "primary_label": "Explorar tienda",
-                "primary_url": shop_url,
-                "secondary_label": "Hablar con un asesor",
-                "secondary_url": whatsapp_url,
-            },
-            "hero_banner": {
-                "name": "Banner principal Tienda LatinPyme",
-                "image_url": "https://latinpyme.com/revista/media/banner/3/image",
-                "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
-                "url": shop_url,
-            },
+            "lp_config": config,
+            "menu_links": Menu.get_active_links(website),
+            "social_links": config.social_link_values() if config else [],
+            "hero_banner": hero_banner,
+            "home_horizontal_banner": Banner.get_active_banner("home_horizontal", website=website),
+            "tech_sidebar_banner": Banner.get_active_banner("tech_sidebar", website=website),
+            "footer_banner": Banner.get_active_banner("footer", website=website),
             "course_categories": [
                 {
                     "title": "Cursos de Auditor en SG-SST",
-                    "summary": "Fórmate para evaluar y mejorar sistemas de gestión.",
+                    "summary": "Formate para evaluar y mejorar sistemas de gestion.",
                     "href": "/shop?search=SG-SST",
                     "icon": "fa-shield",
                 },
                 {
                     "title": "Cursos de Seguridad Vial",
-                    "summary": "Capacítate en prevención y cultura de seguridad vial.",
+                    "summary": "Capacitate en prevencion y cultura de seguridad vial.",
                     "href": "/shop?search=seguridad%20vial",
                     "icon": "fa-road",
                 },
@@ -85,7 +98,7 @@ class LatinpymeTiendaController(Website):
                 },
                 {
                     "title": "Talleres",
-                    "summary": "Formación práctica con resultados inmediatos.",
+                    "summary": "Formacion practica con resultados inmediatos.",
                     "href": "/shop?search=taller",
                     "icon": "fa-book",
                 },
@@ -93,17 +106,17 @@ class LatinpymeTiendaController(Website):
             "training_cards": [
                 {
                     "title": "Cursos Online 100%",
-                    "subtitle": "Cursos de actualización",
-                    "summary": "Flexibles, diseñados para adquirir nuevas habilidades.",
-                    "bullets": ["Auditoría SG-SST.", "Seguridad Vial."],
+                    "subtitle": "Cursos de actualizacion",
+                    "summary": "Flexibles, disenados para adquirir nuevas habilidades.",
+                    "bullets": ["Auditoria SG-SST.", "Seguridad Vial."],
                     "href": "/shop?search=online",
                     "icon": "fa-laptop",
                 },
                 {
                     "title": "Capacitaciones Inhouse",
-                    "subtitle": "Formación a la medida",
-                    "summary": "Diseñamos contenidos según tus procesos y retos, con expertos.",
-                    "bullets": ["Presencial, virtual o híbrida.", "Talento humano, IA, Finanzas y más."],
+                    "subtitle": "Formacion a la medida",
+                    "summary": "Disenamos contenidos segun tus procesos y retos, con expertos.",
+                    "bullets": ["Presencial, virtual o hibrida.", "Talento humano, IA, Finanzas y mas."],
                     "href": "/shop?search=inhouse",
                     "icon": "fa-users",
                 },
@@ -120,14 +133,14 @@ class LatinpymeTiendaController(Website):
                 {
                     "title": "LMS (Aulas)",
                     "summary": "Plataformas de aprendizaje para capacitar equipos y medir avances.",
-                    "bullets": ["Cursos empresariales", "Seguimiento de progreso", "Certificación"],
+                    "bullets": ["Cursos empresariales", "Seguimiento de progreso", "Certificacion"],
                     "href": "/shop?search=lms",
                     "icon": "fa-desktop",
                 },
                 {
                     "title": "Salones (Eventos)",
                     "summary": "Soluciones para encuentros, formaciones y experiencias corporativas.",
-                    "bullets": ["Eventos presenciales", "Experiencias híbridas", "Soporte operativo"],
+                    "bullets": ["Eventos presenciales", "Experiencias hibridas", "Soporte operativo"],
                     "href": "/shop?search=eventos",
                     "icon": "fa-calendar",
                 },
@@ -148,9 +161,9 @@ class LatinpymeTiendaController(Website):
                     "icon": "fa-phone",
                 },
                 {
-                    "title": "IA Analítica y Predictiva",
+                    "title": "IA Analitica y Predictiva",
                     "summary": "Convierte datos en decisiones con modelos en tiempo real.",
-                    "bullets": ["Dashboards", "Predicción", "Decisiones automáticas"],
+                    "bullets": ["Dashboards", "Prediccion", "Decisiones automaticas"],
                     "href": "/shop?search=analitica%20predictiva",
                     "icon": "fa-area-chart",
                 },
@@ -161,7 +174,7 @@ class LatinpymeTiendaController(Website):
                     "logo_url": "https://latinpyme.com/revista/media/ally/2/logo",
                 },
                 {
-                    "name": "Aportes en Línea",
+                    "name": "Aportes en Linea",
                     "logo_url": "https://latinpyme.com/revista/media/ally/1/logo",
                 },
                 {
@@ -173,11 +186,11 @@ class LatinpymeTiendaController(Website):
                     "logo_url": "https://latinpyme.com/revista/media/ally/4/logo",
                 },
                 {
-                    "name": "Universidad Protección",
+                    "name": "Universidad Proteccion",
                     "logo_url": "https://latinpyme.com/revista/media/ally/5/logo",
                 },
                 {
-                    "name": "EduFundación Coomeva",
+                    "name": "EduFundacion Coomeva",
                     "logo_url": "https://latinpyme.com/revista/media/ally/6/logo",
                 },
                 {
@@ -196,29 +209,15 @@ class LatinpymeTiendaController(Website):
             "footer_columns": [
                 {
                     "title": "Secciones",
-                    "links": [
-                        ("Cursos", "/shop?search=cursos"),
-                        ("Capacitación", "/shop?search=capacitacion"),
-                        ("Tecnología", "/shop?search=tecnologia"),
-                        ("Inteligencia artificial", "/shop?search=inteligencia%20artificial"),
-                    ],
+                    "links": Footer.get_active_links("sections", website),
                 },
                 {
                     "title": "Portafolio",
-                    "links": [
-                        ("Soluciones", "/shop?search=soluciones"),
-                        ("Escuela", "/shop?search=escuela"),
-                        ("Eventos", "/shop?search=eventos"),
-                        ("Curso 50 y 20 horas", "/shop?search=50%2020"),
-                    ],
+                    "links": Footer.get_active_links("portfolio", website),
                 },
                 {
                     "title": "Legal",
-                    "links": [
-                        ("Términos de Uso", "/terms"),
-                        ("Privacidad y datos", "/terms"),
-                        ("Aviso Legal", "/terms"),
-                    ],
+                    "links": Footer.get_active_links("legal", website),
                 },
             ],
             "whatsapp_url": whatsapp_url,
@@ -229,7 +228,10 @@ class LatinpymeTiendaController(Website):
         host = (request.httprequest.host or "").split(":", 1)[0].lower()
         website_domain = (getattr(website, "domain", "") or "").split(":", 1)[0].lower()
         website_name = (getattr(website, "name", "") or "").lower()
+        config = request.env["latinpyme.tienda.config"].sudo().get_active_config(website)
 
+        if config and config.is_tienda_host(host):
+            return True
         if host == "tienda.latinpyme.com" or website_domain == "tienda.latinpyme.com":
             return True
         return "tienda" in website_name and "latinpyme" in website_name
@@ -237,13 +239,32 @@ class LatinpymeTiendaController(Website):
     def _render_tienda_home(self):
         return request.render("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
 
+    @http.route(
+        "/latinpyme-tienda/media/banner/<int:banner_id>/image",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def tienda_banner_image(self, banner_id, **kwargs):
+        banner = request.env["latinpyme.tienda.banner"].sudo().browse(banner_id).exists()
+        if not banner or not banner.active or not banner.image or not self._website_matches(banner):
+            raise NotFound()
+        today = fields.Date.context_today(banner)
+        if banner.date_start and banner.date_start > today:
+            raise NotFound()
+        if banner.date_end and banner.date_end < today:
+            raise NotFound()
+        return self._image_response(banner.image)
+
     @http.route("/", type="http", auth="public", website=True, sitemap=True)
     def index(self, **kwargs):
         if self._is_tienda_website():
             return self._render_tienda_home()
         return super().index(**kwargs)
 
-    @http.route("/tienda", type="http", auth="public", website=True, sitemap=True)
+    @http.route("/tienda", type="http", auth="public", website=True, sitemap=False)
     def tienda_home(self, **kwargs):
-        return self._render_tienda_home()
-
+        if self._is_tienda_website():
+            return werkzeug_redirect("/", code=302)
+        raise NotFound()

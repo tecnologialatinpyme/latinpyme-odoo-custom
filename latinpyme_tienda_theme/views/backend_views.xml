@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_latinpyme_tienda_config_list" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.config.list</field>
+    <field name="model">latinpyme.tienda.config</field>
+    <field name="arch" type="xml">
+      <list string="Configuracion Tienda">
+        <field name="name"/>
+        <field name="website_id"/>
+        <field name="production_domain"/>
+        <field name="brand_label"/>
+        <field name="brand_name"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_config_form" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.config.form</field>
+    <field name="model">latinpyme.tienda.config</field>
+    <field name="arch" type="xml">
+      <form string="Configuracion Tienda LatinPyme">
+        <sheet>
+          <group>
+            <group string="General">
+              <field name="name"/>
+              <field name="website_id"/>
+              <field name="production_domain"/>
+              <field name="brand_label"/>
+              <field name="brand_name"/>
+            </group>
+            <group string="Header">
+              <field name="anniversary_title"/>
+              <field name="anniversary_text"/>
+              <field name="search_placeholder"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Redes sociales">
+              <group>
+                <field name="facebook_url"/>
+                <field name="linkedin_url"/>
+                <field name="instagram_url"/>
+                <field name="youtube_url"/>
+                <field name="whatsapp_url"/>
+              </group>
+            </page>
+            <page string="Footer">
+              <group>
+                <field name="footer_summary"/>
+                <field name="footer_text"/>
+                <field name="phone"/>
+                <field name="city"/>
+              </group>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_menu_link_list" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.menu.link.list</field>
+    <field name="model">latinpyme.tienda.menu.link</field>
+    <field name="arch" type="xml">
+      <list string="Menu Tienda" default_order="sequence,name">
+        <field name="sequence" widget="handle"/>
+        <field name="name"/>
+        <field name="url"/>
+        <field name="open_new_tab"/>
+        <field name="website_id"/>
+        <field name="active"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_menu_link_form" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.menu.link.form</field>
+    <field name="model">latinpyme.tienda.menu.link</field>
+    <field name="arch" type="xml">
+      <form string="Link de menu Tienda">
+        <sheet>
+          <group>
+            <group>
+              <field name="active"/>
+              <field name="sequence"/>
+              <field name="name"/>
+              <field name="url"/>
+            </group>
+            <group>
+              <field name="open_new_tab"/>
+              <field name="website_id"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_menu_link_search" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.menu.link.search</field>
+    <field name="model">latinpyme.tienda.menu.link</field>
+    <field name="arch" type="xml">
+      <search string="Buscar links de menu">
+        <field name="name"/>
+        <field name="url"/>
+        <filter name="active" string="Activos" domain="[('active', '=', True)]"/>
+        <filter name="inactive" string="Inactivos" domain="[('active', '=', False)]"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_footer_link_list" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.footer.link.list</field>
+    <field name="model">latinpyme.tienda.footer.link</field>
+    <field name="arch" type="xml">
+      <list string="Footer Tienda" default_order="sequence,group_key,name">
+        <field name="sequence" widget="handle"/>
+        <field name="group_key"/>
+        <field name="name"/>
+        <field name="url"/>
+        <field name="open_new_tab"/>
+        <field name="website_id"/>
+        <field name="active"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_footer_link_form" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.footer.link.form</field>
+    <field name="model">latinpyme.tienda.footer.link</field>
+    <field name="arch" type="xml">
+      <form string="Link de footer Tienda">
+        <sheet>
+          <group>
+            <group>
+              <field name="active"/>
+              <field name="sequence"/>
+              <field name="group_key"/>
+              <field name="name"/>
+              <field name="url"/>
+            </group>
+            <group>
+              <field name="open_new_tab"/>
+              <field name="website_id"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_footer_link_search" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.footer.link.search</field>
+    <field name="model">latinpyme.tienda.footer.link</field>
+    <field name="arch" type="xml">
+      <search string="Buscar links de footer">
+        <field name="name"/>
+        <field name="url"/>
+        <filter name="active" string="Activos" domain="[('active', '=', True)]"/>
+        <filter name="group_sections" string="Secciones" domain="[('group_key', '=', 'sections')]"/>
+        <filter name="group_portfolio" string="Portafolio" domain="[('group_key', '=', 'portfolio')]"/>
+        <filter name="group_legal" string="Legal" domain="[('group_key', '=', 'legal')]"/>
+        <group expand="0" string="Agrupar">
+          <filter name="group_by_group" string="Grupo" context="{'group_by': 'group_key'}"/>
+          <filter name="group_by_website" string="Sitio web" context="{'group_by': 'website_id'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_banner_list" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.banner.list</field>
+    <field name="model">latinpyme.tienda.banner</field>
+    <field name="arch" type="xml">
+      <list string="Banners Tienda" default_order="sequence,name">
+        <field name="sequence" widget="handle"/>
+        <field name="name"/>
+        <field name="placement"/>
+        <field name="url"/>
+        <field name="date_start"/>
+        <field name="date_end"/>
+        <field name="website_id"/>
+        <field name="active"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_banner_form" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.banner.form</field>
+    <field name="model">latinpyme.tienda.banner</field>
+    <field name="arch" type="xml">
+      <form string="Banner Tienda">
+        <sheet>
+          <group>
+            <group>
+              <field name="active"/>
+              <field name="sequence"/>
+              <field name="name"/>
+              <field name="placement"/>
+              <field name="url"/>
+              <field name="alt_text"/>
+            </group>
+            <group>
+              <field name="image" widget="image"/>
+              <field name="date_start"/>
+              <field name="date_end"/>
+              <field name="website_id"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_banner_search" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.banner.search</field>
+    <field name="model">latinpyme.tienda.banner</field>
+    <field name="arch" type="xml">
+      <search string="Buscar banners">
+        <field name="name"/>
+        <field name="placement"/>
+        <filter name="active" string="Activos" domain="[('active', '=', True)]"/>
+        <filter name="hero" string="Home principal" domain="[('placement', '=', 'hero')]"/>
+        <filter name="home_horizontal" string="Horizontal" domain="[('placement', '=', 'home_horizontal')]"/>
+        <filter name="tech_sidebar" string="Tecnologia lateral" domain="[('placement', '=', 'tech_sidebar')]"/>
+        <filter name="footer" string="Footer" domain="[('placement', '=', 'footer')]"/>
+        <group expand="0" string="Agrupar">
+          <filter name="group_by_placement" string="Ubicacion" context="{'group_by': 'placement'}"/>
+          <filter name="group_by_website" string="Sitio web" context="{'group_by': 'website_id'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_latinpyme_tienda_config" model="ir.actions.act_window">
+    <field name="name">Configuracion</field>
+    <field name="res_model">latinpyme.tienda.config</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <record id="action_latinpyme_tienda_menu_link" model="ir.actions.act_window">
+    <field name="name">Menu</field>
+    <field name="res_model">latinpyme.tienda.menu.link</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_tienda_menu_link_search"/>
+    <field name="context">{'search_default_active': 1}</field>
+  </record>
+
+  <record id="action_latinpyme_tienda_footer_link" model="ir.actions.act_window">
+    <field name="name">Footer</field>
+    <field name="res_model">latinpyme.tienda.footer.link</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_tienda_footer_link_search"/>
+    <field name="context">{'search_default_active': 1}</field>
+  </record>
+
+  <record id="action_latinpyme_tienda_banner" model="ir.actions.act_window">
+    <field name="name">Banners</field>
+    <field name="res_model">latinpyme.tienda.banner</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_tienda_banner_search"/>
+    <field name="context">{'search_default_active': 1}</field>
+  </record>
+
+  <menuitem id="menu_latinpyme_tienda_root" name="Tienda LatinPyme" sequence="82" groups="website.group_website_designer"/>
+  <menuitem id="menu_latinpyme_tienda_config" name="Configuracion" parent="menu_latinpyme_tienda_root" action="action_latinpyme_tienda_config" sequence="10"/>
+  <menuitem id="menu_latinpyme_tienda_menu_links" name="Menu" parent="menu_latinpyme_tienda_root" action="action_latinpyme_tienda_menu_link" sequence="20"/>
+  <menuitem id="menu_latinpyme_tienda_footer_links" name="Footer" parent="menu_latinpyme_tienda_root" action="action_latinpyme_tienda_footer_link" sequence="30"/>
+  <menuitem id="menu_latinpyme_tienda_banners" name="Banners" parent="menu_latinpyme_tienda_root" action="action_latinpyme_tienda_banner" sequence="40"/>
+</odoo>
