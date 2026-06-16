@@ -69,6 +69,28 @@
     </a>
   </template>
 
+  <template id="lp_tienda_product_carousel_card" name="Tienda LatinPyme Product Carousel Card">
+    <article class="lp-tienda-product-card">
+      <a class="lp-tienda-product-card__media" t-att-href="product_item['url']" t-att-aria-label="'Ver %s' % product_item['name']">
+        <img t-att-src="product_item['image_url']" t-att-alt="product_item['name']" loading="lazy"/>
+      </a>
+      <div class="lp-tienda-product-card__body">
+        <h3>
+          <a t-att-href="product_item['url']" t-out="product_item['name']"/>
+        </h3>
+        <span
+          t-if="product_item.get('has_price')"
+          class="lp-tienda-product-card__price"
+          t-out="product_item['price']"
+          t-options="{'widget': 'monetary', 'display_currency': product_item['currency']}"/>
+        <a class="lp-tienda-product-card__cta" t-att-href="product_item['url']">
+          Ver detalle
+          <i class="fa fa-arrow-right" aria-hidden="true"/>
+        </a>
+      </div>
+    </article>
+  </template>
+
   <template id="lp_tienda_solution_card" name="Tienda LatinPyme Solution Card">
     <article class="lp-tienda-solution-card">
       <a class="lp-tienda-solution-card__media" t-att-href="item['href']" t-att-aria-label="item['title']">
@@ -152,15 +174,26 @@
             </a>
           </section>
 
-          <section class="lp-tienda-container lp-tienda-block lp-tienda-categories">
+          <section t-if="product_carousels" class="lp-tienda-container lp-tienda-block lp-tienda-product-carousels">
             <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
               <t t-set="title">Cursos de actualidad</t>
             </t>
-            <p class="lp-tienda-block__lead">Estos cursos son certificados</p>
-            <div class="lp-tienda-categories__grid">
-              <t t-foreach="course_categories" t-as="item">
-                <t t-call="latinpyme_tienda_theme.lp_tienda_category_card"/>
-              </t>
+            <p class="lp-tienda-block__lead">Cursos y programas disponibles en la tienda.</p>
+            <div class="lp-tienda-product-carousels__stack">
+              <section class="lp-tienda-product-carousel" t-foreach="product_carousels" t-as="carousel">
+                <header class="lp-tienda-product-carousel__head">
+                  <h3 t-out="carousel['name']"/>
+                  <a class="lp-tienda-product-carousel__all" t-att-href="carousel['url']">
+                    Ver todos
+                    <i class="fa fa-arrow-right" aria-hidden="true"/>
+                  </a>
+                </header>
+                <div class="lp-tienda-product-carousel__track" t-att-aria-label="carousel['name']">
+                  <t t-foreach="carousel['products']" t-as="product_item">
+                    <t t-call="latinpyme_tienda_theme.lp_tienda_product_carousel_card"/>
+                  </t>
+                </div>
+              </section>
             </div>
           </section>
 

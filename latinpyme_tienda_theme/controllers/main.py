@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import logging
 from datetime import date
 
 from odoo import http
@@ -7,7 +8,68 @@ from odoo.addons.website.controllers.main import Website
 from odoo.http import request
 
 
+_logger = logging.getLogger(__name__)
+
+
 class LatinpymeTiendaController(Website):
+    def _home_product_carousels(self):
+        try:
+            with request.env.cr.savepoint():
+                website = getattr(request, "website", False)
+                Category = request.env["product.public.category"]
+                Product = request.env["product.template"]
+                category_domain = []
+                if website and "website_id" in Category._fields:
+                    category_domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
+
+                categories = Category.search(category_domain, order="sequence asc, name asc", limit=30)
+                product_base_domain = []
+                if "active" in Product._fields:
+                    product_base_domain.append(("active", "=", True))
+                if "sale_ok" in Product._fields:
+                    product_base_domain.append(("sale_ok", "=", True))
+                if "is_published" in Product._fields:
+                    product_base_domain.append(("is_published", "=", True))
+                elif "website_published" in Product._fields:
+                    product_base_domain.append(("website_published", "=", True))
+                if website and "website_id" in Product._fields:
+                    product_base_domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
+
+                product_order = "website_sequence asc, name asc" if "website_sequence" in Product._fields else "name asc"
+                currency = getattr(website, "currency_id", False) or request.env.company.currency_id
+                carousels = []
+                for category in categories:
+                    products = Product.search(
+                        product_base_domain + [("public_categ_ids", "in", [category.id])],
+                        order=product_order,
+                        limit=10,
+                    )
+                    if not products:
+                        continue
+                    carousels.append(
+                        {
+                            "name": category.name,
+                            "url": "/shop/category/%s" % category.id,
+                            "products": [
+                                {
+                                    "name": product.name,
+                                    "url": product.website_url if "website_url" in product._fields else "/shop",
+                                    "image_url": "/web/image/product.template/%s/image_512" % product.id,
+                                    "price": product.list_price if "list_price" in product._fields else False,
+                                    "has_price": "list_price" in product._fields,
+                                    "currency": currency,
+                                }
+                                for product in products
+                            ],
+                        }
+                    )
+                    if len(carousels) >= 6:
+                        break
+                return carousels
+        except Exception as exc:
+            _logger.info("No se pudieron cargar carruseles nativos de Tienda: %s", exc)
+            return []
+
     def _home_values(self):
         """Temporary storefront data, grouped for a future backend-managed phase."""
         shop_url = "/shop"
@@ -58,38 +120,7 @@ class LatinpymeTiendaController(Website):
                 "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
                 "url": shop_url,
             },
-            "course_categories": [
-                {
-                    "title": "Cursos de Auditor en SG-SST",
-                    "summary": "Fórmate para evaluar y mejorar sistemas de gestión.",
-                    "href": "/shop?search=SG-SST",
-                    "icon": "fa-shield",
-                },
-                {
-                    "title": "Cursos de Seguridad Vial",
-                    "summary": "Capacítate en prevención y cultura de seguridad vial.",
-                    "href": "/shop?search=seguridad%20vial",
-                    "icon": "fa-road",
-                },
-                {
-                    "title": "Cursos de IA",
-                    "summary": "Impulsa tu futuro. Aprende IA aplicada a tu trabajo y tu empresa.",
-                    "href": "/shop?search=inteligencia%20artificial",
-                    "icon": "fa-cogs",
-                },
-                {
-                    "title": "Diplomados",
-                    "summary": "Programas especializados para avanzar en tu carrera.",
-                    "href": "/shop?search=diplomado",
-                    "icon": "fa-graduation-cap",
-                },
-                {
-                    "title": "Talleres",
-                    "summary": "Formación práctica con resultados inmediatos.",
-                    "href": "/shop?search=taller",
-                    "icon": "fa-book",
-                },
-            ],
+            "product_carousels": self._home_product_carousels(),
             "training_cards": [
                 {
                     "title": "Cursos Online 100%",
