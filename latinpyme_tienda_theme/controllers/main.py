@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import logging
 from datetime import date
 
 from odoo import http
@@ -8,24 +7,11 @@ from odoo.addons.website.controllers.main import Website
 from odoo.http import request
 
 
-_logger = logging.getLogger(__name__)
-
-
 class LatinpymeTiendaController(Website):
-    def _home_product_carousels(self, website):
-        try:
-            with request.env.cr.savepoint():
-                ProductCarousel = request.env["latinpyme.tienda.product.carousel"]
-                return ProductCarousel.get_home_carousels(website=website)
-        except Exception as exc:
-            _logger.info("No se pudieron cargar los carruseles de Tienda LatinPyme: %s", exc)
-            return []
-
     def _home_values(self):
         """Temporary storefront data, grouped for a future backend-managed phase."""
         shop_url = "/shop"
         whatsapp_url = "https://wa.link/i0n10b"
-        website = getattr(request, "website", False)
         social_links = [
             {
                 "label": "Facebook",
@@ -72,7 +58,38 @@ class LatinpymeTiendaController(Website):
                 "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
                 "url": shop_url,
             },
-            "product_carousels": self._home_product_carousels(website),
+            "course_categories": [
+                {
+                    "title": "Cursos de Auditor en SG-SST",
+                    "summary": "Fórmate para evaluar y mejorar sistemas de gestión.",
+                    "href": "/shop?search=SG-SST",
+                    "icon": "fa-shield",
+                },
+                {
+                    "title": "Cursos de Seguridad Vial",
+                    "summary": "Capacítate en prevención y cultura de seguridad vial.",
+                    "href": "/shop?search=seguridad%20vial",
+                    "icon": "fa-road",
+                },
+                {
+                    "title": "Cursos de IA",
+                    "summary": "Impulsa tu futuro. Aprende IA aplicada a tu trabajo y tu empresa.",
+                    "href": "/shop?search=inteligencia%20artificial",
+                    "icon": "fa-cogs",
+                },
+                {
+                    "title": "Diplomados",
+                    "summary": "Programas especializados para avanzar en tu carrera.",
+                    "href": "/shop?search=diplomado",
+                    "icon": "fa-graduation-cap",
+                },
+                {
+                    "title": "Talleres",
+                    "summary": "Formación práctica con resultados inmediatos.",
+                    "href": "/shop?search=taller",
+                    "icon": "fa-book",
+                },
+            ],
             "training_cards": [
                 {
                     "title": "Cursos Online 100%",
@@ -226,8 +243,6 @@ class LatinpymeTiendaController(Website):
             return self._render_tienda_home()
         return super().index(**kwargs)
 
-    @http.route("/tienda", type="http", auth="public", website=True, sitemap=False)
+    @http.route("/tienda", type="http", auth="public", website=True, sitemap=True)
     def tienda_home(self, **kwargs):
-        if not self._is_tienda_website():
-            return request.redirect("https://tienda.latinpyme.com/", code=301)
         return self._render_tienda_home()
