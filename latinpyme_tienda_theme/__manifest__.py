@@ -2,7 +2,7 @@
 
 {
     "name": "Tienda LatinPyme",
-    "version": "19.0.1.5.1",
+    "version": "19.0.1.5.2",
     "category": "Website/eCommerce",
     "summary": "Administracion personalizada de Tienda LatinPyme",
     "description": """
@@ -12,7 +12,7 @@ Incluye configuracion de header, menu, footer, banners y home de tienda,
 manteniendo separacion con Revista LatinPyme y sin tocar checkout ni pagos.
     """,
     "author": "LatinPyme",
-    "website": "https://latinpyme.com",
+    "website": "https://tienda.latinpyme.com",
     "license": "LGPL-3",
     "depends": [
         "website",
