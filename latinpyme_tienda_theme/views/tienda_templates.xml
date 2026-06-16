@@ -174,25 +174,6 @@
             </a>
           </section>
 
-          <section t-if="product_carousels" class="lp-tienda-container lp-tienda-block lp-tienda-product-carousels">
-            <div class="lp-tienda-product-carousels__stack">
-              <section class="lp-tienda-product-carousel" t-foreach="product_carousels" t-as="carousel">
-                <header class="lp-tienda-product-carousel__head">
-                  <h3 t-out="carousel['name']"/>
-                  <a class="lp-tienda-product-carousel__all" t-att-href="carousel['url']">
-                    Ver todos
-                    <i class="fa fa-arrow-right" aria-hidden="true"/>
-                  </a>
-                </header>
-                <div class="lp-tienda-product-carousel__track" t-att-aria-label="carousel['name']">
-                  <t t-foreach="carousel['products']" t-as="product_item">
-                    <t t-call="latinpyme_tienda_theme.lp_tienda_product_carousel_card"/>
-                  </t>
-                </div>
-              </section>
-            </div>
-          </section>
-
           <section class="lp-tienda-container lp-tienda-block">
             <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
               <t t-set="title">Capacitación</t>
@@ -230,6 +211,25 @@
               <t t-foreach="ai_cards" t-as="item">
                 <t t-call="latinpyme_tienda_theme.lp_tienda_solution_card"/>
               </t>
+            </div>
+          </section>
+
+          <section t-if="product_carousels" class="lp-tienda-container lp-tienda-block lp-tienda-product-carousels">
+            <div class="lp-tienda-product-carousels__stack">
+              <section class="lp-tienda-product-carousel" t-foreach="product_carousels" t-as="carousel">
+                <header class="lp-tienda-product-carousel__head">
+                  <h3 t-out="carousel['name']"/>
+                  <a class="lp-tienda-product-carousel__all" t-att-href="carousel['url']">
+                    Ver todos
+                    <i class="fa fa-arrow-right" aria-hidden="true"/>
+                  </a>
+                </header>
+                <div class="lp-tienda-product-carousel__track" t-att-aria-label="carousel['name']">
+                  <t t-foreach="carousel['products']" t-as="product_item">
+                    <t t-call="latinpyme_tienda_theme.lp_tienda_product_carousel_card"/>
+                  </t>
+                </div>
+              </section>
             </div>
           </section>
 
