@@ -52,6 +52,12 @@
     <field name="target">new</field>
   </record>
 
+  <record id="action_latinpyme_tienda_product_categories" model="ir.actions.act_window">
+    <field name="name">Carruseles / Categorias</field>
+    <field name="res_model">product.public.category</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
   <menuitem
     id="menu_latinpyme_tienda_root"
     name="Tienda LatinPyme"
@@ -72,6 +78,13 @@
     parent="menu_latinpyme_tienda_root"
     action="action_latinpyme_tienda_open_home"
     sequence="10"/>
+
+  <menuitem
+    id="menu_latinpyme_tienda_product_categories"
+    name="Carruseles / Categorias"
+    parent="menu_latinpyme_tienda_root"
+    action="action_latinpyme_tienda_product_categories"
+    sequence="15"/>
 
   <menuitem
     id="menu_latinpyme_tienda_open_shop"
