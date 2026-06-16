@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from urllib.parse import quote
+
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.http import request as http_request
@@ -233,3 +235,130 @@ class LatinpymeTiendaBanner(models.Model):
         if not self.image:
             return ""
         return "/latinpyme-tienda/media/banner/%s/image" % self.id
+
+
+class LatinpymeTiendaProductCarousel(models.Model):
+    _name = "latinpyme.tienda.product.carousel"
+    _description = "Carrusel de productos Tienda LatinPyme"
+    _order = "sequence, name"
+
+    name = fields.Char(string="Nombre", required=True)
+    active = fields.Boolean(string="Activo", default=True)
+    sequence = fields.Integer(string="Orden", default=10)
+    description = fields.Char(string="Descripcion")
+    category_id = fields.Many2one(
+        "product.public.category",
+        string="Categoria de tienda",
+        ondelete="restrict",
+        help="Categoria publica de ecommerce usada para listar productos del carrusel.",
+    )
+    category_search_name = fields.Char(
+        string="Buscar categoria por nombre",
+        help="Fallback para datos iniciales: si no hay categoria asignada, se buscan categorias publicas por este texto.",
+    )
+    website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
+    product_ids = fields.Many2many(
+        "product.template",
+        compute="_compute_product_ids",
+        string="Productos relacionados",
+    )
+    product_count = fields.Integer(string="Productos", compute="_compute_product_ids")
+
+    @api.depends("category_id", "category_search_name", "website_id")
+    def _compute_product_ids(self):
+        for carousel in self:
+            products = carousel._get_related_products()
+            carousel.product_ids = products
+            carousel.product_count = len(products)
+
+    def _get_related_categories(self):
+        self.ensure_one()
+        Category = self.env["product.public.category"].sudo()
+        if self.category_id:
+            return self.category_id
+
+        search_name = (self.category_search_name or "").strip()
+        if not search_name:
+            return Category.browse()
+        return Category.search([("name", "ilike", search_name)])
+
+    def _get_related_products(self, website=None):
+        self.ensure_one()
+        Product = self.env["product.template"].sudo()
+        Category = self.env["product.public.category"].sudo()
+        categories = self._get_related_categories()
+        if not categories:
+            return Product.browse()
+
+        category_ids = Category.search([("id", "child_of", categories.ids)]).ids
+        domain = [("public_categ_ids", "in", category_ids)]
+        if "active" in Product._fields:
+            domain.append(("active", "=", True))
+        if "sale_ok" in Product._fields:
+            domain.append(("sale_ok", "=", True))
+        if "is_published" in Product._fields:
+            domain.append(("is_published", "=", True))
+        elif "website_published" in Product._fields:
+            domain.append(("website_published", "=", True))
+        if website and "website_id" in Product._fields:
+            domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
+
+        order_fields = []
+        for field_name in ("website_sequence", "sequence", "name"):
+            if field_name in Product._fields:
+                order_fields.append("%s asc" % field_name)
+        return Product.search(domain, order=", ".join(order_fields) or "name asc")
+
+    def _category_url(self):
+        self.ensure_one()
+        category = self.category_id or self._get_related_categories()[:1]
+        if category and "website_url" in category._fields and category.website_url:
+            return category.website_url
+        search_text = self.category_search_name or self.name
+        return "/shop?search=%s" % quote(search_text)
+
+    @api.model
+    def _product_frontend_values(self, product, website=None):
+        currency = self.env.company.currency_id
+        if website and "currency_id" in website._fields and website.currency_id:
+            currency = website.currency_id
+        product_url = "/shop"
+        if "website_url" in product._fields and product.website_url:
+            product_url = product.website_url
+        category_label = ""
+        if "public_categ_ids" in product._fields and product.public_categ_ids:
+            category_label = product.public_categ_ids[:1].name
+        return {
+            "name": product.name,
+            "url": product_url,
+            "image_url": "/web/image/product.template/%s/image_512" % product.id,
+            "price": product.list_price if "list_price" in product._fields else False,
+            "currency": currency,
+            "category_label": category_label,
+        }
+
+    @api.model
+    def get_home_carousels(self, website=None):
+        domain = [("active", "=", True)]
+        if website:
+            domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
+        else:
+            domain.append(("website_id", "=", False))
+
+        values = []
+        for carousel in self.search(domain, order="sequence, name"):
+            products = carousel._get_related_products(website)
+            if not products:
+                continue
+            values.append(
+                {
+                    "name": carousel.name,
+                    "description": carousel.description,
+                    "category_url": carousel._category_url(),
+                    "products": [
+                        carousel._product_frontend_values(product, website=website)
+                        for product in products
+                    ],
+                }
+            )
+        return values

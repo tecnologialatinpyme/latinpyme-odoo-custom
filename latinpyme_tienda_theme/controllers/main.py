@@ -44,6 +44,7 @@ class LatinpymeTiendaController(Website):
         Menu = request.env["latinpyme.tienda.menu.link"].sudo()
         Footer = request.env["latinpyme.tienda.footer.link"].sudo()
         Banner = request.env["latinpyme.tienda.banner"].sudo()
+        ProductCarousel = request.env["latinpyme.tienda.product.carousel"].sudo()
 
         config = Config.get_active_config(website)
         whatsapp_url = config.whatsapp_url if config and config.whatsapp_url else "https://wa.link/i0n10b"
@@ -71,38 +72,7 @@ class LatinpymeTiendaController(Website):
             "home_horizontal_banner": Banner.get_active_banner("home_horizontal", website=website),
             "tech_sidebar_banner": Banner.get_active_banner("tech_sidebar", website=website),
             "footer_banner": Banner.get_active_banner("footer", website=website),
-            "course_categories": [
-                {
-                    "title": "Cursos de Auditor en SG-SST",
-                    "summary": "Formate para evaluar y mejorar sistemas de gestion.",
-                    "href": "/shop?search=SG-SST",
-                    "icon": "fa-shield",
-                },
-                {
-                    "title": "Cursos de Seguridad Vial",
-                    "summary": "Capacitate en prevencion y cultura de seguridad vial.",
-                    "href": "/shop?search=seguridad%20vial",
-                    "icon": "fa-road",
-                },
-                {
-                    "title": "Cursos de IA",
-                    "summary": "Impulsa tu futuro. Aprende IA aplicada a tu trabajo y tu empresa.",
-                    "href": "/shop?search=inteligencia%20artificial",
-                    "icon": "fa-cogs",
-                },
-                {
-                    "title": "Diplomados",
-                    "summary": "Programas especializados para avanzar en tu carrera.",
-                    "href": "/shop?search=diplomado",
-                    "icon": "fa-graduation-cap",
-                },
-                {
-                    "title": "Talleres",
-                    "summary": "Formacion practica con resultados inmediatos.",
-                    "href": "/shop?search=taller",
-                    "icon": "fa-book",
-                },
-            ],
+            "product_carousels": ProductCarousel.get_home_carousels(website=website),
             "training_cards": [
                 {
                     "title": "Cursos Online 100%",
