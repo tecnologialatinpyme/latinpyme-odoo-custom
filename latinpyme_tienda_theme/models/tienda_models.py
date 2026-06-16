@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import logging
 from urllib.parse import quote
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.http import request as http_request
+from odoo.tools.convert import convert_file
+
+
+_logger = logging.getLogger(__name__)
 
 
 FOOTER_LINK_GROUPS = [
@@ -58,6 +63,17 @@ DEFAULT_PRODUCT_CAROUSELS = [
         "search_name": "Gratis",
     },
 ]
+
+MODULE_DATA_FILES = [
+    "security/ir.model.access.csv",
+    "data/module_metadata.xml",
+    "data/tienda_defaults.xml",
+    "views/backend_views.xml",
+    "views/tienda_templates.xml",
+    "views/shop_templates.xml",
+]
+
+MODULE_TARGET_VERSION = "19.0.1.6.2"
 
 
 def _current_website():
@@ -122,7 +138,7 @@ class LatinpymeTiendaConfig(models.Model):
             "description": description,
             "website": "https://tienda.latinpyme.com",
             "application": True,
-            "latest_version": "19.0.1.6.1",
+            "latest_version": MODULE_TARGET_VERSION,
         }
         module.write(
             {
@@ -132,6 +148,48 @@ class LatinpymeTiendaConfig(models.Model):
             }
         )
         return True
+
+    @api.model
+    def _module_data_needs_refresh(self):
+        module = self.env["ir.module.module"].sudo().search(
+            [("name", "=", "latinpyme_tienda_theme")],
+            limit=1,
+        )
+        if module and "latest_version" in module._fields and module.latest_version != MODULE_TARGET_VERSION:
+            return True
+
+        view = self.env.ref(
+            "latinpyme_tienda_theme.lp_tienda_home_page",
+            raise_if_not_found=False,
+        )
+        if view and "Estos cursos son certificados" in (view.arch_db or ""):
+            return True
+        return False
+
+    @api.model
+    def _refresh_module_data(self, force=False, raise_on_error=False):
+        if not force and not self._module_data_needs_refresh():
+            return False
+
+        idref = {}
+        try:
+            for filename in MODULE_DATA_FILES:
+                convert_file(
+                    self.env,
+                    "latinpyme_tienda_theme",
+                    filename,
+                    idref,
+                    mode="update",
+                    noupdate=False,
+                )
+            self._refresh_module_metadata()
+            _logger.info("Tienda LatinPyme module data refreshed to %s", MODULE_TARGET_VERSION)
+            return True
+        except Exception:
+            _logger.exception("Could not refresh Tienda LatinPyme module data")
+            if raise_on_error:
+                raise
+        return False
 
     @api.model
     def _domain_to_host(self, value):

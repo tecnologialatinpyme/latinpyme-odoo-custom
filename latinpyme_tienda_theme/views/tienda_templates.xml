@@ -8,7 +8,7 @@
 Incluye configuracion de header, menu, footer, banners, carruseles y home de tienda, manteniendo separacion con Revista LatinPyme y sin tocar checkout ni pagos.</field>
     <field name="website">https://tienda.latinpyme.com</field>
     <field name="application">1</field>
-    <field name="latest_version">19.0.1.6.1</field>
+    <field name="latest_version">19.0.1.6.2</field>
   </record>
 
   <template id="lp_tienda_social_links" name="Tienda LatinPyme Social Links">

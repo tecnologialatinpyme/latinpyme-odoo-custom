@@ -41,6 +41,7 @@ class LatinpymeTiendaController(Website):
         shop_url = "/shop"
         website = getattr(request, "website", False)
         Config = request.env["latinpyme.tienda.config"].sudo()
+        Config._refresh_module_data()
         Menu = request.env["latinpyme.tienda.menu.link"].sudo()
         Footer = request.env["latinpyme.tienda.footer.link"].sudo()
         Banner = request.env["latinpyme.tienda.banner"].sudo()
@@ -226,6 +227,23 @@ class LatinpymeTiendaController(Website):
         if banner.date_end and banner.date_end < today:
             raise NotFound()
         return self._image_response(banner.image)
+
+    @http.route(
+        "/latinpyme-tienda/refresh-module-data",
+        type="http",
+        auth="user",
+        website=False,
+        sitemap=False,
+    )
+    def tienda_refresh_module_data(self, **kwargs):
+        if not request.env.user.has_group("base.group_system"):
+            raise NotFound()
+        refreshed = request.env["latinpyme.tienda.config"].sudo()._refresh_module_data(
+            force=True,
+            raise_on_error=True,
+        )
+        message = "Tienda LatinPyme module data refreshed" if refreshed else "Tienda LatinPyme module data already current"
+        return request.make_response(message, headers=[("Content-Type", "text/plain; charset=utf-8")])
 
     @http.route("/", type="http", auth="public", website=True, sitemap=True)
     def index(self, **kwargs):
