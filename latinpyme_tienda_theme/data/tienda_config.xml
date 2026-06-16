@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+    <record id="tienda_config_default" model="latinpyme.tienda.config">
+      <field name="name">Tienda LatinPyme</field>
+      <field name="production_domain">tienda.latinpyme.com</field>
+      <field name="brand_label">Tienda</field>
+    </record>
+  </data>
+</odoo>
