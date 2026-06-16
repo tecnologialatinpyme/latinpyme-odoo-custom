@@ -175,10 +175,6 @@
           </section>
 
           <section t-if="product_carousels" class="lp-tienda-container lp-tienda-block lp-tienda-product-carousels">
-            <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
-              <t t-set="title">Cursos de actualidad</t>
-            </t>
-            <p class="lp-tienda-block__lead">Cursos y programas disponibles en la tienda.</p>
             <div class="lp-tienda-product-carousels__stack">
               <section class="lp-tienda-product-carousel" t-foreach="product_carousels" t-as="carousel">
                 <header class="lp-tienda-product-carousel__head">
