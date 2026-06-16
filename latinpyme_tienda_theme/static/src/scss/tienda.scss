@@ -185,14 +185,27 @@
   place-items: center;
   border-radius: 50%;
   background: var(--lp-tienda-red);
-  color: #fff;
+  color: #fff !important;
   font-size: 14px;
+  line-height: 1;
+  text-decoration: none;
   transition: transform .2s ease, background .2s ease;
 
+  .fa,
+  i {
+    color: #fff !important;
+    line-height: 1;
+  }
+
   &:hover {
-    color: #fff;
+    color: #fff !important;
     background: var(--lp-tienda-red-dark);
     transform: translateY(-1px);
+
+    .fa,
+    i {
+      color: #fff !important;
+    }
   }
 }
 
@@ -758,7 +771,13 @@
 .lp-tienda-footer .lp-tienda-social__link {
   width: 31px;
   height: 31px;
+  color: #fff !important;
   font-size: 14px;
+
+  .fa,
+  i {
+    color: #fff !important;
+  }
 }
 
 .lp-tienda-footer__column {
