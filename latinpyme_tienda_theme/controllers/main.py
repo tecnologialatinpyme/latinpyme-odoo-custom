@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import logging
 from datetime import date
 
 from odoo import http
@@ -7,13 +8,24 @@ from odoo.addons.website.controllers.main import Website
 from odoo.http import request
 
 
+_logger = logging.getLogger(__name__)
+
+
 class LatinpymeTiendaController(Website):
+    def _home_product_carousels(self, website):
+        try:
+            with request.env.cr.savepoint():
+                ProductCarousel = request.env["latinpyme.tienda.product.carousel"].sudo()
+                return ProductCarousel.get_home_carousels(website=website)
+        except Exception as exc:
+            _logger.info("No se pudieron cargar los carruseles de Tienda LatinPyme: %s", exc)
+            return []
+
     def _home_values(self):
         """Temporary storefront data, grouped for a future backend-managed phase."""
         shop_url = "/shop"
         whatsapp_url = "https://wa.link/i0n10b"
         website = getattr(request, "website", False)
-        ProductCarousel = request.env["latinpyme.tienda.product.carousel"].sudo()
         social_links = [
             {
                 "label": "Facebook",
@@ -60,7 +72,7 @@ class LatinpymeTiendaController(Website):
                 "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
                 "url": shop_url,
             },
-            "product_carousels": ProductCarousel.get_home_carousels(website=website),
+            "product_carousels": self._home_product_carousels(website),
             "training_cards": [
                 {
                     "title": "Cursos Online 100%",
