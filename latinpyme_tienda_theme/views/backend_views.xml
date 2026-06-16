@@ -240,6 +240,7 @@
         <field name="sequence" widget="handle"/>
         <field name="name"/>
         <field name="category_id"/>
+        <field name="internal_category_id"/>
         <field name="category_search_name"/>
         <field name="product_count"/>
         <field name="website_id"/>
@@ -263,6 +264,7 @@
             </group>
             <group>
               <field name="category_id"/>
+              <field name="internal_category_id"/>
               <field name="category_search_name"/>
               <field name="website_id"/>
               <field name="product_count" readonly="1"/>
@@ -291,12 +293,14 @@
       <search string="Buscar carruseles">
         <field name="name"/>
         <field name="category_id"/>
+        <field name="internal_category_id"/>
         <field name="category_search_name"/>
         <filter name="active" string="Activos" domain="[('active', '=', True)]"/>
         <filter name="inactive" string="Inactivos" domain="[('active', '=', False)]"/>
         <filter name="without_category" string="Sin categoria asignada" domain="[('category_id', '=', False)]"/>
         <group expand="0" string="Agrupar">
           <filter name="group_by_category" string="Categoria" context="{'group_by': 'category_id'}"/>
+          <filter name="group_by_internal_category" string="Categoria interna" context="{'group_by': 'internal_category_id'}"/>
           <filter name="group_by_website" string="Sitio web" context="{'group_by': 'website_id'}"/>
           <filter name="group_by_active" string="Activo" context="{'group_by': 'active'}"/>
         </group>

@@ -20,6 +20,45 @@ BANNER_PLACEMENTS = [
     ("footer", "Footer"),
 ]
 
+DEFAULT_PRODUCT_CAROUSELS = [
+    {
+        "sequence": 10,
+        "name": "Talleres",
+        "description": "Formacion practica para equipos y empresarios.",
+        "search_name": "Taller",
+    },
+    {
+        "sequence": 20,
+        "name": "Cursos de Auditoría",
+        "description": "Cursos especializados en auditoria y gestion.",
+        "search_name": "Auditor",
+    },
+    {
+        "sequence": 30,
+        "name": "Cursos de Seguridad Vial",
+        "description": "Capacitaciones enfocadas en prevencion y seguridad vial.",
+        "search_name": "Seguridad Vial",
+    },
+    {
+        "sequence": 40,
+        "name": "Diplomados",
+        "description": "Programas especializados de mayor profundidad.",
+        "search_name": "Diplomado",
+    },
+    {
+        "sequence": 50,
+        "name": "FlashTraining",
+        "description": "Capacitaciones cortas para actualizacion rapida.",
+        "search_name": "FlashTraining",
+    },
+    {
+        "sequence": 60,
+        "name": "Cursos Gratis",
+        "description": "Contenidos gratuitos disponibles en la tienda.",
+        "search_name": "Gratis",
+    },
+]
+
 
 def _current_website():
     try:
@@ -252,6 +291,12 @@ class LatinpymeTiendaProductCarousel(models.Model):
         ondelete="restrict",
         help="Categoria publica de ecommerce usada para listar productos del carrusel.",
     )
+    internal_category_id = fields.Many2one(
+        "product.category",
+        string="Categoria interna",
+        ondelete="restrict",
+        help="Fallback opcional si los productos todavia no tienen categoria publica de ecommerce.",
+    )
     category_search_name = fields.Char(
         string="Buscar categoria por nombre",
         help="Fallback para datos iniciales: si no hay categoria asignada, se buscan categorias publicas por este texto.",
@@ -264,7 +309,7 @@ class LatinpymeTiendaProductCarousel(models.Model):
     )
     product_count = fields.Integer(string="Productos", compute="_compute_product_ids")
 
-    @api.depends("category_id", "category_search_name", "website_id")
+    @api.depends("category_id", "internal_category_id", "category_search_name", "website_id")
     def _compute_product_ids(self):
         for carousel in self:
             products = carousel._get_related_products()
@@ -282,16 +327,19 @@ class LatinpymeTiendaProductCarousel(models.Model):
             return Category.browse()
         return Category.search([("name", "ilike", search_name)])
 
-    def _get_related_products(self, website=None):
+    def _get_related_internal_categories(self, search_name=None):
         self.ensure_one()
-        Product = self.env["product.template"].sudo()
-        Category = self.env["product.public.category"].sudo()
-        categories = self._get_related_categories()
-        if not categories:
-            return Product.browse()
+        Category = self.env["product.category"].sudo()
+        if self.internal_category_id:
+            return self.internal_category_id
 
-        category_ids = Category.search([("id", "child_of", categories.ids)]).ids
-        domain = [("public_categ_ids", "in", category_ids)]
+        search_name = (search_name or self.category_search_name or "").strip()
+        if not search_name:
+            return Category.browse()
+        return Category.search([("name", "ilike", search_name)])
+
+    def _base_product_domain(self, Product, website=None):
+        domain = []
         if "active" in Product._fields:
             domain.append(("active", "=", True))
         if "sale_ok" in Product._fields:
@@ -302,12 +350,68 @@ class LatinpymeTiendaProductCarousel(models.Model):
             domain.append(("website_published", "=", True))
         if website and "website_id" in Product._fields:
             domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
+        return domain
 
+    @api.model
+    def _product_order(self, Product):
         order_fields = []
         for field_name in ("website_sequence", "sequence", "name"):
             if field_name in Product._fields:
                 order_fields.append("%s asc" % field_name)
-        return Product.search(domain, order=", ".join(order_fields) or "name asc")
+        return ", ".join(order_fields) or "name asc"
+
+    def _get_related_products(self, website=None, search_name=None):
+        self.ensure_one()
+        Product = self.env["product.template"].sudo()
+        Category = self.env["product.public.category"].sudo()
+        domain_base = self._base_product_domain(Product, website=website)
+        order = self._product_order(Product)
+
+        categories = self._get_related_categories()
+        search_name = (search_name or self.category_search_name or self.name or "").strip()
+        category_ids = Category.search([("id", "child_of", categories.ids)]).ids
+        if category_ids:
+            products = Product.search(domain_base + [("public_categ_ids", "in", category_ids)], order=order)
+            if products:
+                return products
+
+        internal_categories = self._get_related_internal_categories(search_name=search_name)
+        if internal_categories and "categ_id" in Product._fields:
+            products = Product.search(domain_base + [("categ_id", "child_of", internal_categories.ids)], order=order)
+            if products:
+                return products
+
+        if search_name:
+            products = Product.search(domain_base + [("name", "ilike", search_name)], order=order)
+            if products:
+                return products
+        return Product.browse()
+
+    @api.model
+    def _get_products_by_search_name(self, search_name, website=None):
+        search_name = (search_name or "").strip()
+        Product = self.env["product.template"].sudo()
+        PublicCategory = self.env["product.public.category"].sudo()
+        InternalCategory = self.env["product.category"].sudo()
+        domain_base = self._base_product_domain(Product, website=website)
+        order = self._product_order(Product)
+        if not search_name:
+            return Product.browse()
+
+        public_categories = PublicCategory.search([("name", "ilike", search_name)])
+        public_category_ids = PublicCategory.search([("id", "child_of", public_categories.ids)]).ids
+        if public_category_ids:
+            products = Product.search(domain_base + [("public_categ_ids", "in", public_category_ids)], order=order)
+            if products:
+                return products
+
+        internal_categories = InternalCategory.search([("name", "ilike", search_name)])
+        if internal_categories and "categ_id" in Product._fields:
+            products = Product.search(domain_base + [("categ_id", "child_of", internal_categories.ids)], order=order)
+            if products:
+                return products
+
+        return Product.search(domain_base + [("name", "ilike", search_name)], order=order)
 
     def _category_url(self):
         self.ensure_one()
@@ -357,6 +461,24 @@ class LatinpymeTiendaProductCarousel(models.Model):
                     "category_url": carousel._category_url(),
                     "products": [
                         carousel._product_frontend_values(product, website=website)
+                        for product in products
+                    ],
+                }
+            )
+        if values:
+            return values
+
+        for spec in DEFAULT_PRODUCT_CAROUSELS:
+            products = self._get_products_by_search_name(spec["search_name"], website=website)
+            if not products:
+                continue
+            values.append(
+                {
+                    "name": spec["name"],
+                    "description": spec["description"],
+                    "category_url": "/shop?search=%s" % quote(spec["search_name"]),
+                    "products": [
+                        self._product_frontend_values(product, website=website)
                         for product in products
                     ],
                 }
