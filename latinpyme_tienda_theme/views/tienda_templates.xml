@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+  <record id="base.module_latinpyme_tienda_theme" model="ir.module.module">
+    <field name="shortdesc">Tienda LatinPyme</field>
+    <field name="summary">Administracion personalizada de Tienda LatinPyme</field>
+    <field name="description">Aplicacion administrable para la experiencia de Tienda LatinPyme en Odoo 19.
+
+Incluye configuracion de header, menu, footer, banners, carruseles y home de tienda, manteniendo separacion con Revista LatinPyme y sin tocar checkout ni pagos.</field>
+    <field name="website">https://tienda.latinpyme.com</field>
+    <field name="application">1</field>
+    <field name="latest_version">19.0.1.6.1</field>
+  </record>
+
   <template id="lp_tienda_social_links" name="Tienda LatinPyme Social Links">
     <div class="lp-tienda-social" aria-label="Redes sociales">
       <a

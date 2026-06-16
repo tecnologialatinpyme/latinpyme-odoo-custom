@@ -122,7 +122,7 @@ class LatinpymeTiendaConfig(models.Model):
             "description": description,
             "website": "https://tienda.latinpyme.com",
             "application": True,
-            "latest_version": "19.0.1.6.0",
+            "latest_version": "19.0.1.6.1",
         }
         module.write(
             {
