@@ -103,6 +103,37 @@ class LatinpymeTiendaConfig(models.Model):
     whatsapp_url = fields.Char(string="URL WhatsApp", default="https://wa.link/i0n10b")
 
     @api.model
+    def _refresh_module_metadata(self):
+        module = self.env["ir.module.module"].sudo().search(
+            [("name", "=", "latinpyme_tienda_theme")],
+            limit=1,
+        )
+        if not module:
+            return True
+
+        description = (
+            "Aplicacion administrable para la experiencia de Tienda LatinPyme en Odoo 19.\n\n"
+            "Incluye configuracion de header, menu, footer, banners, carruseles y home de tienda, "
+            "manteniendo separacion con Revista LatinPyme y sin tocar checkout ni pagos."
+        )
+        metadata = {
+            "shortdesc": "Tienda LatinPyme",
+            "summary": "Administracion personalizada de Tienda LatinPyme",
+            "description": description,
+            "website": "https://tienda.latinpyme.com",
+            "application": True,
+            "latest_version": "19.0.1.6.0",
+        }
+        module.write(
+            {
+                field_name: value
+                for field_name, value in metadata.items()
+                if field_name in module._fields
+            }
+        )
+        return True
+
+    @api.model
     def _domain_to_host(self, value):
         value = (value or "").strip().lower()
         if not value:

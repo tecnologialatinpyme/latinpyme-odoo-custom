@@ -2,7 +2,7 @@
 
 {
     "name": "Tienda LatinPyme",
-    "version": "19.0.1.5.2",
+    "version": "19.0.1.6.0",
     "category": "Website/eCommerce",
     "summary": "Administracion personalizada de Tienda LatinPyme",
     "description": """
@@ -20,6 +20,7 @@ manteniendo separacion con Revista LatinPyme y sin tocar checkout ni pagos.
     ],
     "data": [
         "security/ir.model.access.csv",
+        "data/module_metadata.xml",
         "data/tienda_defaults.xml",
         "views/backend_views.xml",
         "views/tienda_templates.xml",
