@@ -2,7 +2,7 @@
 
 {
     "name": "Tienda LatinPyme",
-    "version": "19.0.1.3.0",
+    "version": "19.0.1.4.0",
     "category": "Website/eCommerce",
     "summary": "Administracion minima de Tienda LatinPyme",
     "description": """
@@ -21,6 +21,7 @@ backend y conserva el home visual estable de tienda.
     "data": [
         "security/ir.model.access.csv",
         "data/tienda_config.xml",
+        "data/tienda_carousels.xml",
         "views/backend_views.xml",
         "views/tienda_templates.xml",
         "views/shop_templates.xml",

@@ -12,6 +12,8 @@ class LatinpymeTiendaController(Website):
         """Temporary storefront data, grouped for a future backend-managed phase."""
         shop_url = "/shop"
         whatsapp_url = "https://wa.link/i0n10b"
+        website = getattr(request, "website", False)
+        ProductCarousel = request.env["latinpyme.tienda.product.carousel"].sudo()
         social_links = [
             {
                 "label": "Facebook",
@@ -58,38 +60,7 @@ class LatinpymeTiendaController(Website):
                 "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
                 "url": shop_url,
             },
-            "course_categories": [
-                {
-                    "title": "Cursos de Auditor en SG-SST",
-                    "summary": "Fórmate para evaluar y mejorar sistemas de gestión.",
-                    "href": "/shop?search=SG-SST",
-                    "icon": "fa-shield",
-                },
-                {
-                    "title": "Cursos de Seguridad Vial",
-                    "summary": "Capacítate en prevención y cultura de seguridad vial.",
-                    "href": "/shop?search=seguridad%20vial",
-                    "icon": "fa-road",
-                },
-                {
-                    "title": "Cursos de IA",
-                    "summary": "Impulsa tu futuro. Aprende IA aplicada a tu trabajo y tu empresa.",
-                    "href": "/shop?search=inteligencia%20artificial",
-                    "icon": "fa-cogs",
-                },
-                {
-                    "title": "Diplomados",
-                    "summary": "Programas especializados para avanzar en tu carrera.",
-                    "href": "/shop?search=diplomado",
-                    "icon": "fa-graduation-cap",
-                },
-                {
-                    "title": "Talleres",
-                    "summary": "Formación práctica con resultados inmediatos.",
-                    "href": "/shop?search=taller",
-                    "icon": "fa-book",
-                },
-            ],
+            "product_carousels": ProductCarousel.get_home_carousels(website=website),
             "training_cards": [
                 {
                     "title": "Cursos Online 100%",
