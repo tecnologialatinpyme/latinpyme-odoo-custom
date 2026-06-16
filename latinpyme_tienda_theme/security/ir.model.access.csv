@@ -3,3 +3,4 @@ access_latinpyme_tienda_config_system,latinpyme.tienda.config system,model_latin
 access_latinpyme_tienda_config_designer,latinpyme.tienda.config designer,model_latinpyme_tienda_config,website.group_website_designer,1,1,1,0
 access_latinpyme_tienda_product_carousel_system,latinpyme.tienda.product.carousel system,model_latinpyme_tienda_product_carousel,base.group_system,1,1,1,1
 access_latinpyme_tienda_product_carousel_designer,latinpyme.tienda.product.carousel designer,model_latinpyme_tienda_product_carousel,website.group_website_designer,1,1,1,0
+access_latinpyme_tienda_product_carousel_public,latinpyme.tienda.product.carousel public,model_latinpyme_tienda_product_carousel,base.group_public,1,0,0,0

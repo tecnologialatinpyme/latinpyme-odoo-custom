@@ -15,7 +15,7 @@ class LatinpymeTiendaController(Website):
     def _home_product_carousels(self, website):
         try:
             with request.env.cr.savepoint():
-                ProductCarousel = request.env["latinpyme.tienda.product.carousel"].sudo()
+                ProductCarousel = request.env["latinpyme.tienda.product.carousel"]
                 return ProductCarousel.get_home_carousels(website=website)
         except Exception as exc:
             _logger.info("No se pudieron cargar los carruseles de Tienda LatinPyme: %s", exc)
@@ -226,6 +226,8 @@ class LatinpymeTiendaController(Website):
             return self._render_tienda_home()
         return super().index(**kwargs)
 
-    @http.route("/tienda", type="http", auth="public", website=True, sitemap=True)
+    @http.route("/tienda", type="http", auth="public", website=True, sitemap=False)
     def tienda_home(self, **kwargs):
+        if not self._is_tienda_website():
+            return request.redirect("https://tienda.latinpyme.com/", code=301)
         return self._render_tienda_home()

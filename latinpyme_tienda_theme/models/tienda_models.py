@@ -3,6 +3,7 @@
 from urllib.parse import quote
 
 from odoo import api, fields, models
+from odoo.fields import Domain
 
 
 class LatinpymeTiendaConfig(models.Model):
@@ -52,17 +53,20 @@ class LatinpymeTiendaProductCarousel(models.Model):
 
     @api.model
     def _base_product_domain(self, Product, website=None):
-        domain = []
+        if website and hasattr(website, "sale_product_domain"):
+            domain = Domain(website.sale_product_domain())
+        else:
+            domain = Domain.TRUE
         if "active" in Product._fields:
-            domain.append(("active", "=", True))
+            domain &= Domain("active", "=", True)
         if "sale_ok" in Product._fields:
-            domain.append(("sale_ok", "=", True))
+            domain &= Domain("sale_ok", "=", True)
         if "is_published" in Product._fields:
-            domain.append(("is_published", "=", True))
+            domain &= Domain("is_published", "=", True)
         elif "website_published" in Product._fields:
-            domain.append(("website_published", "=", True))
-        if website and "website_id" in Product._fields:
-            domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
+            domain &= Domain("website_published", "=", True)
+        if "service_tracking" in Product._fields and hasattr(Product, "_get_saleable_tracking_types"):
+            domain &= Domain("service_tracking", "in", Product._get_saleable_tracking_types())
         return domain
 
     @api.model
@@ -73,49 +77,54 @@ class LatinpymeTiendaProductCarousel(models.Model):
                 order_fields.append("%s asc" % field_name)
         return ", ".join(order_fields) or "name asc"
 
-    def _get_related_categories(self):
+    def _get_related_categories(self, website=None):
         self.ensure_one()
-        Category = self.env["product.public.category"].sudo()
+        Category = self.env["product.public.category"]
+        domain = Domain.TRUE
+        if website and hasattr(website, "website_domain"):
+            domain &= Domain(website.website_domain())
         if self.category_id:
-            return Category.search([("id", "child_of", self.category_id.id)])
+            return Category.search(domain & Domain("id", "child_of", self.category_id.id))
 
         search_name = (self.category_search_name or self.name or "").strip()
         if not search_name:
             return Category.browse()
-        categories = Category.search([("name", "ilike", search_name)])
-        return Category.search([("id", "child_of", categories.ids)]) if categories else categories
+        categories = Category.search(domain & Domain("name", "ilike", search_name))
+        return Category.search(domain & Domain("id", "child_of", categories.ids)) if categories else categories
 
     def _get_related_products(self, website=None):
         self.ensure_one()
-        Product = self.env["product.template"].sudo()
+        Product = self.env["product.template"]
         domain_base = self._base_product_domain(Product, website=website)
         order = self._product_order(Product)
         search_name = (self.category_search_name or self.name or "").strip()
 
-        categories = self._get_related_categories()
+        categories = self._get_related_categories(website=website)
         if categories and "public_categ_ids" in Product._fields:
-            products = Product.search(domain_base + [("public_categ_ids", "in", categories.ids)], order=order)
+            products = Product.search(domain_base & Domain("public_categ_ids", "in", categories.ids), order=order)
             if products:
                 return products
 
         if search_name and "categ_id" in Product._fields:
-            internal_categories = self.env["product.category"].sudo().search([("name", "ilike", search_name)])
+            internal_categories = self.env["product.category"].search([("name", "ilike", search_name)])
             if internal_categories:
-                products = Product.search(domain_base + [("categ_id", "child_of", internal_categories.ids)], order=order)
+                products = Product.search(domain_base & Domain("categ_id", "child_of", internal_categories.ids), order=order)
                 if products:
                     return products
 
         if search_name:
-            products = Product.search(domain_base + [("name", "ilike", search_name)], order=order)
+            products = Product.search(domain_base & Domain("name", "ilike", search_name), order=order)
             if products:
                 return products
         return Product.browse()
 
-    def _category_url(self):
+    def _category_url(self, website=None):
         self.ensure_one()
-        category = self.category_id or self._get_related_categories()[:1]
+        category = self.category_id or self._get_related_categories(website=website)[:1]
         if category and "website_url" in category._fields and category.website_url:
             return category.website_url
+        if category:
+            return "/shop/category/%s" % category.id
         search_text = self.category_search_name or self.name
         return "/shop?search=%s" % quote(search_text or "")
 
@@ -153,7 +162,7 @@ class LatinpymeTiendaProductCarousel(models.Model):
                 {
                     "name": carousel.name,
                     "description": carousel.description,
-                    "category_url": carousel._category_url(),
+                    "category_url": carousel._category_url(website=website),
                     "products": [
                         carousel._product_frontend_values(product, website=website)
                         for product in products
