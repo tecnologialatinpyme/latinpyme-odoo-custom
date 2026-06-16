@@ -15,43 +15,6 @@ class IrHttp(models.AbstractModel):
         return super()._serve_page()
 
     @classmethod
-    def _register_website_track(cls, response):
-        if cls._skip_latinpyme_revista_website_track():
-            return False
-        return super()._register_website_track(response)
-
-    @classmethod
-    def _skip_latinpyme_revista_website_track(cls):
-        try:
-            path = request.httprequest.path or ""
-            host = (request.httprequest.host or "").split(":", 1)[0].lower()
-            website = getattr(request, "website", False)
-        except Exception:
-            return False
-
-        if not (
-            path == "/blog/revista-latinpyme-2"
-            or path.startswith("/blog/revista-latinpyme-2/")
-            or path == "/revista"
-            or path.startswith("/revista/")
-        ):
-            return False
-
-        website_domain = ""
-        website_name = ""
-        if website:
-            website_domain = (
-                (getattr(website, "domain", "") or "").split(":", 1)[0].lower()
-            )
-            website_name = (getattr(website, "name", "") or "").lower()
-
-        return (
-            host in ("latinpyme.com", "revista.latinpyme.com")
-            or website_domain in ("latinpyme.com", "revista.latinpyme.com")
-            or "revista" in website_name
-        )
-
-    @classmethod
     def _serve_latinpyme_revista_seo_redirect(cls):
         website = getattr(request, "website", False)
         if not website:

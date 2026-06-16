@@ -2,14 +2,14 @@
 
 {
     "name": "Tienda LatinPyme",
-    "version": "19.0.1.6.2",
+    "version": "19.0.1.2.0",
     "category": "Website/eCommerce",
-    "summary": "Administracion personalizada de Tienda LatinPyme",
+    "summary": "Administracion minima de Tienda LatinPyme",
     "description": """
-Aplicacion administrable para la experiencia de Tienda LatinPyme en Odoo 19.
+Base visual y acceso backend minimo para Tienda LatinPyme en Odoo 19.
 
-Incluye configuracion de header, menu, footer, banners y home de tienda,
-manteniendo separacion con Revista LatinPyme y sin tocar checkout ni pagos.
+Esta fase no agrega modelos administrables ni carruseles. Solo expone la app
+backend y conserva el home visual estable de tienda.
     """,
     "author": "LatinPyme",
     "website": "https://tienda.latinpyme.com",
@@ -19,9 +19,6 @@ manteniendo separacion con Revista LatinPyme y sin tocar checkout ni pagos.
         "website_sale",
     ],
     "data": [
-        "security/ir.model.access.csv",
-        "data/module_metadata.xml",
-        "data/tienda_defaults.xml",
         "views/backend_views.xml",
         "views/tienda_templates.xml",
         "views/shop_templates.xml",
