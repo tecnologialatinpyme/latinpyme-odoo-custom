@@ -2,14 +2,14 @@
 
 {
     "name": "Tienda LatinPyme",
-    "version": "19.0.1.4.0",
+    "version": "19.0.1.3.0",
     "category": "Website/eCommerce",
     "summary": "Administracion minima de Tienda LatinPyme",
     "description": """
-Base visual y acceso backend para Tienda LatinPyme en Odoo 19.
+Base visual y acceso backend minimo para Tienda LatinPyme en Odoo 19.
 
-Esta fase agrega administracion backend de carruseles sin conectarlos todavia
-al home visual estable de tienda.
+Esta fase no agrega modelos administrables ni carruseles. Solo expone la app
+backend y conserva el home visual estable de tienda.
     """,
     "author": "LatinPyme",
     "website": "https://tienda.latinpyme.com",
