@@ -221,7 +221,16 @@
             <div class="lp-tienda-product-carousels__stack">
               <section class="lp-tienda-product-carousel" t-foreach="product_carousels" t-as="carousel">
                 <header class="lp-tienda-product-carousel__head">
-                  <h3 t-out="carousel['name']"/>
+                  <span class="lp-tienda-product-carousel__title">
+                    <img
+                      t-if="carousel['name'] == 'Talleres'"
+                      class="lp-tienda-product-carousel__icon"
+                      src="/latinpyme_tienda_theme/static/src/img/talleres-icon.png"
+                      alt=""
+                      loading="lazy"
+                      aria-hidden="true"/>
+                    <h3 t-out="carousel['name']"/>
+                  </span>
                   <a class="lp-tienda-product-carousel__all" t-att-href="carousel['url']">
                     Ver todos
                     <i class="fa fa-arrow-right" aria-hidden="true"/>

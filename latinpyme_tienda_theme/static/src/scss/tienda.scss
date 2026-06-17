@@ -481,6 +481,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+}
+
+.lp-tienda-product-carousel__title {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
 
   h3 {
     margin: 0;
@@ -489,6 +496,15 @@
     font-weight: 950;
     line-height: 1.1;
   }
+}
+
+.lp-tienda-product-carousel__icon {
+  display: block;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 8px;
+  object-fit: contain;
 }
 
 .lp-tienda-product-carousel__all {
