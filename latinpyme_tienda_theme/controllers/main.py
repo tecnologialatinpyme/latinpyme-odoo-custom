@@ -21,8 +21,6 @@ class LatinpymeTiendaController(Website):
                 category_domain = []
                 if "active" in Category._fields:
                     category_domain.append(("active", "=", True))
-                if "parent_id" in Category._fields:
-                    category_domain.append(("parent_id", "=", False))
                 if website and "website_id" in Category._fields:
                     category_domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
 
@@ -43,15 +41,8 @@ class LatinpymeTiendaController(Website):
                 currency = getattr(website, "currency_id", False) or request.env.company.currency_id
                 carousels = []
                 for category in categories:
-                    category_ids = [category.id]
-                    if "parent_id" in Category._fields:
-                        child_domain = [("id", "child_of", category.id)]
-                        if website and "website_id" in Category._fields:
-                            child_domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
-                        category_ids = Category.search(child_domain).ids
-
                     products = Product.search(
-                        product_base_domain + [("public_categ_ids", "in", category_ids)],
+                        product_base_domain + [("public_categ_ids", "in", [category.id])],
                         order=product_order,
                         limit=10,
                     )
