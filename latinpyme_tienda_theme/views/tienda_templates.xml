@@ -94,10 +94,12 @@
   <template id="lp_tienda_solution_card" name="Tienda LatinPyme Solution Card">
     <article class="lp-tienda-solution-card">
       <a class="lp-tienda-solution-card__media" t-att-href="item['href']" t-att-aria-label="item['title']">
-        <i t-attf-class="fa #{item['icon']}" aria-hidden="true"/>
+        <span t-out="item['title']"/>
       </a>
       <div class="lp-tienda-solution-card__body">
-        <h3 t-out="item['title']"/>
+        <span class="lp-tienda-solution-card__icon" aria-hidden="true">
+          <i t-attf-class="fa #{item['icon']}"/>
+        </span>
         <p class="lp-tienda-solution-card__subtitle" t-if="item.get('subtitle')" t-out="item['subtitle']"/>
         <p t-out="item['summary']"/>
         <ul t-if="item.get('bullets')">
