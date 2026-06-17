@@ -811,39 +811,62 @@
 }
 
 .lp-tienda-ad-slot {
-  display: none;
-  gap: 8px;
-  min-height: 150px;
-  padding: 18px;
-  background: #fbfbfc;
-  color: #c1c4ca;
-  text-align: center;
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  color: #8a919d;
 
   > span {
-    font-size: 14px;
-    font-style: italic;
+    color: #8a919d;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    line-height: 1;
+    text-transform: uppercase;
   }
 
   > div {
+    position: relative;
     display: grid;
-    min-height: 118px;
+    min-height: 132px;
+    overflow: hidden;
     place-items: center;
-    border: 2px dashed #d2d5db;
-    border-left: 6px solid var(--lp-tienda-red);
+    border: 1px solid rgba(16, 20, 27, .08);
     border-radius: var(--lp-tienda-radius);
-    background: #f5f5f6;
+    background:
+      linear-gradient(135deg, rgba(200, 0, 26, .045), rgba(255, 255, 255, 0) 42%),
+      linear-gradient(180deg, #fff, #f7f8fa);
+    box-shadow: 0 12px 30px rgba(17, 19, 24, .055);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(16, 20, 27, .06);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .36);
+    }
   }
 
   strong {
-    max-width: 300px;
-    font-size: 18px;
-    font-weight: 500;
-    letter-spacing: .03em;
+    position: relative;
+    z-index: 1;
+    color: #737b87;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
   }
 }
 
 .lp-tienda-ad-horizontal {
-  display: none;
+  display: grid;
+  margin-block: -18px -8px;
+
+  .lp-tienda-ad-slot > div {
+    min-height: 150px;
+    aspect-ratio: 1181 / 161;
+  }
 }
 
 .lp-tienda-tech-layout {
@@ -1190,15 +1213,19 @@
   }
 
   .lp-tienda-tech-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: stretch;
   }
 
-  .lp-tienda-tech-layout .lp-tienda-ad-slot {
+  .lp-tienda-tech-layout > .lp-tienda-solution-grid {
+    grid-column: span 2;
+  }
+
+  .lp-tienda-tech-layout > .lp-tienda-ad-slot {
     min-height: 100%;
 
     > div {
-      min-height: 420px;
+      min-height: 100%;
     }
   }
 
@@ -1276,6 +1303,14 @@
   .lp-tienda-product-carousel {
     gap: 16px;
     padding: 18px;
+  }
+
+  .lp-tienda-ad-horizontal {
+    margin-block: -12px -4px;
+
+    .lp-tienda-ad-slot > div {
+      min-height: 96px;
+    }
   }
 
   .lp-tienda-product-carousel__head {
