@@ -662,19 +662,19 @@
 
 .lp-tienda-solution-card__media {
   display: flex;
-  min-height: 60px;
+  min-height: 52px;
   align-items: center;
   justify-content: center;
   place-items: center;
   background: var(--lp-tienda-red);
   color: #fff !important;
-  padding: 16px 18px;
+  padding: 13px 18px;
   text-align: center;
   -webkit-text-fill-color: #fff;
 
   span {
     color: #fff !important;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1.14;
@@ -685,12 +685,12 @@
 
 .lp-tienda-solution-card__icon {
   display: grid;
-  width: 70px;
-  height: 70px;
+  width: 58px;
+  height: 58px;
   place-items: center;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
   color: var(--lp-tienda-red);
-  font-size: 40px;
+  font-size: 34px;
   line-height: 1;
 
   i,
@@ -706,7 +706,7 @@
   flex: 1;
   flex-direction: column;
   background: linear-gradient(180deg, #fff, #fff7f8);
-  padding: 34px 30px 28px;
+  padding: 24px 26px 24px;
 
   h3 {
     display: none;
@@ -715,26 +715,26 @@
   p,
   li {
     color: #303946;
-    font-size: 16px;
+    font-size: 14.5px;
     font-weight: 500;
-    line-height: 1.42;
+    line-height: 1.34;
   }
 
   p {
-    margin-bottom: 18px;
+    margin-bottom: 12px;
   }
 
   ul {
     display: grid;
-    gap: 9px;
-    margin: 0 0 26px;
+    gap: 6px;
+    margin: 0 0 18px;
     padding-left: 0;
     list-style: none;
   }
 
   li {
     position: relative;
-    padding-left: 20px;
+    padding-left: 17px;
 
     &::before {
       content: "•";
@@ -742,7 +742,7 @@
       top: -.02em;
       left: 0;
       color: #303946;
-      font-size: 17px;
+      font-size: 15px;
       line-height: 1.2;
     }
   }
@@ -750,7 +750,7 @@
   .lp-tienda-button {
     width: 152px;
     max-width: 100%;
-    min-height: 42px;
+    min-height: 40px;
     margin: auto auto 0;
     color: #fff !important;
     box-shadow: 0 10px 22px rgba(151, 0, 20, .18);
@@ -763,11 +763,11 @@
   max-width: 100%;
   border: 0;
   border-radius: 0;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   background: transparent;
   color: var(--lp-tienda-red) !important;
   padding: 0;
-  font-size: 13px !important;
+  font-size: 12px !important;
   font-weight: 900 !important;
   letter-spacing: .02em;
   line-height: 1.2 !important;
@@ -1310,7 +1310,7 @@
   }
 
   .lp-tienda-solution-card__body {
-    padding: 20px;
+    padding: 20px 22px 22px;
 
     h3 {
       font-size: 16px;
@@ -1323,11 +1323,11 @@
   }
 
   .lp-tienda-solution-card__media {
-    min-height: 54px;
-    padding: 14px 16px;
+    min-height: 50px;
+    padding: 12px 16px;
 
     span {
-      font-size: 15px;
+      font-size: 14px;
     }
   }
 
