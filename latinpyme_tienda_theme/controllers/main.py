@@ -2,6 +2,7 @@
 
 import logging
 from datetime import date
+from unicodedata import normalize
 
 from odoo import http
 from odoo.addons.website.controllers.main import Website
@@ -9,6 +10,27 @@ from odoo.http import request
 
 
 _logger = logging.getLogger(__name__)
+
+_HOME_CAROUSEL_CATEGORY_GROUPS = (
+    ("Talleres",),
+    ("Cursos de Auditoría", "Cursos de Auditoria"),
+    ("Cursos de Seguridad Vial",),
+    ("Diplomados",),
+    ("FlashTraining",),
+    ("Cursos Gratis",),
+)
+
+
+def _category_key(value):
+    value = normalize("NFKD", value or "").encode("ascii", "ignore").decode("ascii")
+    return " ".join(value.lower().split())
+
+
+_HOME_CAROUSEL_CATEGORY_ORDER = {
+    _category_key(name): index
+    for index, names in enumerate(_HOME_CAROUSEL_CATEGORY_GROUPS)
+    for name in names
+}
 
 
 class LatinpymeTiendaController(Website):
@@ -22,7 +44,19 @@ class LatinpymeTiendaController(Website):
                 if website and "website_id" in Category._fields:
                     category_domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
 
-                categories = Category.search(category_domain, order="sequence asc, name asc", limit=30)
+                categories = Category.search(category_domain, order="sequence asc, name asc", limit=100)
+                categories = [
+                    category
+                    for category in categories
+                    if _category_key(category.name) in _HOME_CAROUSEL_CATEGORY_ORDER
+                ]
+                categories.sort(
+                    key=lambda category: (
+                        _HOME_CAROUSEL_CATEGORY_ORDER[_category_key(category.name)],
+                        category.sequence,
+                        category.name,
+                    )
+                )
                 product_base_domain = []
                 if "active" in Product._fields:
                     product_base_domain.append(("active", "=", True))
