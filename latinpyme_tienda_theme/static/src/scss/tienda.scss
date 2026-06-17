@@ -843,6 +843,14 @@
 .lp-tienda-tech-layout {
   display: grid;
   gap: 26px;
+
+  > .lp-tienda-ad-slot {
+    gap: 0;
+
+    > span {
+      display: none;
+    }
+  }
 }
 
 .lp-tienda-allies {
@@ -1177,18 +1185,19 @@
 
   .lp-tienda-tech-layout > .lp-tienda-solution-grid {
     grid-column: span 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .lp-tienda-tech-layout > .lp-tienda-ad-slot {
     display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
     align-self: stretch;
     height: 100%;
     min-height: 100%;
 
     > div {
       height: 100%;
-      min-height: 0;
+      min-height: 100%;
     }
   }
 
