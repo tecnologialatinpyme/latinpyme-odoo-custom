@@ -221,11 +221,14 @@
             <div class="lp-tienda-product-carousels__stack">
               <section class="lp-tienda-product-carousel" t-foreach="product_carousels" t-as="carousel">
                 <header class="lp-tienda-product-carousel__head">
+                  <t
+                    t-set="carousel_icon"
+                    t-value="'/latinpyme_tienda_theme/static/src/img/talleres-icon.png' if carousel['name'] == 'Talleres' else '/latinpyme_tienda_theme/static/src/img/icon-auditoria.png' if 'Auditor' in carousel['name'] else '/latinpyme_tienda_theme/static/src/img/icon-seguridad-vial.png' if 'Seguridad Vial' in carousel['name'] else '/latinpyme_tienda_theme/static/src/img/icon-diplomado.png' if 'Diplomado' in carousel['name'] else '/latinpyme_tienda_theme/static/src/img/icon-flashtraining.png' if 'FlashTraining' in carousel['name'] else False"/>
                   <span class="lp-tienda-product-carousel__title">
                     <img
-                      t-if="carousel['name'] == 'Talleres'"
+                      t-if="carousel_icon"
                       class="lp-tienda-product-carousel__icon"
-                      src="/latinpyme_tienda_theme/static/src/img/talleres-icon.png"
+                      t-att-src="carousel_icon"
                       alt=""
                       loading="lazy"
                       aria-hidden="true"/>
