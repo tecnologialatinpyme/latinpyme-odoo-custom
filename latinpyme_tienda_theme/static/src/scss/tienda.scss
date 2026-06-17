@@ -1022,18 +1022,17 @@
 }
 
 .lp-tienda-footer {
-  background: #f7f8fa;
-  padding-block: 44px 34px;
+  background: #fff;
+  padding-block: 34px 36px;
 }
 
 .lp-tienda-footer__inner {
   display: grid;
-  gap: 34px;
-  border: 1px solid rgba(16, 20, 27, .07);
-  border-radius: var(--lp-tienda-radius);
-  background: #fff;
-  padding: 38px;
-  box-shadow: 0 16px 38px rgba(17, 19, 24, .06);
+  gap: 32px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #fff7f7, #fff);
+  padding: 36px;
+  box-shadow: 0 12px 36px rgba(17, 19, 24, .05);
 }
 
 .lp-tienda-footer__brand {
@@ -1042,11 +1041,11 @@
   align-content: start;
 
   p {
-    max-width: 240px;
+    max-width: 190px;
     margin: 0;
-    color: #4d5561;
-    font-size: 13.5px;
-    line-height: 1.5;
+    color: #3c434f;
+    font-size: 13px;
+    line-height: 1.35;
   }
 }
 
@@ -1058,14 +1057,16 @@
 }
 
 .lp-tienda-footer .lp-tienda-social {
-  gap: 10px;
+  gap: 12px;
 }
 
 .lp-tienda-footer .lp-tienda-social__link {
-  width: 34px;
-  height: 34px;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
   color: #fff !important;
   font-size: 14px;
+  line-height: 1;
 
   .fa,
   i {
@@ -1075,35 +1076,24 @@
 
 .lp-tienda-footer__column {
   display: grid;
-  gap: 0;
   align-content: start;
+  gap: 0;
 
   h3 {
-    position: relative;
-    margin: 0 0 14px;
-    padding-bottom: 10px;
+    margin: 0 0 12px;
+    padding-bottom: 0;
     color: var(--lp-tienda-ink);
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 900;
     line-height: 1.2;
     text-transform: uppercase;
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 26px;
-      height: 2px;
-      background: var(--lp-tienda-red);
-    }
   }
 
   a,
   span {
     color: #3c434f;
-    font-size: 13.5px;
-    line-height: 1.4;
+    font-size: 13px;
+    line-height: 1.35;
   }
 
   a:hover {
@@ -1114,7 +1104,7 @@
 .lp-tienda-footer__panel {
   display: grid;
   align-content: start;
-  gap: 9px;
+  gap: 7px;
 }
 
 .lp-tienda-footer__contact i {
@@ -1133,13 +1123,10 @@
 .lp-tienda-footer__copy {
   grid-column: 1 / -1;
   justify-self: center;
-  width: 100%;
-  border-top: 1px solid rgba(16, 20, 27, .07);
-  margin-top: 2px;
-  padding-top: 20px;
-  color: #69717d;
-  font-size: 13px;
-  font-weight: 700;
+  margin-top: -4px;
+  color: #5d6470;
+  font-size: 14px;
+  font-weight: 750;
   text-align: center;
 }
 
@@ -1206,8 +1193,8 @@
 
   .lp-tienda-footer__inner {
     grid-template-columns: 1.25fr repeat(4, minmax(120px, 1fr));
-    gap: 34px;
-    padding: 40px;
+    gap: 32px;
+    padding: 36px;
   }
 }
 
