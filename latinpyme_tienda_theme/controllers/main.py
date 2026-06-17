@@ -226,7 +226,7 @@ class LatinpymeTiendaController(Website):
             ],
             "footer_columns": [
                 {
-                    "title": "Secciones",
+                    "title": "SECCIONES",
                     "links": [
                         ("Cursos", "/shop?search=cursos"),
                         ("Capacitación", "/shop?search=capacitacion"),
@@ -235,7 +235,7 @@ class LatinpymeTiendaController(Website):
                     ],
                 },
                 {
-                    "title": "Portafolio",
+                    "title": "PORTAFOLIO",
                     "links": [
                         ("Soluciones", "/shop?search=soluciones"),
                         ("Escuela", "/shop?search=escuela"),
@@ -244,7 +244,7 @@ class LatinpymeTiendaController(Website):
                     ],
                 },
                 {
-                    "title": "Legal",
+                    "title": "LEGAL",
                     "links": [
                         ("Términos de Uso", "/terms"),
                         ("Privacidad y datos", "/terms"),

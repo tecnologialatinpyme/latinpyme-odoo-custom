@@ -134,7 +134,7 @@
           </div>
         </div>
         <div class="lp-tienda-footer__column lp-tienda-footer__contact">
-          <h3>Contacto</h3>
+          <h3>CONTACTO</h3>
           <div class="lp-tienda-footer__panel">
             <a t-att-href="whatsapp_url" target="_blank" rel="noopener">
               <i class="fa fa-whatsapp" aria-hidden="true"/> +57 3162336085
