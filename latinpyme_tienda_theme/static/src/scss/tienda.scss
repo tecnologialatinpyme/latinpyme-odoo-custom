@@ -658,25 +658,22 @@
 .lp-tienda-solution-card__media {
   position: relative;
   display: grid;
-  min-height: 132px;
+  min-height: 124px;
   overflow: hidden;
   place-items: center;
   border-bottom: 1px solid rgba(16, 20, 27, .06);
-  background:
-    linear-gradient(135deg, rgba(200, 0, 26, .08), rgba(255, 255, 255, .92) 46%, rgba(16, 20, 27, .05)),
-    #fff;
+  background: #f7f8fa;
   color: #fff;
   font-size: 32px;
 
-  &::after {
+  &::before {
     content: "";
     position: absolute;
-    right: -40px;
-    bottom: -46px;
-    width: 132px;
-    height: 132px;
-    border-radius: 50%;
-    background: rgba(200, 0, 26, .07);
+    right: 18px;
+    bottom: 0;
+    left: 18px;
+    height: 3px;
+    background: var(--lp-tienda-red);
   }
 
   > i {
@@ -686,10 +683,17 @@
     width: 68px;
     height: 68px;
     place-items: center;
-    border: 1px solid rgba(255, 255, 255, .34);
+    border: 1px solid rgba(255, 255, 255, .18);
     border-radius: 8px;
-    background: linear-gradient(135deg, var(--lp-tienda-red), var(--lp-tienda-red-dark));
-    box-shadow: 0 16px 30px rgba(151, 0, 20, .22);
+    background: var(--lp-tienda-red);
+    color: #fff !important;
+    box-shadow: 0 12px 24px rgba(17, 19, 24, .14);
+    -webkit-text-fill-color: #fff;
+
+    &::before {
+      color: #fff !important;
+      -webkit-text-fill-color: #fff;
+    }
   }
 }
 
