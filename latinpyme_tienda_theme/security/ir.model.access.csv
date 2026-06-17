@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_latinpyme_tienda_config_system,latinpyme.tienda.config system,model_latinpyme_tienda_config,base.group_system,1,1,1,1
 access_latinpyme_tienda_config_designer,latinpyme.tienda.config designer,model_latinpyme_tienda_config,website.group_website_designer,1,1,1,0
+access_latinpyme_tienda_banner_system,latinpyme.tienda.banner system,model_latinpyme_tienda_banner,base.group_system,1,1,1,1
+access_latinpyme_tienda_banner_designer,latinpyme.tienda.banner designer,model_latinpyme_tienda_banner,website.group_website_designer,1,1,1,0

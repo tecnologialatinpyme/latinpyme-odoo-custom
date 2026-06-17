@@ -109,10 +109,22 @@
   </template>
 
   <template id="lp_tienda_ad_slot" name="Tienda LatinPyme Ad Slot">
-    <aside class="lp-tienda-ad-slot" aria-label="Publicidad">
+    <a
+      t-if="ad_slot and ad_slot.image"
+      class="lp-tienda-ad-slot lp-tienda-ad-slot--image"
+      t-att-href="ad_slot.url or '/shop'"
+      t-att-aria-label="ad_slot.name"
+      data-analytics-event="click_home_ad_banner"
+      data-analytics-item="banner"
+      t-att-data-analytics-banner-name="ad_slot.name"
+      t-att-data-analytics-banner-position="ad_slot.placement"
+      t-att-data-analytics-link-text="ad_slot.button_label or ad_slot.title or ad_slot.name">
+      <img t-att-src="'/tienda/media/banner/%s/image' % ad_slot.id" t-att-alt="ad_slot.name" loading="lazy"/>
+    </a>
+    <aside t-else="" class="lp-tienda-ad-slot" aria-label="Publicidad">
       <span>Publicidad</span>
       <div>
-        <strong>Espacio publicitario prémium</strong>
+        <strong>Espacio publicitario premium</strong>
       </div>
     </aside>
   </template>
@@ -186,6 +198,7 @@
           </section>
 
           <section class="lp-tienda-container lp-tienda-block lp-tienda-ad-horizontal">
+            <t t-set="ad_slot" t-value="home_horizontal_banner"/>
             <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
           </section>
 
@@ -199,6 +212,7 @@
                   <t t-call="latinpyme_tienda_theme.lp_tienda_solution_card"/>
                 </t>
               </div>
+              <t t-set="ad_slot" t-value="home_side_banner"/>
               <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
             </div>
           </section>

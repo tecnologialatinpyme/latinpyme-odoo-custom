@@ -6,5 +6,23 @@
       <field name="production_domain">tienda.latinpyme.com</field>
       <field name="brand_label">Tienda</field>
     </record>
+
+    <record id="tienda_banner_home_horizontal" model="latinpyme.tienda.banner">
+      <field name="name">Banner home horizontal</field>
+      <field name="placement">home_horizontal</field>
+      <field name="sequence">10</field>
+      <field name="url">/shop</field>
+      <field name="button_label">Ver mas</field>
+      <field name="active">True</field>
+    </record>
+
+    <record id="tienda_banner_home_side" model="latinpyme.tienda.banner">
+      <field name="name">Banner home lateral</field>
+      <field name="placement">home_side</field>
+      <field name="sequence">10</field>
+      <field name="url">/shop</field>
+      <field name="button_label">Ver mas</field>
+      <field name="active">True</field>
+    </record>
   </data>
 </odoo>

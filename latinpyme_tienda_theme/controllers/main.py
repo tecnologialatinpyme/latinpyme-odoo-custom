@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import base64
 from datetime import date
 
-from odoo import http
+from werkzeug.exceptions import NotFound
+
+from odoo import fields, http
 from odoo.addons.website.controllers.main import Website
 from odoo.http import request
 
@@ -12,6 +15,31 @@ _logger = logging.getLogger(__name__)
 
 
 class LatinpymeTiendaController(Website):
+    def _image_response(self, image):
+        if not image:
+            raise NotFound()
+        content = base64.b64decode(image)
+        mimetype = "image/png"
+        if content.startswith(b"\xff\xd8"):
+            mimetype = "image/jpeg"
+        elif content.startswith(b"\x89PNG\r\n\x1a\n"):
+            mimetype = "image/png"
+        elif content.startswith(b"GIF"):
+            mimetype = "image/gif"
+        elif content.startswith(b"RIFF") and content[8:12] == b"WEBP":
+            mimetype = "image/webp"
+        return request.make_response(
+            content,
+            headers=[
+                ("Content-Type", mimetype),
+                ("Cache-Control", "public, max-age=86400"),
+            ],
+        )
+
+    def _website_matches(self, record):
+        website = getattr(request, "website", False)
+        return not record.website_id or not website or record.website_id == website
+
     def _home_product_carousels(self):
         try:
             with request.env.cr.savepoint():
@@ -70,6 +98,17 @@ class LatinpymeTiendaController(Website):
             _logger.info("No se pudieron cargar carruseles nativos de Tienda: %s", exc)
             return []
 
+    def _home_banner(self, placement):
+        try:
+            with request.env.cr.savepoint():
+                return request.env["latinpyme.tienda.banner"].sudo().get_active_banner(
+                    placement,
+                    getattr(request, "website", False),
+                )
+        except Exception as exc:
+            _logger.info("No se pudo cargar banner de Tienda %s: %s", placement, exc)
+            return False
+
     def _home_values(self):
         """Temporary storefront data, grouped for a future backend-managed phase."""
         shop_url = "/shop"
@@ -121,6 +160,8 @@ class LatinpymeTiendaController(Website):
                 "url": shop_url,
             },
             "product_carousels": self._home_product_carousels(),
+            "home_horizontal_banner": self._home_banner("home_horizontal"),
+            "home_side_banner": self._home_banner("home_side"),
             "training_cards": [
                 {
                     "title": "Cursos Online 100%",
@@ -279,3 +320,21 @@ class LatinpymeTiendaController(Website):
     @http.route("/tienda", type="http", auth="public", website=True, sitemap=True)
     def tienda_home(self, **kwargs):
         return self._render_tienda_home()
+
+    @http.route(
+        "/tienda/media/banner/<int:banner_id>/image",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def tienda_banner_image(self, banner_id, **kwargs):
+        banner = request.env["latinpyme.tienda.banner"].sudo().browse(banner_id).exists()
+        if not banner or not banner.active or not banner.image or not self._website_matches(banner):
+            raise NotFound()
+        today = fields.Date.context_today(banner)
+        if banner.date_start and banner.date_start > today:
+            raise NotFound()
+        if banner.date_end and banner.date_end < today:
+            raise NotFound()
+        return self._image_response(banner.image)
