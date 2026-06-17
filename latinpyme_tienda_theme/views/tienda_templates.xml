@@ -185,10 +185,6 @@
             </div>
           </section>
 
-          <section class="lp-tienda-container lp-tienda-block lp-tienda-ad-horizontal">
-            <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
-          </section>
-
           <section class="lp-tienda-container lp-tienda-block">
             <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
               <t t-set="title">Tecnología e innovación</t>
@@ -212,6 +208,10 @@
                 <t t-call="latinpyme_tienda_theme.lp_tienda_solution_card"/>
               </t>
             </div>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block lp-tienda-ad-horizontal">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
           </section>
 
           <section t-if="product_carousels" class="lp-tienda-container lp-tienda-block lp-tienda-product-carousels">
