@@ -56,7 +56,7 @@
     <field name="name">Carruseles / Categorias</field>
     <field name="res_model">product.public.category</field>
     <field name="view_mode">list,form</field>
-    <field name="domain">[('name', 'in', ['Talleres', 'Cursos de Auditoría', 'Cursos de Auditoria', 'Cursos de Seguridad Vial', 'Diplomados', 'FlashTraining', 'Cursos Gratis'])]</field>
+    <field name="domain">[('parent_id', '=', False)]</field>
   </record>
 
   <menuitem

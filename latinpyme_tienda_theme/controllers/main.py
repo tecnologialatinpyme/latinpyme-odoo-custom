@@ -2,7 +2,6 @@
 
 import logging
 from datetime import date
-from unicodedata import normalize
 
 from odoo import http
 from odoo.addons.website.controllers.main import Website
@@ -10,27 +9,6 @@ from odoo.http import request
 
 
 _logger = logging.getLogger(__name__)
-
-_HOME_CAROUSEL_CATEGORY_GROUPS = (
-    ("Talleres",),
-    ("Cursos de Auditoría", "Cursos de Auditoria"),
-    ("Cursos de Seguridad Vial",),
-    ("Diplomados",),
-    ("FlashTraining",),
-    ("Cursos Gratis",),
-)
-
-
-def _category_key(value):
-    value = normalize("NFKD", value or "").encode("ascii", "ignore").decode("ascii")
-    return " ".join(value.lower().split())
-
-
-_HOME_CAROUSEL_CATEGORY_ORDER = {
-    _category_key(name): index
-    for index, names in enumerate(_HOME_CAROUSEL_CATEGORY_GROUPS)
-    for name in names
-}
 
 
 class LatinpymeTiendaController(Website):
@@ -41,22 +19,14 @@ class LatinpymeTiendaController(Website):
                 Category = request.env["product.public.category"]
                 Product = request.env["product.template"]
                 category_domain = []
+                if "active" in Category._fields:
+                    category_domain.append(("active", "=", True))
+                if "parent_id" in Category._fields:
+                    category_domain.append(("parent_id", "=", False))
                 if website and "website_id" in Category._fields:
                     category_domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
 
-                categories = Category.search(category_domain, order="sequence asc, name asc", limit=100)
-                categories = [
-                    category
-                    for category in categories
-                    if _category_key(category.name) in _HOME_CAROUSEL_CATEGORY_ORDER
-                ]
-                categories.sort(
-                    key=lambda category: (
-                        _HOME_CAROUSEL_CATEGORY_ORDER[_category_key(category.name)],
-                        category.sequence,
-                        category.name,
-                    )
-                )
+                categories = Category.search(category_domain, order="sequence asc, name asc")
                 product_base_domain = []
                 if "active" in Product._fields:
                     product_base_domain.append(("active", "=", True))
@@ -73,8 +43,15 @@ class LatinpymeTiendaController(Website):
                 currency = getattr(website, "currency_id", False) or request.env.company.currency_id
                 carousels = []
                 for category in categories:
+                    category_ids = [category.id]
+                    if "parent_id" in Category._fields:
+                        child_domain = [("id", "child_of", category.id)]
+                        if website and "website_id" in Category._fields:
+                            child_domain.extend(["|", ("website_id", "=", False), ("website_id", "=", website.id)])
+                        category_ids = Category.search(child_domain).ids
+
                     products = Product.search(
-                        product_base_domain + [("public_categ_ids", "in", [category.id])],
+                        product_base_domain + [("public_categ_ids", "in", category_ids)],
                         order=product_order,
                         limit=10,
                     )
@@ -97,8 +74,6 @@ class LatinpymeTiendaController(Website):
                             ],
                         }
                     )
-                    if len(carousels) >= 6:
-                        break
                 return carousels
         except Exception as exc:
             _logger.info("No se pudieron cargar carruseles nativos de Tienda: %s", exc)
