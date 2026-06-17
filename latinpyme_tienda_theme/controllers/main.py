@@ -16,7 +16,7 @@ class LatinpymeTiendaController(Website):
         try:
             with request.env.cr.savepoint():
                 website = getattr(request, "website", False)
-                Category = request.env["product.public.category"]
+                Category = request.env["product.public.category"].with_context(lang=None)
                 Product = request.env["product.template"]
                 category_domain = []
                 if "active" in Category._fields:
@@ -266,7 +266,9 @@ class LatinpymeTiendaController(Website):
         return "tienda" in website_name and "latinpyme" in website_name
 
     def _render_tienda_home(self):
-        return request.render("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
+        response = request.render("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
+        response.headers["Cache-Control"] = "no-cache, max-age=0, must-revalidate"
+        return response
 
     @http.route("/", type="http", auth="public", website=True, sitemap=True)
     def index(self, **kwargs):
