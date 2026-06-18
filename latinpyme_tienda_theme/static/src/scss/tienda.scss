@@ -242,7 +242,7 @@
 }
 
 .lp-tienda-nav__link,
-.lp-tienda-nav__item summary {
+.lp-tienda-nav__toggle {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -276,15 +276,12 @@
   }
 }
 
-.lp-tienda-nav__item summary {
+.lp-tienda-nav__toggle {
   gap: 7px;
+  border: 0;
+  background: transparent;
   cursor: pointer;
   font-family: inherit;
-  list-style: none;
-
-  &::-webkit-details-marker {
-    display: none;
-  }
 
   i {
     color: currentColor;
@@ -293,7 +290,8 @@
   }
 }
 
-.lp-tienda-nav__item[open] summary i {
+.lp-tienda-nav__item--dropdown:hover .lp-tienda-nav__toggle i,
+.lp-tienda-nav__item--dropdown:focus-within .lp-tienda-nav__toggle i {
   transform: rotate(180deg);
 }
 
@@ -318,9 +316,8 @@
   visibility: hidden;
 }
 
-.lp-tienda-nav__item[open] .lp-tienda-nav__dropdown,
-.lp-tienda-nav__item:hover .lp-tienda-nav__dropdown,
-.lp-tienda-nav__item:focus-within .lp-tienda-nav__dropdown {
+.lp-tienda-nav__item--dropdown:hover .lp-tienda-nav__dropdown,
+.lp-tienda-nav__item--dropdown:focus-within .lp-tienda-nav__dropdown {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
@@ -1368,7 +1365,7 @@
   }
 
   .lp-tienda-nav__link,
-  .lp-tienda-nav__item summary {
+  .lp-tienda-nav__toggle {
     min-height: 46px;
     padding: 0 14px;
 

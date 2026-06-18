@@ -12,17 +12,20 @@ _logger = logging.getLogger(__name__)
 
 
 class LatinpymeTiendaController(Website):
+    def _home_menu_item(self):
+        return {
+            "name": "Inicio",
+            "url": "/",
+            "item_type": "home",
+            "open_new_tab": False,
+            "show_in_mobile": True,
+            "css_class": "",
+            "children": [],
+        }
+
     def _fallback_main_menu(self):
         return [
-            {
-                "name": "Inicio",
-                "url": "/",
-                "item_type": "home",
-                "open_new_tab": False,
-                "show_in_mobile": True,
-                "css_class": "",
-                "children": [],
-            },
+            self._home_menu_item(),
             {
                 "name": "Talleres",
                 "url": "/shop/category/6",
@@ -78,11 +81,15 @@ class LatinpymeTiendaController(Website):
             },
         ]
 
+    def _ensure_home_menu_item(self, menu_items):
+        has_home = any(item.get("item_type") == "home" or item.get("name") == "Inicio" for item in menu_items)
+        return menu_items if has_home else [self._home_menu_item()] + menu_items
+
     def _main_menu_items(self):
         try:
             with request.env.cr.savepoint():
                 menu_items = request.env["latinpyme.tienda.menu.item"].sudo().get_header_menu(getattr(request, "website", False))
-                return menu_items or self._fallback_main_menu()
+                return self._ensure_home_menu_item(menu_items or self._fallback_main_menu())
         except Exception as exc:
             _logger.info("No se pudo cargar el menu administrable de Tienda: %s", exc)
             return self._fallback_main_menu()

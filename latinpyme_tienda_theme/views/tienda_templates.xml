@@ -43,11 +43,11 @@
         <div class="lp-tienda-container lp-tienda-nav__inner">
           <t t-foreach="main_menu" t-as="nav_item">
             <t t-if="nav_item.get('children')">
-              <details t-attf-class="lp-tienda-nav__item lp-tienda-nav__item--dropdown #{'lp-tienda-nav__item--mobile-hidden' if not nav_item.get('show_in_mobile') else ''} #{nav_item.get('css_class') or ''}">
-                <summary>
+              <div t-attf-class="lp-tienda-nav__item lp-tienda-nav__item--dropdown #{'lp-tienda-nav__item--mobile-hidden' if not nav_item.get('show_in_mobile') else ''} #{nav_item.get('css_class') or ''}">
+                <button type="button" class="lp-tienda-nav__link lp-tienda-nav__toggle" aria-haspopup="true" aria-expanded="false">
                   <span t-out="nav_item['name']"/>
                   <i class="fa fa-angle-down" aria-hidden="true"/>
-                </summary>
+                </button>
                 <div class="lp-tienda-nav__dropdown">
                   <a
                     t-foreach="nav_item['children']"
@@ -58,7 +58,7 @@
                     t-att-rel="'noopener' if child_item.get('open_new_tab') else None"
                     t-out="child_item['name']"/>
                 </div>
-              </details>
+              </div>
             </t>
             <t t-else="">
               <a
