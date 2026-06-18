@@ -41,9 +41,34 @@
       </div>
       <nav class="lp-tienda-nav" aria-label="Navegacion principal de Tienda">
         <div class="lp-tienda-container lp-tienda-nav__inner">
-          <a href="/shop?search=portafolio">Portafolio</a>
-          <a href="/shop?search=capacitacion">Capacitación</a>
-          <a href="https://latinpyme.com/" target="_blank" rel="noopener">Revista</a>
+          <t t-foreach="main_menu" t-as="nav_item">
+            <t t-if="nav_item.get('children')">
+              <details t-attf-class="lp-tienda-nav__item lp-tienda-nav__item--dropdown #{'lp-tienda-nav__item--mobile-hidden' if not nav_item.get('show_in_mobile') else ''} #{nav_item.get('css_class') or ''}">
+                <summary>
+                  <span t-out="nav_item['name']"/>
+                  <i class="fa fa-angle-down" aria-hidden="true"/>
+                </summary>
+                <div class="lp-tienda-nav__dropdown">
+                  <a
+                    t-foreach="nav_item['children']"
+                    t-as="child_item"
+                    t-attf-class="lp-tienda-nav__dropdown-link #{'lp-tienda-nav__item--mobile-hidden' if not child_item.get('show_in_mobile') else ''} #{child_item.get('css_class') or ''}"
+                    t-att-href="child_item.get('url') or '#'"
+                    t-att-target="'_blank' if child_item.get('open_new_tab') else None"
+                    t-att-rel="'noopener' if child_item.get('open_new_tab') else None"
+                    t-out="child_item['name']"/>
+                </div>
+              </details>
+            </t>
+            <t t-else="">
+              <a
+                t-attf-class="lp-tienda-nav__link #{'lp-tienda-nav__item--mobile-hidden' if not nav_item.get('show_in_mobile') else ''} #{nav_item.get('css_class') or ''}"
+                t-att-href="nav_item.get('url') or '#'"
+                t-att-target="'_blank' if nav_item.get('open_new_tab') else None"
+                t-att-rel="'noopener' if nav_item.get('open_new_tab') else None"
+                t-out="nav_item['name']"/>
+            </t>
+          </t>
         </div>
       </nav>
     </header>

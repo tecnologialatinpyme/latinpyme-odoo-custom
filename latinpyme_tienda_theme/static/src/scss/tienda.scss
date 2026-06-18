@@ -226,19 +226,93 @@
   align-items: center;
   justify-content: center;
   gap: 28px;
-  overflow-x: auto;
+  overflow: visible;
   padding-block: 18px;
+}
 
-  a {
-    flex: 0 0 auto;
-    color: #0c0f14;
-    font-size: 17px;
-    font-weight: 900;
-    white-space: nowrap;
+.lp-tienda-nav__item {
+  position: relative;
+  flex: 0 0 auto;
+}
 
-    &:hover {
-      color: var(--lp-tienda-red);
-    }
+.lp-tienda-nav__link,
+.lp-tienda-nav__item summary {
+  flex: 0 0 auto;
+  color: #0c0f14;
+  font-size: 17px;
+  font-weight: 900;
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--lp-tienda-red);
+  }
+}
+
+.lp-tienda-nav__item summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  i {
+    color: var(--lp-tienda-red);
+    font-size: 14px;
+    transition: transform .2s ease;
+  }
+}
+
+.lp-tienda-nav__item[open] summary i {
+  transform: rotate(180deg);
+}
+
+.lp-tienda-nav__dropdown {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 12px);
+  left: 50%;
+  display: grid;
+  min-width: 230px;
+  gap: 4px;
+  border: 1px solid rgba(16, 20, 27, .08);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(17, 19, 24, .12);
+  opacity: 0;
+  padding: 10px;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(-4px);
+  transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+  visibility: hidden;
+}
+
+.lp-tienda-nav__item[open] .lp-tienda-nav__dropdown,
+.lp-tienda-nav__item:hover .lp-tienda-nav__dropdown,
+.lp-tienda-nav__item:focus-within .lp-tienda-nav__dropdown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+  visibility: visible;
+}
+
+.lp-tienda-nav__dropdown-link {
+  display: block;
+  border-radius: 6px;
+  color: #303946;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.25;
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+
+  &:hover {
+    background: #fff7f8;
+    color: var(--lp-tienda-red);
   }
 }
 
@@ -1251,6 +1325,22 @@
   .lp-tienda-nav__inner {
     justify-content: flex-start;
     gap: 24px;
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
+  .lp-tienda-nav__item {
+    align-self: flex-start;
+  }
+
+  .lp-tienda-nav__dropdown {
+    position: static;
+    min-width: 220px;
+    margin-top: 10px;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    visibility: visible;
   }
 
   .lp-tienda-promo-banner--image-only {

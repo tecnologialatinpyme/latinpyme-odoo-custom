@@ -12,6 +12,81 @@ _logger = logging.getLogger(__name__)
 
 
 class LatinpymeTiendaController(Website):
+    def _fallback_main_menu(self):
+        return [
+            {
+                "name": "Inicio",
+                "url": "/",
+                "item_type": "home",
+                "open_new_tab": False,
+                "show_in_mobile": True,
+                "css_class": "",
+                "children": [],
+            },
+            {
+                "name": "Talleres",
+                "url": "/shop/category/6",
+                "item_type": "category",
+                "open_new_tab": False,
+                "show_in_mobile": True,
+                "css_class": "",
+                "children": [],
+            },
+            {
+                "name": "Cursos",
+                "url": "#",
+                "item_type": "group",
+                "open_new_tab": False,
+                "show_in_mobile": True,
+                "css_class": "",
+                "children": [
+                    {
+                        "name": "Cursos de Auditoría",
+                        "url": "/shop/category/1",
+                        "item_type": "category",
+                        "open_new_tab": False,
+                        "show_in_mobile": True,
+                        "css_class": "",
+                    },
+                    {
+                        "name": "Cursos de Seguridad Vial",
+                        "url": "/shop/category/2",
+                        "item_type": "category",
+                        "open_new_tab": False,
+                        "show_in_mobile": True,
+                        "css_class": "",
+                    },
+                ],
+            },
+            {
+                "name": "Diplomados",
+                "url": "/shop/category/4",
+                "item_type": "category",
+                "open_new_tab": False,
+                "show_in_mobile": True,
+                "css_class": "",
+                "children": [],
+            },
+            {
+                "name": "FlashTraining",
+                "url": "/shop/category/5",
+                "item_type": "category",
+                "open_new_tab": False,
+                "show_in_mobile": True,
+                "css_class": "",
+                "children": [],
+            },
+        ]
+
+    def _main_menu_items(self):
+        try:
+            with request.env.cr.savepoint():
+                menu_items = request.env["latinpyme.tienda.menu.item"].sudo().get_header_menu(getattr(request, "website", False))
+                return menu_items or self._fallback_main_menu()
+        except Exception as exc:
+            _logger.info("No se pudo cargar el menu administrable de Tienda: %s", exc)
+            return self._fallback_main_menu()
+
     def _home_product_carousels(self):
         try:
             with request.env.cr.savepoint():
@@ -105,6 +180,7 @@ class LatinpymeTiendaController(Website):
         return {
             "current_year": date.today().year,
             "social_links": social_links,
+            "main_menu": self._main_menu_items(),
             "hero": {
                 "eyebrow": "Tienda LatinPyme",
                 "title": "Capacitación y soluciones empresariales para equipos que avanzan",
