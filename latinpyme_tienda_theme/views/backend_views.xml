@@ -174,8 +174,8 @@
               <field name="sequence"/>
             </group>
             <group string="Icono de Tienda">
-              <field name="lp_tienda_icon_effective" widget="image" readonly="1"/>
-              <field name="lp_tienda_icon" widget="image"/>
+              <field name="lp_tienda_icon_effective" widget="image"/>
+              <field name="lp_tienda_icon" invisible="1"/>
               <field name="lp_tienda_icon_url" readonly="1"/>
               <field name="lp_tienda_static_icon_url" readonly="1"/>
             </group>

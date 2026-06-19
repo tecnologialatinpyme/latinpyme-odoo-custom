@@ -53,6 +53,12 @@ def _category_static_icon_binary(category_id):
         return False
 
 
+def _binary_to_text(value):
+    if isinstance(value, bytes):
+        return value.decode("ascii")
+    return value or ""
+
+
 def _menu_item_display_name(item):
     category = item.product_public_category_id
     if item.item_type == "category" and category:
@@ -76,10 +82,12 @@ class ProductPublicCategory(models.Model):
         help="Icono administrable usado en carruseles, encabezados de categoria y navegacion visual de Tienda.",
     )
     lp_tienda_icon_effective = fields.Image(
-        string="Icono activo",
+        string="Icono administrable",
         compute="_compute_lp_tienda_media",
+        inverse="_inverse_lp_tienda_icon_effective",
         compute_sudo=True,
-        help="Muestra el icono subido; si no existe, usa el icono estatico incluido en el modulo.",
+        readonly=False,
+        help="Muestra el icono subido; si no existe, usa el icono estatico incluido en el modulo. Al subir uno nuevo, queda guardado como icono personalizado de la categoria.",
     )
     lp_tienda_icon_url = fields.Char(
         string="URL icono activo",
@@ -121,6 +129,19 @@ class ProductPublicCategory(models.Model):
                 if category.lp_tienda_cover_image
                 else ""
             )
+
+    def _inverse_lp_tienda_icon_effective(self):
+        for category in self:
+            effective_icon = category.lp_tienda_icon_effective
+            if not effective_icon:
+                category.lp_tienda_icon = False
+                continue
+
+            fallback_icon = _category_static_icon_binary(category.id)
+            if _binary_to_text(effective_icon) == _binary_to_text(fallback_icon):
+                category.lp_tienda_icon = False
+            else:
+                category.lp_tienda_icon = effective_icon
 
 
 class LatinpymeTiendaConfig(models.Model):
