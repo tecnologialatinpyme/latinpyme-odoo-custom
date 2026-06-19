@@ -4,11 +4,142 @@ import logging
 from datetime import date
 
 from odoo import http
+from odoo.addons.website_sale.controllers.main import WebsiteSale
 from odoo.addons.website.controllers.main import Website
 from odoo.http import request
 
 
 _logger = logging.getLogger(__name__)
+
+_CATEGORY_OVERRIDES = {
+    5: {
+        "name": "FlashTraining",
+        "url": "/shop/category/flashtraining-5",
+    },
+    6: {
+        "name": "Talleres",
+        "url": "/shop/category/talleres-6",
+    },
+}
+
+
+def _category_display_name(category):
+    return _CATEGORY_OVERRIDES.get(category.id, {}).get("name") or category.name
+
+
+def _category_url(category):
+    return _CATEGORY_OVERRIDES.get(category.id, {}).get("url") or "/shop/category/%s" % category.id
+
+
+def _with_current_query(path):
+    query_string = request.httprequest.query_string.decode("utf-8")
+    return "%s?%s" % (path, query_string) if query_string else path
+
+
+class LatinpymeTiendaShopController(WebsiteSale):
+    def _get_shop_path(self, category=None, page=0):
+        category_id = getattr(category, "id", category)
+        if category_id in _CATEGORY_OVERRIDES:
+            path = _CATEGORY_OVERRIDES[category_id]["url"]
+            if page:
+                path = "%s/page/%s" % (path, page)
+            return path
+        try:
+            return super()._get_shop_path(category, page)
+        except TypeError:
+            return super()._get_shop_path(category)
+
+    def _render_fixed_category(self, category_id, page=0, **post):
+        category = request.env["product.public.category"].sudo().browse(category_id)
+        if not category.exists():
+            return request.not_found()
+        return super().shop(page=page, category=category, **post)
+
+    @http.route(
+        [
+            "/shop/category/webinars-6",
+            "/shop/category/webinars-6/",
+            "/shop/category/6",
+            "/shop/category/6/",
+        ],
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def redirect_talleres_category(self, **post):
+        return request.redirect(_with_current_query("/shop/category/talleres-6"), code=301)
+
+    @http.route(
+        [
+            "/shop/category/webinars-6/page/<int:page>",
+            "/shop/category/webinars-6/page/<int:page>/",
+        ],
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def redirect_talleres_category_page(self, page=0, **post):
+        return request.redirect(_with_current_query("/shop/category/talleres-6/page/%s" % page), code=301)
+
+    @http.route(
+        [
+            "/shop/category/flashtraining-gestion-estrategica-del-talento-humano-5",
+            "/shop/category/flashtraining-gestion-estrategica-del-talento-humano-5/",
+            "/shop/category/5",
+            "/shop/category/5/",
+        ],
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def redirect_flashtraining_category(self, **post):
+        return request.redirect(_with_current_query("/shop/category/flashtraining-5"), code=301)
+
+    @http.route(
+        [
+            "/shop/category/flashtraining-gestion-estrategica-del-talento-humano-5/page/<int:page>",
+            "/shop/category/flashtraining-gestion-estrategica-del-talento-humano-5/page/<int:page>/",
+        ],
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def redirect_flashtraining_category_page(self, page=0, **post):
+        return request.redirect(_with_current_query("/shop/category/flashtraining-5/page/%s" % page), code=301)
+
+    @http.route(
+        [
+            "/shop/category/talleres-6",
+            "/shop/category/talleres-6/",
+            "/shop/category/talleres-6/page/<int:page>",
+            "/shop/category/talleres-6/page/<int:page>/",
+        ],
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def talleres_category(self, page=0, **post):
+        return self._render_fixed_category(6, page=page, **post)
+
+    @http.route(
+        [
+            "/shop/category/flashtraining-5",
+            "/shop/category/flashtraining-5/",
+            "/shop/category/flashtraining-5/page/<int:page>",
+            "/shop/category/flashtraining-5/page/<int:page>/",
+        ],
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def flashtraining_category(self, page=0, **post):
+        return self._render_fixed_category(5, page=page, **post)
 
 
 class LatinpymeTiendaController(Website):
@@ -28,7 +159,7 @@ class LatinpymeTiendaController(Website):
             self._home_menu_item(),
             {
                 "name": "Talleres",
-                "url": "/shop/category/6",
+                "url": "/shop/category/talleres-6",
                 "item_type": "category",
                 "open_new_tab": False,
                 "show_in_mobile": True,
@@ -72,7 +203,7 @@ class LatinpymeTiendaController(Website):
             },
             {
                 "name": "FlashTraining",
-                "url": "/shop/category/5",
+                "url": "/shop/category/flashtraining-5",
                 "item_type": "category",
                 "open_new_tab": False,
                 "show_in_mobile": True,
@@ -132,8 +263,8 @@ class LatinpymeTiendaController(Website):
                         continue
                     carousels.append(
                         {
-                            "name": category.name,
-                            "url": "/shop/category/%s" % category.id,
+                            "name": _category_display_name(category),
+                            "url": _category_url(category),
                             "products": [
                                 {
                                     "name": product.name,

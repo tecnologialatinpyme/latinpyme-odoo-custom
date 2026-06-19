@@ -4,6 +4,24 @@ from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
+_CATEGORY_URL_OVERRIDES = {
+    5: "/shop/category/flashtraining-5",
+    6: "/shop/category/talleres-6",
+}
+
+_CATEGORY_NAME_OVERRIDES = {
+    5: "FlashTraining",
+    6: "Talleres",
+}
+
+
+def _menu_item_display_name(item):
+    category = item.product_public_category_id
+    if item.item_type == "category" and category:
+        return _CATEGORY_NAME_OVERRIDES.get(category.id, item.name)
+    return item.name
+
+
 class LatinpymeTiendaConfig(models.Model):
     _name = "latinpyme.tienda.config"
     _description = "Configuracion Tienda LatinPyme"
@@ -61,7 +79,9 @@ class LatinpymeTiendaMenuItem(models.Model):
                 record.computed_url = "/"
             elif record.item_type == "category" and record.product_public_category_id:
                 category = record.product_public_category_id
-                category_url = category.website_url if "website_url" in category._fields else False
+                category_url = _CATEGORY_URL_OVERRIDES.get(category.id)
+                if not category_url:
+                    category_url = category.website_url if "website_url" in category._fields else False
                 record.computed_url = category_url or "/shop/category/%s" % category.id
             elif record.item_type == "url":
                 record.computed_url = (record.url or "").strip()
@@ -104,7 +124,7 @@ class LatinpymeTiendaMenuItem(models.Model):
         def item_values(item):
             children = items.filtered(lambda child: child.parent_id == item)
             return {
-                "name": item.name,
+                "name": _menu_item_display_name(item),
                 "url": item.computed_url or "#",
                 "item_type": item.item_type,
                 "open_new_tab": item.open_new_tab,
@@ -112,7 +132,7 @@ class LatinpymeTiendaMenuItem(models.Model):
                 "css_class": item.css_class or "",
                 "children": [
                     {
-                        "name": child.name,
+                        "name": _menu_item_display_name(child),
                         "url": child.computed_url or "#",
                         "item_type": child.item_type,
                         "open_new_tab": child.open_new_tab,

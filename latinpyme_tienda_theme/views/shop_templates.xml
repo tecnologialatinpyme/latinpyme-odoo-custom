@@ -33,7 +33,11 @@
             </span>
             <h1>
               <t t-if="category">
-                <span t-field="category.name"/>
+                <t t-if="category.id == 6">Talleres</t>
+                <t t-elif="category.id == 5">FlashTraining</t>
+                <t t-else="">
+                  <span t-field="category.name"/>
+                </t>
               </t>
               <t t-elif="search">
                 Resultados para "<span t-out="search"/>"
@@ -44,7 +48,7 @@
         </div>
         <form
           class="lp-shop-catalog-search"
-          t-att-action="'/shop/category/%s' % category.id if category else '/shop'"
+          t-att-action="('/shop/category/talleres-6' if category.id == 6 else '/shop/category/flashtraining-5' if category.id == 5 else '/shop/category/%s' % category.id) if category else '/shop'"
           method="get"
           role="search">
           <label class="visually-hidden" for="lp-shop-catalog-search-input">Buscar en Tienda LatinPyme</label>
@@ -60,11 +64,11 @@
           </button>
         </form>
         <nav t-if="category" class="lp-shop-catalog-chips lp-category-chips" aria-label="Categorias de tienda">
-          <a href="/shop/category/6" t-att-class="'is-active' if category.id == 6 else ''">Talleres</a>
+          <a href="/shop/category/talleres-6" t-att-class="'is-active' if category.id == 6 else ''">Talleres</a>
           <a href="/shop/category/1" t-att-class="'is-active' if category.id == 1 else ''">Auditoria</a>
           <a href="/shop/category/2" t-att-class="'is-active' if category.id == 2 else ''">Seguridad Vial</a>
           <a href="/shop/category/4" t-att-class="'is-active' if category.id == 4 else ''">Diplomados</a>
-          <a href="/shop/category/5" t-att-class="'is-active' if category.id == 5 else ''">FlashTraining</a>
+          <a href="/shop/category/flashtraining-5" t-att-class="'is-active' if category.id == 5 else ''">FlashTraining</a>
         </nav>
         <nav t-else="" class="lp-shop-catalog-chips" aria-label="Categorias destacadas">
           <a href="/shop?search=capacitacion">Capacitacion</a>
