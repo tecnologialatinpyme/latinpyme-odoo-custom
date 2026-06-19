@@ -7,6 +7,28 @@
       <t t-else="" t-set="additional_title" t-value="category.name if category else None"/>
     </xpath>
 
+    <xpath expr="//t[@t-set='hasLeftColumn']" position="replace">
+      <t t-set="hasLeftColumn" t-value="False if category else (opt_wsale_categories or opt_wsale_attributes)"/>
+    </xpath>
+
+    <xpath expr="//t[@t-set='wsale_has_filters_btn']" position="replace">
+      <t
+        t-set="wsale_has_filters_btn"
+        t-value="False if category else (opt_wsale_categories or opt_wsale_attributes or opt_wsale_attributes_top)"
+      />
+    </xpath>
+
+    <xpath expr="//t[@t-set='wsale_has_filters_btn_lg']" position="replace">
+      <t
+        t-set="wsale_has_filters_btn_lg"
+        t-value="False if category else opt_wsale_attributes_top"
+      />
+    </xpath>
+
+    <xpath expr="//t[@t-call='website_sale.sort']" position="attributes">
+      <attribute name="t-if">not category and is_view_active('website_sale.sort')</attribute>
+    </xpath>
+
     <xpath expr="//div[@id='wrap']" position="attributes">
       <attribute name="class" add="lp-tienda lp-tienda-shop lp-shop-page" separator=" "/>
     </xpath>

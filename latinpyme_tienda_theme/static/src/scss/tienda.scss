@@ -1692,8 +1692,19 @@
       margin-top: 0;
     }
 
+    .o_wsale_products_main_row {
+      width: 100%;
+      margin-inline: 0;
+    }
+
     .products_header button[data-bs-target="#o_wsale_offcanvas"],
-    .products_header .btn[data-bs-target="#o_wsale_offcanvas"] {
+    .products_header .btn[data-bs-target="#o_wsale_offcanvas"],
+    .products_header .o_sortby_dropdown,
+    .products_header .dropdown_sorty_by,
+    .o_sortby_dropdown,
+    .dropdown_sorty_by,
+    #o_wsale_offcanvas_orderby_header,
+    #o_wsale_offcanvas_orderby {
       display: none !important;
     }
 
