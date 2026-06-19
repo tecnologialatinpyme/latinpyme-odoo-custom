@@ -2,7 +2,10 @@
 <odoo>
   <template id="lp_tienda_shop_products_layout" name="Tienda LatinPyme Shop Catalog" inherit_id="website_sale.products">
     <xpath expr="//t[@t-set='additional_title']" position="replace">
-      <t t-if="category and category.id == 6" t-set="title" t-value="'Talleres | Tienda Latinpyme'"/>
+      <t t-if="category and category.id == 1" t-set="title" t-value="'Cursos de Auditoría | Tienda Latinpyme'"/>
+      <t t-elif="category and category.id == 2" t-set="title" t-value="'Cursos de Seguridad Vial | Tienda Latinpyme'"/>
+      <t t-elif="category and category.id == 4" t-set="title" t-value="'Diplomados | Tienda Latinpyme'"/>
+      <t t-elif="category and category.id == 6" t-set="title" t-value="'Talleres | Tienda Latinpyme'"/>
       <t t-elif="category and category.id == 5" t-set="title" t-value="'FlashTraining | Tienda Latinpyme'"/>
       <t t-else="" t-set="additional_title" t-value="category.name if category else None"/>
     </xpath>
@@ -53,19 +56,27 @@
       <section
         t-attf-class="lp-tienda lp-tienda-shop lp-shop-catalog-hero #{'lp-shop-category-page lp-category-landing lp-category-hero' if category else ''}"
         aria-label="Catalogo Tienda LatinPyme">
+        <t
+          t-if="category"
+          t-set="lp_category_display_name"
+          t-value="'Talleres' if category.id == 6 else 'FlashTraining' if category.id == 5 else category.name"/>
+        <t
+          t-if="category"
+          t-set="lp_category_icon"
+          t-value="'/latinpyme_tienda_theme/static/src/img/talleres-icon.png' if category.id == 6 else '/latinpyme_tienda_theme/static/src/img/icon-auditoria.png' if category.id == 1 else '/latinpyme_tienda_theme/static/src/img/icon-seguridad-vial.png' if category.id == 2 else '/latinpyme_tienda_theme/static/src/img/icon-diplomado.png' if category.id == 4 else '/latinpyme_tienda_theme/static/src/img/icon-flashtraining.png' if category.id == 5 else False"/>
         <div class="lp-shop-catalog-hero__content">
           <p class="lp-shop-catalog-hero__eyebrow">Catalogo</p>
           <div class="lp-shop-catalog-hero__title">
-            <span t-if="category" class="lp-category-hero__icon" aria-hidden="true">
-              <i class="fa fa-graduation-cap"/>
+            <span t-if="category and lp_category_icon" class="lp-category-hero__icon" aria-hidden="true">
+              <img
+                t-att-src="lp_category_icon"
+                alt=""
+                loading="lazy"
+                aria-hidden="true"/>
             </span>
             <h1>
               <t t-if="category">
-                <t t-if="category.id == 6">Talleres</t>
-                <t t-elif="category.id == 5">FlashTraining</t>
-                <t t-else="">
-                  <span t-field="category.name"/>
-                </t>
+                <t t-out="lp_category_display_name"/>
               </t>
               <t t-elif="search">
                 Resultados para "<span t-out="search"/>"

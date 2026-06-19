@@ -1545,15 +1545,19 @@
   .lp-category-hero__icon {
     display: inline-flex;
     flex: 0 0 auto;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(200, 0, 26, .16);
-    border-radius: 12px;
-    background: #fff7f8;
-    color: var(--lp-tienda-red);
-    font-size: 18px;
+    border-radius: 10px;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 9px;
+      object-fit: contain;
+    }
   }
 
   .lp-shop-catalog-hero__eyebrow {
@@ -2151,10 +2155,9 @@
     }
 
     .lp-category-hero__icon {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 10px;
-      font-size: 16px;
     }
 
     .lp-shop-catalog-search button {
