@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import base64
+from pathlib import Path
+
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
+
+_MODULE_ROOT = Path(__file__).resolve().parents[1]
 
 _CATEGORY_URL_OVERRIDES = {
     5: "/shop/category/flashtraining-5",
@@ -10,16 +15,112 @@ _CATEGORY_URL_OVERRIDES = {
 }
 
 _CATEGORY_NAME_OVERRIDES = {
+    1: "Cursos de Auditoría",
+    2: "Cursos de Seguridad Vial",
+    4: "Diplomados",
     5: "FlashTraining",
     6: "Talleres",
 }
+
+_CATEGORY_ICON_FILES = {
+    1: "icon-auditoria.png",
+    2: "icon-seguridad-vial.png",
+    4: "icon-diplomado.png",
+    5: "icon-flashtraining.png",
+    6: "talleres-icon.png",
+}
+
+_CATEGORY_ICON_FALLBACKS = {
+    category_id: "/latinpyme_tienda_theme/static/src/img/%s" % filename
+    for category_id, filename in _CATEGORY_ICON_FILES.items()
+}
+
+
+def _category_display_name(category):
+    return _CATEGORY_NAME_OVERRIDES.get(category.id, category.name)
+
+
+def _category_static_icon_binary(category_id):
+    icon_file = _CATEGORY_ICON_FILES.get(category_id)
+    if not icon_file:
+        return False
+
+    icon_path = _MODULE_ROOT / "static" / "src" / "img" / icon_file
+    try:
+        with icon_path.open("rb") as file:
+            return base64.b64encode(file.read())
+    except OSError:
+        return False
 
 
 def _menu_item_display_name(item):
     category = item.product_public_category_id
     if item.item_type == "category" and category:
-        return _CATEGORY_NAME_OVERRIDES.get(category.id, item.name)
+        return _category_display_name(category)
     return item.name
+
+
+class ProductPublicCategory(models.Model):
+    _inherit = "product.public.category"
+
+    lp_tienda_display_name = fields.Char(
+        string="Nombre Tienda",
+        compute="_compute_lp_tienda_media",
+        compute_sudo=True,
+    )
+    lp_tienda_icon = fields.Image(
+        string="Icono Tienda",
+        max_width=512,
+        max_height=512,
+        attachment=True,
+        help="Icono administrable usado en carruseles, encabezados de categoria y navegacion visual de Tienda.",
+    )
+    lp_tienda_icon_effective = fields.Image(
+        string="Icono activo",
+        compute="_compute_lp_tienda_media",
+        compute_sudo=True,
+        help="Muestra el icono subido; si no existe, usa el icono estatico incluido en el modulo.",
+    )
+    lp_tienda_icon_url = fields.Char(
+        string="URL icono activo",
+        compute="_compute_lp_tienda_media",
+        compute_sudo=True,
+    )
+    lp_tienda_static_icon_url = fields.Char(
+        string="URL icono base",
+        compute="_compute_lp_tienda_media",
+        compute_sudo=True,
+    )
+    lp_tienda_cover_image = fields.Image(
+        string="Imagen de portada Tienda",
+        max_width=1920,
+        max_height=1080,
+        attachment=True,
+        help="Imagen de portada disponible para futuras landings de categoria.",
+    )
+    lp_tienda_cover_image_url = fields.Char(
+        string="URL portada Tienda",
+        compute="_compute_lp_tienda_media",
+        compute_sudo=True,
+    )
+
+    @api.depends("name", "lp_tienda_icon", "lp_tienda_cover_image")
+    def _compute_lp_tienda_media(self):
+        for category in self:
+            category.lp_tienda_display_name = _category_display_name(category)
+            category.lp_tienda_static_icon_url = _CATEGORY_ICON_FALLBACKS.get(category.id, "")
+            if category.lp_tienda_icon:
+                category.lp_tienda_icon_effective = category.lp_tienda_icon
+                category.lp_tienda_icon_url = "/web/image/product.public.category/%s/lp_tienda_icon" % category.id
+            else:
+                category.lp_tienda_icon_effective = _category_static_icon_binary(category.id)
+                category.lp_tienda_icon_url = category.lp_tienda_static_icon_url
+
+            category.lp_tienda_cover_image_url = (
+                "/web/image/product.public.category/%s/lp_tienda_cover_image" % category.id
+                if category.lp_tienda_cover_image
+                else ""
+            )
 
 
 class LatinpymeTiendaConfig(models.Model):

@@ -250,7 +250,7 @@
                 <header class="lp-tienda-product-carousel__head">
                   <t
                     t-set="carousel_icon"
-                    t-value="'/latinpyme_tienda_theme/static/src/img/talleres-icon.png' if carousel['name'] == 'Talleres' else '/latinpyme_tienda_theme/static/src/img/icon-auditoria.png' if 'Auditor' in carousel['name'] else '/latinpyme_tienda_theme/static/src/img/icon-seguridad-vial.png' if 'Seguridad Vial' in carousel['name'] else '/latinpyme_tienda_theme/static/src/img/icon-diplomado.png' if 'Diplomado' in carousel['name'] else '/latinpyme_tienda_theme/static/src/img/icon-flashtraining.png' if 'FlashTraining' in carousel['name'] else False"/>
+                    t-value="carousel.get('icon_url')"/>
                   <span class="lp-tienda-product-carousel__title">
                     <img
                       t-if="carousel_icon"

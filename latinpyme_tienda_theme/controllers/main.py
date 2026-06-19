@@ -12,23 +12,45 @@ from odoo.http import request
 _logger = logging.getLogger(__name__)
 
 _CATEGORY_OVERRIDES = {
+    1: {
+        "name": "Cursos de Auditoría",
+        "icon_url": "/latinpyme_tienda_theme/static/src/img/icon-auditoria.png",
+    },
+    2: {
+        "name": "Cursos de Seguridad Vial",
+        "icon_url": "/latinpyme_tienda_theme/static/src/img/icon-seguridad-vial.png",
+    },
+    4: {
+        "name": "Diplomados",
+        "icon_url": "/latinpyme_tienda_theme/static/src/img/icon-diplomado.png",
+    },
     5: {
         "name": "FlashTraining",
         "url": "/shop/category/flashtraining-5",
+        "icon_url": "/latinpyme_tienda_theme/static/src/img/icon-flashtraining.png",
     },
     6: {
         "name": "Talleres",
         "url": "/shop/category/talleres-6",
+        "icon_url": "/latinpyme_tienda_theme/static/src/img/talleres-icon.png",
     },
 }
 
 
 def _category_display_name(category):
+    if "lp_tienda_display_name" in category._fields and category.lp_tienda_display_name:
+        return category.lp_tienda_display_name
     return _CATEGORY_OVERRIDES.get(category.id, {}).get("name") or category.name
 
 
 def _category_url(category):
     return _CATEGORY_OVERRIDES.get(category.id, {}).get("url") or "/shop/category/%s" % category.id
+
+
+def _category_icon_url(category):
+    if "lp_tienda_icon_url" in category._fields and category.lp_tienda_icon_url:
+        return category.lp_tienda_icon_url
+    return _CATEGORY_OVERRIDES.get(category.id, {}).get("icon_url")
 
 
 def _with_current_query(path):
@@ -265,6 +287,7 @@ class LatinpymeTiendaController(Website):
                         {
                             "name": _category_display_name(category),
                             "url": _category_url(category),
+                            "icon_url": _category_icon_url(category),
                             "products": [
                                 {
                                     "name": product.name,

@@ -2,11 +2,14 @@
 <odoo>
   <template id="lp_tienda_shop_products_layout" name="Tienda LatinPyme Shop Catalog" inherit_id="website_sale.products">
     <xpath expr="//t[@t-set='additional_title']" position="replace">
-      <t t-if="category and category.id == 1" t-set="title" t-value="'Cursos de Auditoría | Tienda Latinpyme'"/>
-      <t t-elif="category and category.id == 2" t-set="title" t-value="'Cursos de Seguridad Vial | Tienda Latinpyme'"/>
-      <t t-elif="category and category.id == 4" t-set="title" t-value="'Diplomados | Tienda Latinpyme'"/>
-      <t t-elif="category and category.id == 6" t-set="title" t-value="'Talleres | Tienda Latinpyme'"/>
-      <t t-elif="category and category.id == 5" t-set="title" t-value="'FlashTraining | Tienda Latinpyme'"/>
+      <t
+        t-if="category"
+        t-set="title"
+        t-value="'%s | Tienda Latinpyme' % (category.lp_tienda_display_name or category.name)"/>
+      <t
+        t-if="category and category.lp_tienda_icon_url"
+        t-set="x_icon"
+        t-value="category.lp_tienda_icon_url"/>
       <t t-else="" t-set="additional_title" t-value="category.name if category else None"/>
     </xpath>
 
@@ -14,7 +17,7 @@
       <t
         t-if="category"
         t-set="placeholder"
-        t-value="'Buscar en %s' % ('Cursos de Auditoría' if category.id == 1 else 'Cursos de Seguridad Vial' if category.id == 2 else 'Diplomados' if category.id == 4 else 'FlashTraining' if category.id == 5 else 'Talleres' if category.id == 6 else category.name)"
+        t-value="'Buscar en %s' % (category.lp_tienda_display_name or category.name)"
       />
     </xpath>
 
@@ -67,11 +70,11 @@
         <t
           t-if="category"
           t-set="lp_category_display_name"
-          t-value="'Cursos de Auditoría' if category.id == 1 else 'Cursos de Seguridad Vial' if category.id == 2 else 'Diplomados' if category.id == 4 else 'FlashTraining' if category.id == 5 else 'Talleres' if category.id == 6 else category.name"/>
+          t-value="category.lp_tienda_display_name or category.name"/>
         <t
           t-if="category"
           t-set="lp_category_icon"
-          t-value="'/latinpyme_tienda_theme/static/src/img/talleres-icon.png' if category.id == 6 else '/latinpyme_tienda_theme/static/src/img/icon-auditoria.png' if category.id == 1 else '/latinpyme_tienda_theme/static/src/img/icon-seguridad-vial.png' if category.id == 2 else '/latinpyme_tienda_theme/static/src/img/icon-diplomado.png' if category.id == 4 else '/latinpyme_tienda_theme/static/src/img/icon-flashtraining.png' if category.id == 5 else False"/>
+          t-value="category.lp_tienda_icon_url"/>
         <div class="lp-shop-catalog-hero__content">
           <p class="lp-shop-catalog-hero__eyebrow">Catalogo</p>
           <div class="lp-shop-catalog-hero__title">
@@ -133,23 +136,13 @@
   <template id="lp_tienda_shop_breadcrumb_labels" name="Tienda LatinPyme Shop Breadcrumb Labels" inherit_id="website_sale.products_breadcrumb">
     <xpath expr="//span[@t-field='cat.name']" position="replace">
       <span class="d-inline-block">
-        <t t-if="cat.id == 1">Cursos de Auditoría</t>
-        <t t-elif="cat.id == 2">Cursos de Seguridad Vial</t>
-        <t t-elif="cat.id == 4">Diplomados</t>
-        <t t-elif="cat.id == 6">Talleres</t>
-        <t t-elif="cat.id == 5">FlashTraining</t>
-        <t t-else="" t-out="cat.name"/>
+        <t t-out="cat.lp_tienda_display_name or cat.name"/>
       </span>
     </xpath>
 
     <xpath expr="//a[@t-field='cat.name']" position="replace">
       <a t-att-href="keep('/shop/category/talleres-6' if cat.id == 6 else '/shop/category/flashtraining-5' if cat.id == 5 else '%s/category/%s' % (shop_path, slug(cat)))">
-        <t t-if="cat.id == 1">Cursos de Auditoría</t>
-        <t t-elif="cat.id == 2">Cursos de Seguridad Vial</t>
-        <t t-elif="cat.id == 4">Diplomados</t>
-        <t t-elif="cat.id == 6">Talleres</t>
-        <t t-elif="cat.id == 5">FlashTraining</t>
-        <t t-else="" t-out="cat.name"/>
+        <t t-out="cat.lp_tienda_display_name or cat.name"/>
       </a>
     </xpath>
   </template>
@@ -165,4 +158,5 @@
       </a>
     </xpath>
   </template>
+
 </odoo>
