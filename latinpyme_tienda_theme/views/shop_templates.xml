@@ -10,6 +10,14 @@
       <t t-else="" t-set="additional_title" t-value="category.name if category else None"/>
     </xpath>
 
+    <xpath expr="//t[@t-if='category' and @t-set='placeholder']" position="replace">
+      <t
+        t-if="category"
+        t-set="placeholder"
+        t-value="'Buscar en %s' % ('Cursos de Auditoría' if category.id == 1 else 'Cursos de Seguridad Vial' if category.id == 2 else 'Diplomados' if category.id == 4 else 'FlashTraining' if category.id == 5 else 'Talleres' if category.id == 6 else category.name)"
+      />
+    </xpath>
+
     <xpath expr="//t[@t-set='hasLeftColumn']" position="replace">
       <t t-set="hasLeftColumn" t-value="False if category else (opt_wsale_categories or opt_wsale_attributes)"/>
     </xpath>
@@ -59,7 +67,7 @@
         <t
           t-if="category"
           t-set="lp_category_display_name"
-          t-value="'Talleres' if category.id == 6 else 'FlashTraining' if category.id == 5 else category.name"/>
+          t-value="'Cursos de Auditoría' if category.id == 1 else 'Cursos de Seguridad Vial' if category.id == 2 else 'Diplomados' if category.id == 4 else 'FlashTraining' if category.id == 5 else 'Talleres' if category.id == 6 else category.name"/>
         <t
           t-if="category"
           t-set="lp_category_icon"
@@ -125,7 +133,10 @@
   <template id="lp_tienda_shop_breadcrumb_labels" name="Tienda LatinPyme Shop Breadcrumb Labels" inherit_id="website_sale.products_breadcrumb">
     <xpath expr="//span[@t-field='cat.name']" position="replace">
       <span class="d-inline-block">
-        <t t-if="cat.id == 6">Talleres</t>
+        <t t-if="cat.id == 1">Cursos de Auditoría</t>
+        <t t-elif="cat.id == 2">Cursos de Seguridad Vial</t>
+        <t t-elif="cat.id == 4">Diplomados</t>
+        <t t-elif="cat.id == 6">Talleres</t>
         <t t-elif="cat.id == 5">FlashTraining</t>
         <t t-else="" t-out="cat.name"/>
       </span>
@@ -133,7 +144,10 @@
 
     <xpath expr="//a[@t-field='cat.name']" position="replace">
       <a t-att-href="keep('/shop/category/talleres-6' if cat.id == 6 else '/shop/category/flashtraining-5' if cat.id == 5 else '%s/category/%s' % (shop_path, slug(cat)))">
-        <t t-if="cat.id == 6">Talleres</t>
+        <t t-if="cat.id == 1">Cursos de Auditoría</t>
+        <t t-elif="cat.id == 2">Cursos de Seguridad Vial</t>
+        <t t-elif="cat.id == 4">Diplomados</t>
+        <t t-elif="cat.id == 6">Talleres</t>
         <t t-elif="cat.id == 5">FlashTraining</t>
         <t t-else="" t-out="cat.name"/>
       </a>

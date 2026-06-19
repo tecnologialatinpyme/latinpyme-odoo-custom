@@ -1694,6 +1694,14 @@
 
     .products_header {
       margin-top: 0;
+      justify-content: flex-end !important;
+    }
+
+    .o_wsale_products_header_search_form_container {
+      flex: 0 1 520px;
+      max-width: 520px;
+      margin-right: 0 !important;
+      margin-left: auto !important;
     }
 
     .o_wsale_products_main_row {
