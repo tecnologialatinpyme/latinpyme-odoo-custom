@@ -59,6 +59,19 @@ def _binary_to_text(value):
     return value or ""
 
 
+def _image_cache_key(record):
+    date_value = record.write_date or record.create_date
+    return date_value.strftime("%Y%m%d%H%M%S") if date_value else str(record.id)
+
+
+def _record_image_url(record, field_name):
+    return "/web/image/product.public.category/%s/%s?unique=%s" % (
+        record.id,
+        field_name,
+        _image_cache_key(record),
+    )
+
+
 def _menu_item_display_name(item):
     category = item.product_public_category_id
     if item.item_type == "category" and category:
@@ -112,20 +125,20 @@ class ProductPublicCategory(models.Model):
         compute_sudo=True,
     )
 
-    @api.depends("name", "lp_tienda_icon", "lp_tienda_cover_image")
+    @api.depends("name", "lp_tienda_icon", "lp_tienda_cover_image", "write_date")
     def _compute_lp_tienda_media(self):
         for category in self:
             category.lp_tienda_display_name = _category_display_name(category)
             category.lp_tienda_static_icon_url = _CATEGORY_ICON_FALLBACKS.get(category.id, "")
             if category.lp_tienda_icon:
                 category.lp_tienda_icon_effective = category.lp_tienda_icon
-                category.lp_tienda_icon_url = "/web/image/product.public.category/%s/lp_tienda_icon" % category.id
+                category.lp_tienda_icon_url = _record_image_url(category, "lp_tienda_icon")
             else:
                 category.lp_tienda_icon_effective = _category_static_icon_binary(category.id)
                 category.lp_tienda_icon_url = category.lp_tienda_static_icon_url
 
             category.lp_tienda_cover_image_url = (
-                "/web/image/product.public.category/%s/lp_tienda_cover_image" % category.id
+                _record_image_url(category, "lp_tienda_cover_image")
                 if category.lp_tienda_cover_image
                 else ""
             )
