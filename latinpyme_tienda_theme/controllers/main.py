@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import base64
 import logging
 from datetime import date
+from pathlib import Path
 
 from odoo import http
 from odoo.addons.website_sale.controllers.main import WebsiteSale
@@ -10,6 +12,8 @@ from odoo.http import request
 
 
 _logger = logging.getLogger(__name__)
+_MODULE_ROOT = Path(__file__).resolve().parents[1]
+_STATIC_ICON_PREFIX = "/latinpyme_tienda_theme/static/src/img/"
 
 _CATEGORY_OVERRIDES = {
     1: {
@@ -50,12 +54,46 @@ def _category_url(category):
 def _category_icon_url(category):
     if "lp_tienda_icon_url" in category._fields and category.lp_tienda_icon_url:
         return category.lp_tienda_icon_url
-    return _CATEGORY_OVERRIDES.get(category.id, {}).get("icon_url")
+    if _CATEGORY_OVERRIDES.get(category.id, {}).get("icon_url"):
+        return "/tienda/category/%s/icon" % category.id
+    return False
 
 
 def _with_current_query(path):
     query_string = request.httprequest.query_string.decode("utf-8")
     return "%s?%s" % (path, query_string) if query_string else path
+
+
+def _decode_image(value):
+    if not value:
+        return b""
+    if isinstance(value, str):
+        value = value.encode("ascii")
+    return base64.b64decode(value)
+
+
+def _guess_image_mimetype(image_data):
+    if image_data.startswith(b"\x89PNG"):
+        return "image/png"
+    if image_data.startswith(b"\xff\xd8"):
+        return "image/jpeg"
+    if image_data.startswith(b"RIFF") and image_data[8:12] == b"WEBP":
+        return "image/webp"
+    if image_data.startswith(b"GIF"):
+        return "image/gif"
+    return "image/png"
+
+
+def _fallback_icon_data(category_id):
+    icon_url = _CATEGORY_OVERRIDES.get(category_id, {}).get("icon_url")
+    if not icon_url or not icon_url.startswith(_STATIC_ICON_PREFIX):
+        return b""
+
+    icon_path = _MODULE_ROOT / "static" / "src" / "img" / icon_url.replace(_STATIC_ICON_PREFIX, "")
+    try:
+        return icon_path.read_bytes()
+    except OSError:
+        return b""
 
 
 class LatinpymeTiendaShopController(WebsiteSale):
@@ -165,6 +203,28 @@ class LatinpymeTiendaShopController(WebsiteSale):
 
 
 class LatinpymeTiendaController(Website):
+    @http.route("/tienda/category/<int:category_id>/icon", type="http", auth="public", website=True, sitemap=False)
+    def tienda_category_icon(self, category_id, **kwargs):
+        category = request.env["product.public.category"].sudo().browse(category_id)
+        if not category.exists():
+            return request.not_found()
+
+        image_data = b""
+        if "lp_tienda_icon" in category._fields and category.lp_tienda_icon:
+            image_data = _decode_image(category.lp_tienda_icon)
+        if not image_data:
+            image_data = _fallback_icon_data(category.id)
+        if not image_data:
+            return request.not_found()
+
+        return request.make_response(
+            image_data,
+            headers=[
+                ("Content-Type", _guess_image_mimetype(image_data)),
+                ("Cache-Control", "no-cache, max-age=0, must-revalidate"),
+            ],
+        )
+
     def _home_menu_item(self):
         return {
             "name": "Inicio",

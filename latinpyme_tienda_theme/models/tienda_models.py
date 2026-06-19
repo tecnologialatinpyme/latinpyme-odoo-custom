@@ -65,11 +65,11 @@ def _image_cache_key(record):
 
 
 def _record_image_url(record, field_name):
-    return "/web/image/product.public.category/%s/%s?unique=%s" % (
-        record.id,
-        field_name,
-        _image_cache_key(record),
-    )
+    return "/web/image/product.public.category/%s/%s?unique=%s" % (record.id, field_name, _image_cache_key(record))
+
+
+def _category_icon_route(record):
+    return "/tienda/category/%s/icon?unique=%s" % (record.id, _image_cache_key(record))
 
 
 def _menu_item_display_name(item):
@@ -132,10 +132,14 @@ class ProductPublicCategory(models.Model):
             category.lp_tienda_static_icon_url = _CATEGORY_ICON_FALLBACKS.get(category.id, "")
             if category.lp_tienda_icon:
                 category.lp_tienda_icon_effective = category.lp_tienda_icon
-                category.lp_tienda_icon_url = _record_image_url(category, "lp_tienda_icon")
             else:
                 category.lp_tienda_icon_effective = _category_static_icon_binary(category.id)
-                category.lp_tienda_icon_url = category.lp_tienda_static_icon_url
+
+            category.lp_tienda_icon_url = (
+                _category_icon_route(category)
+                if category.lp_tienda_icon or category.lp_tienda_static_icon_url
+                else ""
+            )
 
             category.lp_tienda_cover_image_url = (
                 _record_image_url(category, "lp_tienda_cover_image")
