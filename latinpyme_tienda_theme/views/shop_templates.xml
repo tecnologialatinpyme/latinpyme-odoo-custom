@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <template id="lp_tienda_shop_products_layout" name="Tienda LatinPyme Shop Catalog" inherit_id="website_sale.products">
+    <xpath expr="//t[@t-set='additional_title']" position="replace">
+      <t t-if="category and category.id == 6" t-set="title" t-value="'Talleres | Tienda Latinpyme'"/>
+      <t t-elif="category and category.id == 5" t-set="title" t-value="'FlashTraining | Tienda Latinpyme'"/>
+      <t t-else="" t-set="additional_title" t-value="category.name if category else None"/>
+    </xpath>
+
     <xpath expr="//div[@id='wrap']" position="attributes">
       <attribute name="class" add="lp-tienda lp-tienda-shop lp-shop-page" separator=" "/>
     </xpath>
@@ -80,6 +86,24 @@
           <a href="/shop?search=flashtraining">FlashTraining</a>
         </nav>
       </section>
+    </xpath>
+  </template>
+
+  <template id="lp_tienda_shop_breadcrumb_labels" name="Tienda LatinPyme Shop Breadcrumb Labels" inherit_id="website_sale.products_breadcrumb">
+    <xpath expr="//span[@t-field='cat.name']" position="replace">
+      <span class="d-inline-block">
+        <t t-if="cat.id == 6">Talleres</t>
+        <t t-elif="cat.id == 5">FlashTraining</t>
+        <t t-else="" t-out="cat.name"/>
+      </span>
+    </xpath>
+
+    <xpath expr="//a[@t-field='cat.name']" position="replace">
+      <a t-att-href="keep('/shop/category/talleres-6' if cat.id == 6 else '/shop/category/flashtraining-5' if cat.id == 5 else '%s/category/%s' % (shop_path, slug(cat)))">
+        <t t-if="cat.id == 6">Talleres</t>
+        <t t-elif="cat.id == 5">FlashTraining</t>
+        <t t-else="" t-out="cat.name"/>
+      </a>
     </xpath>
   </template>
 
