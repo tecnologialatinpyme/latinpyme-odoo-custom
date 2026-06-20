@@ -1735,23 +1735,42 @@
       background: #fbfbfc;
 
       a,
+      .oe_product_image_link,
+      .oe_product_image_wrapper,
       picture {
         display: grid;
         width: 100%;
         height: 100%;
         place-items: center;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-size: contain !important;
       }
 
       img,
       .img,
       .img-fluid,
+      .o_image,
+      .oe_product_image_img,
+      .oe_product_image_link img,
+      .oe_product_image_wrapper img,
       picture img {
-        width: 100%;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
         max-width: 100%;
         max-height: 100%;
         object-fit: contain !important;
         object-position: center;
+        transform: none !important;
+      }
+
+      .o_image,
+      .oe_product_image_link,
+      .oe_product_image_wrapper,
+      [style*="background-image"] {
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-size: contain !important;
       }
     }
 
