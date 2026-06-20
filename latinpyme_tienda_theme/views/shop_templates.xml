@@ -139,15 +139,19 @@
         <span class="lp-tienda-breadcrumb__current">Todos los productos</span>
       </nav>
     </xpath>
-  </template>
 
-  <template id="lp_tienda_shop_breadcrumb_labels" name="Tienda LatinPyme Shop Breadcrumb Labels" inherit_id="website_sale.products_breadcrumb">
-    <xpath expr="." position="replace">
+    <xpath expr="//div[@id='category_header']" position="inside">
       <nav t-if="category" class="lp-tienda-breadcrumb" aria-label="Miga de pan">
         <a href="/">Inicio</a>
         <span aria-hidden="true">&gt;</span>
         <span class="lp-tienda-breadcrumb__current" t-out="category.lp_tienda_display_name or category.name"/>
       </nav>
+    </xpath>
+  </template>
+
+  <template id="lp_tienda_shop_breadcrumb_labels" name="Tienda LatinPyme Shop Breadcrumb Labels" inherit_id="website_sale.products_breadcrumb">
+    <xpath expr="." position="replace">
+      <t/>
     </xpath>
   </template>
 
