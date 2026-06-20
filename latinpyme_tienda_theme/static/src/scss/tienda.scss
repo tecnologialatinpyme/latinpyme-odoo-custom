@@ -1663,7 +1663,7 @@
       #fff;
   }
 
-  .lp-shop-catalog-hero.lp-category-landing + #o_wsale_container.lp-shop-catalog__layout {
+  .lp-shop-catalog-hero.lp-category-landing + #o_wsale_container {
     max-width: 1180px;
 
     #products_grid_before,
@@ -1720,8 +1720,13 @@
       display: none !important;
     }
 
-    #o_wsale_products_grid.lp-store-products {
+    #o_wsale_products_grid {
       gap: 22px;
+
+      &.o_wsale_products_opt_thumb_cover {
+        --o-wsale-card-thumb-fill-mode: contain;
+        --o-wsale-card-thumb-aspect-ratio: auto;
+      }
     }
 
     .oe_product_cart {
@@ -1743,10 +1748,29 @@
         display: grid;
         width: 100%;
         height: 100%;
+        min-height: 0 !important;
         place-items: center;
+        aspect-ratio: auto !important;
+        max-height: 100% !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
         background-size: contain !important;
+      }
+
+      .oe_product_image_link {
+        display: flex !important;
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .oe_product_image_img_wrapper,
+      .oe_product_image_img_wrapper_primary {
+        position: static !important;
+        inset: auto !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
       }
 
       img,
@@ -1757,6 +1781,7 @@
       .oe_product_image_link img,
       .oe_product_image_wrapper img,
       picture img {
+        position: static !important;
         width: auto !important;
         height: auto !important;
         min-width: 0 !important;
@@ -1779,12 +1804,16 @@
     }
 
     .o_wsale_products_opt_thumb_cover {
+      --o-wsale-card-thumb-fill-mode: contain;
+      --o-wsale-card-thumb-aspect-ratio: auto;
+
       .oe_product_image img,
       .oe_product_image .img,
       .oe_product_image .img-fluid,
       .oe_product_image .oe_product_image_img,
       .oe_product_image .oe_product_image_link img,
       .oe_product_image .oe_product_image_img_wrapper img {
+        position: static !important;
         width: auto !important;
         height: auto !important;
         min-width: 0 !important;
@@ -2296,7 +2325,7 @@
       padding: 16px;
     }
 
-    .lp-shop-catalog-hero.lp-category-landing + #o_wsale_container.lp-shop-catalog__layout {
+    .lp-shop-catalog-hero.lp-category-landing + #o_wsale_container {
       .oe_product_image {
         height: 188px;
         min-height: 188px;
