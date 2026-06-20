@@ -140,7 +140,7 @@
       </nav>
     </xpath>
 
-    <xpath expr="//div[@id='category_header']" position="inside">
+    <xpath expr="//div[@id='category_header']" position="before">
       <nav t-if="category" class="lp-tienda-breadcrumb" aria-label="Miga de pan">
         <a href="/">Inicio</a>
         <span aria-hidden="true">&gt;</span>
