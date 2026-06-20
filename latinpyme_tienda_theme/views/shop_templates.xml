@@ -144,7 +144,7 @@
   </template>
 
   <template id="lp_tienda_shop_breadcrumb_labels" name="Tienda LatinPyme Shop Breadcrumb Labels" inherit_id="website_sale.products_breadcrumb">
-    <xpath expr="//ol[hasclass('breadcrumb')]" position="replace">
+    <xpath expr="." position="replace">
       <t/>
     </xpath>
   </template>

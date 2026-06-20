@@ -1573,6 +1573,10 @@
     white-space: nowrap;
   }
 
+  #o_wsale_products_header .breadcrumb {
+    display: none !important;
+  }
+
   .lp-category-hero__icon {
     display: inline-flex;
     flex: 0 0 auto;
