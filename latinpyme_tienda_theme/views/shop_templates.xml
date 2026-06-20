@@ -75,6 +75,16 @@
           t-if="category"
           t-set="lp_category_icon"
           t-value="category.lp_tienda_icon_url"/>
+        <nav class="lp-tienda-breadcrumb" aria-label="Miga de pan">
+          <a href="/">Inicio</a>
+          <span aria-hidden="true">&gt;</span>
+          <span class="lp-tienda-breadcrumb__current">
+            <t t-if="category">
+              <t t-out="lp_category_display_name"/>
+            </t>
+            <t t-else="">Todos los productos</t>
+          </span>
+        </nav>
         <div class="lp-shop-catalog-hero__content">
           <p class="lp-shop-catalog-hero__eyebrow">Catalogo</p>
           <div class="lp-shop-catalog-hero__title">
@@ -134,16 +144,8 @@
   </template>
 
   <template id="lp_tienda_shop_breadcrumb_labels" name="Tienda LatinPyme Shop Breadcrumb Labels" inherit_id="website_sale.products_breadcrumb">
-    <xpath expr="//span[@t-field='cat.name']" position="replace">
-      <span class="d-inline-block">
-        <t t-out="cat.lp_tienda_display_name or cat.name"/>
-      </span>
-    </xpath>
-
-    <xpath expr="//a[@t-field='cat.name']" position="replace">
-      <a t-att-href="keep('/shop/category/talleres-6' if cat.id == 6 else '/shop/category/flashtraining-5' if cat.id == 5 else '%s/category/%s' % (shop_path, slug(cat)))">
-        <t t-out="cat.lp_tienda_display_name or cat.name"/>
-      </a>
+    <xpath expr="//ol[hasclass('breadcrumb')]" position="replace">
+      <t/>
     </xpath>
   </template>
 

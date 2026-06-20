@@ -1542,6 +1542,37 @@
     }
   }
 
+  .lp-tienda-breadcrumb {
+    display: flex;
+    grid-column: 1 / -1;
+    max-width: 100%;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    color: #69707d;
+    font-size: 13px;
+    font-weight: 750;
+    line-height: 1.3;
+
+    a {
+      flex: 0 0 auto;
+      color: #151922;
+      text-decoration: none;
+
+      &:hover {
+        color: var(--lp-tienda-red);
+      }
+    }
+  }
+
+  .lp-tienda-breadcrumb__current {
+    min-width: 0;
+    overflow: hidden;
+    color: #151922;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .lp-category-hero__icon {
     display: inline-flex;
     flex: 0 0 auto;
