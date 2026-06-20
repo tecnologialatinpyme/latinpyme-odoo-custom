@@ -99,8 +99,8 @@ def _fallback_icon_data(category_id):
 class LatinpymeTiendaShopController(WebsiteSale):
     def _get_shop_path(self, category=None, page=0):
         category_id = getattr(category, "id", category)
-        if category_id in _CATEGORY_OVERRIDES:
-            path = _CATEGORY_OVERRIDES[category_id]["url"]
+        path = _CATEGORY_OVERRIDES.get(category_id, {}).get("url")
+        if path:
             if page:
                 path = "%s/page/%s" % (path, page)
             return path
