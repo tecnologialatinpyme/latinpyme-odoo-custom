@@ -223,8 +223,7 @@
 
         #wrapwrap #wrap .hero,
         #wrapwrap #wrap .hero *,
-        #wrapwrap #wrap .btn.secondary,
-        #wrapwrap #wrap .cta-sticky .btn {
+        #wrapwrap #wrap .btn.secondary {
           color: #fff !important;
           -webkit-text-fill-color: #fff !important;
         }
@@ -232,6 +231,14 @@
         #wrapwrap #wrap .btn.primary {
           color: #e30613 !important;
           -webkit-text-fill-color: #e30613 !important;
+        }
+
+        #wrapwrap #wrap .cta-sticky .btn,
+        #wrapwrap #wrap .cta-sticky .btn.primary,
+        #wrapwrap #wrap .cta-sticky .btn.primary:hover,
+        #wrapwrap #wrap .cta-sticky .btn.primary:focus {
+          color: #fff !important;
+          -webkit-text-fill-color: #fff !important;
         }
       </style>
     </xpath>
