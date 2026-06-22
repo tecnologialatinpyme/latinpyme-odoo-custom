@@ -190,6 +190,50 @@
           display: none !important;
         }
       </style>
+      <style t-if="(request.httprequest.path or '').rstrip('/') == '/patrocinio-corporativo'">
+        #wrapwrap #wrap .section,
+        #wrapwrap #wrap .section p,
+        #wrapwrap #wrap .section li,
+        #wrapwrap #wrap .card,
+        #wrapwrap #wrap .prog-card,
+        #wrapwrap #wrap .prog-content {
+          color: #1a1f2b !important;
+          -webkit-text-fill-color: #1a1f2b !important;
+        }
+
+        #wrapwrap #wrap .section h2,
+        #wrapwrap #wrap .section h3,
+        #wrapwrap #wrap .prog-btn,
+        #wrapwrap #wrap .prog-btn .t {
+          color: #1a1f2b !important;
+          -webkit-text-fill-color: #1a1f2b !important;
+        }
+
+        #wrapwrap #wrap .sub,
+        #wrapwrap #wrap .chip {
+          color: #495163 !important;
+          -webkit-text-fill-color: #495163 !important;
+        }
+
+        #wrapwrap #wrap .prog-btn .plus,
+        #wrapwrap #wrap .bullet li .mes {
+          color: #0a4d8c !important;
+          -webkit-text-fill-color: #0a4d8c !important;
+        }
+
+        #wrapwrap #wrap .hero,
+        #wrapwrap #wrap .hero *,
+        #wrapwrap #wrap .btn.secondary,
+        #wrapwrap #wrap .cta-sticky .btn {
+          color: #fff !important;
+          -webkit-text-fill-color: #fff !important;
+        }
+
+        #wrapwrap #wrap .btn.primary {
+          color: #e30613 !important;
+          -webkit-text-fill-color: #e30613 !important;
+        }
+      </style>
     </xpath>
 
     <xpath expr="//div[@id='wrapwrap']/*[1]" position="before">
