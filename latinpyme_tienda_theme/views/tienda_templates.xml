@@ -244,7 +244,7 @@
     </xpath>
 
     <xpath expr="//div[@id='wrapwrap']/*[1]" position="before">
-      <t t-if="request.env['latinpyme.tienda.config'].sudo().is_current_request_tienda_shell()">
+      <t t-if="request.env['latinpyme.tienda.config'].sudo().is_current_request_tienda_shell() and not request.env['latinpyme.tienda.config'].sudo().is_current_request_shop_catalog()">
         <t t-set="lp_tienda_layout_values" t-value="request.env['latinpyme.tienda.config'].sudo().get_layout_context(request.website)"/>
         <t t-set="social_links" t-value="lp_tienda_layout_values['social_links']"/>
         <t t-set="main_menu" t-value="lp_tienda_layout_values['main_menu']"/>
