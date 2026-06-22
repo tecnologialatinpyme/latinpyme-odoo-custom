@@ -6,5 +6,74 @@
       <field name="production_domain">tienda.latinpyme.com</field>
       <field name="brand_label">Tienda</field>
     </record>
+
+    <record id="tienda_footer_sections_courses" model="latinpyme.tienda.footer.link">
+      <field name="group_key">sections</field>
+      <field name="name">Cursos</field>
+      <field name="url">/shop?search=cursos</field>
+      <field name="sequence">10</field>
+    </record>
+    <record id="tienda_footer_sections_training" model="latinpyme.tienda.footer.link">
+      <field name="group_key">sections</field>
+      <field name="name">Capacitación</field>
+      <field name="url">/shop?search=capacitacion</field>
+      <field name="sequence">20</field>
+    </record>
+    <record id="tienda_footer_sections_technology" model="latinpyme.tienda.footer.link">
+      <field name="group_key">sections</field>
+      <field name="name">Tecnología</field>
+      <field name="url">/shop?search=tecnologia</field>
+      <field name="sequence">30</field>
+    </record>
+    <record id="tienda_footer_sections_ai" model="latinpyme.tienda.footer.link">
+      <field name="group_key">sections</field>
+      <field name="name">Inteligencia artificial</field>
+      <field name="url">/shop?search=inteligencia%20artificial</field>
+      <field name="sequence">40</field>
+    </record>
+
+    <record id="tienda_footer_portfolio_solutions" model="latinpyme.tienda.footer.link">
+      <field name="group_key">portfolio</field>
+      <field name="name">Soluciones</field>
+      <field name="url">/shop?search=soluciones</field>
+      <field name="sequence">10</field>
+    </record>
+    <record id="tienda_footer_portfolio_school" model="latinpyme.tienda.footer.link">
+      <field name="group_key">portfolio</field>
+      <field name="name">Escuela</field>
+      <field name="url">/shop?search=escuela</field>
+      <field name="sequence">20</field>
+    </record>
+    <record id="tienda_footer_portfolio_events" model="latinpyme.tienda.footer.link">
+      <field name="group_key">portfolio</field>
+      <field name="name">Eventos</field>
+      <field name="url">/shop?search=eventos</field>
+      <field name="sequence">30</field>
+    </record>
+    <record id="tienda_footer_portfolio_course_50_20" model="latinpyme.tienda.footer.link">
+      <field name="group_key">portfolio</field>
+      <field name="name">Curso 50 y 20 horas</field>
+      <field name="url">/shop?search=50%2020</field>
+      <field name="sequence">40</field>
+    </record>
+
+    <record id="tienda_footer_legal_terms" model="latinpyme.tienda.footer.link">
+      <field name="group_key">legal</field>
+      <field name="name">Términos de Uso</field>
+      <field name="url">/terms</field>
+      <field name="sequence">10</field>
+    </record>
+    <record id="tienda_footer_legal_privacy" model="latinpyme.tienda.footer.link">
+      <field name="group_key">legal</field>
+      <field name="name">Privacidad y datos</field>
+      <field name="url">/terms</field>
+      <field name="sequence">20</field>
+    </record>
+    <record id="tienda_footer_legal_notice" model="latinpyme.tienda.footer.link">
+      <field name="group_key">legal</field>
+      <field name="name">Aviso Legal</field>
+      <field name="url">/terms</field>
+      <field name="sequence">30</field>
+    </record>
   </data>
 </odoo>

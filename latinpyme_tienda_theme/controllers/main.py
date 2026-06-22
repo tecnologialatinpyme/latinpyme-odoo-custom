@@ -521,36 +521,49 @@ class LatinpymeTiendaController(Website):
                     "logo_url": "https://latinpyme.com/revista/media/ally/9/logo",
                 },
             ],
-            "footer_columns": [
-                {
-                    "title": "SECCIONES",
-                    "links": [
-                        ("Cursos", "/shop?search=cursos"),
-                        ("Capacitación", "/shop?search=capacitacion"),
-                        ("Tecnología", "/shop?search=tecnologia"),
-                        ("Inteligencia artificial", "/shop?search=inteligencia%20artificial"),
-                    ],
-                },
-                {
-                    "title": "PORTAFOLIO",
-                    "links": [
-                        ("Soluciones", "/shop?search=soluciones"),
-                        ("Escuela", "/shop?search=escuela"),
-                        ("Eventos", "/shop?search=eventos"),
-                        ("Curso 50 y 20 horas", "/shop?search=50%2020"),
-                    ],
-                },
-                {
-                    "title": "LEGAL",
-                    "links": [
-                        ("Términos de Uso", "/terms"),
-                        ("Privacidad y datos", "/terms"),
-                        ("Aviso Legal", "/terms"),
-                    ],
-                },
-            ],
+            "footer_columns": self._footer_columns(),
             "whatsapp_url": whatsapp_url,
         }
+
+    def _fallback_footer_columns(self):
+        return [
+            {
+                "title": "SECCIONES",
+                "links": [
+                    {"label": "Cursos", "url": "/shop?search=cursos", "open_new_tab": False},
+                    {"label": "Capacitación", "url": "/shop?search=capacitacion", "open_new_tab": False},
+                    {"label": "Tecnología", "url": "/shop?search=tecnologia", "open_new_tab": False},
+                    {"label": "Inteligencia artificial", "url": "/shop?search=inteligencia%20artificial", "open_new_tab": False},
+                ],
+            },
+            {
+                "title": "PORTAFOLIO",
+                "links": [
+                    {"label": "Soluciones", "url": "/shop?search=soluciones", "open_new_tab": False},
+                    {"label": "Escuela", "url": "/shop?search=escuela", "open_new_tab": False},
+                    {"label": "Eventos", "url": "/shop?search=eventos", "open_new_tab": False},
+                    {"label": "Curso 50 y 20 horas", "url": "/shop?search=50%2020", "open_new_tab": False},
+                ],
+            },
+            {
+                "title": "LEGAL",
+                "links": [
+                    {"label": "Términos de Uso", "url": "/terms", "open_new_tab": False},
+                    {"label": "Privacidad y datos", "url": "/terms", "open_new_tab": False},
+                    {"label": "Aviso Legal", "url": "/terms", "open_new_tab": False},
+                ],
+            },
+        ]
+
+    def _footer_columns(self):
+        try:
+            website = getattr(request, "website", False)
+            columns = request.env["latinpyme.tienda.footer.link"].sudo().get_footer_columns(website)
+            if any(column.get("links") for column in columns):
+                return columns
+        except Exception as exc:
+            _logger.info("No se pudieron cargar links de footer de Tienda: %s", exc)
+        return self._fallback_footer_columns()
 
     def _is_tienda_website(self):
         website = getattr(request, "website", False)

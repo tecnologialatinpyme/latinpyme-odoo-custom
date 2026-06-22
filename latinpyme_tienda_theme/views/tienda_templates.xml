@@ -155,7 +155,13 @@
         <div class="lp-tienda-footer__column" t-foreach="footer_columns" t-as="column">
           <h3 t-out="column['title']"/>
           <div class="lp-tienda-footer__panel">
-            <a t-foreach="column['links']" t-as="link" t-att-href="link[1]" t-out="link[0]"/>
+            <a
+              t-foreach="column['links']"
+              t-as="link"
+              t-att-href="link['url']"
+              t-att-target="'_blank' if link.get('open_new_tab') else None"
+              t-att-rel="'noopener' if link.get('open_new_tab') else None"
+              t-out="link['label']"/>
           </div>
         </div>
         <div class="lp-tienda-footer__column lp-tienda-footer__contact">

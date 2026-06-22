@@ -35,6 +35,18 @@ _CATEGORY_ICON_FALLBACKS = {
     for category_id, filename in _CATEGORY_ICON_FILES.items()
 }
 
+FOOTER_LINK_GROUPS = [
+    ("sections", "Secciones"),
+    ("portfolio", "Portafolio"),
+    ("legal", "Legal"),
+]
+
+FOOTER_COLUMN_TITLES = {
+    "sections": "SECCIONES",
+    "portfolio": "PORTAFOLIO",
+    "legal": "LEGAL",
+}
+
 
 def _category_display_name(category):
     return _CATEGORY_NAME_OVERRIDES.get(category.id, category.name)
@@ -284,3 +296,47 @@ class LatinpymeTiendaMenuItem(models.Model):
 
         roots = items.filtered(lambda item: not item.parent_id)
         return [item_values(item) for item in roots]
+
+
+class LatinpymeTiendaFooterLink(models.Model):
+    _name = "latinpyme.tienda.footer.link"
+    _description = "Link del footer Tienda LatinPyme"
+    _order = "sequence, group_key, name"
+
+    name = fields.Char(string="Texto", required=True)
+    url = fields.Char(string="URL", required=True, default="#")
+    group_key = fields.Selection(FOOTER_LINK_GROUPS, string="Grupo", required=True, default="sections", index=True)
+    active = fields.Boolean(string="Activo", default=True)
+    sequence = fields.Integer(string="Orden", default=10)
+    open_new_tab = fields.Boolean(string="Abrir en nueva pestaña")
+    website_id = fields.Many2one("website", string="Sitio web", ondelete="cascade")
+
+    @api.model
+    def get_active_links(self, group_key, website=None):
+        domain = [("active", "=", True), ("group_key", "=", group_key)]
+        if website:
+            website_links = self.sudo().search(domain + [("website_id", "=", website.id)], order="sequence, name")
+            if website_links:
+                return website_links
+        return self.sudo().search(domain + [("website_id", "=", False)], order="sequence, name")
+
+    @api.model
+    def get_footer_columns(self, website=None):
+        columns = []
+        for group_key, _label in FOOTER_LINK_GROUPS:
+            links = self.get_active_links(group_key, website)
+            columns.append(
+                {
+                    "key": group_key,
+                    "title": FOOTER_COLUMN_TITLES[group_key],
+                    "links": [
+                        {
+                            "label": link.name,
+                            "url": link.url,
+                            "open_new_tab": link.open_new_tab,
+                        }
+                        for link in links
+                    ],
+                }
+            )
+        return columns
