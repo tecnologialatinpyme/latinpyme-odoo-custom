@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import base64
+from datetime import date
 from pathlib import Path
 
 from odoo import api, fields, models
@@ -182,6 +183,197 @@ class LatinpymeTiendaConfig(models.Model):
     website_id = fields.Many2one("website", string="Sitio web", ondelete="set null")
     production_domain = fields.Char(string="Dominio final", default="tienda.latinpyme.com")
     brand_label = fields.Char(string="Etiqueta de marca", default="Tienda")
+
+    @api.model
+    def _home_menu_item(self):
+        return {
+            "name": "Inicio",
+            "url": "/",
+            "item_type": "home",
+            "open_new_tab": False,
+            "show_in_mobile": True,
+            "css_class": "",
+            "children": [],
+        }
+
+    @api.model
+    def _fallback_main_menu(self):
+        return [
+            self._home_menu_item(),
+            {
+                "name": "Talleres",
+                "url": "/shop/category/talleres-6",
+                "item_type": "category",
+                "open_new_tab": False,
+                "show_in_mobile": True,
+                "css_class": "",
+                "children": [],
+            },
+            {
+                "name": "Cursos",
+                "url": "#",
+                "item_type": "group",
+                "open_new_tab": False,
+                "show_in_mobile": True,
+                "css_class": "",
+                "children": [
+                    {
+                        "name": "Cursos de Auditoría",
+                        "url": "/shop/category/1",
+                        "item_type": "category",
+                        "open_new_tab": False,
+                        "show_in_mobile": True,
+                        "css_class": "",
+                    },
+                    {
+                        "name": "Cursos de Seguridad Vial",
+                        "url": "/shop/category/2",
+                        "item_type": "category",
+                        "open_new_tab": False,
+                        "show_in_mobile": True,
+                        "css_class": "",
+                    },
+                ],
+            },
+            {
+                "name": "Diplomados",
+                "url": "/shop/category/4",
+                "item_type": "category",
+                "open_new_tab": False,
+                "show_in_mobile": True,
+                "css_class": "",
+                "children": [],
+            },
+            {
+                "name": "FlashTraining",
+                "url": "/shop/category/flashtraining-5",
+                "item_type": "category",
+                "open_new_tab": False,
+                "show_in_mobile": True,
+                "css_class": "",
+                "children": [],
+            },
+        ]
+
+    @api.model
+    def _ensure_home_menu_item(self, menu_items):
+        has_home = any(item.get("item_type") == "home" or item.get("name") == "Inicio" for item in menu_items)
+        return menu_items if has_home else [self._home_menu_item()] + menu_items
+
+    @api.model
+    def get_main_menu(self, website=None):
+        menu_items = self.env["latinpyme.tienda.menu.item"].sudo().get_header_menu(website)
+        return self._ensure_home_menu_item(menu_items or self._fallback_main_menu())
+
+    @api.model
+    def get_social_links(self):
+        whatsapp_url = "https://wa.link/i0n10b"
+        return [
+            {
+                "label": "Facebook",
+                "href": "https://www.facebook.com/revistalatinpyme",
+                "icon": "fa-facebook",
+            },
+            {
+                "label": "LinkedIn",
+                "href": "https://co.linkedin.com/company/latinpyme/",
+                "icon": "fa-linkedin",
+            },
+            {
+                "label": "Instagram",
+                "href": "https://www.instagram.com/revistalatinpyme",
+                "icon": "fa-instagram",
+            },
+            {
+                "label": "YouTube",
+                "href": "https://www.youtube.com/@revistalatinpyme",
+                "icon": "fa-youtube-play",
+            },
+            {
+                "label": "WhatsApp",
+                "href": whatsapp_url,
+                "icon": "fa-whatsapp",
+                "variant": "whatsapp",
+            },
+        ]
+
+    @api.model
+    def _fallback_footer_columns(self):
+        return [
+            {
+                "title": "SECCIONES",
+                "links": [
+                    {"label": "Cursos", "url": "/shop?search=cursos", "open_new_tab": False},
+                    {"label": "Capacitación", "url": "/shop?search=capacitacion", "open_new_tab": False},
+                    {"label": "Tecnología", "url": "/shop?search=tecnologia", "open_new_tab": False},
+                    {"label": "Inteligencia artificial", "url": "/shop?search=inteligencia%20artificial", "open_new_tab": False},
+                ],
+            },
+            {
+                "title": "PORTAFOLIO",
+                "links": [
+                    {"label": "Soluciones", "url": "/shop?search=soluciones", "open_new_tab": False},
+                    {"label": "Escuela", "url": "/shop?search=escuela", "open_new_tab": False},
+                    {"label": "Eventos", "url": "/shop?search=eventos", "open_new_tab": False},
+                    {"label": "Curso 50 y 20 horas", "url": "/shop?search=50%2020", "open_new_tab": False},
+                ],
+            },
+            {
+                "title": "LEGAL",
+                "links": [
+                    {"label": "Términos de Uso", "url": "/terms", "open_new_tab": False},
+                    {"label": "Privacidad y datos", "url": "/terms", "open_new_tab": False},
+                    {"label": "Aviso Legal", "url": "/terms", "open_new_tab": False},
+                ],
+            },
+        ]
+
+    @api.model
+    def get_footer_columns(self, website=None):
+        columns = self.env["latinpyme.tienda.footer.link"].sudo().get_footer_columns(website)
+        if any(column.get("links") for column in columns):
+            return columns
+        return self._fallback_footer_columns()
+
+    @api.model
+    def get_layout_context(self, website=None):
+        whatsapp_url = "https://wa.link/i0n10b"
+        return {
+            "current_year": date.today().year,
+            "social_links": self.get_social_links(),
+            "main_menu": self.get_main_menu(website),
+            "footer_columns": self.get_footer_columns(website),
+            "whatsapp_url": whatsapp_url,
+        }
+
+    @api.model
+    def is_current_request_tienda_shell(self):
+        from odoo.http import request
+
+        website = getattr(request, "website", False)
+        host = (request.httprequest.host or "").split(":", 1)[0].lower()
+        website_domain = (getattr(website, "domain", "") or "").split(":", 1)[0].lower()
+        website_name = (getattr(website, "name", "") or "").lower()
+        is_tienda = host == "tienda.latinpyme.com" or website_domain == "tienda.latinpyme.com"
+        is_tienda = is_tienda or ("tienda" in website_name and "latinpyme" in website_name)
+        if not is_tienda:
+            return False
+
+        path = request.httprequest.path or "/"
+        normalized_path = path.rstrip("/") or "/"
+        if normalized_path in ("/", "/tienda"):
+            return False
+
+        blocked_prefixes = (
+            "/web",
+            "/odoo",
+            "/payment",
+            "/shop/cart",
+            "/shop/checkout",
+            "/shop/payment",
+            "/shop/confirm_order",
+        )
+        return not any(path.startswith(prefix) for prefix in blocked_prefixes)
 
 
 class LatinpymeTiendaMenuItem(models.Model):

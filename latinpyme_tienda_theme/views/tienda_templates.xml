@@ -180,6 +180,43 @@
     </footer>
   </template>
 
+  <template id="lp_tienda_website_layout_shell" inherit_id="website.layout" name="Tienda LatinPyme Website Layout Shell">
+    <xpath expr="//head" position="inside">
+      <style t-if="request.env['latinpyme.tienda.config'].sudo().is_current_request_tienda_shell()">
+        header#top,
+        footer#bottom,
+        .o_header_standard,
+        .o_footer {
+          display: none !important;
+        }
+      </style>
+    </xpath>
+
+    <xpath expr="//header" position="before">
+      <t t-if="request.env['latinpyme.tienda.config'].sudo().is_current_request_tienda_shell()">
+        <t t-set="lp_tienda_layout_values" t-value="request.env['latinpyme.tienda.config'].sudo().get_layout_context(request.website)"/>
+        <t t-set="social_links" t-value="lp_tienda_layout_values['social_links']"/>
+        <t t-set="main_menu" t-value="lp_tienda_layout_values['main_menu']"/>
+        <div class="lp-tienda lp-tienda-layout-shell">
+          <t t-call="latinpyme_tienda_theme.lp_tienda_masthead"/>
+        </div>
+      </t>
+    </xpath>
+
+    <xpath expr="//div[@id='footer']" position="before">
+      <t t-if="request.env['latinpyme.tienda.config'].sudo().is_current_request_tienda_shell()">
+        <t t-set="lp_tienda_layout_values" t-value="request.env['latinpyme.tienda.config'].sudo().get_layout_context(request.website)"/>
+        <t t-set="social_links" t-value="lp_tienda_layout_values['social_links']"/>
+        <t t-set="footer_columns" t-value="lp_tienda_layout_values['footer_columns']"/>
+        <t t-set="whatsapp_url" t-value="lp_tienda_layout_values['whatsapp_url']"/>
+        <t t-set="current_year" t-value="lp_tienda_layout_values['current_year']"/>
+        <div class="lp-tienda lp-tienda-layout-shell">
+          <t t-call="latinpyme_tienda_theme.lp_tienda_footer"/>
+        </div>
+      </t>
+    </xpath>
+  </template>
+
   <template id="lp_tienda_home_page" name="Tienda LatinPyme Home Page">
     <t t-call="website.layout">
       <t t-set="no_header" t-value="True"/>

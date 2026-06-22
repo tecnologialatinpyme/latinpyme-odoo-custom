@@ -2,7 +2,6 @@
 
 import base64
 import logging
-from datetime import date
 from pathlib import Path
 
 from odoo import http
@@ -370,38 +369,9 @@ class LatinpymeTiendaController(Website):
         """Temporary storefront data, grouped for a future backend-managed phase."""
         shop_url = "/shop"
         whatsapp_url = "https://wa.link/i0n10b"
-        social_links = [
-            {
-                "label": "Facebook",
-                "href": "https://www.facebook.com/revistalatinpyme",
-                "icon": "fa-facebook",
-            },
-            {
-                "label": "LinkedIn",
-                "href": "https://co.linkedin.com/company/latinpyme/",
-                "icon": "fa-linkedin",
-            },
-            {
-                "label": "Instagram",
-                "href": "https://www.instagram.com/revistalatinpyme",
-                "icon": "fa-instagram",
-            },
-            {
-                "label": "YouTube",
-                "href": "https://www.youtube.com/@revistalatinpyme",
-                "icon": "fa-youtube-play",
-            },
-            {
-                "label": "WhatsApp",
-                "href": whatsapp_url,
-                "icon": "fa-whatsapp",
-                "variant": "whatsapp",
-            },
-        ]
+        layout_values = request.env["latinpyme.tienda.config"].sudo().get_layout_context(getattr(request, "website", False))
         return {
-            "current_year": date.today().year,
-            "social_links": social_links,
-            "main_menu": self._main_menu_items(),
+            **layout_values,
             "hero": {
                 "eyebrow": "Tienda LatinPyme",
                 "title": "Capacitación y soluciones empresariales para equipos que avanzan",
@@ -521,8 +491,6 @@ class LatinpymeTiendaController(Website):
                     "logo_url": "https://latinpyme.com/revista/media/ally/9/logo",
                 },
             ],
-            "footer_columns": self._footer_columns(),
-            "whatsapp_url": whatsapp_url,
         }
 
     def _fallback_footer_columns(self):
