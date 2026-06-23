@@ -2,7 +2,7 @@
 
 {
     "name": "Tienda LatinPyme",
-    "version": "19.0.1.7.2",
+    "version": "19.0.1.7.3",
     "category": "Website/eCommerce",
     "summary": "Administracion minima de Tienda LatinPyme",
     "description": """

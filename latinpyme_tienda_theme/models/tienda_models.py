@@ -382,6 +382,22 @@ class LatinpymeTiendaConfig(models.Model):
         path = (request.httprequest.path or "/").rstrip("/") or "/"
         return path == "/shop" or path == "/shop/category" or path.startswith("/shop/category/")
 
+    @api.model
+    def is_current_request_shop_product(self):
+        from odoo.http import request
+
+        path = (request.httprequest.path or "/").rstrip("/") or "/"
+        if not path.startswith("/shop/"):
+            return False
+        blocked_prefixes = (
+            "/shop/category",
+            "/shop/cart",
+            "/shop/checkout",
+            "/shop/payment",
+            "/shop/confirm_order",
+        )
+        return not any(path.startswith(prefix) for prefix in blocked_prefixes)
+
 
 class LatinpymeTiendaMenuItem(models.Model):
     _name = "latinpyme.tienda.menu.item"

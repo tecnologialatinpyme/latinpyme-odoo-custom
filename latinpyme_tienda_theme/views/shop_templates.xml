@@ -160,4 +160,62 @@
     </xpath>
   </template>
 
+  <template id="lp_tienda_product_detail_layout" name="Tienda LatinPyme Product Detail" inherit_id="website_sale.product">
+    <xpath expr="//div[hasclass('js_sale')]" position="attributes">
+      <attribute name="class" add="lp-tienda lp-tienda-product-detail" separator=" "/>
+    </xpath>
+
+    <xpath expr="//section[@id='product_detail']" position="attributes">
+      <attribute name="class" add="lp-product-shell" separator=" "/>
+    </xpath>
+
+    <xpath expr="//div[@id='product_detail_main']" position="attributes">
+      <attribute name="class" add="lp-product-main" separator=" "/>
+    </xpath>
+
+    <xpath expr="//div[hasclass('o_wsale_product_images')]" position="attributes">
+      <attribute name="class" add="lp-product-gallery" separator=" "/>
+    </xpath>
+
+    <xpath expr="//div[@id='product_details']" position="attributes">
+      <attribute name="class" add="lp-product-info" separator=" "/>
+    </xpath>
+
+    <xpath expr="//section[@id='product_detail']" position="before">
+      <t t-set="lp_product_category" t-value="category or (product.public_categ_ids and product.public_categ_ids[0])"/>
+      <t
+        t-if="lp_product_category"
+        t-set="lp_product_category_name"
+        t-value="lp_product_category.lp_tienda_display_name or lp_product_category.name"/>
+      <t
+        t-if="lp_product_category"
+        t-set="lp_product_category_url"
+        t-value="'/shop/category/talleres-6' if lp_product_category.id == 6 else '/shop/category/flashtraining-5' if lp_product_category.id == 5 else '/shop/category/%s' % lp_product_category.id"/>
+      <nav class="lp-product-breadcrumb" aria-label="Miga de pan">
+        <a href="/">Inicio</a>
+        <span aria-hidden="true">&gt;</span>
+        <a t-if="lp_product_category" t-att-href="lp_product_category_url" t-out="lp_product_category_name"/>
+        <span t-if="lp_product_category" aria-hidden="true">&gt;</span>
+        <span class="lp-product-breadcrumb__current" t-field="product.name"/>
+      </nav>
+    </xpath>
+
+    <xpath expr="//div[@id='product_details']" position="inside">
+      <div class="lp-product-trust">
+        <div>
+          <i class="fa fa-shield" aria-hidden="true"/>
+          <span>Compra segura</span>
+        </div>
+        <div>
+          <i class="fa fa-graduation-cap" aria-hidden="true"/>
+          <span>Formación empresarial</span>
+        </div>
+        <div>
+          <i class="fa fa-whatsapp" aria-hidden="true"/>
+          <span>Acompañamiento LatinPyme</span>
+        </div>
+      </div>
+    </xpath>
+  </template>
+
 </odoo>
