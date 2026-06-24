@@ -160,4 +160,66 @@
     </xpath>
   </template>
 
+  <template id="lp_tienda_product_detail_landing" name="Tienda LatinPyme Product Landing" inherit_id="website_sale.product">
+    <xpath expr="//div[@id='wrap']" position="attributes">
+      <attribute name="class" add="lp-tienda lp-product-page lp-product-landing" separator=" "/>
+    </xpath>
+
+    <xpath expr="//section[@id='product_detail']" position="attributes">
+      <attribute name="class" add="lp-product-landing__shell" separator=" "/>
+    </xpath>
+
+    <xpath expr="//div[@id='product_detail_main']" position="attributes">
+      <attribute name="class" add="lp-product-landing__main" separator=" "/>
+    </xpath>
+
+    <xpath expr="//div[hasclass('o_wsale_product_images')]" position="attributes">
+      <attribute name="class" add="lp-product-landing__media" separator=" "/>
+    </xpath>
+
+    <xpath expr="//div[@id='product_details']" position="attributes">
+      <attribute name="class" add="lp-product-landing__purchase" separator=" "/>
+    </xpath>
+
+    <xpath expr="//div[@id='o_wsale_product_details_content']" position="attributes">
+      <attribute name="class" add="lp-product-landing__purchase-card" separator=" "/>
+    </xpath>
+
+    <xpath expr="//section[@id='product_detail']" position="before">
+      <t t-set="lp_product_category" t-value="category or (product.public_categ_ids and product.public_categ_ids[0])"/>
+      <t
+        t-if="lp_product_category"
+        t-set="lp_product_category_name"
+        t-value="lp_product_category.lp_tienda_display_name or lp_product_category.name"/>
+      <t
+        t-if="lp_product_category"
+        t-set="lp_product_category_url"
+        t-value="'/shop/category/talleres-6' if lp_product_category.id == 6 else '/shop/category/flashtraining-5' if lp_product_category.id == 5 else '/shop/category/%s' % lp_product_category.id"/>
+      <nav class="lp-product-landing__breadcrumb" aria-label="Miga de pan">
+        <a href="/shop">Todos los productos</a>
+        <span aria-hidden="true">/</span>
+        <a t-if="lp_product_category" t-att-href="lp_product_category_url" t-out="lp_product_category_name"/>
+        <span t-if="lp_product_category" aria-hidden="true">/</span>
+        <span class="lp-product-landing__breadcrumb-current" t-field="product.name"/>
+      </nav>
+    </xpath>
+
+    <xpath expr="//div[hasclass('o_wsale_product_details_content_section_cta')]" position="after">
+      <div class="lp-product-landing__trust">
+        <div>
+          <i class="fa fa-shield" aria-hidden="true"/>
+          <span>Compra segura</span>
+        </div>
+        <div>
+          <i class="fa fa-graduation-cap" aria-hidden="true"/>
+          <span>Formacion empresarial</span>
+        </div>
+        <div>
+          <i class="fa fa-headphones" aria-hidden="true"/>
+          <span>Acompanamiento LatinPyme</span>
+        </div>
+      </div>
+    </xpath>
+  </template>
+
 </odoo>
