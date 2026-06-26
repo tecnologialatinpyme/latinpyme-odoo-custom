@@ -43,7 +43,8 @@ _CATEGORY_OVERRIDES = {
 def _category_display_name(category):
     if "lp_tienda_display_name" in category._fields and category.lp_tienda_display_name:
         return category.lp_tienda_display_name
-    return _CATEGORY_OVERRIDES.get(category.id, {}).get("name") or category.name
+    category_name = (category.name or "").strip()
+    return category_name or _CATEGORY_OVERRIDES.get(category.id, {}).get("name") or category.name
 
 
 def _category_url(category):
