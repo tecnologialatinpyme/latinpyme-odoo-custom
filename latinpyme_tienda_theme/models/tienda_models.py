@@ -23,6 +23,8 @@ _CATEGORY_NAME_OVERRIDES = {
     6: "Talleres",
 }
 
+_CATEGORY_BREADCRUMB_PRIORITY = [6, 1, 2, 4, 5]
+
 _CATEGORY_ICON_FILES = {
     1: "icon-auditoria.png",
     2: "icon-seguridad-vial.png",
@@ -172,6 +174,29 @@ class ProductPublicCategory(models.Model):
                 category.lp_tienda_icon = False
             else:
                 category.lp_tienda_icon = effective_icon
+
+
+class ProductTemplate(models.Model):
+    _inherit = "product.template"
+
+    def _lp_tienda_breadcrumb_category(self, category=False):
+        self.ensure_one()
+
+        if category and getattr(category, "_name", False) == "product.public.category":
+            return category
+
+        categories = self.public_categ_ids
+        if not categories:
+            return False
+
+        canonical_categories = categories.filtered(lambda record: record.id in _CATEGORY_NAME_OVERRIDES)
+        if canonical_categories:
+            for category_id in _CATEGORY_BREADCRUMB_PRIORITY:
+                preferred = canonical_categories.filtered(lambda record, category_id=category_id: record.id == category_id)
+                if preferred:
+                    return preferred[0]
+
+        return categories[0]
 
 
 class LatinpymeTiendaConfig(models.Model):

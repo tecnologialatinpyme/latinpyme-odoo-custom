@@ -182,7 +182,7 @@
     </xpath>
 
     <xpath expr="//section[@id='product_detail']" position="before">
-      <t t-set="lp_product_category" t-value="category or (product.public_categ_ids and product.public_categ_ids[0])"/>
+      <t t-set="lp_product_category" t-value="product._lp_tienda_breadcrumb_category(category)"/>
       <t
         t-if="lp_product_category"
         t-set="lp_product_category_name"
