@@ -411,7 +411,7 @@ class ProductTemplate(models.Model):
                 if preferred:
                     return preferred[0]
 
-        return categories[0]
+        return False
 
 
 class LatinpymeTiendaMenuItem(models.Model):
