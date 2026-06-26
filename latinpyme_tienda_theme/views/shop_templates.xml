@@ -160,4 +160,10 @@
     </xpath>
   </template>
 
+  <template id="lp_tienda_product_image_layout" name="Tienda LatinPyme Product Image Layout" inherit_id="website_sale.product">
+    <xpath expr="//div[@id='wrap']" position="attributes">
+      <attribute name="class" add="lp-tienda lp-product-page" separator=" "/>
+    </xpath>
+  </template>
+
 </odoo>
