@@ -22,25 +22,19 @@
     </xpath>
 
     <xpath expr="//t[@t-set='hasLeftColumn']" position="replace">
-      <t t-set="hasLeftColumn" t-value="False if category else (opt_wsale_categories or opt_wsale_attributes)"/>
+      <t t-set="hasLeftColumn" t-value="False"/>
     </xpath>
 
     <xpath expr="//t[@t-set='wsale_has_filters_btn']" position="replace">
-      <t
-        t-set="wsale_has_filters_btn"
-        t-value="False if category else (opt_wsale_categories or opt_wsale_attributes or opt_wsale_attributes_top)"
-      />
+      <t t-set="wsale_has_filters_btn" t-value="False"/>
     </xpath>
 
     <xpath expr="//t[@t-set='wsale_has_filters_btn_lg']" position="replace">
-      <t
-        t-set="wsale_has_filters_btn_lg"
-        t-value="False if category else opt_wsale_attributes_top"
-      />
+      <t t-set="wsale_has_filters_btn_lg" t-value="False"/>
     </xpath>
 
     <xpath expr="//t[@t-call='website_sale.sort']" position="attributes">
-      <attribute name="t-if">not category and is_view_active('website_sale.sort')</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
 
     <xpath expr="//div[@id='wrap']" position="attributes">
@@ -65,14 +59,13 @@
 
     <xpath expr="//div[@id='o_wsale_container']" position="before">
       <section
-        t-attf-class="lp-tienda lp-tienda-shop lp-shop-catalog-hero #{'lp-shop-category-page lp-category-landing lp-category-hero' if category else ''}"
+        t-if="category"
+        class="lp-tienda lp-tienda-shop lp-shop-catalog-hero lp-shop-category-page lp-category-landing lp-category-hero"
         aria-label="Catalogo Tienda LatinPyme">
         <t
-          t-if="category"
           t-set="lp_category_display_name"
           t-value="category.lp_tienda_display_name or category.name"/>
         <t
-          t-if="category"
           t-set="lp_category_icon"
           t-value="category.lp_tienda_icon_url"/>
         <div class="lp-shop-catalog-hero__content">
@@ -86,13 +79,7 @@
                 aria-hidden="true"/>
             </span>
             <h1>
-              <t t-if="category">
-                <t t-out="lp_category_display_name"/>
-              </t>
-              <t t-elif="search">
-                Resultados para "<span t-out="search"/>"
-              </t>
-              <t t-else="">Tienda LatinPyme</t>
+              <t t-out="lp_category_display_name"/>
             </h1>
           </div>
         </div>
@@ -119,15 +106,6 @@
           <a href="/shop/category/2" t-att-class="'is-active' if category.id == 2 else ''">Seguridad Vial</a>
           <a href="/shop/category/4" t-att-class="'is-active' if category.id == 4 else ''">Diplomados</a>
           <a href="/shop/category/flashtraining-5" t-att-class="'is-active' if category.id == 5 else ''">FlashTraining</a>
-        </nav>
-        <nav t-else="" class="lp-shop-catalog-chips" aria-label="Categorias destacadas">
-          <a href="/shop?search=capacitacion">Capacitacion</a>
-          <a href="/shop?search=cursos">Cursos</a>
-          <a href="/shop?search=auditoria">Auditoria</a>
-          <a href="/shop?search=diplomado">Diplomados</a>
-          <a href="/shop?search=seguridad%20vial">Seguridad vial</a>
-          <a href="/shop?search=inteligencia%20artificial">IA</a>
-          <a href="/shop?search=flashtraining">FlashTraining</a>
         </nav>
       </section>
     </xpath>

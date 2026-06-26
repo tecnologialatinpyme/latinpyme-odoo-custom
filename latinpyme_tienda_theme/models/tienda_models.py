@@ -50,7 +50,8 @@ FOOTER_COLUMN_TITLES = {
 
 
 def _category_display_name(category):
-    return _CATEGORY_NAME_OVERRIDES.get(category.id, category.name)
+    category_name = (category.name or "").strip()
+    return category_name or _CATEGORY_NAME_OVERRIDES.get(category.id, category.name)
 
 
 def _category_static_icon_binary(category_id):

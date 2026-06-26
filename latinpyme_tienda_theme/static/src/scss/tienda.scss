@@ -1697,7 +1697,9 @@
   }
 
   &.lp-shop-catalog-hero.lp-category-landing,
-  .lp-shop-catalog-hero.lp-category-landing {
+  &.lp-shop-catalog-hero.lp-shop-all-products-page,
+  .lp-shop-catalog-hero.lp-category-landing,
+  .lp-shop-catalog-hero.lp-shop-all-products-page {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
     margin-bottom: 20px;
@@ -1706,7 +1708,9 @@
       #fff;
   }
 
-  .lp-shop-catalog-hero.lp-category-landing + #o_wsale_container {
+  #o_wsale_container.lp-shop-catalog__layout,
+  .lp-shop-catalog-hero.lp-category-landing + #o_wsale_container,
+  .lp-shop-catalog-hero.lp-shop-all-products-page + #o_wsale_container {
     max-width: 1180px;
 
     #products_grid_before,
@@ -2293,7 +2297,9 @@
     }
 
     &.lp-shop-catalog-hero.lp-category-landing,
-    .lp-shop-catalog-hero.lp-category-landing {
+    &.lp-shop-catalog-hero.lp-shop-all-products-page,
+    .lp-shop-catalog-hero.lp-category-landing,
+    .lp-shop-catalog-hero.lp-shop-all-products-page {
       grid-template-columns: minmax(0, 1fr) minmax(320px, 520px);
       padding: 20px;
     }
@@ -2321,7 +2327,8 @@
       font-size: 26px;
     }
 
-    .lp-shop-catalog-hero.lp-category-landing .lp-shop-catalog-hero__content h1 {
+    .lp-shop-catalog-hero.lp-category-landing .lp-shop-catalog-hero__content h1,
+    .lp-shop-catalog-hero.lp-shop-all-products-page .lp-shop-catalog-hero__content h1 {
       font-size: 28px;
     }
   }
@@ -2368,7 +2375,9 @@
       padding: 16px;
     }
 
-    .lp-shop-catalog-hero.lp-category-landing + #o_wsale_container {
+    #o_wsale_container.lp-shop-catalog__layout,
+    .lp-shop-catalog-hero.lp-category-landing + #o_wsale_container,
+    .lp-shop-catalog-hero.lp-shop-all-products-page + #o_wsale_container {
       .oe_product_image {
         height: 174px;
         min-height: 174px;

@@ -274,6 +274,7 @@
     <field name="res_model">product.public.category</field>
     <field name="view_mode">list,form</field>
     <field name="search_view_id" ref="view_latinpyme_tienda_product_category_search"/>
+    <field name="domain">[('id', 'in', [1, 2, 4, 5, 6])]</field>
   </record>
 
   <record id="action_latinpyme_tienda_product_categories_view_list" model="ir.actions.act_window.view">
