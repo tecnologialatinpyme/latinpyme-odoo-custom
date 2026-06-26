@@ -382,6 +382,13 @@ class LatinpymeTiendaConfig(models.Model):
         path = (request.httprequest.path or "/").rstrip("/") or "/"
         return path == "/shop" or path == "/shop/category" or path.startswith("/shop/category/")
 
+    @api.model
+    def is_current_request_shop_product(self):
+        from odoo.http import request
+
+        product = request.params.get("product")
+        return bool(product and getattr(product, "_name", False) == "product.template")
+
 
 class LatinpymeTiendaMenuItem(models.Model):
     _name = "latinpyme.tienda.menu.item"
