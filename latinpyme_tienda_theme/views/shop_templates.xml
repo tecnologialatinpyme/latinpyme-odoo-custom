@@ -150,8 +150,8 @@
 
   <template id="lp_tienda_product_breadcrumb" name="Tienda LatinPyme Product Breadcrumb" inherit_id="website_sale.product">
     <xpath expr="//section[@id='product_detail']" position="before">
-      <t t-set="lp_breadcrumb_category" t-value="category or (product.public_categ_ids and product.public_categ_ids[0] or False)"/>
-      <t t-set="lp_breadcrumb_category_name" t-value="lp_breadcrumb_category and (lp_breadcrumb_category.lp_tienda_display_name or lp_breadcrumb_category.name) or 'Todos los productos'"/>
+      <t t-set="lp_breadcrumb_category" t-value="product._lp_tienda_breadcrumb_category(category)"/>
+      <t t-set="lp_breadcrumb_category_name" t-value="lp_breadcrumb_category and lp_breadcrumb_category.lp_tienda_display_name or 'Todos los productos'"/>
       <t t-set="lp_breadcrumb_category_url" t-value="lp_breadcrumb_category and ('/shop/category/%s' % lp_breadcrumb_category.id) or '/shop'"/>
       <nav class="lp-tienda-breadcrumb lp-tienda-breadcrumb--product" aria-label="Miga de pan">
         <a href="/">Inicio</a>
