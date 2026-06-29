@@ -367,7 +367,7 @@ class LatinpymeTiendaConfig(models.Model):
 
         path = request.httprequest.path or "/"
         normalized_path = path.rstrip("/") or "/"
-        if normalized_path in ("/", "/tienda"):
+        if normalized_path in ("/", "/tienda", "/terminos-de-uso", "/aviso-legal", "/terms"):
             return False
 
         blocked_prefixes = (
