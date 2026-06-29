@@ -64,6 +64,28 @@ Antes de modificar un módulo, revisar lo que aplique:
 - No regenerar secciones, footer, sidebar o bloques si ya se administran desde backend.
 - Evitar duplicados al actualizar módulo.
 
+## Regla operativa sobre submódulos
+
+- Si una tarea implica un submódulo, tratar cada puntero como una unidad independiente de despliegue.
+- Antes de commitear o pushear, revisar `git diff --submodule=short` y confirmar el SHA esperado del submódulo.
+- No mezclar en un mismo push cambios de submódulo pertenecientes a tareas distintas.
+- Si el submódulo no está alineado con la base esperada, detenerse y corregir antes de publicar.
+- Preferir que cada despliegue a Production contenga un solo cambio funcional por submódulo afectado.
+
+## Checklist antes de push con submódulos
+
+- Revisar cada puntero de submódulo con `git diff --submodule=short`.
+- Confirmar que el SHA del submódulo coincide con el commit funcional esperado.
+- No mezclar en un mismo push cambios de submódulo pertenecientes a tareas distintas.
+- Si el submódulo no está alineado con la base esperada, detenerse antes de commitear o pushear.
+
+## Protocolo de rollback
+
+- Si un cambio de submódulo rompe Production, preferir `git revert` sobre `git reset --hard`.
+- Restaurar primero el submódulo al SHA funcional conocido y luego el repo principal al commit que apuntaba a ese SHA.
+- Confirmar el puntero con `git diff --submodule=short` antes y después del revert.
+- No introducir cambios nuevos durante el rollback.
+
 ## Validación mínima
 
 Cuando haya cambios funcionales:
