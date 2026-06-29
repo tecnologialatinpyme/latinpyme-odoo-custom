@@ -333,6 +333,8 @@
                   <t t-call="latinpyme_tienda_theme.lp_tienda_solution_card"/>
                 </t>
               </div>
+              <t t-set="banner" t-value="side_banner"/>
+              <t t-set="banner_position" t-value="'home_side'"/>
               <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
             </div>
           </section>
