@@ -7,6 +7,14 @@ Esta carpeta contiene los addons personalizados de LatinPyme:
 - `latinpyme_revista_theme`
 - `latinpyme_tienda_theme`
 
+Checkout operativo aprobado para trabajo y validación de custom addons:
+
+- `D:/Odoo/_codex_tmp/latinpyme_custom_phase6_fresh`
+
+Checkout descartado para publicar cambios:
+
+- `D:/Odoo/latinpyme-odoo/src/odoo/addons/latinpyme_custom` no debe usarse para commit o push si está sobre ramas locales de trabajo, con cambios sin cerrar o fuera de `origin/main`.
+
 No se deben tocar módulos core de Odoo desde esta carpeta ni usar esta ruta como excusa para cambios amplios fuera del alcance solicitado.
 
 ## Separación estricta de módulos
@@ -71,6 +79,9 @@ Antes de modificar un módulo, revisar lo que aplique:
 - No mezclar en un mismo push cambios de submódulo pertenecientes a tareas distintas.
 - Si el submódulo no está alineado con la base esperada, detenerse y corregir antes de publicar.
 - Preferir que cada despliegue a Production contenga un solo cambio funcional por submódulo afectado.
+- Toda fase nueva de Tienda debe implementarse primero en este checkout limpio y solo después reflejarse en el repo principal limpio `D:/Odoo/_codex_tmp/latinpyme_main_phase1`.
+- No publicar cambios desde ramas locales del submódulo distintas de `origin/main`.
+- No mezclar en el mismo despliegue cambios funcionales de Tienda, cambios documentales de `AGENTS.md` y bumps de submódulo de otras tareas.
 
 ## Checklist antes de push con submódulos
 
