@@ -354,6 +354,17 @@
   padding-block: 34px 72px;
 }
 
+.lp-legal-terms {
+  header,
+  footer,
+  #top,
+  #bottom,
+  .o_header_standard,
+  .o_footer {
+    display: none !important;
+  }
+}
+
 .lp-tienda-hero {
   display: block;
 }
