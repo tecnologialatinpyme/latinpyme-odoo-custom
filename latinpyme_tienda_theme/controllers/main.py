@@ -393,6 +393,26 @@ class LatinpymeTiendaController(Website):
             _logger.info("No se pudo cargar el banner hero administrable de Tienda: %s", exc)
             return self._fallback_home_hero_banner(shop_url)
 
+    def _serialize_home_horizontal_banner(self, banner):
+        if not banner:
+            return False
+        return {
+            "name": banner.name or "Publicidad horizontal Tienda LatinPyme",
+            "image_url": "/web/image/latinpyme.tienda.banner/%s/image" % banner.id,
+            "alt": banner.title or banner.name or "Publicidad horizontal Tienda LatinPyme",
+            "url": banner.url or "/shop",
+        }
+
+    def _home_horizontal_banner(self):
+        try:
+            with request.env.cr.savepoint():
+                website = getattr(request, "website", False)
+                banner = request.env["latinpyme.tienda.banner"].sudo().get_active_banner("home_horizontal", website=website)
+                return self._serialize_home_horizontal_banner(banner)
+        except Exception as exc:
+            _logger.info("No se pudo cargar el banner horizontal administrable de Tienda: %s", exc)
+            return False
+
     def _home_values(self):
         """Temporary storefront data, grouped for a future backend-managed phase."""
         shop_url = "/shop"
@@ -410,6 +430,7 @@ class LatinpymeTiendaController(Website):
                 "secondary_url": whatsapp_url,
             },
             "hero_banner": self._home_hero_banner(shop_url),
+            "horizontal_banner": self._home_horizontal_banner(),
             "product_carousels": self._home_product_carousels(),
             "training_cards": [
                 {

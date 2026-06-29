@@ -137,10 +137,27 @@
 
   <template id="lp_tienda_ad_slot" name="Tienda LatinPyme Ad Slot">
     <aside class="lp-tienda-ad-slot" aria-label="Publicidad">
-      <span>Publicidad</span>
-      <div>
-        <strong>Banner disponible</strong>
-      </div>
+      <t t-if="banner">
+        <a
+          class="lp-tienda-promo-banner lp-tienda-promo-banner--image-only"
+          t-att-href="banner['url']"
+          t-att-aria-label="banner['name']"
+          data-analytics-event="click_home_ad_banner"
+          t-att-data-analytics-banner-name="banner['name']"
+          t-att-data-analytics-banner-position="banner_position or 'home_ad'">
+          <img
+            class="lp-tienda-promo-banner__image"
+            t-att-src="banner['image_url']"
+            t-att-alt="banner['alt']"
+            loading="lazy"/>
+        </a>
+      </t>
+      <t t-else="">
+        <span>Publicidad</span>
+        <div>
+          <strong>Banner disponible</strong>
+        </div>
+      </t>
     </aside>
   </template>
 
@@ -332,6 +349,8 @@
           </section>
 
           <section class="lp-tienda-container lp-tienda-block lp-tienda-ad-horizontal">
+            <t t-set="banner" t-value="horizontal_banner"/>
+            <t t-set="banner_position" t-value="'home_horizontal'"/>
             <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
           </section>
 
