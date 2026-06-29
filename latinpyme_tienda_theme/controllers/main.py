@@ -365,6 +365,34 @@ class LatinpymeTiendaController(Website):
             _logger.info("No se pudieron cargar carruseles nativos de Tienda: %s", exc)
             return []
 
+    def _fallback_home_hero_banner(self, shop_url):
+        return {
+            "name": "Banner principal Tienda LatinPyme",
+            "image_url": "https://latinpyme.com/revista/media/banner/3/image",
+            "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
+            "url": shop_url,
+        }
+
+    def _serialize_home_hero_banner(self, banner, shop_url):
+        if not banner:
+            return self._fallback_home_hero_banner(shop_url)
+        return {
+            "name": banner.name or "Banner principal Tienda LatinPyme",
+            "image_url": "/web/image/latinpyme.tienda.banner/%s/image" % banner.id,
+            "alt": banner.title or banner.name or "Banner principal Tienda LatinPyme",
+            "url": banner.url or shop_url,
+        }
+
+    def _home_hero_banner(self, shop_url):
+        try:
+            with request.env.cr.savepoint():
+                website = getattr(request, "website", False)
+                banner = request.env["latinpyme.tienda.banner"].sudo().get_active_banner("home_hero", website=website)
+                return self._serialize_home_hero_banner(banner, shop_url)
+        except Exception as exc:
+            _logger.info("No se pudo cargar el banner hero administrable de Tienda: %s", exc)
+            return self._fallback_home_hero_banner(shop_url)
+
     def _home_values(self):
         """Temporary storefront data, grouped for a future backend-managed phase."""
         shop_url = "/shop"
@@ -381,12 +409,7 @@ class LatinpymeTiendaController(Website):
                 "secondary_label": "Hablar con un asesor",
                 "secondary_url": whatsapp_url,
             },
-            "hero_banner": {
-                "name": "Banner principal Tienda LatinPyme",
-                "image_url": "https://latinpyme.com/revista/media/banner/3/image",
-                "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
-                "url": shop_url,
-            },
+            "hero_banner": self._home_hero_banner(shop_url),
             "product_carousels": self._home_product_carousels(),
             "training_cards": [
                 {
