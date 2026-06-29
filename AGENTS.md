@@ -7,6 +7,20 @@ Esta carpeta contiene los addons personalizados de LatinPyme:
 - `latinpyme_revista_theme`
 - `latinpyme_tienda_theme`
 
+Checkout operativo aprobado para trabajo y validación de custom addons:
+
+- `D:/Odoo/_codex_tmp/latinpyme_custom_safe`
+
+Base funcional aprobada para Tienda:
+
+- rama `tienda-production-safe`
+- baseline funcional `66d16cb7999b3ae8a36babdad8cf88d73466a4d0`
+
+Checkout descartado para publicar cambios:
+
+- `D:/Odoo/latinpyme-odoo/src/odoo/addons/latinpyme_custom`
+- ramas que continúan la línea fallida de `59fb18f` y `fe3b6fa`
+
 No se deben tocar módulos core de Odoo desde esta carpeta ni usar esta ruta como excusa para cambios amplios fuera del alcance solicitado.
 
 ## Separación estricta de módulos
@@ -65,6 +79,12 @@ Antes de modificar un módulo, revisar lo que aplique:
 - Evitar duplicados al actualizar módulo.
 
 ## Validación mínima
+
+## Regla operativa sobre submódulos
+
+- Toda fase nueva de Tienda debe implementarse primero sobre esta base segura.
+- No usar `origin/main` como base de deploy de Tienda mientras siga incluyendo la línea fallida iniciada por `59fb18f` y `fe3b6fa`.
+- El repo principal solo debe apuntar a commits verificados de esta base segura o de una línea que la reemplace explícitamente.
 
 Cuando haya cambios funcionales:
 
