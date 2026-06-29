@@ -923,6 +923,17 @@
     }
   }
 
+  > .lp-tienda-ad-slot__banner {
+    position: relative;
+    display: grid;
+    min-height: 132px;
+    overflow: hidden;
+    border: 1px solid rgba(16, 20, 27, .08);
+    border-radius: var(--lp-tienda-radius);
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(17, 19, 24, .055);
+  }
+
   strong {
     position: relative;
     z-index: 1;
@@ -932,6 +943,68 @@
     letter-spacing: .06em;
     text-transform: uppercase;
   }
+}
+
+.lp-tienda-ad-slot__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lp-tienda-ad-slot__banner--overlay {
+  align-items: end;
+  min-height: 100%;
+}
+
+.lp-tienda-ad-slot__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(16, 20, 27, 0) 18%, rgba(16, 20, 27, .78) 100%);
+}
+
+.lp-tienda-ad-slot__content {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  color: #fff;
+}
+
+.lp-tienda-ad-slot__label,
+.lp-tienda-ad-slot__title,
+.lp-tienda-ad-slot__text,
+.lp-tienda-ad-slot__cta {
+  color: #fff !important;
+}
+
+.lp-tienda-ad-slot__label {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.lp-tienda-ad-slot__title {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.lp-tienda-ad-slot__text {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.lp-tienda-ad-slot__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
 
 .lp-tienda-ad-horizontal {

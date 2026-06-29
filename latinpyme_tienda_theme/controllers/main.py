@@ -95,6 +95,12 @@ def _fallback_icon_data(category_id):
         return b""
 
 
+def _record_image_url(record, field_name):
+    date_value = record.write_date or record.create_date
+    unique = date_value.strftime("%Y%m%d%H%M%S") if date_value else str(record.id)
+    return "/web/image/%s/%s/%s?unique=%s" % (record._name, record.id, field_name, unique)
+
+
 class LatinpymeTiendaShopController(WebsiteSale):
     def _get_shop_path(self, category=None, page=0):
         category_id = getattr(category, "id", category)
@@ -297,6 +303,48 @@ class LatinpymeTiendaController(Website):
         has_home = any(item.get("item_type") == "home" or item.get("name") == "Inicio" for item in menu_items)
         return menu_items if has_home else [self._home_menu_item()] + menu_items
 
+    def _fallback_home_banner(self, placement, shop_url):
+        fallbacks = {
+            "home_hero": {
+                "name": "Banner principal Tienda LatinPyme",
+                "image_url": "https://latinpyme.com/revista/media/banner/3/image",
+                "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
+                "url": shop_url,
+                "display_mode": "image_only",
+                "title": "",
+                "text": "",
+                "button_label": "",
+            },
+            "home_horizontal": False,
+            "home_side": False,
+        }
+        return fallbacks.get(placement)
+
+    def _serialize_home_banner(self, banner):
+        if not banner:
+            return False
+        return {
+            "id": banner.id,
+            "name": banner.name,
+            "image_url": _record_image_url(banner, "image"),
+            "alt": banner.title or banner.name,
+            "url": banner.url or "/shop",
+            "display_mode": banner.display_mode or "image_only",
+            "title": banner.title or "",
+            "text": banner.text or "",
+            "button_label": banner.button_label or "",
+        }
+
+    def _home_banner(self, placement, shop_url):
+        try:
+            with request.env.cr.savepoint():
+                website = getattr(request, "website", False)
+                banner = request.env["latinpyme.tienda.banner"].sudo().get_active_banner(placement, website=website)
+                return self._serialize_home_banner(banner) or self._fallback_home_banner(placement, shop_url)
+        except Exception as exc:
+            _logger.info("No se pudo cargar banner de Tienda para %s: %s", placement, exc)
+            return self._fallback_home_banner(placement, shop_url)
+
     def _main_menu_items(self):
         try:
             with request.env.cr.savepoint():
@@ -381,12 +429,9 @@ class LatinpymeTiendaController(Website):
                 "secondary_label": "Hablar con un asesor",
                 "secondary_url": whatsapp_url,
             },
-            "hero_banner": {
-                "name": "Banner principal Tienda LatinPyme",
-                "image_url": "https://latinpyme.com/revista/media/banner/3/image",
-                "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
-                "url": shop_url,
-            },
+            "hero_banner": self._home_banner("home_hero", shop_url),
+            "horizontal_banner": self._home_banner("home_horizontal", shop_url),
+            "side_banner": self._home_banner("home_side", shop_url),
             "product_carousels": self._home_product_carousels(),
             "training_cards": [
                 {

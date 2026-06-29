@@ -138,7 +138,31 @@
   <template id="lp_tienda_ad_slot" name="Tienda LatinPyme Ad Slot">
     <aside class="lp-tienda-ad-slot" aria-label="Publicidad">
       <span>Publicidad</span>
-      <div>
+      <t t-if="banner and banner.get('image_url')">
+        <a
+          t-attf-class="lp-tienda-ad-slot__banner #{'lp-tienda-ad-slot__banner--overlay' if banner.get('display_mode') == 'text_overlay' else 'lp-tienda-promo-banner lp-tienda-promo-banner--image-only'}"
+          t-att-href="banner.get('url') or '#'"
+          t-att-aria-label="banner.get('name') or 'Publicidad Tienda LatinPyme'"
+          data-analytics-event="click_home_ad_banner"
+          t-att-data-analytics-banner-name="banner.get('name') or 'Banner Tienda'"
+          t-att-data-analytics-banner-position="banner_position or 'home_slot'">
+          <img
+            class="lp-tienda-ad-slot__image"
+            t-att-src="banner['image_url']"
+            t-att-alt="banner.get('alt') or banner.get('name') or 'Publicidad Tienda LatinPyme'"
+            loading="lazy"/>
+          <span t-if="banner.get('display_mode') == 'text_overlay'" class="lp-tienda-ad-slot__shade"/>
+          <span t-if="banner.get('display_mode') == 'text_overlay'" class="lp-tienda-ad-slot__content">
+            <span class="lp-tienda-ad-slot__label">Publicidad</span>
+            <strong t-if="banner.get('title')" class="lp-tienda-ad-slot__title" t-out="banner['title']"/>
+            <span t-if="banner.get('text')" class="lp-tienda-ad-slot__text" t-out="banner['text']"/>
+            <span t-if="banner.get('button_label')" class="lp-tienda-ad-slot__cta">
+              <t t-out="banner['button_label']"/> <i class="fa fa-arrow-right" aria-hidden="true"/>
+            </span>
+          </span>
+        </a>
+      </t>
+      <div t-else="">
         <strong>Banner disponible</strong>
       </div>
     </aside>
@@ -316,6 +340,8 @@
                   <t t-call="latinpyme_tienda_theme.lp_tienda_solution_card"/>
                 </t>
               </div>
+              <t t-set="banner" t-value="side_banner"/>
+              <t t-set="banner_position" t-value="'home_side'"/>
               <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
             </div>
           </section>
@@ -332,6 +358,8 @@
           </section>
 
           <section class="lp-tienda-container lp-tienda-block lp-tienda-ad-horizontal">
+            <t t-set="banner" t-value="horizontal_banner"/>
+            <t t-set="banner_position" t-value="'home_horizontal'"/>
             <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
           </section>
 
