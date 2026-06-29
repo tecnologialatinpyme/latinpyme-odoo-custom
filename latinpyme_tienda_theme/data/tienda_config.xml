@@ -60,19 +60,19 @@
     <record id="tienda_footer_legal_terms" model="latinpyme.tienda.footer.link">
       <field name="group_key">legal</field>
       <field name="name">Términos de Uso</field>
-      <field name="url">/terms</field>
+      <field name="url">/terminos-de-uso</field>
       <field name="sequence">10</field>
     </record>
     <record id="tienda_footer_legal_privacy" model="latinpyme.tienda.footer.link">
       <field name="group_key">legal</field>
       <field name="name">Privacidad y datos</field>
-      <field name="url">/terms</field>
+      <field name="url">/terminos-de-uso</field>
       <field name="sequence">20</field>
     </record>
     <record id="tienda_footer_legal_notice" model="latinpyme.tienda.footer.link">
       <field name="group_key">legal</field>
       <field name="name">Aviso Legal</field>
-      <field name="url">/terms</field>
+      <field name="url">/terminos-de-uso</field>
       <field name="sequence">30</field>
     </record>
   </data>

@@ -439,3 +439,20 @@ patch(CustomerAddress.prototype, {
         return super.saveAddress(...arguments);
     },
 });
+
+function rewriteTiendaTermsLinks() {
+    if (typeof document === "undefined") {
+        return;
+    }
+    document
+        .querySelectorAll('.o_wsale_product_terms_and_conditions a[href="/terms"], .o_wsale_product_terms_and_conditions a[href$="/terms"]')
+        .forEach((link) => {
+            link.setAttribute("href", "/terminos-de-uso");
+        });
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", rewriteTiendaTermsLinks, { once: true });
+} else {
+    rewriteTiendaTermsLinks();
+}

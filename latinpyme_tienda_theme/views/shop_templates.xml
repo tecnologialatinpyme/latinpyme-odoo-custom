@@ -166,4 +166,20 @@
     </xpath>
   </template>
 
+  <template id="lp_tienda_terms_page" name="Tienda LatinPyme Terms Page">
+    <t t-call="website.layout">
+      <t t-set="title" t-value="'Términos de uso | Tienda LatinPyme'"/>
+      <t t-set="website_meta_description" t-value="'Términos de uso de Tienda LatinPyme.'"/>
+      <div id="wrap" class="lp-tienda lp-legal-page lp-legal-terms">
+        <main class="lp-tienda-container lp-legal-page__content">
+          <h1>Términos de uso</h1>
+          <p>
+            Este espacio reúne las condiciones generales de uso de Tienda LatinPyme.
+            El contenido legal completo puede administrarse y ampliarse desde el sitio.
+          </p>
+        </main>
+      </div>
+    </t>
+  </template>
+
 </odoo>

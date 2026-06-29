@@ -327,9 +327,9 @@ class LatinpymeTiendaConfig(models.Model):
             {
                 "title": "LEGAL",
                 "links": [
-                    {"label": "Términos de Uso", "url": "/terms", "open_new_tab": False},
-                    {"label": "Privacidad y datos", "url": "/terms", "open_new_tab": False},
-                    {"label": "Aviso Legal", "url": "/terms", "open_new_tab": False},
+                    {"label": "Términos de Uso", "url": "/terminos-de-uso", "open_new_tab": False},
+                    {"label": "Privacidad y datos", "url": "/terminos-de-uso", "open_new_tab": False},
+                    {"label": "Aviso Legal", "url": "/terminos-de-uso", "open_new_tab": False},
                 ],
             },
         ]

@@ -202,9 +202,15 @@ class LatinpymeTiendaShopController(WebsiteSale):
 
 
 class LatinpymeTiendaController(Website):
-    @http.route("/terms", type="http", auth="public", website=True, sitemap=False)
-    def tienda_terms_redirect(self, **kwargs):
-        return request.redirect("/terminos-de-uso", code=301)
+    @http.route(["/terminos-de-uso", "/terms"], type="http", auth="public", website=True, sitemap=False)
+    def tienda_terms_page(self, **kwargs):
+        return request.render(
+            "latinpyme_tienda_theme.lp_tienda_terms_page",
+            {
+                "title": "Términos de uso | Tienda LatinPyme",
+                "website_meta_description": "Términos de uso de Tienda LatinPyme.",
+            },
+        )
 
     @http.route("/tienda/category/<int:category_id>/icon", type="http", auth="public", website=True, sitemap=False)
     def tienda_category_icon(self, category_id, **kwargs):
@@ -585,9 +591,9 @@ class LatinpymeTiendaController(Website):
             {
                 "title": "LEGAL",
                 "links": [
-                    {"label": "Términos de Uso", "url": "/terms", "open_new_tab": False},
-                    {"label": "Privacidad y datos", "url": "/terms", "open_new_tab": False},
-                    {"label": "Aviso Legal", "url": "/terms", "open_new_tab": False},
+                    {"label": "Términos de Uso", "url": "/terminos-de-uso", "open_new_tab": False},
+                    {"label": "Privacidad y datos", "url": "/terminos-de-uso", "open_new_tab": False},
+                    {"label": "Aviso Legal", "url": "/terminos-de-uso", "open_new_tab": False},
                 ],
             },
         ]
