@@ -206,7 +206,7 @@ class LatinpymeTiendaController(Website):
     def tienda_terms_page(self, **kwargs):
         layout_values = request.env["latinpyme.tienda.config"].sudo().get_layout_context(getattr(request, "website", False))
         return request.render(
-            "latinpyme_tienda_theme.lp_tienda_terms_page",
+            "latinpyme_tienda_theme.lp_tienda_terms_page_clean",
             {
                 "title": "Términos de uso | Tienda LatinPyme",
                 "website_meta_description": "Términos de uso de Tienda LatinPyme.",

@@ -166,7 +166,7 @@
     </xpath>
   </template>
 
-  <template id="lp_tienda_terms_page" name="Tienda LatinPyme Terms Page">
+  <template id="lp_tienda_terms_page_clean" name="Tienda LatinPyme Terms Page Clean">
     <t t-call="website.layout">
       <t t-set="no_header" t-value="True"/>
       <t t-set="no_footer" t-value="True"/>
