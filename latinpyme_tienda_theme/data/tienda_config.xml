@@ -7,6 +7,15 @@
       <field name="brand_label">Tienda</field>
     </record>
 
+    <record id="tienda_banner_home_hero" model="latinpyme.tienda.banner">
+      <field name="name">Banner principal home</field>
+      <field name="placement">home_hero</field>
+      <field name="sequence">10</field>
+      <field name="url">/shop</field>
+      <field name="button_label">Ver mas</field>
+      <field name="active">True</field>
+    </record>
+
     <record id="tienda_banner_home_horizontal" model="latinpyme.tienda.banner">
       <field name="name">Banner home horizontal</field>
       <field name="placement">home_horizontal</field>

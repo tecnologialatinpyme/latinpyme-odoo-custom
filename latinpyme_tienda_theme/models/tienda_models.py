@@ -4,6 +4,13 @@ from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
+BANNER_PLACEMENTS = [
+    ("home_hero", "Home banner principal"),
+    ("home_horizontal", "Home publicidad horizontal"),
+    ("home_side", "Home publicidad lateral"),
+]
+
+
 class LatinpymeTiendaConfig(models.Model):
     _name = "latinpyme.tienda.config"
     _description = "Configuracion Tienda LatinPyme"
@@ -22,13 +29,10 @@ class LatinpymeTiendaBanner(models.Model):
 
     name = fields.Char(string="Nombre", required=True)
     placement = fields.Selection(
-        [
-            ("home_horizontal", "Home publicidad horizontal"),
-            ("home_side", "Home publicidad lateral"),
-        ],
+        BANNER_PLACEMENTS,
         string="Ubicacion",
         required=True,
-        default="home_horizontal",
+        default="home_hero",
     )
     image = fields.Image(string="Imagen", max_width=1920, max_height=1080)
     title = fields.Char(string="Titulo")
@@ -70,4 +74,16 @@ class LatinpymeTiendaBanner(models.Model):
 
     @api.model
     def get_active_banner(self, placement, website=None):
-        return self.get_active_banners(placement, website=website, limit=1)
+        if website:
+            banner = self.search(
+                self._active_domain(placement, website=False) + [("website_id", "=", website.id)],
+                order="sequence, id",
+                limit=1,
+            )
+            if banner:
+                return banner
+        return self.search(
+            self._active_domain(placement, website=False) + [("website_id", "=", False)],
+            order="sequence, id",
+            limit=1,
+        )

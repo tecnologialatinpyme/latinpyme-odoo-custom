@@ -56,7 +56,7 @@
     <field name="name">latinpyme.tienda.banner.list</field>
     <field name="model">latinpyme.tienda.banner</field>
     <field name="arch" type="xml">
-      <list string="Banners Tienda" default_order="sequence,name">
+      <list string="Publicidad Tienda" default_order="sequence,name">
         <field name="sequence" widget="handle"/>
         <field name="image" widget="image" optional="show"/>
         <field name="name"/>
@@ -73,7 +73,7 @@
     <field name="name">latinpyme.tienda.banner.form</field>
     <field name="model">latinpyme.tienda.banner</field>
     <field name="arch" type="xml">
-      <form string="Banner Tienda">
+      <form string="Publicidad Tienda">
         <sheet>
           <group>
             <group string="Configuracion">
@@ -104,10 +104,11 @@
     <field name="name">latinpyme.tienda.banner.search</field>
     <field name="model">latinpyme.tienda.banner</field>
     <field name="arch" type="xml">
-      <search string="Banners Tienda">
+      <search string="Publicidad Tienda">
         <field name="name"/>
         <field name="placement"/>
         <filter string="Activos" name="active" domain="[('active', '=', True)]"/>
+        <filter string="Home principal" name="home_hero" domain="[('placement', '=', 'home_hero')]"/>
         <filter string="Home horizontal" name="home_horizontal" domain="[('placement', '=', 'home_horizontal')]"/>
         <filter string="Home lateral" name="home_side" domain="[('placement', '=', 'home_side')]"/>
         <group expand="0" string="Agrupar por">
@@ -119,7 +120,7 @@
   </record>
 
   <record id="action_latinpyme_tienda_banner" model="ir.actions.act_window">
-    <field name="name">Banners</field>
+    <field name="name">Publicidad</field>
     <field name="res_model">latinpyme.tienda.banner</field>
     <field name="view_mode">list,form</field>
     <field name="search_view_id" ref="view_latinpyme_tienda_banner_search"/>
@@ -154,7 +155,7 @@
 
   <menuitem
     id="menu_latinpyme_tienda_banners"
-    name="Banners"
+    name="Publicidad"
     parent="menu_latinpyme_tienda_root"
     action="action_latinpyme_tienda_banner"
     sequence="12"/>

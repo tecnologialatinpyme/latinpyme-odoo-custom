@@ -109,6 +109,17 @@ class LatinpymeTiendaController(Website):
             _logger.info("No se pudo cargar banner de Tienda %s: %s", placement, exc)
             return False
 
+    def _serialize_home_banner(self, banner, fallback):
+        if not banner:
+            return fallback
+        return {
+            "id": banner.id,
+            "name": banner.name,
+            "image_url": "/tienda/media/banner/%s/image" % banner.id,
+            "alt": banner.name,
+            "url": banner.url or "/shop",
+        }
+
     def _home_values(self):
         """Temporary storefront data, grouped for a future backend-managed phase."""
         shop_url = "/shop"
@@ -153,12 +164,15 @@ class LatinpymeTiendaController(Website):
                 "secondary_label": "Hablar con un asesor",
                 "secondary_url": whatsapp_url,
             },
-            "hero_banner": {
-                "name": "Banner principal Tienda LatinPyme",
-                "image_url": "https://latinpyme.com/revista/media/banner/3/image",
-                "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
-                "url": shop_url,
-            },
+            "hero_banner": self._serialize_home_banner(
+                self._home_banner("home_hero"),
+                {
+                    "name": "Banner principal Tienda LatinPyme",
+                    "image_url": "https://latinpyme.com/revista/media/banner/3/image",
+                    "alt": "Acoso Sexual Laboral: Lo que toda empresa debe revisar antes de una sanción",
+                    "url": shop_url,
+                },
+            ),
             "product_carousels": self._home_product_carousels(),
             "home_horizontal_banner": self._home_banner("home_horizontal"),
             "home_side_banner": self._home_banner("home_side"),
