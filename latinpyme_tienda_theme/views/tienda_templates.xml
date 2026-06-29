@@ -381,24 +381,10 @@
                     <i class="fa fa-arrow-right" aria-hidden="true"/>
                   </a>
                 </header>
-                <div class="lp-tienda-product-carousel__viewport">
-                  <button
-                    type="button"
-                    class="lp-tienda-product-carousel__control lp-tienda-product-carousel__control--prev"
-                    t-att-aria-label="'Desplazar %s hacia la izquierda' % carousel['name']">
-                    <i class="fa fa-angle-left" aria-hidden="true"/>
-                  </button>
-                  <div class="lp-tienda-product-carousel__track" t-att-aria-label="carousel['name']">
-                    <t t-foreach="carousel['products']" t-as="product_item">
-                      <t t-call="latinpyme_tienda_theme.lp_tienda_product_carousel_card"/>
-                    </t>
-                  </div>
-                  <button
-                    type="button"
-                    class="lp-tienda-product-carousel__control lp-tienda-product-carousel__control--next"
-                    t-att-aria-label="'Desplazar %s hacia la derecha' % carousel['name']">
-                    <i class="fa fa-angle-right" aria-hidden="true"/>
-                  </button>
+                <div class="lp-tienda-product-carousel__track" t-att-aria-label="carousel['name']">
+                  <t t-foreach="carousel['products']" t-as="product_item">
+                    <t t-call="latinpyme_tienda_theme.lp_tienda_product_carousel_card"/>
+                  </t>
                 </div>
               </section>
             </div>
