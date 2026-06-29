@@ -175,7 +175,6 @@
       <t t-set="title" t-value="'Términos de uso | Tienda LatinPyme'"/>
       <t t-set="website_meta_description" t-value="'Términos de uso de Tienda LatinPyme.'"/>
       <div id="wrap" class="lp-tienda lp-legal-page lp-legal-terms">
-        <t t-call="latinpyme_tienda_theme.lp_tienda_masthead"/>
         <main class="lp-tienda-main">
           <section class="lp-tienda-container lp-legal-page__content oe_structure" id="lp_tienda_terms_content">
             <h1>Términos de uso</h1>
@@ -185,7 +184,6 @@
             </p>
           </section>
         </main>
-        <t t-call="latinpyme_tienda_theme.lp_tienda_footer"/>
       </div>
     </t>
   </template>
