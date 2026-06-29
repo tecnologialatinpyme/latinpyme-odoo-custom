@@ -1,16 +1,18 @@
 /** @odoo-module **/
 
-function rewriteProductTermsLink(root = document) {
-    if (!window.location?.pathname?.startsWith("/shop")) {
+function rewriteProductTermsLink(root) {
+    var path = (window.location && window.location.pathname) || "";
+    if (path.indexOf("/shop") !== 0) {
         return;
     }
+    root = root || document;
     root
         .querySelectorAll(
             'a[href="/terms"], ' +
             'a[href$="/terms"], ' +
             'a[href*="/terms?"]'
         )
-        .forEach((link) => {
+        .forEach(function (link) {
             link.setAttribute("href", "/terminos-de-uso");
         });
 }
@@ -26,11 +28,7 @@ function startObserver() {
         return;
     }
 
-    const observer = new MutationObserver(() => {
-        rewriteProductTermsLink();
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-    window.setTimeout(() => observer.disconnect(), 5000);
+    rewriteProductTermsLink(document);
 }
 
 if (document.readyState === "loading") {
