@@ -164,9 +164,6 @@
     <xpath expr="//div[@id='wrap']" position="attributes">
       <attribute name="class" add="lp-tienda lp-product-page" separator=" "/>
     </xpath>
-    <xpath expr="//*[hasclass('o_wsale_product_terms_and_conditions')]//a" position="attributes">
-      <attribute name="href">/terminos-de-uso</attribute>
-    </xpath>
   </template>
 
 </odoo>

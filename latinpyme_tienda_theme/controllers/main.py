@@ -202,6 +202,10 @@ class LatinpymeTiendaShopController(WebsiteSale):
 
 
 class LatinpymeTiendaController(Website):
+    @http.route("/terms", type="http", auth="public", website=True, sitemap=False)
+    def tienda_terms_redirect(self, **kwargs):
+        return request.redirect("/terminos-de-uso", code=301)
+
     @http.route("/tienda/category/<int:category_id>/icon", type="http", auth="public", website=True, sitemap=False)
     def tienda_category_icon(self, category_id, **kwargs):
         category = request.env["product.public.category"].sudo().browse(category_id)
