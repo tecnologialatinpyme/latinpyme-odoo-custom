@@ -385,11 +385,14 @@ class LatinpymeTiendaConfig(models.Model):
     def _home_blocks_for_section(self, section_key, website=None):
         Block = self.env["latinpyme.tienda.home.block"].sudo()
         domain = [("active", "=", True), ("section_key", "=", section_key)]
-        if website:
-            website_blocks = Block.search(domain + [("website_id", "=", website.id)], order="sequence, id")
-            if website_blocks:
-                return website_blocks
-        return Block.search(domain + [("website_id", "=", False)], order="sequence, id")
+        try:
+            if website:
+                website_blocks = Block.search(domain + [("website_id", "=", website.id)], order="sequence, id")
+                if website_blocks:
+                    return website_blocks
+            return Block.search(domain + [("website_id", "=", False)], order="sequence, id")
+        except Exception:
+            return self.browse()
 
     @api.model
     def get_home_blocks(self, website=None):
