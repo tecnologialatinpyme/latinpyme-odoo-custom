@@ -941,16 +941,19 @@
   min-height: 100%;
 
   > a.lp-tienda-promo-banner--image-only {
-    display: block;
+    display: grid;
     flex: 1 1 auto;
     aspect-ratio: auto;
     min-height: 100%;
+    place-items: center;
+    background: #fff;
   }
 
   > a.lp-tienda-promo-banner--image-only > .lp-tienda-promo-banner__image {
+    position: static;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
   }
 }
