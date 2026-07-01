@@ -86,6 +86,34 @@ Antes de modificar un módulo, revisar lo que aplique:
 - No usar `origin/main` como base de deploy de Tienda mientras siga incluyendo la línea fallida iniciada por `59fb18f` y `fe3b6fa`.
 - El repo principal solo debe apuntar a commits verificados de esta base segura o de una línea que la reemplace explícitamente.
 
+## Flujo recomendado por entorno Odoo.sh
+
+Cuando el usuario pida `main`, `staging` o `production`, tratar cada uno como un destino distinto de despliegue.
+
+- `main`:
+  - usarlo para smoke test o verificación temprana.
+  - útil cuando el cambio todavía puede requerir ajustes.
+- `staging`:
+  - usarlo para validar con una copia fresca de Production.
+  - es el paso previo recomendado antes de publicar en Production.
+- `production`:
+  - usarlo solo como salida final, con cambios ya revisados.
+
+Reglas operativas:
+
+- Si la tarea está en `MODO TIENDA_SAFE` o `MODO REVISTA_SAFE`, no hacer push.
+- Si la tarea está en `MODO TIENDA_PUSH` o `MODO REVISTA_PUSH`, el push debe ir al entorno que el usuario pida explícitamente.
+- No mezclar en un mismo push cambios de prueba, cambios funcionales y bumps de submódulo no relacionados.
+- Si la tarea va a `staging`, debe llegar el mismo commit ya validado y no una variante distinta.
+
+Secuencia sugerida:
+
+```bash
+git push origin HEAD:main
+git push origin HEAD:staging
+git push origin HEAD:production
+```
+
 Cuando haya cambios funcionales:
 
 ```bash

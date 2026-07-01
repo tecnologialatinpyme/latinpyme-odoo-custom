@@ -4,7 +4,7 @@ import base64
 import logging
 from pathlib import Path
 
-from odoo import http
+from odoo import fields, http
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 from odoo.addons.website.controllers.main import Website
 from odoo.http import request
@@ -81,6 +81,11 @@ def _guess_image_mimetype(image_data):
     if image_data.startswith(b"GIF"):
         return "image/gif"
     return "image/png"
+
+
+def _website_matches(record):
+    website = getattr(request, "website", False)
+    return not record.website_id or not website or record.website_id == website
 
 
 def _fallback_icon_data(category_id):
@@ -225,6 +230,36 @@ class LatinpymeTiendaController(Website):
             image_data = _decode_image(category.lp_tienda_icon)
         if not image_data:
             image_data = _fallback_icon_data(category.id)
+        if not image_data:
+            return request.not_found()
+
+        return request.make_response(
+            image_data,
+            headers=[
+                ("Content-Type", _guess_image_mimetype(image_data)),
+                ("Cache-Control", "no-cache, max-age=0, must-revalidate"),
+            ],
+        )
+
+    @http.route(
+        "/tienda/media/banner/<int:banner_id>/image",
+        type="http",
+        auth="public",
+        website=True,
+        sitemap=False,
+    )
+    def tienda_banner_image(self, banner_id, **kwargs):
+        banner = request.env["latinpyme.tienda.banner"].sudo().browse(banner_id).exists()
+        if not banner or not banner.active or not banner.image or not _website_matches(banner):
+            return request.not_found()
+
+        today = fields.Date.context_today(banner)
+        if banner.date_start and banner.date_start > today:
+            return request.not_found()
+        if banner.date_end and banner.date_end < today:
+            return request.not_found()
+
+        image_data = _decode_image(banner.image)
         if not image_data:
             return request.not_found()
 
@@ -390,7 +425,7 @@ class LatinpymeTiendaController(Website):
             return self._fallback_home_hero_banner(shop_url)
         return {
             "name": banner.name or "Banner principal Tienda LatinPyme",
-            "image_url": "/web/image/latinpyme.tienda.banner/%s/image" % banner.id,
+            "image_url": "/tienda/media/banner/%s/image" % banner.id,
             "alt": banner.title or banner.name or "Banner principal Tienda LatinPyme",
             "url": banner.url or shop_url,
         }
@@ -410,7 +445,7 @@ class LatinpymeTiendaController(Website):
             return False
         return {
             "name": banner.name or "Publicidad horizontal Tienda LatinPyme",
-            "image_url": "/web/image/latinpyme.tienda.banner/%s/image" % banner.id,
+            "image_url": "/tienda/media/banner/%s/image" % banner.id,
             "alt": banner.title or banner.name or "Publicidad horizontal Tienda LatinPyme",
             "url": banner.url or "/shop",
         }
@@ -430,7 +465,7 @@ class LatinpymeTiendaController(Website):
             return False
         return {
             "name": banner.name or "Publicidad lateral Tienda LatinPyme",
-            "image_url": "/web/image/latinpyme.tienda.banner/%s/image" % banner.id,
+            "image_url": "/tienda/media/banner/%s/image" % banner.id,
             "alt": banner.title or banner.name or "Publicidad lateral Tienda LatinPyme",
             "url": banner.url or "/shop",
         }
