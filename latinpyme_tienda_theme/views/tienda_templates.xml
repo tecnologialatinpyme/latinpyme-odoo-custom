@@ -161,6 +161,32 @@
     </aside>
   </template>
 
+  <template id="lp_tienda_side_banner" name="Tienda LatinPyme Side Banner">
+    <aside class="lp-tienda-side-banner" aria-label="Publicidad">
+      <t t-if="banner">
+        <a
+          class="lp-tienda-side-banner__link"
+          t-att-href="banner['url']"
+          t-att-aria-label="banner['name']"
+          data-analytics-event="click_home_ad_banner"
+          t-att-data-analytics-banner-name="banner['name']"
+          t-att-data-analytics-banner-position="banner_position or 'home_side'">
+          <img
+            class="lp-tienda-side-banner__image"
+            t-att-src="banner['image_url']"
+            t-att-alt="banner['alt']"
+            loading="lazy"/>
+        </a>
+      </t>
+      <t t-else="">
+        <div class="lp-tienda-side-banner__empty">
+          <span>Publicidad</span>
+          <strong>Banner disponible</strong>
+        </div>
+      </t>
+    </aside>
+  </template>
+
   <template id="lp_tienda_footer" name="Tienda LatinPyme Footer">
     <footer class="lp-tienda-footer">
       <div class="lp-tienda-container lp-tienda-footer__inner">
@@ -335,7 +361,7 @@
               </div>
               <t t-set="banner" t-value="side_banner"/>
               <t t-set="banner_position" t-value="'home_side'"/>
-              <t t-call="latinpyme_tienda_theme.lp_tienda_ad_slot"/>
+              <t t-call="latinpyme_tienda_theme.lp_tienda_side_banner"/>
             </div>
           </section>
 

@@ -958,6 +958,47 @@
   }
 }
 
+.lp-tienda-side-banner {
+  display: flex;
+  min-width: 0;
+  min-height: 100%;
+  align-self: stretch;
+  overflow: hidden;
+  border: 1px solid rgba(16, 20, 27, .08);
+  border-radius: var(--lp-tienda-radius);
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(17, 19, 24, .055);
+}
+
+.lp-tienda-side-banner__link {
+  display: grid;
+  width: 100%;
+  min-height: 100%;
+  place-items: center;
+  background: #fff;
+}
+
+.lp-tienda-side-banner__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.lp-tienda-side-banner__empty {
+  display: grid;
+  gap: 8px;
+  min-height: 132px;
+  place-items: center;
+  color: #737b87;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 .lp-tienda-ad-horizontal {
   display: grid;
   margin-block: -18px -8px;
@@ -1333,6 +1374,10 @@
     }
   }
 
+  .lp-tienda-tech-layout > .lp-tienda-side-banner {
+    min-height: 100%;
+  }
+
   .lp-tienda-allies__group {
     grid-auto-columns: 170px;
   }
@@ -1415,6 +1460,10 @@
 
   .lp-tienda-promo-banner--image-only {
     min-height: 78px;
+  }
+
+  .lp-tienda-side-banner {
+    min-height: 96px;
   }
 
   .lp-tienda-main {
