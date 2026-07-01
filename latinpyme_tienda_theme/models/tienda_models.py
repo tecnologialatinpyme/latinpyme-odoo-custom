@@ -386,6 +386,11 @@ class LatinpymeTiendaConfig(models.Model):
         Block = self.env["latinpyme.tienda.home.block"].sudo()
         domain = [("active", "=", True), ("section_key", "=", section_key)]
         try:
+            self.env.cr.execute("SELECT to_regclass(%s)", (Block._table,))
+            table_exists = bool(self.env.cr.fetchone()[0])
+            if not table_exists:
+                return self.browse()
+
             if website:
                 website_blocks = Block.search(domain + [("website_id", "=", website.id)], order="sequence, id")
                 if website_blocks:
