@@ -136,7 +136,7 @@
   </template>
 
   <template id="lp_tienda_ad_slot" name="Tienda LatinPyme Ad Slot">
-    <aside class="lp-tienda-ad-slot" aria-label="Publicidad">
+    <aside t-attf-class="lp-tienda-ad-slot #{'lp-tienda-ad-slot--side' if banner_position == 'home_side' else ''} #{'lp-tienda-ad-slot--horizontal' if banner_position == 'home_horizontal' else ''}" aria-label="Publicidad">
       <t t-if="banner">
         <a
           class="lp-tienda-promo-banner lp-tienda-promo-banner--image-only"

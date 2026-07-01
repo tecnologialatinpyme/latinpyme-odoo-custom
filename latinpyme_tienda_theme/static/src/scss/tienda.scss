@@ -934,6 +934,27 @@
   }
 }
 
+.lp-tienda-ad-slot--side {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
+  > a.lp-tienda-promo-banner--image-only {
+    display: block;
+    flex: 1 1 auto;
+    aspect-ratio: auto;
+    min-height: 100%;
+  }
+
+  > a.lp-tienda-promo-banner--image-only > .lp-tienda-promo-banner__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
 .lp-tienda-ad-horizontal {
   display: grid;
   margin-block: -18px -8px;
@@ -946,10 +967,14 @@
 
 .lp-tienda-tech-layout {
   display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 377px);
+  align-items: stretch;
   gap: 26px;
 
   > .lp-tienda-ad-slot {
+    min-width: 0;
     gap: 0;
+    justify-self: stretch;
 
     > span {
       display: none;
