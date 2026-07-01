@@ -36,6 +36,12 @@ _CATEGORY_ICON_FALLBACKS = {
     for category_id, filename in _CATEGORY_ICON_FILES.items()
 }
 
+HOME_BLOCK_SECTIONS = [
+    ("training", "Capacitación"),
+    ("technology", "Tecnología e innovación"),
+    ("ai", "Inteligencia artificial"),
+]
+
 FOOTER_LINK_GROUPS = [
     ("sections", "Secciones"),
     ("portfolio", "Portafolio"),
@@ -96,6 +102,10 @@ def _menu_item_display_name(item):
     if item.item_type == "category" and category:
         return _category_display_name(category)
     return item.name
+
+
+def _split_lines(value):
+    return [line.strip(" -•\t") for line in (value or "").splitlines() if line and line.strip(" -•\t")]
 
 
 class ProductPublicCategory(models.Model):
@@ -262,6 +272,135 @@ class LatinpymeTiendaConfig(models.Model):
         ]
 
     @api.model
+    def _fallback_home_blocks(self):
+        return {
+            "training": [
+                {
+                    "title": "Cursos Online 100%",
+                    "subtitle": "Cursos de actualización",
+                    "summary": "Flexibles, diseñados para adquirir nuevas habilidades.",
+                    "bullets": ["Auditoría SG-SST.", "Seguridad Vial."],
+                    "href": "/shop?search=online",
+                    "button_url": "/shop?search=online",
+                    "button_label": "Ver más",
+                    "icon": "fa-laptop",
+                    "css_class": "",
+                },
+                {
+                    "title": "Capacitaciones Inhouse",
+                    "subtitle": "Formación a la medida",
+                    "summary": "Diseñamos contenidos según tus procesos y retos, con expertos.",
+                    "bullets": ["Presencial, virtual o híbrida.", "Talento humano, IA, Finanzas y más."],
+                    "href": "/shop?search=inhouse",
+                    "button_url": "/shop?search=inhouse",
+                    "button_label": "Ver más",
+                    "icon": "fa-users",
+                    "css_class": "",
+                },
+                {
+                    "title": "Fidelizacion empresarial",
+                    "subtitle": "E-learning",
+                    "summary": "Capacitaciones en gerencia, negocios y temas legales.",
+                    "bullets": ["Charlas empresariales.", "Diplomados.", "Flashtraining.", "Curso 50/20 horas (SG-SST)."],
+                    "href": "/shop?search=fidelizacion",
+                    "button_url": "/shop?search=fidelizacion",
+                    "button_label": "Ver más",
+                    "icon": "fa-line-chart",
+                    "css_class": "",
+                },
+            ],
+            "technology": [
+                {
+                    "title": "LMS (Aulas)",
+                    "summary": "Plataformas de aprendizaje para capacitar equipos y medir avances.",
+                    "bullets": ["Cursos empresariales", "Seguimiento de progreso", "Certificación"],
+                    "href": "/shop?search=lms",
+                    "button_url": "/shop?search=lms",
+                    "button_label": "Ver más",
+                    "icon": "fa-desktop",
+                    "css_class": "",
+                },
+                {
+                    "title": "Salones (Eventos)",
+                    "summary": "Soluciones para encuentros, formaciones y experiencias corporativas.",
+                    "bullets": ["Eventos presenciales", "Experiencias híbridas", "Soporte operativo"],
+                    "href": "/shop?search=eventos",
+                    "button_url": "/shop?search=eventos",
+                    "button_label": "Ver más",
+                    "icon": "fa-calendar",
+                    "css_class": "",
+                },
+            ],
+            "ai": [
+                {
+                    "title": "Agentes IA",
+                    "summary": "Asistentes virtuales 24/7 para atencion, ventas y procesos.",
+                    "bullets": ["Omnicanal", "Automatizacion", "Integracion CRM/ERP"],
+                    "href": "/shop?search=agentes%20ia",
+                    "button_url": "/shop?search=agentes%20ia",
+                    "button_label": "Ver más",
+                    "icon": "fa-comments",
+                    "css_class": "",
+                },
+                {
+                    "title": "Telefonia IA",
+                    "summary": "Llamadas inteligentes con voz natural e integracion a tus sistemas.",
+                    "bullets": ["Entrantes y salientes.", "Voz natural.", "Registro en CRM."],
+                    "href": "/shop?search=telefonia%20ia",
+                    "button_url": "/shop?search=telefonia%20ia",
+                    "button_label": "Ver más",
+                    "icon": "fa-phone",
+                    "css_class": "",
+                },
+                {
+                    "title": "IA Analítica y Predictiva",
+                    "summary": "Convierte datos en decisiones con modelos en tiempo real.",
+                    "bullets": ["Dashboards", "Predicción", "Decisiones automáticas"],
+                    "href": "/shop?search=analitica%20predictiva",
+                    "button_url": "/shop?search=analitica%20predictiva",
+                    "button_label": "Ver más",
+                    "icon": "fa-area-chart",
+                    "css_class": "",
+                },
+            ],
+        }
+
+    @api.model
+    def _serialize_home_block(self, block):
+        href = (block.button_url or "/shop").strip() or "/shop"
+        return {
+            "name": block.name,
+            "title": block.name,
+            "subtitle": block.subtitle or "",
+            "summary": block.summary or "",
+            "bullets": _split_lines(block.bullet_points),
+            "href": href,
+            "button_url": href,
+            "button_label": block.button_label or "Ver más",
+            "icon": block.icon_class or "fa-circle",
+            "css_class": block.css_class or "",
+        }
+
+    @api.model
+    def _home_blocks_for_section(self, section_key, website=None):
+        Block = self.env["latinpyme.tienda.home.block"].sudo()
+        domain = [("active", "=", True), ("section_key", "=", section_key)]
+        if website:
+            website_blocks = Block.search(domain + [("website_id", "=", website.id)], order="sequence, id")
+            if website_blocks:
+                return website_blocks
+        return Block.search(domain + [("website_id", "=", False)], order="sequence, id")
+
+    @api.model
+    def get_home_blocks(self, website=None):
+        fallback_blocks = self._fallback_home_blocks()
+        home_blocks = {}
+        for section_key, _label in HOME_BLOCK_SECTIONS:
+            records = self._home_blocks_for_section(section_key, website=website)
+            home_blocks[section_key] = [self._serialize_home_block(block) for block in records] if records else fallback_blocks.get(section_key, [])
+        return home_blocks
+
+    @api.model
     def _ensure_home_menu_item(self, menu_items):
         has_home = any(item.get("item_type") == "home" or item.get("name") == "Inicio" for item in menu_items)
         return menu_items if has_home else [self._home_menu_item()] + menu_items
@@ -349,6 +488,7 @@ class LatinpymeTiendaConfig(models.Model):
             "social_links": self.get_social_links(),
             "main_menu": self.get_main_menu(website),
             "footer_columns": self.get_footer_columns(website),
+            "home_blocks": self.get_home_blocks(website),
             "whatsapp_url": whatsapp_url,
         }
 
@@ -394,6 +534,40 @@ class LatinpymeTiendaConfig(models.Model):
 
         product = request.params.get("product")
         return bool(product and getattr(product, "_name", False) == "product.template")
+
+
+class LatinpymeTiendaHomeBlock(models.Model):
+    _name = "latinpyme.tienda.home.block"
+    _description = "Bloque del home Tienda LatinPyme"
+    _order = "section_key, sequence, id"
+
+    name = fields.Char(string="Titulo", required=True)
+    section_key = fields.Selection(
+        HOME_BLOCK_SECTIONS,
+        string="Seccion",
+        required=True,
+        default="training",
+        index=True,
+    )
+    sequence = fields.Integer(string="Orden", default=10)
+    active = fields.Boolean(string="Activo", default=True)
+    website_id = fields.Many2one("website", string="Sitio web", ondelete="set null")
+    subtitle = fields.Char(string="Subtitulo")
+    summary = fields.Text(string="Resumen")
+    bullet_points = fields.Text(
+        string="Puntos destacados",
+        help="Escribe un punto por linea para mostrarlos como lista en la tarjeta.",
+    )
+    icon_class = fields.Char(string="Icono", default="fa-circle")
+    button_label = fields.Char(string="Texto del boton", default="Ver más")
+    button_url = fields.Char(string="URL del boton", default="/shop")
+    css_class = fields.Char(string="Clase CSS opcional")
+
+    @api.constrains("button_url")
+    def _check_button_url(self):
+        for record in self:
+            if not (record.button_url or "").strip():
+                raise ValidationError("El bloque del home debe tener una URL de boton valida.")
 
 
 class LatinpymeTiendaMenuItem(models.Model):

@@ -21,6 +21,7 @@ mostrar carruseles de productos sin crear modelos nuevos.
     "data": [
         "security/ir.model.access.csv",
         "data/tienda_config.xml",
+        "data/tienda_home_blocks.xml",
         "views/backend_views.xml",
         "views/tienda_templates.xml",
         "views/shop_templates.xml",

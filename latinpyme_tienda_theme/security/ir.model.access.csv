@@ -1,6 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_latinpyme_tienda_config_system,latinpyme.tienda.config system,model_latinpyme_tienda_config,base.group_system,1,1,1,1
 access_latinpyme_tienda_config_designer,latinpyme.tienda.config designer,model_latinpyme_tienda_config,website.group_website_designer,1,1,1,0
+access_latinpyme_tienda_home_block_system,latinpyme.tienda.home.block system,model_latinpyme_tienda_home_block,base.group_system,1,1,1,1
+access_latinpyme_tienda_home_block_designer,latinpyme.tienda.home.block designer,model_latinpyme_tienda_home_block,website.group_website_designer,1,1,1,0
 access_latinpyme_tienda_menu_item_system,latinpyme.tienda.menu.item system,model_latinpyme_tienda_menu_item,base.group_system,1,1,1,1
 access_latinpyme_tienda_menu_item_designer,latinpyme.tienda.menu.item designer,model_latinpyme_tienda_menu_item,website.group_website_designer,1,1,1,0
 access_latinpyme_tienda_footer_link_system,latinpyme.tienda.footer.link system,model_latinpyme_tienda_footer_link,base.group_system,1,1,1,1

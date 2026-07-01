@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+    <record id="tienda_home_block_training_online" model="latinpyme.tienda.home.block">
+      <field name="name">Cursos Online 100%</field>
+      <field name="section_key">training</field>
+      <field name="sequence">10</field>
+      <field name="subtitle">Cursos de actualización</field>
+      <field name="summary">Flexibles, diseñados para adquirir nuevas habilidades.</field>
+      <field name="bullet_points">Auditoría SG-SST.
+Seguridad Vial.</field>
+      <field name="icon_class">fa-laptop</field>
+      <field name="button_label">Ver más</field>
+      <field name="button_url">/shop?search=online</field>
+    </record>
+
+    <record id="tienda_home_block_training_inhouse" model="latinpyme.tienda.home.block">
+      <field name="name">Capacitaciones Inhouse</field>
+      <field name="section_key">training</field>
+      <field name="sequence">20</field>
+      <field name="subtitle">Formación a la medida</field>
+      <field name="summary">Diseñamos contenidos según tus procesos y retos, con expertos.</field>
+      <field name="bullet_points">Presencial, virtual o híbrida.
+Talento humano, IA, Finanzas y más.</field>
+      <field name="icon_class">fa-users</field>
+      <field name="button_label">Ver más</field>
+      <field name="button_url">/shop?search=inhouse</field>
+    </record>
+
+    <record id="tienda_home_block_training_fidelizacion" model="latinpyme.tienda.home.block">
+      <field name="name">Fidelizacion empresarial</field>
+      <field name="section_key">training</field>
+      <field name="sequence">30</field>
+      <field name="subtitle">E-learning</field>
+      <field name="summary">Capacitaciones en gerencia, negocios y temas legales.</field>
+      <field name="bullet_points">Charlas empresariales.
+Diplomados.
+Flashtraining.
+Curso 50/20 horas (SG-SST).</field>
+      <field name="icon_class">fa-line-chart</field>
+      <field name="button_label">Ver más</field>
+      <field name="button_url">/shop?search=fidelizacion</field>
+    </record>
+
+    <record id="tienda_home_block_technology_lms" model="latinpyme.tienda.home.block">
+      <field name="name">LMS (Aulas)</field>
+      <field name="section_key">technology</field>
+      <field name="sequence">10</field>
+      <field name="summary">Plataformas de aprendizaje para capacitar equipos y medir avances.</field>
+      <field name="bullet_points">Cursos empresariales
+Seguimiento de progreso
+Certificación</field>
+      <field name="icon_class">fa-desktop</field>
+      <field name="button_label">Ver más</field>
+      <field name="button_url">/shop?search=lms</field>
+    </record>
+
+    <record id="tienda_home_block_technology_events" model="latinpyme.tienda.home.block">
+      <field name="name">Salones (Eventos)</field>
+      <field name="section_key">technology</field>
+      <field name="sequence">20</field>
+      <field name="summary">Soluciones para encuentros, formaciones y experiencias corporativas.</field>
+      <field name="bullet_points">Eventos presenciales
+Experiencias híbridas
+Soporte operativo</field>
+      <field name="icon_class">fa-calendar</field>
+      <field name="button_label">Ver más</field>
+      <field name="button_url">/shop?search=eventos</field>
+    </record>
+
+    <record id="tienda_home_block_ai_agents" model="latinpyme.tienda.home.block">
+      <field name="name">Agentes IA</field>
+      <field name="section_key">ai</field>
+      <field name="sequence">10</field>
+      <field name="summary">Asistentes virtuales 24/7 para atencion, ventas y procesos.</field>
+      <field name="bullet_points">Omnicanal
+Automatizacion
+Integracion CRM/ERP</field>
+      <field name="icon_class">fa-comments</field>
+      <field name="button_label">Ver más</field>
+      <field name="button_url">/shop?search=agentes%20ia</field>
+    </record>
+
+    <record id="tienda_home_block_ai_telephony" model="latinpyme.tienda.home.block">
+      <field name="name">Telefonia IA</field>
+      <field name="section_key">ai</field>
+      <field name="sequence">20</field>
+      <field name="summary">Llamadas inteligentes con voz natural e integracion a tus sistemas.</field>
+      <field name="bullet_points">Entrantes y salientes.
+Voz natural.
+Registro en CRM.</field>
+      <field name="icon_class">fa-phone</field>
+      <field name="button_label">Ver más</field>
+      <field name="button_url">/shop?search=telefonia%20ia</field>
+    </record>
+
+    <record id="tienda_home_block_ai_predictive" model="latinpyme.tienda.home.block">
+      <field name="name">IA Analítica y Predictiva</field>
+      <field name="section_key">ai</field>
+      <field name="sequence">30</field>
+      <field name="summary">Convierte datos en decisiones con modelos en tiempo real.</field>
+      <field name="bullet_points">Dashboards
+Predicción
+Decisiones automáticas</field>
+      <field name="icon_class">fa-area-chart</field>
+      <field name="button_label">Ver más</field>
+      <field name="button_url">/shop?search=analitica%20predictiva</field>
+    </record>
+  </data>
+</odoo>

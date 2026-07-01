@@ -485,6 +485,7 @@ class LatinpymeTiendaController(Website):
         shop_url = "/shop"
         whatsapp_url = "https://wa.link/i0n10b"
         layout_values = request.env["latinpyme.tienda.config"].sudo().get_layout_context(getattr(request, "website", False))
+        home_blocks = layout_values.get("home_blocks") or {}
         return {
             **layout_values,
             "hero": {
@@ -500,71 +501,9 @@ class LatinpymeTiendaController(Website):
             "horizontal_banner": self._home_horizontal_banner(),
             "side_banner": self._home_side_banner(),
             "product_carousels": self._home_product_carousels(),
-            "training_cards": [
-                {
-                    "title": "Cursos Online 100%",
-                    "subtitle": "Cursos de actualización",
-                    "summary": "Flexibles, diseñados para adquirir nuevas habilidades.",
-                    "bullets": ["Auditoría SG-SST.", "Seguridad Vial."],
-                    "href": "/shop?search=online",
-                    "icon": "fa-laptop",
-                },
-                {
-                    "title": "Capacitaciones Inhouse",
-                    "subtitle": "Formación a la medida",
-                    "summary": "Diseñamos contenidos según tus procesos y retos, con expertos.",
-                    "bullets": ["Presencial, virtual o híbrida.", "Talento humano, IA, Finanzas y más."],
-                    "href": "/shop?search=inhouse",
-                    "icon": "fa-users",
-                },
-                {
-                    "title": "Fidelizacion empresarial",
-                    "subtitle": "E-learning",
-                    "summary": "Capacitaciones en gerencia, negocios y temas legales.",
-                    "bullets": ["Charlas empresariales.", "Diplomados.", "Flashtraining.", "Curso 50/20 horas (SG-SST)."],
-                    "href": "/shop?search=fidelizacion",
-                    "icon": "fa-line-chart",
-                },
-            ],
-            "technology_cards": [
-                {
-                    "title": "LMS (Aulas)",
-                    "summary": "Plataformas de aprendizaje para capacitar equipos y medir avances.",
-                    "bullets": ["Cursos empresariales", "Seguimiento de progreso", "Certificación"],
-                    "href": "/shop?search=lms",
-                    "icon": "fa-desktop",
-                },
-                {
-                    "title": "Salones (Eventos)",
-                    "summary": "Soluciones para encuentros, formaciones y experiencias corporativas.",
-                    "bullets": ["Eventos presenciales", "Experiencias híbridas", "Soporte operativo"],
-                    "href": "/shop?search=eventos",
-                    "icon": "fa-calendar",
-                },
-            ],
-            "ai_cards": [
-                {
-                    "title": "Agentes IA",
-                    "summary": "Asistentes virtuales 24/7 para atencion, ventas y procesos.",
-                    "bullets": ["Omnicanal", "Automatizacion", "Integracion CRM/ERP"],
-                    "href": "/shop?search=agentes%20ia",
-                    "icon": "fa-comments",
-                },
-                {
-                    "title": "Telefonia IA",
-                    "summary": "Llamadas inteligentes con voz natural e integracion a tus sistemas.",
-                    "bullets": ["Entrantes y salientes.", "Voz natural.", "Registro en CRM."],
-                    "href": "/shop?search=telefonia%20ia",
-                    "icon": "fa-phone",
-                },
-                {
-                    "title": "IA Analítica y Predictiva",
-                    "summary": "Convierte datos en decisiones con modelos en tiempo real.",
-                    "bullets": ["Dashboards", "Predicción", "Decisiones automáticas"],
-                    "href": "/shop?search=analitica%20predictiva",
-                    "icon": "fa-area-chart",
-                },
-            ],
+            "training_cards": home_blocks.get("training", []),
+            "technology_cards": home_blocks.get("technology", []),
+            "ai_cards": home_blocks.get("ai", []),
             "allies": [
                 {
                     "name": "Banco de Occidente",

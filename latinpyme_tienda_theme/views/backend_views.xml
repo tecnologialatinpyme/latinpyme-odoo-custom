@@ -40,6 +40,91 @@
     <field name="view_mode">list,form</field>
   </record>
 
+  <record id="view_latinpyme_tienda_home_block_list" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.home.block.list</field>
+    <field name="model">latinpyme.tienda.home.block</field>
+    <field name="arch" type="xml">
+      <list string="Bloques del home de Tienda" default_order="section_key,sequence,id">
+        <field name="sequence" widget="handle"/>
+        <field name="active"/>
+        <field name="section_key"/>
+        <field name="name"/>
+        <field name="subtitle"/>
+        <field name="button_label"/>
+        <field name="button_url"/>
+        <field name="website_id"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_home_block_form" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.home.block.form</field>
+    <field name="model">latinpyme.tienda.home.block</field>
+    <field name="arch" type="xml">
+      <form string="Bloque del home">
+        <sheet>
+          <group>
+            <group string="General">
+              <field name="active"/>
+              <field name="sequence"/>
+              <field name="section_key"/>
+              <field name="website_id"/>
+            </group>
+            <group string="Contenido">
+              <field name="name"/>
+              <field name="subtitle"/>
+              <field name="summary"/>
+            </group>
+          </group>
+          <group>
+            <group string="Boton">
+              <field name="button_label"/>
+              <field name="button_url"/>
+            </group>
+            <group string="Visualizacion">
+              <field name="icon_class"/>
+              <field name="css_class"/>
+            </group>
+          </group>
+          <group string="Puntos destacados">
+            <field name="bullet_points" placeholder="Un punto por linea"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_latinpyme_tienda_home_block_search" model="ir.ui.view">
+    <field name="name">latinpyme.tienda.home.block.search</field>
+    <field name="model">latinpyme.tienda.home.block</field>
+    <field name="arch" type="xml">
+      <search string="Buscar bloques del home">
+        <field name="name"/>
+        <field name="section_key"/>
+        <field name="website_id"/>
+        <filter name="active" string="Activos" domain="[('active', '=', True)]"/>
+        <filter name="inactive" string="Inactivos" domain="[('active', '=', False)]"/>
+        <filter name="training" string="Capacitación" domain="[('section_key', '=', 'training')]"/>
+        <filter name="technology" string="Tecnología" domain="[('section_key', '=', 'technology')]"/>
+        <filter name="ai" string="Inteligencia artificial" domain="[('section_key', '=', 'ai')]"/>
+        <filter name="group_section" string="Agrupar por sección" context="{'group_by': 'section_key'}"/>
+        <filter name="group_website" string="Agrupar por sitio web" context="{'group_by': 'website_id'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_latinpyme_tienda_home_block" model="ir.actions.act_window">
+    <field name="name">Bloques del home</field>
+    <field name="res_model">latinpyme.tienda.home.block</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_latinpyme_tienda_home_block_search"/>
+    <field name="context">{'search_default_active': 1}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">Administra los bloques del home de Tienda.</p>
+      <p>Controla capacitación, tecnología e innovación e inteligencia artificial. Puedes agregar nuevos bloques, ajustar el enlace del boton y reordenarlos por sección.</p>
+    </field>
+  </record>
+
   <record id="view_latinpyme_tienda_menu_item_list" model="ir.ui.view">
     <field name="name">latinpyme.tienda.menu.item.list</field>
     <field name="model">latinpyme.tienda.menu.item</field>
@@ -384,6 +469,13 @@
     parent="menu_latinpyme_tienda_root"
     action="action_latinpyme_tienda_config"
     sequence="5"/>
+
+  <menuitem
+    id="menu_latinpyme_tienda_home_blocks"
+    name="Contenido del home"
+    parent="menu_latinpyme_tienda_root"
+    action="action_latinpyme_tienda_home_block"
+    sequence="7"/>
 
   <menuitem
     id="menu_latinpyme_tienda_menu_item"

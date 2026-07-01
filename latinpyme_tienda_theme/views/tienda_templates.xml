@@ -130,7 +130,9 @@
         <ul t-if="item.get('bullets')">
           <li t-foreach="item['bullets']" t-as="bullet" t-out="bullet"/>
         </ul>
-        <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="item['href']">Ver más</a>
+        <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="item.get('button_url') or item.get('href') or '/shop'">
+          <t t-out="item.get('button_label') or 'Ver más'"/>
+        </a>
       </div>
     </article>
   </template>
@@ -338,7 +340,7 @@
             </a>
           </section>
 
-          <section class="lp-tienda-container lp-tienda-block">
+          <section t-if="training_cards" class="lp-tienda-container lp-tienda-block">
             <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
               <t t-set="title">Capacitación</t>
             </t>
@@ -349,7 +351,7 @@
             </div>
           </section>
 
-          <section class="lp-tienda-container lp-tienda-block">
+          <section t-if="technology_cards" class="lp-tienda-container lp-tienda-block">
             <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
               <t t-set="title">Tecnología e innovación</t>
             </t>
@@ -365,7 +367,7 @@
             </div>
           </section>
 
-          <section class="lp-tienda-container lp-tienda-block">
+          <section t-if="ai_cards" class="lp-tienda-container lp-tienda-block">
             <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
               <t t-set="title">Inteligencia artificial</t>
             </t>
