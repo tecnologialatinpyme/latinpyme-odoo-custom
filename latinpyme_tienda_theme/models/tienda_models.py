@@ -537,6 +537,13 @@ class LatinpymeTiendaConfig(models.Model):
         return path == "/shop" or path == "/shop/category" or path.startswith("/shop/category/")
 
     @api.model
+    def is_current_request_shop_category(self):
+        from odoo.http import request
+
+        path = (request.httprequest.path or "/").rstrip("/") or "/"
+        return path.startswith("/shop/category/")
+
+    @api.model
     def is_current_request_shop_product(self):
         from odoo.http import request
 
