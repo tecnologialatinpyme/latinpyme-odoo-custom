@@ -16,6 +16,18 @@
     </div>
   </template>
 
+  <template id="lp_tienda_cart_link" name="Tienda LatinPyme Cart Link">
+    <t t-set="website_sale_order" t-value="request.cart"/>
+    <a class="lp-tienda-cart-link" href="/shop/cart" aria-label="Ver carrito de compras" title="Carrito">
+      <i class="fa fa-shopping-cart" aria-hidden="true"/>
+      <span class="lp-tienda-cart-link__label">Carrito</span>
+      <sup
+        class="lp-tienda-cart-link__count my_cart_quantity"
+        t-out="website_sale_order.cart_quantity if website_sale_order else '0'"
+        t-att-data-order-id="website_sale_order.id if website_sale_order else ''"/>
+    </a>
+  </template>
+
   <template id="lp_tienda_masthead" name="Tienda LatinPyme Masthead">
     <header class="lp-tienda-masthead">
       <div class="lp-tienda-container lp-tienda-masthead__top">
@@ -37,7 +49,10 @@
             <i class="fa fa-search" aria-hidden="true"/>
           </button>
         </form>
-        <t t-call="latinpyme_tienda_theme.lp_tienda_social_links"/>
+        <div class="lp-tienda-masthead__actions">
+          <t t-call="latinpyme_tienda_theme.lp_tienda_cart_link"/>
+          <t t-call="latinpyme_tienda_theme.lp_tienda_social_links"/>
+        </div>
       </div>
       <nav class="lp-tienda-nav" aria-label="Navegacion principal de Tienda">
         <div class="lp-tienda-container lp-tienda-nav__inner">
