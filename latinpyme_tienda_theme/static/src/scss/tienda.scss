@@ -178,6 +178,11 @@
   gap: 12px;
 }
 
+.lp-tienda-cart-shell {
+  display: inline-flex;
+  align-items: center;
+}
+
 .lp-tienda-cart-link {
   position: relative;
   display: inline-flex;
@@ -210,6 +215,10 @@
     text-decoration: none;
     transform: translateY(-1px);
   }
+}
+
+.lp-tienda-cart-link.nav-link {
+  padding-inline: 13px;
 }
 
 .lp-tienda-cart-link__count {
