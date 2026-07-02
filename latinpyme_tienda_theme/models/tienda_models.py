@@ -518,6 +518,9 @@ class LatinpymeTiendaConfig(models.Model):
         if normalized_path in ("/", "/tienda", "/terminos-de-uso", "/aviso-legal", "/terms"):
             return False
 
+        if "/survey" in path:
+            return False
+
         blocked_prefixes = (
             "/web",
             "/odoo",
