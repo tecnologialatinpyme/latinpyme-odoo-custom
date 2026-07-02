@@ -31,6 +31,16 @@
     </div>
   </template>
 
+  <template id="lp_tienda_wish_link" name="Tienda LatinPyme Wishlist Link">
+    <t t-set="wishcount" t-value="len(request.env['product.wishlist'].current())"/>
+    <t t-set="show_wishes" t-value="True"/>
+    <a class="o_wsale_my_wish lp-tienda-wish-link nav-link" href="/shop/wishlist" aria-label="Ver lista de deseos" title="Wishlist">
+      <i class="fa fa-heart" aria-hidden="true"/>
+      <span class="lp-tienda-wish-link__label">Wishlist</span>
+      <sup class="lp-tienda-wish-link__count my_wish_quantity badge badge-primary" t-esc="wishcount"/>
+    </a>
+  </template>
+
   <template id="lp_tienda_masthead" name="Tienda LatinPyme Masthead">
     <header class="lp-tienda-masthead">
       <div class="lp-tienda-container lp-tienda-masthead__top">
@@ -53,6 +63,7 @@
           </button>
         </form>
         <div class="lp-tienda-masthead__actions">
+          <t t-call="latinpyme_tienda_theme.lp_tienda_wish_link"/>
           <t t-call="latinpyme_tienda_theme.lp_tienda_cart_link"/>
           <t t-call="latinpyme_tienda_theme.lp_tienda_social_links"/>
         </div>
