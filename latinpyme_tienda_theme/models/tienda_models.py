@@ -521,11 +521,6 @@ class LatinpymeTiendaConfig(models.Model):
         blocked_prefixes = (
             "/web",
             "/odoo",
-            "/payment",
-            "/shop/cart",
-            "/shop/checkout",
-            "/shop/payment",
-            "/shop/confirm_order",
         )
         return not any(path.startswith(prefix) for prefix in blocked_prefixes)
 
