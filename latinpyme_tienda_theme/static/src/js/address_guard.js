@@ -12,8 +12,12 @@ function hiddenWrap(form, name) {
 }
 
 function ensureHiddenInput(form, name, value = "") {
-    if (form.elements[name]) {
-        return form.elements[name];
+    const existing = form.elements[name];
+    if (existing) {
+        if (value !== "" && !existing.value) {
+            existing.value = value;
+        }
+        return existing;
     }
     const input = document.createElement("input");
     input.type = "hidden";
@@ -22,6 +26,69 @@ function ensureHiddenInput(form, name, value = "") {
     input.value = value;
     hiddenWrap(form, name).appendChild(input);
     return input;
+}
+
+function getControlValue(form, name) {
+    const control = form?.elements?.[name];
+    return typeof control?.value === "string" ? control.value.trim() : "";
+}
+
+function inferNitIdentificationTypeValue(form) {
+    const vat = getControlValue(form, "vat");
+    const preferredNitValue = (() => {
+        const select = form?.querySelector?.('select[name="l10n_latam_identification_type_id"]');
+        if (select) {
+            const nitOption = Array.from(select.options || []).find((option) => {
+                return normalizeText(option.textContent).includes("nit");
+            });
+            if (nitOption?.value) {
+                return nitOption.value;
+            }
+        }
+
+        const anySelectWithNit = Array.from(form?.querySelectorAll?.("select") || []).find((selectNode) => {
+            return Array.from(selectNode.options || []).some((option) => normalizeText(option.textContent).includes("nit"));
+        });
+        if (anySelectWithNit) {
+            const nitOption = Array.from(anySelectWithNit.options || []).find((option) => {
+                return normalizeText(option.textContent).includes("nit");
+            });
+            return nitOption?.value || anySelectWithNit.value || "";
+        }
+
+        return "";
+    })();
+    if (vat && preferredNitValue) {
+        return preferredNitValue;
+    }
+
+    const direct = getControlValue(form, "l10n_latam_identification_type_id");
+    if (direct) {
+        return direct;
+    }
+
+    return "";
+}
+
+function syncFiscalFields(form) {
+    if (!form) {
+        return;
+    }
+
+    const vat = getControlValue(form, "vat");
+    if (vat) {
+        ensureHiddenInput(form, "vat", vat);
+    }
+
+    const companyType = vat ? "company" : getControlValue(form, "company_type");
+    if (companyType) {
+        ensureHiddenInput(form, "company_type", companyType);
+    }
+
+    const nitType = inferNitIdentificationTypeValue(form);
+    if (nitType) {
+        ensureHiddenInput(form, "l10n_latam_identification_type_id", nitType);
+    }
 }
 
 function ensureHiddenSelect(form, name) {
@@ -227,6 +294,7 @@ function applyAddressAdjustments(form) {
     if (!form) {
         return;
     }
+    syncFiscalFields(form);
     makeZipOptional(form);
     arrangeAddressFields(form);
 }
@@ -335,6 +403,9 @@ function ensureAddressCompatibility(root) {
     ensureHiddenInput(form, "zip");
     ensureHiddenInput(form, "city");
     ensureHiddenInput(form, "phone");
+    ensureHiddenInput(form, "vat");
+    ensureHiddenInput(form, "company_type");
+    ensureHiddenInput(form, "l10n_latam_identification_type_id");
     ensureHiddenSelect(form, "country_id");
     ensureHiddenSelect(form, "state_id");
     applyAddressAdjustments(form);
