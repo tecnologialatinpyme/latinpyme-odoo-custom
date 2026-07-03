@@ -228,7 +228,6 @@ function applyAddressAdjustments(form) {
         return;
     }
     makeZipOptional(form);
-    hideObligationsControl(form);
     arrangeAddressFields(form);
 }
 
