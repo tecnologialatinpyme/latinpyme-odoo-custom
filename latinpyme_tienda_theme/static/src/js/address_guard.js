@@ -75,19 +75,42 @@ function syncFiscalFields(form) {
         return;
     }
 
+    const colombiaSelected = isColombiaSelected(form);
     const vat = getControlValue(form, "vat");
-    if (vat) {
+    if (vat && colombiaSelected) {
+        const normalizedVat = normalizeColombianNitValue(vat);
+        const vatInput = form.elements.vat;
+        if (vatInput && vatInput.value !== normalizedVat) {
+            vatInput.value = normalizedVat;
+        }
+        ensureHiddenInput(form, "vat", normalizedVat);
+    } else if (vat) {
         ensureHiddenInput(form, "vat", vat);
     }
 
     const companyType = vat ? "company" : getControlValue(form, "company_type");
     if (companyType) {
+        const companyTypeControl = form.querySelector?.('select[name="company_type"]');
+        if (companyTypeControl && companyTypeControl.value !== companyType) {
+            companyTypeControl.value = companyType;
+            companyTypeControl.dispatchEvent(new Event("change", { bubbles: true }));
+        }
         ensureHiddenInput(form, "company_type", companyType);
     }
 
     const nitType = inferNitIdentificationTypeValue(form);
     if (nitType) {
+        const nitTypeControl = form.querySelector?.('select[name="l10n_latam_identification_type_id"]');
+        if (nitTypeControl && nitTypeControl.value !== nitType) {
+            nitTypeControl.value = nitType;
+            nitTypeControl.dispatchEvent(new Event("change", { bubbles: true }));
+        }
         ensureHiddenInput(form, "l10n_latam_identification_type_id", nitType);
+    } else if (vat && colombiaSelected) {
+        const nitValue = setSelectValueByText(form, "l10n_latam_identification_type_id", "NIT");
+        if (nitValue) {
+            ensureHiddenInput(form, "l10n_latam_identification_type_id", nitValue);
+        }
     }
 }
 
@@ -233,6 +256,57 @@ function normalizeText(value = "") {
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase();
+}
+
+const COLOMBIA_NIT_WEIGHTS = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71];
+
+function isColombiaSelected(form) {
+    const country = form?.elements?.country_id;
+    const selectedText = country?.selectedOptions?.[0]?.textContent || "";
+    return normalizeText(selectedText).includes("colombia");
+}
+
+function computeColombianNitCheckDigit(baseDigits) {
+    const digits = String(baseDigits || "").replace(/\D/g, "");
+    if (!digits) {
+        return "";
+    }
+    const total = digits
+        .split("")
+        .reverse()
+        .reduce((sum, digit, index) => {
+            const weight = COLOMBIA_NIT_WEIGHTS[index];
+            return sum + (weight ? Number(digit) * weight : 0);
+        }, 0);
+    const remainder = total % 11;
+    return String(remainder > 1 ? 11 - remainder : remainder);
+}
+
+function normalizeColombianNitValue(value = "") {
+    const raw = String(value || "").trim().replace(/\s+/g, "").replace(/[.]/g, "");
+    const match = raw.match(/^(\d+)(?:-(\d))?$/);
+    if (!match) {
+        return raw;
+    }
+    const baseDigits = match[1];
+    const expectedDigit = computeColombianNitCheckDigit(baseDigits);
+    return expectedDigit ? `${baseDigits}-${expectedDigit}` : raw;
+}
+
+function setSelectValueByText(form, name, expectedText) {
+    const select = form?.querySelector?.(`select[name="${name}"]`);
+    if (!select) {
+        return "";
+    }
+    const expected = normalizeText(expectedText);
+    const option = Array.from(select.options || []).find((opt) => {
+        return normalizeText(opt.textContent).includes(expected);
+    });
+    if (option && select.value !== option.value) {
+        select.value = option.value;
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    return select.value || option?.value || "";
 }
 
 function isObligationsField(value = "") {
