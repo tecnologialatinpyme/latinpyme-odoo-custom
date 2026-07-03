@@ -91,6 +91,32 @@ function syncFiscalFields(form) {
     }
 }
 
+function bindFiscalFieldSync(form) {
+    if (!form || form.dataset.lpTiendaFiscalSyncBound === "1") {
+        return;
+    }
+
+    const sync = () => syncFiscalFields(form);
+    ["input", "change", "submit"].forEach((eventName) => {
+        form.addEventListener(eventName, sync, true);
+    });
+
+    const vat = form.elements.vat;
+    const companyType = form.elements.company_type;
+    const idType = form.elements.l10n_latam_identification_type_id;
+    [vat, companyType, idType].forEach((field) => {
+        if (!field?.addEventListener) {
+            return;
+        }
+        field.addEventListener("input", sync, true);
+        field.addEventListener("change", sync, true);
+        field.addEventListener("blur", sync, true);
+    });
+
+    form.dataset.lpTiendaFiscalSyncBound = "1";
+    sync();
+}
+
 function ensureHiddenSelect(form, name) {
     const select = form.querySelector(`select[name="${name}"]`);
     if (select) {
@@ -409,6 +435,7 @@ function ensureAddressCompatibility(root) {
     ensureHiddenSelect(form, "country_id");
     ensureHiddenSelect(form, "state_id");
     applyAddressAdjustments(form);
+    bindFiscalFieldSync(form);
 
     return form;
 }
