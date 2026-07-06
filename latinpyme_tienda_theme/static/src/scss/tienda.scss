@@ -281,10 +281,10 @@
 }
 
 .lp-tienda-cart-link__count {
+  display: none;
   position: absolute;
   top: -8px;
   right: -7px;
-  display: inline-grid;
   min-width: 19px;
   height: 19px;
   padding-inline: 5px;
