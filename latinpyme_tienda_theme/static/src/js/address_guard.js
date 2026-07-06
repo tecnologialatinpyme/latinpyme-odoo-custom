@@ -88,7 +88,10 @@ function syncFiscalFields(form) {
         ensureHiddenInput(form, "vat", vat);
     }
 
-    const companyType = vat ? "company" : getControlValue(form, "company_type");
+    const companyTypeTouchedByUser = form.dataset.lpTiendaCompanyTypeTouched === "1";
+    const companyType = companyTypeTouchedByUser
+        ? getControlValue(form, "company_type")
+        : (vat ? "company" : getControlValue(form, "company_type"));
     if (companyType) {
         const companyTypeControl = form.querySelector?.('select[name="company_type"]');
         if (companyTypeControl && companyTypeControl.value !== companyType) {
@@ -119,7 +122,12 @@ function bindFiscalFieldSync(form) {
         return;
     }
 
-    const sync = () => syncFiscalFields(form);
+    const sync = (event) => {
+        if (event?.isTrusted && event.target?.name === "company_type") {
+            form.dataset.lpTiendaCompanyTypeTouched = "1";
+        }
+        syncFiscalFields(form);
+    };
     ["input", "change", "submit"].forEach((eventName) => {
         form.addEventListener(eventName, sync, true);
     });
