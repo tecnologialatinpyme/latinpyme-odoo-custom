@@ -166,7 +166,7 @@
     </xpath>
     <xpath expr="//div[@id='product_detail_main']" position="after">
       <div class="lp-tienda-product-description">
-        <xpath expr="//div[@data-oe-field='description_ecommerce']" position="move"/>
+        <xpath expr="//div[@t-field='product.description_ecommerce']" position="move"/>
       </div>
     </xpath>
   </template>
