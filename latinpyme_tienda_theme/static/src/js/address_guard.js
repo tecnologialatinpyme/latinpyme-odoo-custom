@@ -507,8 +507,7 @@ function bindLocationObserver(form) {
     let debounceId = null;
     const observer = new MutationObserver((mutations) => {
         const isOwnMutation = mutations.every((mutation) => {
-            return mutation.target?.dataset?.lpTiendaAddressLocationGrid
-                || mutation.target?.closest?.("[data-lp-tienda-address-location-grid]");
+            return mutation.target?.dataset?.lpTiendaAddressLocationGrid === "1";
         });
         if (isOwnMutation) {
             return;
@@ -518,7 +517,7 @@ function bindLocationObserver(form) {
         }
         debounceId = setTimeout(() => {
             arrangeAddressFields(form);
-        }, 60);
+        }, 120);
     });
     observer.observe(form, { childList: true, subtree: true });
 
