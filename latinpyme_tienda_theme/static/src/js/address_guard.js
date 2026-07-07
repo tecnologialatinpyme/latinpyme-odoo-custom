@@ -499,6 +499,32 @@ function setAddressFieldLayout(form) {
     });
 }
 
+function bindLocationObserver(form) {
+    if (!form || form.dataset.lpTiendaLocationObserverBound === "1") {
+        return;
+    }
+
+    let debounceId = null;
+    const observer = new MutationObserver((mutations) => {
+        const isOwnMutation = mutations.every((mutation) => {
+            return mutation.target?.dataset?.lpTiendaAddressLocationGrid
+                || mutation.target?.closest?.("[data-lp-tienda-address-location-grid]");
+        });
+        if (isOwnMutation) {
+            return;
+        }
+        if (debounceId) {
+            clearTimeout(debounceId);
+        }
+        debounceId = setTimeout(() => {
+            arrangeAddressFields(form);
+        }, 60);
+    });
+    observer.observe(form, { childList: true, subtree: true });
+
+    form.dataset.lpTiendaLocationObserverBound = "1";
+}
+
 function ensureAddressCompatibility(root) {
     const form = root?.querySelector?.("form.address_autoformat");
     if (!form) {
@@ -518,6 +544,7 @@ function ensureAddressCompatibility(root) {
     ensureHiddenSelect(form, "state_id");
     applyAddressAdjustments(form);
     bindFiscalFieldSync(form);
+    bindLocationObserver(form);
 
     return form;
 }
