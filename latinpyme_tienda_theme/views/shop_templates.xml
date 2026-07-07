@@ -164,6 +164,11 @@
     <xpath expr="//div[@id='wrap']" position="attributes">
       <attribute name="class" add="lp-tienda lp-product-page" separator=" "/>
     </xpath>
+    <xpath expr="//div[@id='product_detail_main']" position="after">
+      <div class="lp-tienda-product-description">
+        <xpath expr="//div[@data-oe-field='description_ecommerce']" position="move"/>
+      </div>
+    </xpath>
   </template>
 
   <template id="lp_tienda_terms_page" name="Tienda LatinPyme Terms Page">
