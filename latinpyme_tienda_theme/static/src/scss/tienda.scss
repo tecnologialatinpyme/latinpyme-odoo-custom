@@ -3124,13 +3124,19 @@
       margin-bottom: 12px !important;
     }
 
+    #add_to_cart_wrap {
+      flex-wrap: nowrap !important;
+    }
+
     #o_wsale_cta_wrapper #add_to_cart {
       min-height: 46px;
+      flex-shrink: 1;
       font-weight: 900;
     }
 
     .css_quantity {
       display: inline-flex !important;
+      flex-shrink: 0;
       order: -1;
       min-height: 46px;
       margin-right: 8px;
@@ -3144,7 +3150,7 @@
       }
 
       input.quantity {
-        min-width: 42px;
+        min-width: 34px;
         font-weight: 900;
       }
     }
