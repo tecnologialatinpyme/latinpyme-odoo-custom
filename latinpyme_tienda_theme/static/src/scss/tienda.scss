@@ -3128,6 +3128,26 @@
       min-height: 46px;
       font-weight: 900;
     }
+
+    .css_quantity {
+      display: inline-flex !important;
+      order: -1;
+      min-height: 46px;
+      margin-right: 8px;
+      border-color: rgba(16, 20, 27, .16) !important;
+      border-radius: 7px;
+      overflow: hidden;
+
+      .css_quantity_minus,
+      .css_quantity_plus {
+        color: var(--lp-tienda-red);
+      }
+
+      input.quantity {
+        min-width: 42px;
+        font-weight: 900;
+      }
+    }
   }
 }
 
