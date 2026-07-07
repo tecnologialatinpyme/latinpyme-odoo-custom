@@ -166,9 +166,13 @@
     </xpath>
     <xpath expr="//div[@id='product_detail_main']" position="after">
       <div class="lp-tienda-product-description">
-        <xpath expr="//div[@t-field='product.description_ecommerce']" position="move"/>
+        <div t-field="product.description_ecommerce" class="oe_structure mb-3 text-muted"/>
       </div>
     </xpath>
+  </template>
+
+  <template id="lp_tienda_hide_product_title_description" name="Tienda LatinPyme Hide Product Title Description" inherit_id="website_sale.product_title">
+    <xpath expr="//div[@t-field='product.description_ecommerce']" position="replace"/>
   </template>
 
   <template id="lp_tienda_terms_page" name="Tienda LatinPyme Terms Page">
