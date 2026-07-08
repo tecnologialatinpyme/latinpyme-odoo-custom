@@ -388,10 +388,16 @@ function applyHiddenFiscalDefault(field) {
         }
         return;
     }
-    if ((field.tagName === "INPUT" || field.tagName === "TEXTAREA") && !field.value) {
-        field.value = "R-99-PN";
-        field.dispatchEvent(new Event("input", { bubbles: true }));
-        field.dispatchEvent(new Event("change", { bubbles: true }));
+    if (field.tagName === "INPUT" || field.tagName === "TEXTAREA") {
+        if (!field.value) {
+            field.value = "R-99-PN";
+            field.dispatchEvent(new Event("input", { bubbles: true }));
+            field.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        if (field.tagName === "INPUT" && field.type !== "hidden") {
+            field.setAttribute("autocomplete", "off");
+            field.type = "hidden";
+        }
     }
 }
 
