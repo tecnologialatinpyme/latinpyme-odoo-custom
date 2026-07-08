@@ -418,8 +418,9 @@ function normalizeAddressLocationGrid(form) {
         ["state_id", addressFieldWrap(form, "state_id")],
         ["city", addressFieldWrap(form, "city")],
         ["zip", addressFieldWrap(form, "zip")],
-    ];
-    if (locationFields.some(([, wrap]) => !wrap)) {
+    ].filter(([, wrap]) => wrap);
+
+    if (!locationFields.length) {
         return;
     }
 
