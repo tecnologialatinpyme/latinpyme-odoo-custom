@@ -3211,6 +3211,12 @@
 form.address_autoformat {
   .lp-tienda-address-field {
     margin-bottom: 16px;
+
+    select,
+    input {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
   }
 
   .lp-tienda-address-location-grid,

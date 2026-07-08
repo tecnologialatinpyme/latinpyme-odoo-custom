@@ -198,7 +198,12 @@ function fieldWrap(form, name) {
 }
 
 function isVisibleAddressWrap(wrap) {
-    return Boolean(wrap && !wrap.hidden && !wrap.dataset.lpTiendaAddressGuard);
+    return Boolean(
+        wrap
+        && !wrap.hidden
+        && !wrap.dataset.lpTiendaAddressGuard
+        && wrap.offsetParent !== null
+    );
 }
 
 function labelWrapByText(form, expectedText) {
