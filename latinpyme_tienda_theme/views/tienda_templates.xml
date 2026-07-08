@@ -253,6 +253,14 @@
           display: none !important;
         }
       </style>
+      <style t-if="(request.httprequest.path or '').rstrip('/') in ('/terminos-de-uso', '/terms', '/aviso-legal')">
+        header#top,
+        footer#bottom,
+        .o_header_standard,
+        .o_footer {
+          display: none !important;
+        }
+      </style>
       <style t-if="(request.httprequest.path or '').rstrip('/') == '/patrocinio-corporativo'">
         #wrapwrap #wrap .section,
         #wrapwrap #wrap .section p,
