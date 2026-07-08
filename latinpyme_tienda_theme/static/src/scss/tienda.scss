@@ -54,7 +54,7 @@
 
 .lp-tienda-container {
   width: calc(100% - 40px);
-  max-width: 1320px;
+  max-width: 1180px;
   margin-inline: auto;
 }
 
@@ -188,40 +188,34 @@
 
 .lp-tienda-cart-link {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 36px;
-  padding: 0 13px;
-  border: 1px solid var(--lp-tienda-border);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--lp-tienda-ink);
-  font-size: 13px;
-  font-weight: 800;
+  display: inline-grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--lp-tienda-red);
+  color: #fff;
   line-height: 1;
   text-decoration: none;
-  white-space: nowrap;
-  transition: border-color .2s ease, box-shadow .2s ease, color .2s ease, transform .2s ease;
+  transition: transform .2s ease, background .2s ease;
 
   .fa,
   i {
-    color: var(--lp-tienda-red);
-    font-size: 15px;
+    color: #fff !important;
+    font-size: 14px;
     line-height: 1;
   }
 
   &:hover {
-    border-color: rgba(185, 0, 18, .34);
-    color: var(--lp-tienda-red);
-    box-shadow: 0 10px 24px rgba(16, 24, 40, .08);
+    color: #fff;
+    background: var(--lp-tienda-red-dark);
     text-decoration: none;
     transform: translateY(-1px);
   }
 }
 
 .lp-tienda-cart-link.nav-link {
-  padding-inline: 13px;
+  padding: 0;
 }
 
 .lp-tienda-wish-link {
@@ -476,9 +470,9 @@
 .lp-tienda-main {
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 32px;
   min-width: 0;
-  padding-block: 28px 56px;
+  padding-block: 20px 36px;
 }
 
 .lp-tienda-hero {
@@ -1558,17 +1552,6 @@
 
   .lp-tienda-brand__text strong {
     font-size: 28px;
-  }
-
-  .lp-tienda-cart-link__label {
-    display: none;
-  }
-
-  .lp-tienda-cart-link {
-    width: 38px;
-    min-height: 38px;
-    justify-content: center;
-    padding-inline: 0;
   }
 
   .lp-tienda-nav__inner {
