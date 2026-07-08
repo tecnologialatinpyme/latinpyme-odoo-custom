@@ -70,16 +70,27 @@ function inferNitIdentificationTypeValue(form) {
     return "";
 }
 
-function syncFiscalFields(form) {
+function syncFiscalFields(form, { finalizeVat = true } = {}) {
     if (!form) {
         return;
     }
 
     const colombiaSelected = isColombiaSelected(form);
+    const vatInput = form.elements.vat;
+    if (vatInput && typeof vatInput.value === "string") {
+        const digitsOnly = vatInput.value.replace(/[^\d-]/g, "");
+        if (digitsOnly !== vatInput.value) {
+            const caret = vatInput.selectionStart;
+            vatInput.value = digitsOnly;
+            if (typeof caret === "number" && vatInput.setSelectionRange) {
+                const newPos = Math.max(0, caret - 1);
+                vatInput.setSelectionRange(newPos, newPos);
+            }
+        }
+    }
     const vat = getControlValue(form, "vat");
-    if (vat && colombiaSelected) {
+    if (vat && colombiaSelected && finalizeVat) {
         const normalizedVat = normalizeColombianNitValue(vat);
-        const vatInput = form.elements.vat;
         if (vatInput && vatInput.value !== normalizedVat) {
             vatInput.value = normalizedVat;
         }
@@ -126,7 +137,8 @@ function bindFiscalFieldSync(form) {
         if (event?.isTrusted && event.target?.name === "company_type") {
             form.dataset.lpTiendaCompanyTypeTouched = "1";
         }
-        syncFiscalFields(form);
+        const finalizeVat = !event || event.type !== "input";
+        syncFiscalFields(form, { finalizeVat });
     };
     ["input", "change", "submit"].forEach((eventName) => {
         form.addEventListener(eventName, sync, true);
