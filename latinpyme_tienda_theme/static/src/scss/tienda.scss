@@ -54,7 +54,7 @@
 
 .lp-tienda-container {
   width: calc(100% - 40px);
-  max-width: 1180px;
+  max-width: 1320px;
   margin-inline: auto;
 }
 
@@ -476,9 +476,9 @@
 .lp-tienda-main {
   display: flex;
   flex-direction: column;
-  gap: 64px;
+  gap: 48px;
   min-width: 0;
-  padding-block: 34px 72px;
+  padding-block: 28px 56px;
 }
 
 .lp-tienda-hero {
@@ -565,7 +565,7 @@
 
 .lp-tienda-block {
   display: grid;
-  gap: 32px;
+  gap: 22px;
 }
 
 .lp-tienda-section-heading {
@@ -699,13 +699,8 @@
 
 .lp-tienda-product-carousel {
   display: grid;
-  gap: 20px;
+  gap: 16px;
   min-width: 0;
-  border: 1px solid rgba(16, 20, 27, .075);
-  border-radius: var(--lp-tienda-radius);
-  background: #fff;
-  padding: 22px;
-  box-shadow: 0 12px 30px rgba(17, 19, 24, .055);
 }
 
 .lp-tienda-product-carousel__head {
@@ -1141,6 +1136,11 @@
   grid-template-columns: minmax(0, 1fr) minmax(280px, 377px);
   align-items: stretch;
   gap: 26px;
+
+  > .lp-tienda-solution-grid {
+    height: 100%;
+    align-content: stretch;
+  }
 
   > .lp-tienda-ad-slot {
     min-width: 0;
@@ -1629,7 +1629,6 @@
 
   .lp-tienda-product-carousel {
     gap: 16px;
-    padding: 18px;
   }
 
   .lp-tienda-ad-horizontal {
