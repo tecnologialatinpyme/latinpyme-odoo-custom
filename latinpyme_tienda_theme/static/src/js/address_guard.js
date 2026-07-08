@@ -377,6 +377,24 @@ function removeRequiredField(form, fieldName) {
         .join(",");
 }
 
+function applyHiddenFiscalDefault(field) {
+    if (field.tagName === "SELECT") {
+        const target = Array.from(field.options || []).find((option) => {
+            return normalizeText(option.textContent).includes("no aplica");
+        });
+        if (target && field.value !== target.value) {
+            field.value = target.value;
+            field.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        return;
+    }
+    if ((field.tagName === "INPUT" || field.tagName === "TEXTAREA") && !field.value) {
+        field.value = "R-99-PN";
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+        field.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+}
+
 function hideObligationsControl(form) {
     if (!form?.querySelectorAll) {
         return;
@@ -422,9 +440,9 @@ function hideObligationsControl(form) {
         wrap.querySelectorAll("input, select, textarea").forEach((field) => {
             removeRequiredField(form, field.name);
             field.required = false;
-            field.disabled = true;
             field.removeAttribute("required");
             field.classList.remove("is-invalid");
+            applyHiddenFiscalDefault(field);
         });
     });
 }
