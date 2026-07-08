@@ -350,10 +350,12 @@ function isObligationsField(value = "") {
     const text = normalizeText(value);
     return (
         (text.includes("oblig") && text.includes("respons"))
-        || (text.includes("l10n_co") && (text.includes("oblig") || text.includes("respons")))
+        || (text.includes("l10n_co") && (text.includes("oblig") || text.includes("respons") || text.includes("regimen")))
         || text.includes("fiscal_respons")
         || text.includes("responsibility_ids")
         || text.includes("obligation_ids")
+        || (text.includes("regimen") && text.includes("fiscal"))
+        || text.includes("fiscal_regimen")
     );
 }
 
@@ -433,6 +435,7 @@ function applyAddressAdjustments(form) {
     }
     syncFiscalFields(form);
     makeZipOptional(form);
+    hideObligationsControl(form);
     arrangeAddressFields(form);
 }
 
