@@ -171,11 +171,23 @@ function ensureHiddenSelect(form, name) {
     return hiddenSelect;
 }
 
+function resolveNamedField(form, name) {
+    const field = form.elements[name];
+    if (!field || field.nodeType || typeof field.length !== "number") {
+        // Single element (or nothing): nodeType is only set on real DOM nodes.
+        return field || null;
+    }
+    // RadioNodeList: multiple elements share this name (e.g. a leftover hidden
+    // fallback plus the real field Odoo swapped in). Prefer the visible one.
+    const candidates = Array.from(field);
+    return candidates.find((el) => el.offsetParent !== null && !el.hidden) || candidates[0] || null;
+}
+
 function fieldWrap(form, name) {
     if (!form?.elements) {
         return null;
     }
-    const field = form.elements[name];
+    const field = resolveNamedField(form, name);
     if (!field?.closest) {
         return field?.parentElement || null;
     }
