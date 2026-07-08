@@ -3213,7 +3213,36 @@ form.address_autoformat {
     margin-bottom: 16px;
   }
 
-  .lp-tienda-address-location-grid {
+  .lp-tienda-address-location-grid,
+  .lp-tienda-address-street-row {
     margin-top: 4px;
+  }
+
+  .lp-tienda-address-section-heading {
+    margin: 28px 0 14px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(16, 20, 27, .1);
+    color: var(--lp-tienda-ink);
+    font-size: 15px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+
+    &[data-lp-tienda-heading="fiscal"] {
+      margin-top: 8px;
+      padding-top: 0;
+      border-top: none;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .lp-tienda-address-location-grid {
+      .lp-tienda-address-field--country_id,
+      .lp-tienda-address-field--state_id,
+      .lp-tienda-address-field--city {
+        flex: 0 0 33.3333% !important;
+        max-width: 33.3333% !important;
+      }
+    }
   }
 }

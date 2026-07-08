@@ -408,8 +408,29 @@ function applyAddressAdjustments(form) {
 }
 
 function arrangeAddressFields(form) {
+    insertAddressSectionHeadings(form);
     normalizeAddressLocationGrid(form);
     setAddressFieldLayout(form);
+}
+
+function ensureSectionHeading(form, beforeFieldName, headingId, label) {
+    const wrap = fieldWrap(form, beforeFieldName);
+    if (!isVisibleAddressWrap(wrap) || !wrap.parentElement) {
+        return;
+    }
+    if (form.querySelector(`[data-lp-tienda-heading="${headingId}"]`)) {
+        return;
+    }
+    const heading = document.createElement("div");
+    heading.className = "lp-tienda-address-section-heading w-100";
+    heading.dataset.lpTiendaHeading = headingId;
+    heading.textContent = label;
+    wrap.insertAdjacentElement("beforebegin", heading);
+}
+
+function insertAddressSectionHeadings(form) {
+    ensureSectionHeading(form, "company_type", "fiscal", "Datos de facturación");
+    ensureSectionHeading(form, "street", "address", "Dirección");
 }
 
 function normalizeAddressLocationGrid(form) {
@@ -417,47 +438,66 @@ function normalizeAddressLocationGrid(form) {
         ["country_id", addressFieldWrap(form, "country_id")],
         ["state_id", addressFieldWrap(form, "state_id")],
         ["city", addressFieldWrap(form, "city")],
-        ["zip", addressFieldWrap(form, "zip")],
     ].filter(([, wrap]) => wrap);
 
-    if (!locationFields.length) {
-        return;
+    if (locationFields.length) {
+        const grid = ensureAddressGroupRow(
+            form,
+            "lp-tienda-address-location-grid",
+            "lpTiendaAddressLocationGrid",
+            locationFields[0][1],
+        );
+        locationFields.forEach(([fieldName, wrap]) => {
+            const previousParent = wrap.parentElement;
+            wrap.dataset.lpTiendaAddressField = fieldName;
+            if (previousParent !== grid) {
+                grid.appendChild(wrap);
+                collapseEmptyAddressRow(previousParent);
+            }
+        });
     }
 
-    const grid = ensureAddressLocationGrid(form, locationFields);
-    locationFields.forEach(([fieldName, wrap]) => {
-        const previousParent = wrap.parentElement;
-        wrap.dataset.lpTiendaAddressField = fieldName;
-        if (previousParent !== grid) {
-            grid.appendChild(wrap);
-            collapseEmptyAddressRow(previousParent);
-        }
-    });
+    const streetWrap = addressFieldWrap(form, "street");
+    const zipWrap = addressFieldWrap(form, "zip");
+    if (streetWrap && zipWrap) {
+        const streetRow = ensureAddressGroupRow(
+            form,
+            "lp-tienda-address-street-row",
+            "lpTiendaAddressStreetRow",
+            streetWrap,
+        );
+        [["street", streetWrap], ["zip", zipWrap]].forEach(([fieldName, wrap]) => {
+            const previousParent = wrap.parentElement;
+            wrap.dataset.lpTiendaAddressField = fieldName;
+            if (previousParent !== streetRow) {
+                streetRow.appendChild(wrap);
+                collapseEmptyAddressRow(previousParent);
+            }
+        });
+    }
 }
 
-function ensureAddressLocationGrid(form, locationFields) {
-    const existing = form.querySelector(".lp-tienda-address-location-grid");
+function ensureAddressGroupRow(form, className, datasetKey, referenceWrap) {
+    const existing = form.querySelector(`.${className}`);
     if (existing) {
         existing.classList.add("lp-tienda-address-fields", "row");
         return existing;
     }
 
-    const grid = document.createElement("div");
-    grid.className = "lp-tienda-address-location-grid lp-tienda-address-fields row";
-    grid.dataset.lpTiendaAddressLocationGrid = "1";
+    const row = document.createElement("div");
+    row.className = `${className} lp-tienda-address-fields row`;
+    row.dataset[datasetKey] = "1";
 
-    const streetWrap = fieldWrap(form, "street");
-    const referenceWrap = isVisibleAddressWrap(streetWrap) ? streetWrap : locationFields[0][1];
     if (referenceWrap?.parentElement) {
-        referenceWrap.insertAdjacentElement("afterend", grid);
+        referenceWrap.insertAdjacentElement("beforebegin", row);
     } else {
-        form.appendChild(grid);
+        form.appendChild(row);
     }
-    return grid;
+    return row;
 }
 
 function collapseEmptyAddressRow(row) {
-    if (!row || row.dataset.lpTiendaAddressLocationGrid) {
+    if (!row || row.dataset.lpTiendaAddressLocationGrid || row.dataset.lpTiendaAddressStreetRow) {
         return;
     }
     const hasVisibleChildren = Array.from(row.children || []).some((child) => {
@@ -468,32 +508,50 @@ function collapseEmptyAddressRow(row) {
     }
 }
 
+function stripGridClasses(wrap) {
+    Array.from(wrap.classList).forEach((className) => {
+        if (
+            className.startsWith("col-")
+            || className.startsWith("col-md-")
+            || className.startsWith("col-lg-")
+            || className.startsWith("col-xl-")
+            || className.startsWith("offset-")
+            || className.startsWith("order-")
+            || className.startsWith("flex-grow-")
+            || className === "w-100"
+        ) {
+            wrap.classList.remove(className);
+        }
+    });
+}
+
 function setAddressFieldLayout(form) {
     [
-        ["country_id", "1"],
-        ["state_id", "2"],
-        ["city", "3"],
-        ["zip", "4"],
-    ].forEach(([fieldName, order]) => {
+        ["country_id", "1", "col-md-6"],
+        ["state_id", "2", "col-md-6"],
+        ["city", "3", "col-md-6"],
+    ].forEach(([fieldName, order, widthClass]) => {
         const wrap = addressFieldWrap(form, fieldName);
         if (!wrap) {
             return;
         }
-        Array.from(wrap.classList).forEach((className) => {
-            if (
-                className.startsWith("col-")
-                || className.startsWith("col-md-")
-                || className.startsWith("col-lg-")
-                || className.startsWith("col-xl-")
-                || className.startsWith("offset-")
-                || className.startsWith("order-")
-                || className.startsWith("flex-grow-")
-                || className === "w-100"
-            ) {
-                wrap.classList.remove(className);
-            }
-        });
-        wrap.classList.add("lp-tienda-address-field", `lp-tienda-address-field--${fieldName}`, "col-12", "col-md-6");
+        stripGridClasses(wrap);
+        wrap.classList.add("lp-tienda-address-field", `lp-tienda-address-field--${fieldName}`, "col-12", widthClass);
+        wrap.style.order = order;
+        wrap.style.width = "";
+        wrap.style.flex = "";
+    });
+
+    [
+        ["street", "1", "col-md-8"],
+        ["zip", "2", "col-md-4"],
+    ].forEach(([fieldName, order, widthClass]) => {
+        const wrap = addressFieldWrap(form, fieldName);
+        if (!wrap) {
+            return;
+        }
+        stripGridClasses(wrap);
+        wrap.classList.add("lp-tienda-address-field", `lp-tienda-address-field--${fieldName}`, "col-12", widthClass);
         wrap.style.order = order;
         wrap.style.width = "";
         wrap.style.flex = "";
