@@ -346,16 +346,24 @@ function setSelectValueByText(form, name, expectedText) {
     return select.value || option?.value || "";
 }
 
+function isRegimeField(value = "") {
+    const text = normalizeText(value);
+    return (
+        (text.includes("regimen") && text.includes("fiscal"))
+        || text.includes("fiscal_regimen")
+        || (text.includes("l10n_co") && text.includes("regimen"))
+    );
+}
+
 function isObligationsField(value = "") {
     const text = normalizeText(value);
     return (
-        (text.includes("oblig") && text.includes("respons"))
-        || (text.includes("l10n_co") && (text.includes("oblig") || text.includes("respons") || text.includes("regimen")))
+        isRegimeField(value)
+        || (text.includes("oblig") && text.includes("respons"))
+        || (text.includes("l10n_co") && (text.includes("oblig") || text.includes("respons")))
         || text.includes("fiscal_respons")
         || text.includes("responsibility_ids")
         || text.includes("obligation_ids")
-        || (text.includes("regimen") && text.includes("fiscal"))
-        || text.includes("fiscal_regimen")
     );
 }
 
@@ -401,6 +409,24 @@ function applyHiddenFiscalDefault(field) {
     }
 }
 
+function collectFieldWrappers(form, matcher) {
+    const wrappers = new Set();
+    form.querySelectorAll("input, select, textarea").forEach((field) => {
+        const wrap = wrapperForControl(field);
+        const label = field.id ? wrap?.querySelector(`label[for="${field.id}"]`) : null;
+        const dataName = field.closest("[data-name]")?.dataset?.name || "";
+        if (matcher(field.name) || matcher(field.id) || matcher(dataName) || matcher(label?.textContent)) {
+            wrappers.add(wrap);
+        }
+    });
+    form.querySelectorAll("label").forEach((label) => {
+        if (matcher(label.textContent)) {
+            wrappers.add(wrapperForControl(label));
+        }
+    });
+    return wrappers;
+}
+
 function hideObligationsControl(form) {
     if (!form?.querySelectorAll) {
         return;
@@ -411,32 +437,12 @@ function hideObligationsControl(form) {
         requiredFields.value = requiredFields.value
             .split(",")
             .map((name) => name.trim())
-            .filter((name) => name && !isObligationsField(name))
+            .filter((name) => name && !isRegimeField(name))
             .join(",");
     }
 
-    const wrappers = new Set();
-    form.querySelectorAll("input, select, textarea").forEach((field) => {
-        const wrap = wrapperForControl(field);
-        const label = field.id ? wrap?.querySelector(`label[for="${field.id}"]`) : null;
-        const dataName = field.closest("[data-name]")?.dataset?.name || "";
-        if (
-            isObligationsField(field.name)
-            || isObligationsField(field.id)
-            || isObligationsField(dataName)
-            || isObligationsField(label?.textContent)
-        ) {
-            wrappers.add(wrap);
-        }
-    });
-
-    form.querySelectorAll("label").forEach((label) => {
-        if (isObligationsField(label.textContent)) {
-            wrappers.add(wrapperForControl(label));
-        }
-    });
-
-    wrappers.forEach((wrap) => {
+    // Regimen fiscal is a plain <select>: safe to hide entirely with a default value.
+    collectFieldWrappers(form, isRegimeField).forEach((wrap) => {
         if (!wrap || wrap.dataset.lpTiendaAddressGuard) {
             return;
         }
@@ -449,6 +455,29 @@ function hideObligationsControl(form) {
             field.removeAttribute("required");
             field.classList.remove("is-invalid");
             applyHiddenFiscalDefault(field);
+        });
+    });
+
+    // Obligaciones y responsabilidades is an Odoo SelectMenu (Owl) widget: hiding its
+    // anchor breaks the popover positioning, so keep it visible and only pre-fill it.
+    collectFieldWrappers(form, (value) => isObligationsField(value) && !isRegimeField(value)).forEach((wrap) => {
+        wrap?.querySelectorAll("input, select, textarea").forEach((field) => {
+            if (field.value) {
+                return;
+            }
+            if (field.tagName === "SELECT") {
+                const target = Array.from(field.options || []).find((option) => {
+                    return normalizeText(option.textContent).includes("r-99-pn");
+                });
+                if (target) {
+                    field.value = target.value;
+                    field.dispatchEvent(new Event("change", { bubbles: true }));
+                }
+                return;
+            }
+            field.value = "R-99-PN";
+            field.dispatchEvent(new Event("input", { bubbles: true }));
+            field.dispatchEvent(new Event("change", { bubbles: true }));
         });
     });
 }
