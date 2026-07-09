@@ -21,7 +21,7 @@
     <t t-set="show_cart" t-value="True"/>
     <li class="o_wsale_my_cart nav-item lp-tienda-cart-shell">
       <a class="lp-tienda-cart-link nav-link" href="/shop/cart" aria-label="Ver carrito de compras" title="Carrito">
-        <i class="fa fa-shopping-cart" aria-hidden="true"/>
+        <i class="fa fa-shopping-bag" aria-hidden="true"/>
         <sup
           class="lp-tienda-cart-link__count my_cart_quantity badge badge-primary"
           t-out="website_sale_order.cart_quantity if website_sale_order else '0'"
