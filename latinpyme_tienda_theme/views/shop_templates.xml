@@ -175,6 +175,41 @@
     <xpath expr="//div[@t-field='product.description_ecommerce']" position="replace"/>
   </template>
 
+  <template id="lp_tienda_product_cupos_selector" name="Tienda LatinPyme Selector de Cupos" inherit_id="website_sale.product_quantity">
+    <xpath expr="//div[contains(@t-attf-class, 'css_quantity')]" position="before">
+      <t t-set="lp_tienda_cupos_active" t-value="bool(product.public_categ_ids.filtered('lp_tienda_use_cupos_label'))"/>
+      <div t-if="lp_tienda_cupos_active" class="lp-tienda-cupos-heading">
+        <p class="lp-tienda-cupos-heading__title">Selecciona tus cupos</p>
+        <p class="lp-tienda-cupos-heading__hint">Cada cupo equivale a una persona.</p>
+      </div>
+    </xpath>
+
+    <xpath expr="//div[contains(@t-attf-class, 'css_quantity')]" position="attributes">
+      <attribute name="t-attf-class" add="{{'lp-tienda-cupos-input-group' if lp_tienda_cupos_active else ''}}" separator=" "/>
+    </xpath>
+
+    <xpath expr="//input[@name='add_qty']" position="after">
+      <span t-if="lp_tienda_cupos_active" class="lp-tienda-cupos-count" aria-hidden="true">1 cupo</span>
+    </xpath>
+
+    <xpath expr="//div[contains(@t-attf-class, 'css_quantity')]" position="after">
+      <div t-if="lp_tienda_cupos_active" class="lp-tienda-cupos-summary" data-lp-tienda-cupos-summary="1">
+        <div class="lp-tienda-cupos-summary__row">
+          <span class="lp-tienda-cupos-summary__label">Precio por cupo</span>
+          <span class="lp-tienda-cupos-summary__value" data-lp-cupos-unit-price="1">-</span>
+        </div>
+        <div class="lp-tienda-cupos-summary__row lp-tienda-cupos-summary__row--total">
+          <span class="lp-tienda-cupos-summary__label">Total estimado</span>
+          <span class="lp-tienda-cupos-summary__value" data-lp-cupos-total-price="1">-</span>
+        </div>
+        <div class="lp-tienda-cupos-summary__row lp-tienda-cupos-summary__row--savings d-none" data-lp-cupos-savings-row="1">
+          <span class="lp-tienda-cupos-summary__label">Ahorras frente al precio normal</span>
+          <span class="lp-tienda-cupos-summary__value lp-tienda-cupos-summary__value--savings" data-lp-cupos-savings="1">-</span>
+        </div>
+      </div>
+    </xpath>
+  </template>
+
   <template id="lp_tienda_terms_page" name="Tienda LatinPyme Terms Page">
     <t t-call="website.layout">
       <t t-set="no_header" t-value="True"/>

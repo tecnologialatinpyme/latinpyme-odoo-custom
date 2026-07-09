@@ -406,6 +406,7 @@
               <field name="lp_tienda_display_name" readonly="1"/>
               <field name="parent_id"/>
               <field name="sequence"/>
+              <field name="lp_tienda_use_cupos_label"/>
             </group>
             <group string="Icono de Tienda">
               <field name="lp_tienda_icon_effective" widget="image"/>

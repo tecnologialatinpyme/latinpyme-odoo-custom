@@ -153,6 +153,13 @@ class ProductPublicCategory(models.Model):
         compute="_compute_lp_tienda_media",
         compute_sudo=True,
     )
+    lp_tienda_use_cupos_label = fields.Boolean(
+        string="Usar selector de cupos",
+        default=False,
+        help="Si esta activo, la ficha de producto de esta categoria muestra el selector "
+        "de cantidad como \"cupos\" (1 cupo = 1 persona) con resumen de precio total y "
+        "ahorro. No afecta el carrito ni el calculo de precio, solo la presentacion.",
+    )
 
     @api.depends("name", "lp_tienda_icon", "lp_tienda_cover_image", "write_date")
     def _compute_lp_tienda_media(self):

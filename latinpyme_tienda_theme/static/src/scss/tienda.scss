@@ -2896,6 +2896,80 @@
     }
   }
 
+  .lp-tienda-cupos-heading {
+    margin-bottom: 8px;
+
+    &__title {
+      margin: 0;
+      color: #151a22;
+      font-size: 14.5px;
+      font-weight: 900;
+    }
+
+    &__hint {
+      margin: 2px 0 0;
+      color: #7b8290;
+      font-size: 12.5px;
+    }
+  }
+
+  .css_quantity.lp-tienda-cupos-input-group {
+    input[name="add_qty"] {
+      display: none;
+    }
+
+    .lp-tienda-cupos-count {
+      display: inline-flex;
+      align-items: center;
+      min-width: 72px;
+      padding: 0 6px;
+      color: #151a22;
+      font-size: 14px;
+      font-weight: 800;
+      text-align: center;
+      white-space: nowrap;
+    }
+  }
+
+  .lp-tienda-cupos-summary {
+    display: grid;
+    gap: 4px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e7e9ee;
+
+    &__row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    &__label {
+      color: #69717d;
+      font-size: 12.5px;
+    }
+
+    &__value {
+      color: #2a313c;
+      font-size: 13.5px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    &__row--total &__label,
+    &__row--total &__value {
+      color: #151a22;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    &__row--savings &__label,
+    &__row--savings &__value--savings {
+      color: var(--lp-tienda-red-dark);
+    }
+  }
+
   #product_full_description {
     width: calc(100% - 32px);
     max-width: 1180px;

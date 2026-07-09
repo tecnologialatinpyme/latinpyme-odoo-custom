@@ -30,6 +30,7 @@ mostrar carruseles de productos sin crear modelos nuevos.
         "web.assets_frontend": [
             "latinpyme_tienda_theme/static/src/scss/tienda.scss",
             "latinpyme_tienda_theme/static/src/js/product_terms_link.js",
+            "latinpyme_tienda_theme/static/src/js/product_cupos.js",
         ],
         "web.assets_frontend_lazy": [
             "latinpyme_tienda_theme/static/src/js/address_guard.js",
