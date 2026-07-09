@@ -220,6 +220,25 @@
     <xpath expr="//a[@id='add_to_cart']" position="attributes">
       <attribute name="t-attf-class" add="{{'lp-tienda-cupos-cta' if lp_tienda_cupos_active else ''}}" separator=" "/>
     </xpath>
+
+    <xpath expr="//div[@id='add_to_cart_wrap']" position="attributes">
+      <attribute name="t-attf-class" add="{{'lp-tienda-cupos-active-wrap' if lp_tienda_cupos_active else ''}}" separator=" "/>
+    </xpath>
+  </template>
+
+  <template id="lp_tienda_product_title_reposition" name="Tienda LatinPyme Reposicionar Titulo" inherit_id="website_sale.product">
+    <xpath expr="//div[@id='product_detail_main']" position="before">
+      <t t-call="website_sale.product_title" position="move"/>
+    </xpath>
+  </template>
+
+  <template id="lp_tienda_neutralize_boxed_cta_for_cupos" name="Tienda LatinPyme Neutralizar CTA Boxed en Cupos" inherit_id="website_sale.cta_wrapper_boxed">
+    <xpath expr="//span[@name='o_wsale_cta_wrapper_boxed_price_label']/.." position="attributes">
+      <attribute name="t-attf-class" add="{{'d-none' if product.public_categ_ids.filtered('lp_tienda_use_cupos_label') else ''}}" separator=" "/>
+    </xpath>
+    <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="attributes">
+      <attribute name="t-attf-class" add="{{'lp-tienda-cupos-no-box' if product.public_categ_ids.filtered('lp_tienda_use_cupos_label') else ''}}" separator=" "/>
+    </xpath>
   </template>
 
   <template id="lp_tienda_terms_page" name="Tienda LatinPyme Terms Page">

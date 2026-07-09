@@ -3282,21 +3282,17 @@
 
 .lp-product-page {
   #product_detail_main {
-    .o_wsale_product_details_content_section_title h1 {
-      font-weight: 900;
-    }
-
-    #add_to_cart_wrap {
+    #add_to_cart_wrap:not(.lp-tienda-cupos-active-wrap) {
       flex-wrap: nowrap !important;
     }
 
-    #o_wsale_cta_wrapper #add_to_cart {
+    #o_wsale_cta_wrapper #add_to_cart:not(.lp-tienda-cupos-cta) {
       min-height: 46px;
       flex-shrink: 1;
       font-weight: 900;
     }
 
-    .css_quantity {
+    .css_quantity:not(.lp-tienda-cupos-hidden-native) {
       display: inline-flex !important;
       flex-shrink: 0;
       order: -1;
@@ -3316,6 +3312,16 @@
         font-weight: 900;
       }
     }
+  }
+
+  #o_wsale_cta_wrapper.lp-tienda-cupos-no-box {
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  #product_detail > .o_wsale_product_details_content_section_title {
+    margin-bottom: 18px;
   }
 }
 
