@@ -173,6 +173,8 @@
 
   <template id="lp_tienda_hide_product_title_description" name="Tienda LatinPyme Hide Product Title Description" inherit_id="website_sale.product_title">
     <xpath expr="//div[@t-field='product.description_ecommerce']" position="replace"/>
+    <xpath expr="//h1[@t-field='product.name']" position="replace"/>
+    <xpath expr="//t[@t-call='website_sale.product_tags']" position="replace"/>
   </template>
 
   <template id="lp_tienda_product_price_cupos_label" name="Tienda LatinPyme Precio por Cupo Label" inherit_id="website_sale.product_price">
@@ -222,13 +224,24 @@
     </xpath>
 
     <xpath expr="//div[@id='add_to_cart_wrap']" position="attributes">
-      <attribute name="t-attf-class" add="{{'lp-tienda-cupos-active-wrap' if lp_tienda_cupos_active else ''}}" separator=" "/>
+      <attribute name="t-attf-class" add="{{'lp-tienda-cupos-active-wrap' if product.public_categ_ids.filtered('lp_tienda_use_cupos_label') else ''}}" separator=" "/>
     </xpath>
   </template>
 
   <template id="lp_tienda_product_title_reposition" name="Tienda LatinPyme Reposicionar Titulo" inherit_id="website_sale.product">
     <xpath expr="//div[@id='product_detail_main']" position="before">
-      <t t-call="website_sale.product_title" position="move"/>
+      <div class="lp-tienda-product-title-top">
+        <h1 t-field="product.name" class="lp-tienda-product-title-top__h1"/>
+        <t
+          t-if="is_view_active('website_sale.product_tags')"
+          t-call="website_sale.product_tags"
+        >
+          <t
+            t-set="all_product_tags"
+            t-value="product_variant.all_product_tag_ids"
+          />
+        </t>
+      </div>
     </xpath>
   </template>
 

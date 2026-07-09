@@ -2724,39 +2724,11 @@
   }
 
   .o_wsale_product_details_content_section_title {
-    h1 {
-      margin: 0;
-      color: #151a22;
-      font-size: 32px;
-      font-weight: 900;
-      line-height: 1.15;
-      letter-spacing: 0;
-    }
-
     .text-muted,
     .oe_structure {
       color: #646c78 !important;
       font-size: 15px;
       line-height: 1.55;
-    }
-
-    .o_product_tags {
-      gap: 6px !important;
-      margin: 4px 0 0 !important;
-
-      .o_product_tag_img {
-        width: 16px;
-        height: 16px;
-      }
-
-      > span:not(.order-0) {
-        padding: 2px 8px !important;
-      }
-
-      .text-nowrap {
-        font-size: 11px;
-        font-weight: 700;
-      }
     }
   }
 
@@ -2933,13 +2905,10 @@
 
   .lp-tienda-cupos-cards {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
     gap: 8px;
     margin-bottom: 12px;
-
-    @media (min-width: 480px) {
-      grid-template-columns: repeat(4, 1fr);
-    }
+    max-width: 100%;
   }
 
   .lp-tienda-cupos-card {
@@ -3228,7 +3197,7 @@
       padding: 16px;
     }
 
-    .o_wsale_product_details_content_section_title h1 {
+    .lp-tienda-product-title-top__h1 {
       font-size: 26px;
     }
 
@@ -3320,8 +3289,36 @@
     padding: 0 !important;
   }
 
-  #product_detail > .o_wsale_product_details_content_section_title {
+  .lp-tienda-product-title-top {
     margin-bottom: 18px;
+
+    &__h1 {
+      margin: 0;
+      color: #151a22;
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .o_product_tags {
+      gap: 6px !important;
+      margin: 8px 0 0 !important;
+
+      .o_product_tag_img {
+        width: 16px;
+        height: 16px;
+      }
+
+      > span:not(.order-0) {
+        padding: 2px 8px !important;
+      }
+
+      .text-nowrap {
+        font-size: 11px;
+        font-weight: 700;
+      }
+    }
   }
 }
 
