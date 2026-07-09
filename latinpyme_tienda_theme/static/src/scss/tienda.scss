@@ -2740,27 +2740,22 @@
       line-height: 1.55;
     }
 
-    .badge,
-    a.o_product_tag,
-    span.o_product_tag,
-    [class*="tag"] {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin: 8px 6px 0 0;
-      border: none;
-      border-radius: 4px;
-      background: #f3f4f6;
-      padding: 3px 9px;
-      color: #5b6270;
-      font-size: 11.5px;
-      font-weight: 700;
-      text-transform: none;
-      letter-spacing: 0;
+    .o_product_tags {
+      gap: 6px !important;
+      margin: 4px 0 0 !important;
 
-      .fa,
-      i {
+      .o_product_tag_img {
+        width: 16px;
+        height: 16px;
+      }
+
+      > span:not(.order-0) {
+        padding: 2px 8px !important;
+      }
+
+      .text-nowrap {
         font-size: 11px;
+        font-weight: 700;
       }
     }
   }
