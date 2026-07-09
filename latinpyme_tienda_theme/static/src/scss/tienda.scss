@@ -42,6 +42,24 @@
     clip: rect(0 0 0 0);
     white-space: nowrap;
   }
+
+  .btn-primary,
+  .btn-primary:disabled,
+  #o_payment_submit_button {
+    border-color: var(--lp-tienda-red);
+    background-color: var(--lp-tienda-red);
+    color: #fff;
+  }
+
+  .btn-primary:hover,
+  .btn-primary:focus,
+  .btn-primary:active,
+  #o_payment_submit_button:hover,
+  #o_payment_submit_button:focus {
+    border-color: var(--lp-tienda-red-dark);
+    background-color: var(--lp-tienda-red-dark);
+    color: #fff;
+  }
 }
 
 #wrapwrap:has(.lp-tienda-home) > #lp-menu-global {

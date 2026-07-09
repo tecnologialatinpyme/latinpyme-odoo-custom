@@ -254,6 +254,12 @@
     </xpath>
   </template>
 
+  <template id="lp_tienda_checkout_flow_shell" name="Tienda LatinPyme Checkout Flow Shell" inherit_id="website_sale.checkout_layout">
+    <xpath expr="//div[@id='wrap']" position="attributes">
+      <attribute name="class" add="lp-tienda" separator=" "/>
+    </xpath>
+  </template>
+
   <template id="lp_tienda_terms_page" name="Tienda LatinPyme Terms Page">
     <t t-call="website.layout">
       <t t-set="no_header" t-value="True"/>
