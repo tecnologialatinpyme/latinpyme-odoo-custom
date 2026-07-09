@@ -175,38 +175,50 @@
     <xpath expr="//div[@t-field='product.description_ecommerce']" position="replace"/>
   </template>
 
-  <template id="lp_tienda_product_cupos_selector" name="Tienda LatinPyme Selector de Cupos" inherit_id="website_sale.product_quantity">
-    <xpath expr="//div[contains(@t-attf-class, 'css_quantity')]" position="before">
+  <template id="lp_tienda_product_price_cupos_label" name="Tienda LatinPyme Precio por Cupo Label" inherit_id="website_sale.product_price">
+    <xpath expr="//div[@name='product_price_container']" position="before">
       <t t-set="lp_tienda_cupos_active" t-value="bool(product.public_categ_ids.filtered('lp_tienda_use_cupos_label'))"/>
-      <div t-if="lp_tienda_cupos_active" class="lp-tienda-cupos-heading">
-        <p class="lp-tienda-cupos-heading__title">Selecciona tus cupos</p>
-        <p class="lp-tienda-cupos-heading__hint">Cada cupo equivale a una persona.</p>
-      </div>
+      <p t-if="lp_tienda_cupos_active" class="lp-tienda-cupos-price-label">Precio por cupo</p>
     </xpath>
+  </template>
 
+  <template id="lp_tienda_product_cupos_selector" name="Tienda LatinPyme Selector de Cupos" inherit_id="website_sale.product_quantity">
     <xpath expr="//div[contains(@t-attf-class, 'css_quantity')]" position="attributes">
-      <attribute name="t-attf-class" add="{{'lp-tienda-cupos-input-group' if lp_tienda_cupos_active else ''}}" separator=" "/>
+      <attribute name="t-attf-class" add="{{'lp-tienda-cupos-hidden-native' if lp_tienda_cupos_active else ''}}" separator=" "/>
     </xpath>
 
-    <xpath expr="//input[@name='add_qty']" position="after">
-      <span t-if="lp_tienda_cupos_active" class="lp-tienda-cupos-count" aria-hidden="true">1 cupo</span>
-    </xpath>
-
-    <xpath expr="//div[contains(@t-attf-class, 'css_quantity')]" position="after">
-      <div t-if="lp_tienda_cupos_active" class="lp-tienda-cupos-summary" data-lp-tienda-cupos-summary="1">
-        <div class="lp-tienda-cupos-summary__row">
-          <span class="lp-tienda-cupos-summary__label">Precio por cupo</span>
-          <span class="lp-tienda-cupos-summary__value" data-lp-cupos-unit-price="1">-</span>
+    <xpath expr="//a[@id='add_to_cart']" position="before">
+      <t t-set="lp_tienda_cupos_active" t-value="bool(product.public_categ_ids.filtered('lp_tienda_use_cupos_label'))"/>
+      <div t-if="lp_tienda_cupos_active" class="lp-tienda-cupos-block">
+        <div class="lp-tienda-cupos-heading">
+          <p class="lp-tienda-cupos-heading__title">Selecciona tus cupos</p>
+          <p class="lp-tienda-cupos-heading__hint">Cada cupo equivale a una persona.</p>
         </div>
-        <div class="lp-tienda-cupos-summary__row lp-tienda-cupos-summary__row--total">
+        <div class="lp-tienda-cupos-cards" role="group" aria-label="Selector de cupos">
+          <t t-foreach="[1, 2, 3, 4]" t-as="lp_cupos_option">
+            <button
+              type="button"
+              t-attf-class="lp-tienda-cupos-card {{'is-active' if lp_cupos_option == 1 else ''}}"
+              t-att-data-lp-cupos-option="lp_cupos_option"
+              t-att-aria-pressed="'true' if lp_cupos_option == 1 else 'false'"
+            >
+              <span class="lp-tienda-cupos-card__badge d-none" t-att-data-lp-cupos-option-badge="lp_cupos_option"/>
+              <span class="lp-tienda-cupos-card__qty">
+                <t t-out="lp_cupos_option"/> <t t-out="'cupo' if lp_cupos_option == 1 else 'cupos'"/>
+              </span>
+              <span class="lp-tienda-cupos-card__price" t-att-data-lp-cupos-option-price="lp_cupos_option">&#8203;</span>
+            </button>
+          </t>
+        </div>
+        <div class="lp-tienda-cupos-summary" data-lp-tienda-cupos-summary="1">
           <span class="lp-tienda-cupos-summary__label">Total estimado</span>
           <span class="lp-tienda-cupos-summary__value" data-lp-cupos-total-price="1">-</span>
         </div>
-        <div class="lp-tienda-cupos-summary__row lp-tienda-cupos-summary__row--savings d-none" data-lp-cupos-savings-row="1">
-          <span class="lp-tienda-cupos-summary__label">Ahorras frente al precio normal</span>
-          <span class="lp-tienda-cupos-summary__value lp-tienda-cupos-summary__value--savings" data-lp-cupos-savings="1">-</span>
-        </div>
       </div>
+    </xpath>
+
+    <xpath expr="//a[@id='add_to_cart']" position="attributes">
+      <attribute name="t-attf-class" add="{{'lp-tienda-cupos-cta' if lp_tienda_cupos_active else ''}}" separator=" "/>
     </xpath>
   </template>
 

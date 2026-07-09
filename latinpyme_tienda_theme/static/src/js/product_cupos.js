@@ -2,14 +2,15 @@
 
 import { patch } from "@web/core/utils/patch";
 import { WebsiteSale } from "@website_sale/interactions/website_sale";
+import { rpc } from "@web/core/network/rpc";
 import { localization } from "@web/core/l10n/localization";
 import { insertThousandsSep } from "@web/core/utils/numbers";
 
-// Reuses Odoo's own combination-info result (price, list_price,
-// has_discounted_price, currency_precision) to render a "cupos" summary.
-// Does not compute or duplicate any pricing/discount logic: the numbers
-// come straight from the pricelist RPC that Odoo already performs on
-// quantity change.
+// Reuses Odoo's own combination-info RPC (the same one the native +/- quantity
+// selector triggers) to price each "cupos" card. No pricing/discount logic is
+// computed here: every number comes from the pricelist resolved server-side.
+
+const lastComboKeyByParent = new WeakMap();
 
 function getCurrencyParts(priceEl) {
     const valueEl = priceEl.querySelector(".oe_currency_value");
@@ -37,55 +38,109 @@ function formatWithSameCurrency(priceEl, amount, precision) {
     return parts ? `${parts.before}${numberText}${parts.after}` : numberText;
 }
 
-function pluralizeCupos(qty) {
-    const n = Math.max(1, Math.round(qty || 1));
-    return `${n} ${n === 1 ? "cupo" : "cupos"}`;
+function getCuposBlock(parent) {
+    return parent.querySelector(".lp-tienda-cupos-block");
 }
 
-function updateCuposSummary(parent, combination) {
+function setActiveCard(block, qty) {
+    const target = Math.max(1, Math.round(qty || 1));
+    block.querySelectorAll(".lp-tienda-cupos-card").forEach((card) => {
+        const isActive = parseInt(card.dataset.lpCuposOption, 10) === target;
+        card.classList.toggle("is-active", isActive);
+        card.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+}
+
+function updateCuposTotal(parent, combination) {
     const summary = parent.querySelector("[data-lp-tienda-cupos-summary]");
-    if (!summary) {
+    const priceEl = parent.querySelector(".oe_price");
+    if (!summary || !priceEl) {
         return;
     }
-    const priceEl = parent.querySelector(".oe_price");
     const qtyInput = parent.querySelector('input[name="add_qty"]');
     const qty = Math.max(1, parseFloat(qtyInput?.value || "1"));
-    const precision = combination.currency_precision;
-    const unitPrice = combination.price;
-    const listPrice = combination.list_price;
-    const hasDiscount = !!combination.has_discounted_price;
+    const totalPriceEl = summary.querySelector("[data-lp-cupos-total-price]");
+    if (totalPriceEl) {
+        totalPriceEl.textContent = formatWithSameCurrency(
+            priceEl,
+            combination.price * qty,
+            combination.currency_precision
+        );
+    }
+}
 
-    const countEl = parent.querySelector(".lp-tienda-cupos-count");
-    if (countEl) {
-        countEl.textContent = pluralizeCupos(qty);
+/**
+ * Fetches the unit price for each cupos card (1 to 4) using the same public
+ * RPC the native quantity selector uses, and fills in price + savings badge.
+ */
+async function refreshCuposCardPrices(parent) {
+    const block = getCuposBlock(parent);
+    if (!block) {
+        return;
+    }
+    const cards = Array.from(block.querySelectorAll(".lp-tienda-cupos-card"));
+    if (!cards.length) {
+        return;
+    }
+    const productTemplateId = parseInt(parent.querySelector(".product_template_id")?.value);
+    if (!productTemplateId) {
+        return;
+    }
+    const productId = parseInt(parent.querySelector(".product_id")?.value) || 0;
+    const combination = Array.from(
+        parent.querySelectorAll("input.js_variant_change:checked, select.js_variant_change")
+    ).map((el) => parseInt(el.value));
+    const uomId = parseInt(parent.querySelector('input[name="uom_id"]:checked')?.value) || undefined;
+
+    let results;
+    try {
+        results = await Promise.all(
+            cards.map((card) =>
+                rpc("/website_sale/get_combination_info", {
+                    product_template_id: productTemplateId,
+                    product_id: productId,
+                    combination,
+                    add_qty: parseInt(card.dataset.lpCuposOption, 10),
+                    uom_id: uomId,
+                }).then((info) => ({ card, info }))
+            )
+        );
+    } catch {
+        // Native mechanism unavailable (offline, combination invalid, ...):
+        // leave cards without a price rather than showing a stale/invented one.
+        return;
     }
 
+    const priceEl = parent.querySelector(".oe_price");
     if (!priceEl) {
         return;
     }
+    const baseline = results.find((r) => parseInt(r.card.dataset.lpCuposOption, 10) === 1);
+    const basePrice = baseline ? baseline.info.price : null;
+    const minPrice = Math.min(...results.map((r) => r.info.price));
 
-    const unitPriceEl = summary.querySelector("[data-lp-cupos-unit-price]");
-    if (unitPriceEl) {
-        unitPriceEl.textContent = priceEl.textContent.trim();
-    }
-
-    const totalPriceEl = summary.querySelector("[data-lp-cupos-total-price]");
-    if (totalPriceEl) {
-        totalPriceEl.textContent = formatWithSameCurrency(priceEl, unitPrice * qty, precision);
-    }
-
-    const savingsRow = summary.querySelector("[data-lp-cupos-savings-row]");
-    const savingsEl = summary.querySelector("[data-lp-cupos-savings]");
-    if (savingsRow && savingsEl) {
-        if (hasDiscount && listPrice > unitPrice) {
-            savingsEl.textContent = formatWithSameCurrency(
+    for (const { card, info } of results) {
+        const priceSpan = card.querySelector("[data-lp-cupos-option-price]");
+        if (priceSpan) {
+            priceSpan.textContent = `${formatWithSameCurrency(
                 priceEl,
-                (listPrice - unitPrice) * qty,
-                precision
-            );
-            savingsRow.classList.remove("d-none");
+                info.price,
+                info.currency_precision
+            )} c/u`;
+        }
+        const badge = card.querySelector("[data-lp-cupos-option-badge]");
+        if (!badge) {
+            continue;
+        }
+        const isDiscounted = basePrice !== null && info.price < basePrice;
+        if (isDiscounted && info.price === minPrice) {
+            badge.textContent = "Mejor valor";
+            badge.classList.remove("d-none");
+        } else if (isDiscounted) {
+            badge.textContent = "Ahorra";
+            badge.classList.remove("d-none");
         } else {
-            savingsRow.classList.add("d-none");
+            badge.classList.add("d-none");
         }
     }
 }
@@ -93,25 +148,49 @@ function updateCuposSummary(parent, combination) {
 patch(WebsiteSale.prototype, {
     _onChangeCombination(ev, parent, combination) {
         super._onChangeCombination(ev, parent, combination);
-        updateCuposSummary(parent, combination);
+
+        const block = getCuposBlock(parent);
+        if (!block) {
+            return;
+        }
+        const qtyInput = parent.querySelector('input[name="add_qty"]');
+        setActiveCard(block, parseFloat(qtyInput?.value || "1"));
+        updateCuposTotal(parent, combination);
+
+        const comboKey = combination.display_name || "";
+        if (lastComboKeyByParent.get(parent) !== comboKey) {
+            lastComboKeyByParent.set(parent, comboKey);
+            refreshCuposCardPrices(parent);
+        }
     },
 });
 
-// Instant label feedback while the price RPC (triggered natively by Odoo) is
-// still in flight; the summary values above stay authoritative once it
-// resolves.
 document.addEventListener(
-    "change",
+    "click",
     (ev) => {
-        const input = ev.target;
-        if (!input.matches || !input.matches('input[name="add_qty"]')) {
+        const card = ev.target.closest(".lp-tienda-cupos-card");
+        if (!card) {
             return;
         }
-        const parent = input.closest(".js_product");
-        const countEl = parent?.querySelector(".lp-tienda-cupos-count");
-        if (countEl) {
-            countEl.textContent = pluralizeCupos(parseFloat(input.value || "1"));
+        const parent = card.closest(".js_product");
+        const input = parent?.querySelector('input[name="add_qty"]');
+        if (!input) {
+            return;
+        }
+        const qty = parseInt(card.dataset.lpCuposOption, 10);
+        if (!qty) {
+            return;
+        }
+        setActiveCard(getCuposBlock(parent), qty);
+        if (parseFloat(input.value) !== qty) {
+            input.value = qty;
+            input.dispatchEvent(new Event("change", { bubbles: true }));
         }
     },
     true
 );
+
+// No separate "on load" fetch is needed: Odoo's own WebsiteSale.start() already
+// triggers a combination-info call for every product page (to compute the
+// "out of stock" state), which reaches our patched _onChangeCombination above
+// and performs the first cards price fetch.

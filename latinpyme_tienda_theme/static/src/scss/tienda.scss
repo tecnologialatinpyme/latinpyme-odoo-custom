@@ -2896,8 +2896,26 @@
     }
   }
 
+  .lp-tienda-cupos-price-label {
+    margin: 0 0 2px;
+    color: #69717d;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+  }
+
+  .css_quantity.lp-tienda-cupos-hidden-native {
+    display: none !important;
+  }
+
+  .lp-tienda-cupos-block {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+
   .lp-tienda-cupos-heading {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 
     &__title {
       margin: 0;
@@ -2913,61 +2931,108 @@
     }
   }
 
-  .css_quantity.lp-tienda-cupos-input-group {
-    input[name="add_qty"] {
-      display: none;
+  .lp-tienda-cupos-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+
+    @media (min-width: 480px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .lp-tienda-cupos-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    border: 1px solid #dfe2e7;
+    border-radius: 8px;
+    background: #fff;
+    padding: 10px 6px;
+    color: #2a313c;
+    text-align: center;
+    transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease;
+
+    &:hover {
+      border-color: rgba(200, 0, 26, .35);
     }
 
-    .lp-tienda-cupos-count {
-      display: inline-flex;
-      align-items: center;
-      min-width: 72px;
-      padding: 0 6px;
-      color: #151a22;
-      font-size: 14px;
+    &:focus-visible {
+      outline: none;
+      border-color: var(--lp-tienda-red);
+      box-shadow: 0 0 0 3px rgba(200, 0, 26, .12);
+    }
+
+    &.is-active {
+      border-color: var(--lp-tienda-red);
+      background: #fff5f6;
+      box-shadow: 0 6px 16px rgba(200, 0, 26, .12);
+
+      .lp-tienda-cupos-card__qty {
+        color: var(--lp-tienda-red-dark);
+      }
+    }
+
+    &__badge {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: var(--lp-tienda-red);
+      padding: 2px 8px;
+      color: #fff;
+      font-size: 9.5px;
       font-weight: 800;
-      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: .02em;
       white-space: nowrap;
+    }
+
+    &__qty {
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    &__price {
+      display: block;
+      color: #7b8290;
+      font-size: 11px;
+      font-weight: 700;
+      min-height: 14px;
     }
   }
 
   .lp-tienda-cupos-summary {
-    display: grid;
-    gap: 4px;
-    margin-top: 10px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
     padding-top: 10px;
     border-top: 1px solid #e7e9ee;
 
-    &__row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
     &__label {
       color: #69717d;
-      font-size: 12.5px;
+      font-size: 13px;
+      font-weight: 800;
     }
 
     &__value {
-      color: #2a313c;
-      font-size: 13.5px;
-      font-weight: 800;
+      color: #151a22;
+      font-size: 17px;
+      font-weight: 900;
       white-space: nowrap;
     }
+  }
 
-    &__row--total &__label,
-    &__row--total &__value {
-      color: #151a22;
-      font-size: 15px;
-      font-weight: 900;
-    }
-
-    &__row--savings &__label,
-    &__row--savings &__value--savings {
-      color: var(--lp-tienda-red-dark);
-    }
+  a.lp-tienda-cupos-cta {
+    flex: 0 0 100% !important;
+    width: 100%;
   }
 
   #product_full_description {
