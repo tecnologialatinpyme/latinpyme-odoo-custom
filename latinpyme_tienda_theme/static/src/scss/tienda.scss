@@ -67,8 +67,8 @@
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
-  gap: 18px;
-  padding-block: 18px 20px;
+  gap: 14px;
+  padding-block: 12px 14px;
 }
 
 .lp-tienda-brand {
@@ -91,10 +91,10 @@
 }
 
 .lp-tienda-brand__mark {
-  width: 54px;
-  height: 54px;
+  width: 44px;
+  height: 44px;
   border-radius: 5px;
-  font-size: 30px;
+  font-size: 24px;
 }
 
 .lp-tienda-brand__text {
@@ -112,7 +112,7 @@
   strong {
     color: var(--lp-tienda-ink);
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 31px;
+    font-size: 25px;
     font-weight: 600;
     line-height: .98;
   }
@@ -347,7 +347,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  min-height: 66px;
+  min-height: 50px;
   overflow: visible;
   padding-block: 0;
   scrollbar-width: none;
@@ -368,7 +368,7 @@
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
-  min-height: 66px;
+  min-height: 50px;
   padding: 0 17px;
   color: #111318;
   font-size: 14px;
@@ -509,13 +509,13 @@
 .lp-tienda-button {
   display: inline-flex;
   box-sizing: border-box;
-  min-height: 44px;
+  min-height: 38px;
   align-items: center;
   justify-content: center;
   border: 1px solid transparent;
   border-radius: 7px;
-  padding: 11px 22px;
-  font-size: 14px;
+  padding: 9px 18px;
+  font-size: 13px;
   font-weight: 900;
   line-height: 1.2;
   transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
@@ -693,7 +693,7 @@
 
 .lp-tienda-product-carousel {
   display: grid;
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
 }
 
@@ -746,7 +746,7 @@
   display: grid;
   grid-auto-columns: minmax(250px, 282px);
   grid-auto-flow: column;
-  gap: 20px;
+  gap: 14px;
   min-width: 0;
   overflow-x: auto;
   padding: 2px 2px 4px;
@@ -779,11 +779,11 @@
 
 .lp-tienda-product-card__media {
   display: grid;
-  height: 164px;
+  height: 140px;
   place-items: center;
   border-bottom: 1px solid rgba(16, 20, 27, .06);
   background: #fafbfc;
-  padding: 14px;
+  padding: 10px;
 
   img {
     display: block;
@@ -799,16 +799,16 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 12px;
-  padding: 18px;
+  gap: 8px;
+  padding: 14px;
 
   h3 {
-    min-height: 38px;
+    min-height: 34px;
     margin: 0;
     color: var(--lp-tienda-ink);
-    font-size: 15.5px;
+    font-size: 14px;
     font-weight: 900;
-    line-height: 1.25;
+    line-height: 1.22;
 
     a {
       display: -webkit-box;
@@ -826,13 +826,13 @@
 
 .lp-tienda-product-card__price {
   color: var(--lp-tienda-ink);
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 950;
 }
 
 .lp-tienda-product-card__cta {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 34px;
   align-items: center;
   justify-content: center;
   gap: 7px;
@@ -882,19 +882,19 @@
 
 .lp-tienda-solution-card__media {
   display: flex;
-  min-height: 52px;
+  min-height: 42px;
   align-items: center;
   justify-content: center;
   place-items: center;
   background: var(--lp-tienda-red);
   color: #fff !important;
-  padding: 13px 18px;
+  padding: 10px 16px;
   text-align: center;
   -webkit-text-fill-color: #fff;
 
   span {
     color: #fff !important;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1.14;
@@ -905,12 +905,12 @@
 
 .lp-tienda-solution-card__icon {
   display: grid;
-  width: 58px;
-  height: 58px;
+  width: 42px;
+  height: 42px;
   place-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   color: var(--lp-tienda-red);
-  font-size: 34px;
+  font-size: 24px;
   line-height: 1;
 
   i,
@@ -926,7 +926,7 @@
   flex: 1;
   flex-direction: column;
   background: linear-gradient(180deg, #fff, #fff7f8);
-  padding: 24px 26px 24px;
+  padding: 18px 20px 18px;
 
   h3 {
     display: none;
@@ -935,19 +935,19 @@
   p,
   li {
     color: #303946;
-    font-size: 14.5px;
+    font-size: 13.5px;
     font-weight: 500;
-    line-height: 1.34;
+    line-height: 1.3;
   }
 
   p {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   ul {
     display: grid;
-    gap: 6px;
-    margin: 0 0 18px;
+    gap: 5px;
+    margin: 0 0 14px;
     padding-left: 0;
     list-style: none;
   }
@@ -1160,7 +1160,7 @@
   gap: 14px;
   overflow: hidden;
   border-block: 1px solid var(--lp-tienda-border);
-  padding-block: 18px;
+  padding-block: 12px;
 
   &::before,
   &::after {
@@ -1325,15 +1325,15 @@
 
 .lp-tienda-footer {
   background: #fff;
-  padding-block: 34px 36px;
+  padding-block: 20px 22px;
 }
 
 .lp-tienda-footer__inner {
   display: grid;
-  gap: 32px;
-  border-radius: 28px;
+  gap: 22px;
+  border-radius: 24px;
   background: linear-gradient(135deg, #fff7f7, #fff);
-  padding: 36px;
+  padding: 26px;
   box-shadow: 0 12px 36px rgba(17, 19, 24, .05);
 }
 
@@ -1352,10 +1352,10 @@
 }
 
 .lp-tienda-footer__mark {
-  width: 58px;
-  height: 58px;
+  width: 46px;
+  height: 46px;
   border-radius: 5px;
-  font-size: 34px;
+  font-size: 26px;
 }
 
 .lp-tienda-footer .lp-tienda-social {
@@ -1450,8 +1450,8 @@
 
   .lp-tienda-masthead__top {
     grid-template-columns: auto minmax(170px, 1fr) minmax(260px, 390px) auto;
-    gap: 28px;
-    padding-block: 26px 20px;
+    gap: 22px;
+    padding-block: 14px 14px;
   }
 
   .lp-tienda-masthead__actions {
@@ -1551,7 +1551,7 @@
   }
 
   .lp-tienda-brand__text strong {
-    font-size: 28px;
+    font-size: 22px;
   }
 
   .lp-tienda-nav__inner {
@@ -1611,7 +1611,7 @@
   }
 
   .lp-tienda-product-carousel {
-    gap: 16px;
+    gap: 10px;
   }
 
   .lp-tienda-ad-horizontal {
@@ -1629,11 +1629,11 @@
 
   .lp-tienda-product-carousel__track {
     grid-auto-columns: minmax(238px, 82vw);
-    gap: 16px;
+    gap: 12px;
   }
 
   .lp-tienda-product-card__media {
-    height: 152px;
+    height: 120px;
   }
 
   .lp-tienda-category-card {
@@ -1687,11 +1687,11 @@
   }
 
   .lp-tienda-footer {
-    padding-block: 36px 28px;
+    padding-block: 22px 18px;
   }
 
   .lp-tienda-footer__inner {
-    padding: 26px;
+    padding: 20px;
   }
 }
 
