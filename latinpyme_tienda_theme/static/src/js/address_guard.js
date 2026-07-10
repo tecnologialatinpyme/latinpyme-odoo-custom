@@ -70,7 +70,7 @@ function inferNitIdentificationTypeValue(form) {
     return "";
 }
 
-function syncFiscalFields(form) {
+function syncFiscalFields(form, { finalizeVat = true } = {}) {
     if (!form) {
         return;
     }
@@ -85,6 +85,17 @@ function syncFiscalFields(form) {
             if (typeof caret === "number" && vatInput.setSelectionRange) {
                 const newPos = Math.max(0, caret - 1);
                 vatInput.setSelectionRange(newPos, newPos);
+            }
+        }
+        // Once the customer finishes typing (blur/change), place the dash
+        // before the last digit if they didn't type one themselves. This is
+        // pure formatting: the digit itself is never changed, only where the
+        // dash goes - only applies for Colombia, where a NIT check digit is
+        // expected in that position.
+        if (finalizeVat && colombiaSelected) {
+            const plainDigits = vatInput.value.match(/^(\d{2,})$/);
+            if (plainDigits) {
+                vatInput.value = `${plainDigits[1].slice(0, -1)}-${plainDigits[1].slice(-1)}`;
             }
         }
     }
@@ -134,7 +145,8 @@ function bindFiscalFieldSync(form) {
         if (event?.isTrusted && event.target?.name === "company_type") {
             form.dataset.lpTiendaCompanyTypeTouched = "1";
         }
-        syncFiscalFields(form);
+        const finalizeVat = !event || event.type !== "input";
+        syncFiscalFields(form, { finalizeVat });
     };
     ["input", "change", "submit"].forEach((eventName) => {
         form.addEventListener(eventName, sync, true);
