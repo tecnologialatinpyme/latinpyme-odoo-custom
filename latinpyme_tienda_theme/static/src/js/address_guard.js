@@ -255,6 +255,31 @@ function labelForField(form, name) {
     return field?.id ? fieldWrap(form, name)?.querySelector(`label[for="${field.id}"]`) : null;
 }
 
+// Odoo already shows a single "*" for required fields via pure CSS
+// (`.col-form-label:not(.label-optional)::after`). Some l10n-specific labels
+// (e.g. Colombia's "Tipo Cliente", "NIT") additionally bake a literal "*"
+// into their text, producing a visible "* *". Strip any literal asterisk so
+// the native CSS rule stays the single source of truth for the indicator.
+function stripLiteralAsterisk(label) {
+    if (!label) {
+        return;
+    }
+    label.childNodes.forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+            node.nodeValue = node.nodeValue.replace(/\s*\*+\s*$/, "");
+        }
+    });
+    label.querySelectorAll("span, sup").forEach((node) => {
+        if (node.textContent.trim() === "*") {
+            node.remove();
+        }
+    });
+}
+
+function stripLiteralLabelAsterisks(form) {
+    form.querySelectorAll(".col-form-label, label").forEach(stripLiteralAsterisk);
+}
+
 function makeZipOptional(form) {
     const requiredFields = form.elements.required_fields;
     if (requiredFields?.value) {
@@ -274,18 +299,7 @@ function makeZipOptional(form) {
 
     const label = labelForField(form, "zip");
     label?.classList.add("label-optional");
-    if (label) {
-        label.childNodes.forEach((node) => {
-            if (node.nodeType === Node.TEXT_NODE) {
-                node.nodeValue = node.nodeValue.replace(/\s*\*+\s*$/, "");
-            }
-        });
-        label.querySelectorAll("span, sup").forEach((node) => {
-            if (node.textContent.trim() === "*") {
-                node.remove();
-            }
-        });
-    }
+    stripLiteralAsterisk(label);
 }
 
 function normalizeText(value = "") {
@@ -505,29 +519,44 @@ function applyAddressAdjustments(form) {
 }
 
 function arrangeAddressFields(form) {
-    insertAddressSectionHeadings(form);
     normalizeAddressLocationGrid(form);
+    normalizeAddressFiscalGrid(form);
     setAddressFieldLayout(form);
+    stripLiteralLabelAsterisks(form);
 }
 
-function ensureSectionHeading(form, beforeFieldName, headingId, label) {
-    const wrap = fieldWrap(form, beforeFieldName);
-    if (!isVisibleAddressWrap(wrap) || !wrap.parentElement) {
-        return;
-    }
-    if (form.querySelector(`[data-lp-tienda-heading="${headingId}"]`)) {
-        return;
-    }
-    const heading = document.createElement("div");
-    heading.className = "lp-tienda-address-section-heading w-100";
-    heading.dataset.lpTiendaHeading = headingId;
-    heading.textContent = label;
-    wrap.insertAdjacentElement("beforebegin", heading);
-}
+// Company name / identification type / NIT flow as a single distributed
+// row instead of a rigid 2-then-1 split: each field grows to fill the row
+// (a lone field stretches full width instead of leaving an empty gap), and
+// it self-adjusts automatically whichever fields Tipo Cliente shows or hides.
+function normalizeAddressFiscalGrid(form) {
+    const fiscalFields = ["company_name", "l10n_latam_identification_type_id", "vat"]
+        .map((name) => [name, fieldWrap(form, name)])
+        .filter(([, wrap]) => isVisibleAddressWrap(wrap));
 
-function insertAddressSectionHeadings(form) {
-    ensureSectionHeading(form, "company_type", "fiscal", "Datos de facturación");
-    ensureSectionHeading(form, "street", "address", "Dirección");
+    if (!fiscalFields.length) {
+        return;
+    }
+
+    const grid = ensureAddressGroupRow(
+        form,
+        "lp-tienda-address-fiscal-grid",
+        "lpTiendaAddressFiscalGrid",
+        fiscalFields[0][1],
+    );
+    fiscalFields.forEach(([fieldName, wrap]) => {
+        const previousParent = wrap.parentElement;
+        wrap.dataset.lpTiendaAddressField = fieldName;
+        stripGridClasses(wrap);
+        wrap.classList.add("lp-tienda-address-field", `lp-tienda-address-field--${fieldName}`, "col-12");
+        wrap.style.order = "";
+        wrap.style.width = "";
+        wrap.style.flex = "";
+        if (previousParent !== grid) {
+            grid.appendChild(wrap);
+            collapseEmptyAddressRow(previousParent);
+        }
+    });
 }
 
 function normalizeAddressLocationGrid(form) {
@@ -594,7 +623,12 @@ function ensureAddressGroupRow(form, className, datasetKey, referenceWrap) {
 }
 
 function collapseEmptyAddressRow(row) {
-    if (!row || row.dataset.lpTiendaAddressLocationGrid || row.dataset.lpTiendaAddressStreetRow) {
+    if (
+        !row
+        || row.dataset.lpTiendaAddressLocationGrid
+        || row.dataset.lpTiendaAddressStreetRow
+        || row.dataset.lpTiendaAddressFiscalGrid
+    ) {
         return;
     }
     const hasVisibleChildren = Array.from(row.children || []).some((child) => {

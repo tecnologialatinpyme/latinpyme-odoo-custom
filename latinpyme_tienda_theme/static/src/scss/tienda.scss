@@ -3403,24 +3403,18 @@ form.address_autoformat {
   }
 
   .lp-tienda-address-location-grid,
-  .lp-tienda-address-street-row {
+  .lp-tienda-address-street-row,
+  .lp-tienda-address-fiscal-grid {
     margin-top: 4px;
   }
 
-  .lp-tienda-address-section-heading {
-    margin: 28px 0 14px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(16, 20, 27, .1);
-    color: var(--lp-tienda-ink);
-    font-size: 15px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: .03em;
+  .lp-tienda-address-fiscal-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 20px;
 
-    &[data-lp-tienda-heading="fiscal"] {
-      margin-top: 8px;
-      padding-top: 0;
-      border-top: none;
+    > .lp-tienda-address-field {
+      flex: 1 1 220px;
     }
   }
 
