@@ -93,10 +93,19 @@ function syncFiscalFields(form, { finalizeVat = true } = {}) {
         // dash goes - only applies for Colombia with NIT selected, since
         // other identification types (Cedula, Pasaporte, ...) don't use a
         // check digit at all.
-        if (finalizeVat && colombiaSelected && isNitIdentificationTypeSelected(form)) {
-            const plainDigits = vatInput.value.match(/^(\d{2,})$/);
-            if (plainDigits) {
-                vatInput.value = `${plainDigits[1].slice(0, -1)}-${plainDigits[1].slice(-1)}`;
+        if (finalizeVat && colombiaSelected) {
+            if (isNitIdentificationTypeSelected(form)) {
+                const plainDigits = vatInput.value.match(/^(\d{2,})$/);
+                if (plainDigits) {
+                    vatInput.value = `${plainDigits[1].slice(0, -1)}-${plainDigits[1].slice(-1)}`;
+                }
+            } else {
+                // Not a NIT (anymore): strip a leftover dash from a previous
+                // Tipo de Identificacion so the value is a plain number.
+                const dashed = vatInput.value.match(/^(\d+)-(\d)$/);
+                if (dashed) {
+                    vatInput.value = dashed[1] + dashed[2];
+                }
             }
         }
     }
