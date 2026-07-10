@@ -120,6 +120,18 @@ function syncFiscalFields(form, { finalizeVat = true } = {}) {
         ensureHiddenInput(form, "company_type", companyType);
     }
 
+    // Tipo Cliente drives the identification type: Independiente (person)
+    // always defaults to Cedula de ciudadania, regardless of what's typed
+    // in the document-number field or what was previously selected (the
+    // same "vat" field is reused for both NIT and Cedula numbers).
+    if (colombiaSelected && companyType === "person") {
+        const cedulaValue = setSelectValueByText(form, "l10n_latam_identification_type_id", "ciudadania");
+        if (cedulaValue) {
+            ensureHiddenInput(form, "l10n_latam_identification_type_id", cedulaValue);
+        }
+        return;
+    }
+
     const nitType = inferNitIdentificationTypeValue(form);
     if (nitType) {
         const nitTypeControl = form.querySelector?.('select[name="l10n_latam_identification_type_id"]');
