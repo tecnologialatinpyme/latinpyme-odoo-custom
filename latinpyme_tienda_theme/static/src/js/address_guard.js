@@ -90,9 +90,10 @@ function syncFiscalFields(form, { finalizeVat = true } = {}) {
         // Once the customer finishes typing (blur/change), place the dash
         // before the last digit if they didn't type one themselves. This is
         // pure formatting: the digit itself is never changed, only where the
-        // dash goes - only applies for Colombia, where a NIT check digit is
-        // expected in that position.
-        if (finalizeVat && colombiaSelected) {
+        // dash goes - only applies for Colombia with NIT selected, since
+        // other identification types (Cedula, Pasaporte, ...) don't use a
+        // check digit at all.
+        if (finalizeVat && colombiaSelected && isNitIdentificationTypeSelected(form)) {
             const plainDigits = vatInput.value.match(/^(\d{2,})$/);
             if (plainDigits) {
                 vatInput.value = `${plainDigits[1].slice(0, -1)}-${plainDigits[1].slice(-1)}`;
@@ -103,8 +104,10 @@ function syncFiscalFields(form, { finalizeVat = true } = {}) {
     if (vat) {
         ensureHiddenInput(form, "vat", vat);
     }
-    if (colombiaSelected) {
+    if (colombiaSelected && isNitIdentificationTypeSelected(form)) {
         warnOnColombianNitMismatch(form, vat);
+    } else {
+        warnOnColombianNitMismatch(form, "");
     }
 
     const companyTypeTouchedByUser = form.dataset.lpTiendaCompanyTypeTouched === "1";
@@ -347,6 +350,15 @@ function isColombiaSelected(form) {
     const country = form?.elements?.country_id;
     const selectedText = country?.selectedOptions?.[0]?.textContent || "";
     return normalizeText(selectedText).includes("colombia");
+}
+
+// The NIT check-digit format/validation only makes sense when the customer
+// is actually identifying with a NIT; Cedula, Pasaporte, etc. are plain
+// numbers with no dash or DIAN check digit expected.
+function isNitIdentificationTypeSelected(form) {
+    const idType = form?.querySelector?.('select[name="l10n_latam_identification_type_id"]');
+    const selectedText = idType?.selectedOptions?.[0]?.textContent || "";
+    return normalizeText(selectedText).includes("nit");
 }
 
 function computeColombianNitCheckDigit(baseDigits) {
