@@ -519,39 +519,27 @@ function applyAddressAdjustments(form) {
 }
 
 function arrangeAddressFields(form) {
+    normalizeAddressContactGrid(form);
     normalizeAddressLocationGrid(form);
     normalizeAddressFiscalGrid(form);
-    setAddressFieldLayout(form);
     stripLiteralLabelAsterisks(form);
 }
 
-// Company name / identification type / NIT flow as a single distributed
-// row instead of a rigid 2-then-1 split: each field grows to fill the row
-// (a lone field stretches full width instead of leaving an empty gap), and
-// it self-adjusts automatically whichever fields Tipo Cliente shows or hides.
-function normalizeAddressFiscalGrid(form) {
-    const fiscalFields = ["company_name", "l10n_latam_identification_type_id", "vat"]
-        .map((name) => [name, fieldWrap(form, name)])
+function normalizeFieldGroup(form, groupFields, className, datasetKey) {
+    const fields = groupFields
+        .map((name) => [name, addressFieldWrap(form, name)])
         .filter(([, wrap]) => isVisibleAddressWrap(wrap));
 
-    if (!fiscalFields.length) {
+    if (!fields.length) {
         return;
     }
 
-    const grid = ensureAddressGroupRow(
-        form,
-        "lp-tienda-address-fiscal-grid",
-        "lpTiendaAddressFiscalGrid",
-        fiscalFields[0][1],
-    );
-    fiscalFields.forEach(([fieldName, wrap]) => {
+    const grid = ensureAddressGroupRow(form, className, datasetKey, fields[0][1]);
+    fields.forEach(([fieldName, wrap]) => {
         const previousParent = wrap.parentElement;
         wrap.dataset.lpTiendaAddressField = fieldName;
         stripGridClasses(wrap);
-        wrap.classList.add("lp-tienda-address-field", `lp-tienda-address-field--${fieldName}`, "col-12");
-        wrap.style.order = "";
-        wrap.style.width = "";
-        wrap.style.flex = "";
+        wrap.classList.add("lp-tienda-address-field", `lp-tienda-address-field--${fieldName}`);
         if (previousParent !== grid) {
             grid.appendChild(wrap);
             collapseEmptyAddressRow(previousParent);
@@ -559,59 +547,45 @@ function normalizeAddressFiscalGrid(form) {
     });
 }
 
+// Name/email/phone are the native contact fields Odoo already shows first;
+// pairing email+phone keeps them on the same flex grid as every other row
+// below so every row's right edge lines up consistently.
+function normalizeAddressContactGrid(form) {
+    normalizeFieldGroup(form, ["email", "phone"], "lp-tienda-address-contact-grid", "lpTiendaAddressContactGrid");
+}
+
+// Company name / identification type / NIT flow as a single distributed
+// row instead of a rigid 2-then-1 split: each field grows to fill the row
+// (a lone field stretches full width instead of leaving an empty gap), and
+// it self-adjusts automatically whichever fields Tipo Cliente shows or hides.
+function normalizeAddressFiscalGrid(form) {
+    normalizeFieldGroup(
+        form,
+        ["company_name", "l10n_latam_identification_type_id", "vat"],
+        "lp-tienda-address-fiscal-grid",
+        "lpTiendaAddressFiscalGrid",
+    );
+}
+
 function normalizeAddressLocationGrid(form) {
-    const locationFields = [
-        ["country_id", addressFieldWrap(form, "country_id")],
-        ["state_id", addressFieldWrap(form, "state_id")],
-        ["city", addressFieldWrap(form, "city")],
-    ].filter(([, wrap]) => wrap);
-
-    if (locationFields.length) {
-        const grid = ensureAddressGroupRow(
-            form,
-            "lp-tienda-address-location-grid",
-            "lpTiendaAddressLocationGrid",
-            locationFields[0][1],
-        );
-        locationFields.forEach(([fieldName, wrap]) => {
-            const previousParent = wrap.parentElement;
-            wrap.dataset.lpTiendaAddressField = fieldName;
-            if (previousParent !== grid) {
-                grid.appendChild(wrap);
-                collapseEmptyAddressRow(previousParent);
-            }
-        });
-    }
-
-    const streetWrap = addressFieldWrap(form, "street");
-    const zipWrap = addressFieldWrap(form, "zip");
-    if (streetWrap && zipWrap) {
-        const streetRow = ensureAddressGroupRow(
-            form,
-            "lp-tienda-address-street-row",
-            "lpTiendaAddressStreetRow",
-            streetWrap,
-        );
-        [["street", streetWrap], ["zip", zipWrap]].forEach(([fieldName, wrap]) => {
-            const previousParent = wrap.parentElement;
-            wrap.dataset.lpTiendaAddressField = fieldName;
-            if (previousParent !== streetRow) {
-                streetRow.appendChild(wrap);
-                collapseEmptyAddressRow(previousParent);
-            }
-        });
-    }
+    normalizeFieldGroup(
+        form,
+        ["country_id", "state_id", "city"],
+        "lp-tienda-address-location-grid",
+        "lpTiendaAddressLocationGrid",
+    );
+    normalizeFieldGroup(form, ["street", "zip"], "lp-tienda-address-street-row", "lpTiendaAddressStreetRow");
 }
 
 function ensureAddressGroupRow(form, className, datasetKey, referenceWrap) {
     const existing = form.querySelector(`.${className}`);
     if (existing) {
-        existing.classList.add("lp-tienda-address-fields", "row");
+        existing.classList.add("lp-tienda-address-fields");
         return existing;
     }
 
     const row = document.createElement("div");
-    row.className = `${className} lp-tienda-address-fields row`;
+    row.className = `${className} lp-tienda-address-fields`;
     row.dataset[datasetKey] = "1";
 
     if (referenceWrap?.parentElement) {
@@ -653,39 +627,6 @@ function stripGridClasses(wrap) {
         ) {
             wrap.classList.remove(className);
         }
-    });
-}
-
-function setAddressFieldLayout(form) {
-    [
-        ["country_id", "1", "col-md-6"],
-        ["state_id", "2", "col-md-6"],
-        ["city", "3", "col-md-6"],
-    ].forEach(([fieldName, order, widthClass]) => {
-        const wrap = addressFieldWrap(form, fieldName);
-        if (!wrap) {
-            return;
-        }
-        stripGridClasses(wrap);
-        wrap.classList.add("lp-tienda-address-field", `lp-tienda-address-field--${fieldName}`, "col-12", widthClass);
-        wrap.style.order = order;
-        wrap.style.width = "";
-        wrap.style.flex = "";
-    });
-
-    [
-        ["street", "1", "col-md-8"],
-        ["zip", "2", "col-md-4"],
-    ].forEach(([fieldName, order, widthClass]) => {
-        const wrap = addressFieldWrap(form, fieldName);
-        if (!wrap) {
-            return;
-        }
-        stripGridClasses(wrap);
-        wrap.classList.add("lp-tienda-address-field", `lp-tienda-address-field--${fieldName}`, "col-12", widthClass);
-        wrap.style.order = order;
-        wrap.style.width = "";
-        wrap.style.flex = "";
     });
 }
 

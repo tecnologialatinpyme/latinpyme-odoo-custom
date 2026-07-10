@@ -3436,30 +3436,31 @@ form.address_autoformat {
     }
   }
 
-  .lp-tienda-address-location-grid,
-  .lp-tienda-address-street-row,
-  .lp-tienda-address-fiscal-grid {
-    margin-top: 4px;
-  }
-
-  .lp-tienda-address-fiscal-grid {
+  // One shared flex system for every paired row (contacto, ubicacion,
+  // direccion, datos fiscales) so their right edges always line up with
+  // each other, regardless of which fields Tipo Cliente shows or hides.
+  .lp-tienda-address-fields {
     display: flex;
     flex-wrap: wrap;
     gap: 0 20px;
+    margin-top: 4px;
 
     > .lp-tienda-address-field {
       flex: 1 1 220px;
     }
+
+    > .lp-tienda-address-field--street {
+      flex: 2 1 320px;
+    }
+
+    > .lp-tienda-address-field--zip {
+      flex: 1 1 160px;
+    }
   }
 
   @media (min-width: 1200px) {
-    .lp-tienda-address-location-grid {
-      .lp-tienda-address-field--country_id,
-      .lp-tienda-address-field--state_id,
-      .lp-tienda-address-field--city {
-        flex: 0 0 33.3333% !important;
-        max-width: 33.3333% !important;
-      }
+    .lp-tienda-address-location-grid > .lp-tienda-address-field {
+      flex: 1 1 0;
     }
   }
 }
