@@ -60,6 +60,40 @@
     background-color: var(--lp-tienda-red-dark);
     color: #fff;
   }
+
+  // Carrito, direccion, checkout, pago y confirmacion comparten este
+  // contenedor nativo. Por defecto usa el .container ancho de Bootstrap y
+  // un offset-xxl-1 que deja un vacio entre el formulario y el resumen;
+  // se ajusta al mismo ancho/ritmo del home (1180px) sin ese hueco.
+  .o_website_sale_checkout_container {
+    max-width: 1180px;
+    width: calc(100% - 40px);
+  }
+
+  .o_website_sale_checkout_container > .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 0;
+    margin-right: 0;
+    gap: 28px;
+
+    > * {
+      flex: 1 1 100%;
+      max-width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+      margin-left: 0 !important;
+    }
+
+    > .oe_cart {
+      flex: 1 1 540px;
+    }
+
+    > .o_wsale_shorter_cart_summary,
+    > .col-xxl-4 {
+      flex: 1 1 340px;
+    }
+  }
 }
 
 #wrapwrap:has(.lp-tienda-home) > #lp-menu-global {
