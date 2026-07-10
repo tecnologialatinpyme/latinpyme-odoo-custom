@@ -70,7 +70,6 @@
           t-set="lp_category_icon"
           t-value="category.lp_tienda_icon_url"/>
         <div class="lp-shop-catalog-hero__content">
-          <p class="lp-shop-catalog-hero__eyebrow">Catalogo</p>
           <div class="lp-shop-catalog-hero__title">
             <span t-if="category and lp_category_icon" class="lp-category-hero__icon" aria-hidden="true">
               <img

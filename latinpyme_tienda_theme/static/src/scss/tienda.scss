@@ -1941,16 +1941,6 @@
     }
   }
 
-  .lp-shop-catalog-hero__eyebrow {
-    margin: 0;
-    color: var(--lp-tienda-red);
-    font-size: 11px;
-    font-weight: 950;
-    letter-spacing: .04em;
-    line-height: 1.1;
-    text-transform: uppercase;
-  }
-
   .lp-shop-catalog-search {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -2067,25 +2057,14 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 20px;
-      background: #fff;
+      margin-bottom: 10px;
+      background: #fbfbfc;
 
       .o_wsale_shop_title,
-      .o_wsale_category_title {
-        display: none;
+      .o_wsale_category_title,
+      .products_header {
+        display: none !important;
       }
-    }
-
-    .products_header {
-      margin-top: 0;
-      justify-content: flex-end !important;
-    }
-
-    .o_wsale_products_header_search_form_container {
-      flex: 0 1 520px;
-      max-width: 520px;
-      margin-right: 0 !important;
-      margin-left: auto !important;
     }
 
     .o_wsale_products_main_row {
@@ -2270,7 +2249,7 @@
   }
 
   #o_wsale_products_header.lp-shop-catalog__header {
-    margin-bottom: 18px;
+    margin-bottom: 10px;
     border: 0;
     border-bottom: 1px solid var(--lp-tienda-border);
     border-radius: var(--lp-tienda-radius);
@@ -2278,16 +2257,13 @@
     padding: 14px 16px;
     box-shadow: none;
 
+    // The hero card above already shows the title and its own working
+    // search: this native title + search + pricelist toolbar is a full
+    // duplicate, on both /shop and every category page.
     .o_wsale_shop_title,
-    .o_wsale_category_title {
-      color: var(--lp-tienda-ink);
-      font-weight: 950;
-      letter-spacing: 0;
-    }
-
+    .o_wsale_category_title,
     .products_header {
-      gap: 12px;
-      margin-top: 4px;
+      display: none !important;
     }
   }
 
