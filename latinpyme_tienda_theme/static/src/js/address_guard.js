@@ -437,15 +437,22 @@ function hideObligationsControl(form) {
         requiredFields.value = requiredFields.value
             .split(",")
             .map((name) => name.trim())
-            .filter((name) => name && !isRegimeField(name))
+            .filter((name) => name && !isObligationsField(name))
             .join(",");
     }
 
-    // Regimen fiscal is a plain <select>: safe to hide entirely with a default value.
-    collectFieldWrappers(form, isRegimeField).forEach((wrap) => {
+    // Both Regimen fiscal (plain <select>) and Obligaciones y responsabilidades
+    // (Odoo SelectMenu/Owl widget, which Odoo itself already renders on top of a
+    // hidden native <select> carrying the real field name) are safe to hide via
+    // CSS: we only ever set `.value` + dispatch `change` on the underlying native
+    // control, we never simulate clicks inside the SelectMenu popover, so its
+    // positioning logic is never triggered. The control is never `disabled`, so
+    // it keeps submitting normally with the form.
+    function hideFieldWrap(wrap, applyDefault) {
         if (!wrap || wrap.dataset.lpTiendaAddressGuard) {
             return;
         }
+        wrap.querySelectorAll("input, select, textarea").forEach(applyDefault);
         wrap.hidden = true;
         wrap.style.display = "none";
         wrap.classList.add("d-none", "lp-tienda-address-field--hidden-obligations");
@@ -454,14 +461,17 @@ function hideObligationsControl(form) {
             field.required = false;
             field.removeAttribute("required");
             field.classList.remove("is-invalid");
-            applyHiddenFiscalDefault(field);
         });
+    }
+
+    // Regimen fiscal: default to "No Aplica".
+    collectFieldWrappers(form, isRegimeField).forEach((wrap) => {
+        hideFieldWrap(wrap, (field) => applyHiddenFiscalDefault(field));
     });
 
-    // Obligaciones y responsabilidades is an Odoo SelectMenu (Owl) widget: hiding its
-    // anchor breaks the popover positioning, so keep it visible and only pre-fill it.
+    // Obligaciones y responsabilidades: default to "R-99-PN" (No aplica - Otros).
     collectFieldWrappers(form, (value) => isObligationsField(value) && !isRegimeField(value)).forEach((wrap) => {
-        wrap?.querySelectorAll("input, select, textarea").forEach((field) => {
+        hideFieldWrap(wrap, (field) => {
             if (field.value) {
                 return;
             }
@@ -475,9 +485,11 @@ function hideObligationsControl(form) {
                 }
                 return;
             }
-            field.value = "R-99-PN";
-            field.dispatchEvent(new Event("input", { bubbles: true }));
-            field.dispatchEvent(new Event("change", { bubbles: true }));
+            if (field.tagName === "INPUT" || field.tagName === "TEXTAREA") {
+                field.value = "R-99-PN";
+                field.dispatchEvent(new Event("input", { bubbles: true }));
+                field.dispatchEvent(new Event("change", { bubbles: true }));
+            }
         });
     });
 }
