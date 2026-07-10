@@ -212,6 +212,21 @@
             </button>
           </t>
         </div>
+        <div class="lp-tienda-cupos-custom">
+          <label for="lp_tienda_cupos_custom_qty" class="lp-tienda-cupos-custom__label">¿Necesitas más cupos?</label>
+          <div class="lp-tienda-cupos-custom__row">
+            <input
+              type="number"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              id="lp_tienda_cupos_custom_qty"
+              class="lp-tienda-cupos-custom__input"
+              placeholder="Cantidad"
+            />
+            <button type="button" class="lp-tienda-cupos-custom__submit">Actualizar</button>
+          </div>
+        </div>
         <div class="lp-tienda-cupos-summary" data-lp-tienda-cupos-summary="1">
           <span class="lp-tienda-cupos-summary__label">Total estimado</span>
           <span class="lp-tienda-cupos-summary__value" data-lp-cupos-total-price="1">-</span>

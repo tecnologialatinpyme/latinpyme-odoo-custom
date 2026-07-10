@@ -165,27 +165,55 @@ patch(WebsiteSale.prototype, {
     },
 });
 
+function applyCuposQty(parent, input, qty) {
+    if (!input || !qty || qty < 1) {
+        return;
+    }
+    setActiveCard(getCuposBlock(parent), qty);
+    if (parseFloat(input.value) !== qty) {
+        input.value = qty;
+        // Reuses the exact same native mechanism the +/- selector and the
+        // cards already use: Odoo listens for `change` on add_qty and
+        // recomputes price via the pricelist RPC, no matter the quantity.
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+}
+
 document.addEventListener(
     "click",
     (ev) => {
         const card = ev.target.closest(".lp-tienda-cupos-card");
-        if (!card) {
+        if (card) {
+            const parent = card.closest(".js_product");
+            const input = parent?.querySelector('input[name="add_qty"]');
+            const qty = parseInt(card.dataset.lpCuposOption, 10);
+            applyCuposQty(parent, input, qty);
             return;
         }
-        const parent = card.closest(".js_product");
+
+        const submitBtn = ev.target.closest(".lp-tienda-cupos-custom__submit");
+        if (submitBtn) {
+            const parent = submitBtn.closest(".js_product");
+            const customInput = parent?.querySelector("#lp_tienda_cupos_custom_qty");
+            const input = parent?.querySelector('input[name="add_qty"]');
+            const qty = Math.floor(parseFloat(customInput?.value));
+            applyCuposQty(parent, input, qty);
+        }
+    },
+    true
+);
+
+document.addEventListener(
+    "keydown",
+    (ev) => {
+        if (ev.key !== "Enter" || !ev.target.matches("#lp_tienda_cupos_custom_qty")) {
+            return;
+        }
+        ev.preventDefault();
+        const parent = ev.target.closest(".js_product");
         const input = parent?.querySelector('input[name="add_qty"]');
-        if (!input) {
-            return;
-        }
-        const qty = parseInt(card.dataset.lpCuposOption, 10);
-        if (!qty) {
-            return;
-        }
-        setActiveCard(getCuposBlock(parent), qty);
-        if (parseFloat(input.value) !== qty) {
-            input.value = qty;
-            input.dispatchEvent(new Event("change", { bubbles: true }));
-        }
+        const qty = Math.floor(parseFloat(ev.target.value));
+        applyCuposQty(parent, input, qty);
     },
     true
 );
