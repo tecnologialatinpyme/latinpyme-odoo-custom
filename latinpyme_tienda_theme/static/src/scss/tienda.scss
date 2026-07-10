@@ -3449,13 +3449,20 @@ form.address_autoformat {
       flex: 1 1 220px;
     }
 
-    > .lp-tienda-address-field--street {
+    > .lp-tienda-address-field--street,
+    > .lp-tienda-address-field--company_name {
       flex: 2 1 320px;
     }
 
-    > .lp-tienda-address-field--zip {
+    > .lp-tienda-address-field--zip,
+    > .lp-tienda-address-field--vat,
+    > .lp-tienda-address-field--l10n_latam_identification_type_id {
       flex: 1 1 160px;
     }
+  }
+
+  .lp-tienda-address-field--full {
+    flex: 1 1 100% !important;
   }
 
   @media (min-width: 1200px) {

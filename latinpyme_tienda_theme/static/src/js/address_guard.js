@@ -522,7 +522,19 @@ function arrangeAddressFields(form) {
     normalizeAddressContactGrid(form);
     normalizeAddressLocationGrid(form);
     normalizeAddressFiscalGrid(form);
+    normalizeFullWidthField(form, "company_type");
     stripLiteralLabelAsterisks(form);
+}
+
+// Tipo Cliente drives which fiscal fields appear below it; keep it spanning
+// the full form width instead of the native half-width column.
+function normalizeFullWidthField(form, fieldName) {
+    const wrap = addressFieldWrap(form, fieldName);
+    if (!isVisibleAddressWrap(wrap)) {
+        return;
+    }
+    stripGridClasses(wrap);
+    wrap.classList.add("lp-tienda-address-field", "lp-tienda-address-field--full");
 }
 
 function normalizeFieldGroup(form, groupFields, className, datasetKey) {
