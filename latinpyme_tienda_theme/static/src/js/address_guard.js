@@ -121,11 +121,14 @@ function syncFiscalFields(form, { finalizeVat = true } = {}) {
     }
 
     // Tipo Cliente drives the identification type: Independiente (person)
-    // always defaults to Cedula de ciudadania, regardless of country, what's
-    // typed in the document-number field, or what was previously selected
-    // (the same "vat" field is reused for both NIT and Cedula numbers). If
-    // the current country's identification type list has no such option,
-    // setSelectValueByText simply finds no match and this is a no-op.
+    // defaults to Cedula de ciudadania and Empresa defaults to NIT - but only
+    // until the customer manually picks a different option themselves; from
+    // then on their choice is respected until Tipo Cliente changes again.
+    const idTypeTouchedByUser = form.dataset.lpTiendaIdTypeTouched === "1";
+    if (idTypeTouchedByUser) {
+        return;
+    }
+
     if (companyType === "person") {
         const cedulaValue = setSelectValueByText(form, "l10n_latam_identification_type_id", "ciudadania");
         if (cedulaValue) {
@@ -158,6 +161,13 @@ function bindFiscalFieldSync(form) {
     const sync = (event) => {
         if (event?.isTrusted && event.target?.name === "company_type") {
             form.dataset.lpTiendaCompanyTypeTouched = "1";
+            // Switching Tipo Cliente should re-apply its sensible default
+            // (Cedula for Independiente, NIT for Empresa) rather than keep
+            // whatever identification type the customer had picked before.
+            delete form.dataset.lpTiendaIdTypeTouched;
+        }
+        if (event?.isTrusted && event.target?.name === "l10n_latam_identification_type_id") {
+            form.dataset.lpTiendaIdTypeTouched = "1";
         }
         const finalizeVat = !event || event.type !== "input";
         syncFiscalFields(form, { finalizeVat });
