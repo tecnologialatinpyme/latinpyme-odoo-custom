@@ -70,7 +70,7 @@ function inferNitIdentificationTypeValue(form) {
     return "";
 }
 
-function syncFiscalFields(form, { finalizeVat = true } = {}) {
+function syncFiscalFields(form) {
     if (!form) {
         return;
     }
@@ -89,14 +89,11 @@ function syncFiscalFields(form, { finalizeVat = true } = {}) {
         }
     }
     const vat = getControlValue(form, "vat");
-    if (vat && colombiaSelected && finalizeVat) {
-        const normalizedVat = normalizeColombianNitValue(vat);
-        if (vatInput && vatInput.value !== normalizedVat) {
-            vatInput.value = normalizedVat;
-        }
-        ensureHiddenInput(form, "vat", normalizedVat);
-    } else if (vat) {
+    if (vat) {
         ensureHiddenInput(form, "vat", vat);
+    }
+    if (colombiaSelected) {
+        warnOnColombianNitMismatch(form, vat);
     }
 
     const companyTypeTouchedByUser = form.dataset.lpTiendaCompanyTypeTouched === "1";
@@ -137,8 +134,7 @@ function bindFiscalFieldSync(form) {
         if (event?.isTrusted && event.target?.name === "company_type") {
             form.dataset.lpTiendaCompanyTypeTouched = "1";
         }
-        const finalizeVat = !event || event.type !== "input";
-        syncFiscalFields(form, { finalizeVat });
+        syncFiscalFields(form);
     };
     ["input", "change", "submit"].forEach((eventName) => {
         form.addEventListener(eventName, sync, true);
@@ -333,15 +329,36 @@ function computeColombianNitCheckDigit(baseDigits) {
     return String(remainder > 1 ? 11 - remainder : remainder);
 }
 
-function normalizeColombianNitValue(value = "") {
-    const raw = String(value || "").trim().replace(/\s+/g, "").replace(/[.]/g, "");
-    const match = raw.match(/^(\d+)(?:-(\d))?$/);
+// The NIT stays fully manual: we never rewrite what the customer types. We
+// only show a non-blocking, informational note when the check digit they
+// typed doesn't match the DIAN formula, in case it helps them catch a typo.
+function warnOnColombianNitMismatch(form, vat) {
+    const wrap = fieldWrap(form, "vat");
+    let note = wrap?.querySelector('[data-lp-tienda-nit-check="1"]');
+
+    const raw = String(vat || "").trim().replace(/\s+/g, "").replace(/[.]/g, "");
+    const match = raw.match(/^(\d+)-(\d)$/);
     if (!match) {
-        return raw;
+        note?.remove();
+        return;
     }
-    const baseDigits = match[1];
+
+    const [, baseDigits, typedDigit] = match;
     const expectedDigit = computeColombianNitCheckDigit(baseDigits);
-    return expectedDigit ? `${baseDigits}-${expectedDigit}` : raw;
+    if (!expectedDigit || typedDigit === expectedDigit) {
+        note?.remove();
+        return;
+    }
+
+    if (!note && wrap) {
+        note = document.createElement("small");
+        note.dataset.lpTiendaNitCheck = "1";
+        note.className = "lp-tienda-nit-check-note form-text text-danger d-block mt-1";
+        wrap.appendChild(note);
+    }
+    if (note) {
+        note.textContent = `Revisa el NIT: según la fórmula del DIAN, el dígito de verificación esperado es ${expectedDigit}.`;
+    }
 }
 
 function setSelectValueByText(form, name, expectedText) {
