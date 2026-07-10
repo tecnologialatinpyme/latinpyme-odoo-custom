@@ -87,36 +87,10 @@ function syncFiscalFields(form, { finalizeVat = true } = {}) {
                 vatInput.setSelectionRange(newPos, newPos);
             }
         }
-        // Once the customer finishes typing (blur/change), place the dash
-        // before the last digit if they didn't type one themselves. This is
-        // pure formatting: the digit itself is never changed, only where the
-        // dash goes - only applies for Colombia with NIT selected, since
-        // other identification types (Cedula, Pasaporte, ...) don't use a
-        // check digit at all.
-        if (finalizeVat && colombiaSelected) {
-            if (isNitIdentificationTypeSelected(form)) {
-                const plainDigits = vatInput.value.match(/^(\d{2,})$/);
-                if (plainDigits) {
-                    vatInput.value = `${plainDigits[1].slice(0, -1)}-${plainDigits[1].slice(-1)}`;
-                }
-            } else {
-                // Not a NIT (anymore): strip a leftover dash from a previous
-                // Tipo de Identificacion so the value is a plain number.
-                const dashed = vatInput.value.match(/^(\d+)-(\d)$/);
-                if (dashed) {
-                    vatInput.value = dashed[1] + dashed[2];
-                }
-            }
-        }
     }
     const vat = getControlValue(form, "vat");
     if (vat) {
         ensureHiddenInput(form, "vat", vat);
-    }
-    if (colombiaSelected && isNitIdentificationTypeSelected(form)) {
-        warnOnColombianNitMismatch(form, vat);
-    } else {
-        warnOnColombianNitMismatch(form, "");
     }
 
     const companyTypeTouchedByUser = form.dataset.lpTiendaCompanyTypeTouched === "1";
@@ -136,32 +110,59 @@ function syncFiscalFields(form, { finalizeVat = true } = {}) {
     // defaults to Cedula de ciudadania and Empresa defaults to NIT - but only
     // until the customer manually picks a different option themselves; from
     // then on their choice is respected until Tipo Cliente changes again.
+    // This has to run *before* the vat dash formatting/validation below,
+    // since that logic needs to know the identification type as it will be
+    // for this pass, not the (possibly stale) value from before this sync.
     const idTypeTouchedByUser = form.dataset.lpTiendaIdTypeTouched === "1";
-    if (idTypeTouchedByUser) {
-        return;
-    }
-
-    if (companyType === "person") {
-        const cedulaValue = setSelectValueByText(form, "l10n_latam_identification_type_id", "ciudadania");
-        if (cedulaValue) {
-            ensureHiddenInput(form, "l10n_latam_identification_type_id", cedulaValue);
-            return;
+    if (!idTypeTouchedByUser) {
+        if (companyType === "person") {
+            const cedulaValue = setSelectValueByText(form, "l10n_latam_identification_type_id", "ciudadania");
+            if (cedulaValue) {
+                ensureHiddenInput(form, "l10n_latam_identification_type_id", cedulaValue);
+            }
+        } else {
+            const nitType = inferNitIdentificationTypeValue(form);
+            if (nitType) {
+                const nitTypeControl = form.querySelector?.('select[name="l10n_latam_identification_type_id"]');
+                if (nitTypeControl && nitTypeControl.value !== nitType) {
+                    nitTypeControl.value = nitType;
+                    nitTypeControl.dispatchEvent(new Event("change", { bubbles: true }));
+                }
+                ensureHiddenInput(form, "l10n_latam_identification_type_id", nitType);
+            } else if (vat && colombiaSelected) {
+                const nitValue = setSelectValueByText(form, "l10n_latam_identification_type_id", "NIT");
+                if (nitValue) {
+                    ensureHiddenInput(form, "l10n_latam_identification_type_id", nitValue);
+                }
+            }
         }
     }
 
-    const nitType = inferNitIdentificationTypeValue(form);
-    if (nitType) {
-        const nitTypeControl = form.querySelector?.('select[name="l10n_latam_identification_type_id"]');
-        if (nitTypeControl && nitTypeControl.value !== nitType) {
-            nitTypeControl.value = nitType;
-            nitTypeControl.dispatchEvent(new Event("change", { bubbles: true }));
+    // Once the customer finishes typing (blur/change), place the dash
+    // before the last digit if they didn't type one themselves. This is
+    // pure formatting: the digit itself is never changed, only where the
+    // dash goes - only applies for Colombia with NIT selected, since other
+    // identification types (Cedula, Pasaporte, ...) don't use a check digit
+    // at all.
+    if (vatInput && finalizeVat && colombiaSelected) {
+        if (isNitIdentificationTypeSelected(form)) {
+            const plainDigits = vatInput.value.match(/^(\d{2,})$/);
+            if (plainDigits) {
+                vatInput.value = `${plainDigits[1].slice(0, -1)}-${plainDigits[1].slice(-1)}`;
+            }
+        } else {
+            // Not a NIT (anymore): strip a leftover dash from a previous
+            // Tipo de Identificacion so the value is a plain number.
+            const dashed = vatInput.value.match(/^(\d+)-(\d)$/);
+            if (dashed) {
+                vatInput.value = dashed[1] + dashed[2];
+            }
         }
-        ensureHiddenInput(form, "l10n_latam_identification_type_id", nitType);
-    } else if (vat && colombiaSelected) {
-        const nitValue = setSelectValueByText(form, "l10n_latam_identification_type_id", "NIT");
-        if (nitValue) {
-            ensureHiddenInput(form, "l10n_latam_identification_type_id", nitValue);
-        }
+    }
+    if (colombiaSelected && isNitIdentificationTypeSelected(form)) {
+        warnOnColombianNitMismatch(form, getControlValue(form, "vat"));
+    } else {
+        warnOnColombianNitMismatch(form, "");
     }
 }
 
