@@ -390,6 +390,43 @@
   }
 }
 
+.lp-tienda-nav-toggle {
+  display: none;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid var(--lp-tienda-border);
+  border-radius: 7px;
+  background: #fff;
+  cursor: pointer;
+
+  &__bar {
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--lp-tienda-ink);
+    transition: transform .2s ease, opacity .2s ease;
+  }
+
+  &.is-active {
+    .lp-tienda-nav-toggle__bar:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .lp-tienda-nav-toggle__bar:nth-child(2) {
+      opacity: 0;
+    }
+
+    .lp-tienda-nav-toggle__bar:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  }
+}
+
 .lp-tienda-nav {
   border-top: 1px solid var(--lp-tienda-border);
 }
@@ -1588,12 +1625,84 @@
     border-left: 0;
   }
 
-  .lp-tienda-social {
+  .lp-tienda-masthead__actions {
+    flex-wrap: nowrap;
     justify-content: flex-start;
+    gap: 10px;
   }
 
-  .lp-tienda-masthead__actions {
+  .lp-tienda-social {
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
     justify-content: flex-start;
+    overflow-x: auto;
+    gap: 8px;
+  }
+
+  .lp-tienda-nav-toggle {
+    display: inline-flex;
+  }
+
+  // Hover-based dropdowns don't exist on touch devices: the whole nav
+  // collapses behind the hamburger button, and each dropdown item expands
+  // on click (toggled by mobile_nav.js) instead of always showing inline.
+  .lp-tienda-nav {
+    display: none;
+    border-top: 1px solid var(--lp-tienda-border);
+    background: #fff;
+
+    &.is-open {
+      display: block;
+    }
+  }
+
+  .lp-tienda-nav__inner {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+    gap: 0;
+    padding-block: 6px;
+  }
+
+  .lp-tienda-nav__item {
+    width: 100%;
+  }
+
+  .lp-tienda-nav__link,
+  .lp-tienda-nav__toggle {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 6px;
+  }
+
+  .lp-tienda-nav__link::after,
+  .lp-tienda-nav__toggle::after {
+    display: none;
+  }
+
+  .lp-tienda-nav__dropdown {
+    position: static;
+    display: none;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin-top: 0;
+    padding-left: 14px;
+    border: 0;
+    box-shadow: none;
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+  }
+
+  .lp-tienda-nav__item--dropdown.is-open {
+    .lp-tienda-nav__dropdown {
+      display: grid;
+    }
+
+    .lp-tienda-nav__toggle i {
+      transform: rotate(180deg);
+    }
   }
 }
 
@@ -1606,37 +1715,9 @@
     font-size: 22px;
   }
 
-  .lp-tienda-nav__inner {
-    justify-content: flex-start;
-    gap: 4px;
-    overflow-x: auto;
-    overflow-y: visible;
-    padding-block: 8px;
-  }
-
-  .lp-tienda-nav__item {
-    align-self: flex-start;
-  }
-
   .lp-tienda-nav__link,
   .lp-tienda-nav__toggle {
     min-height: 46px;
-    padding: 0 14px;
-
-    &::after {
-      right: 14px;
-      left: 14px;
-    }
-  }
-
-  .lp-tienda-nav__dropdown {
-    position: static;
-    min-width: 220px;
-    margin-top: 10px;
-    opacity: 1;
-    pointer-events: auto;
-    transform: none;
-    visibility: visible;
   }
 
   .lp-tienda-promo-banner--image-only {

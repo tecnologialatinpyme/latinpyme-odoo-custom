@@ -54,9 +54,20 @@
         <div class="lp-tienda-masthead__actions">
           <t t-call="latinpyme_tienda_theme.lp_tienda_social_links"/>
           <t t-call="latinpyme_tienda_theme.lp_tienda_cart_link"/>
+          <button
+            type="button"
+            class="lp-tienda-nav-toggle"
+            aria-label="Abrir menu"
+            aria-expanded="false"
+            aria-controls="lp-tienda-nav-panel"
+          >
+            <span class="lp-tienda-nav-toggle__bar"/>
+            <span class="lp-tienda-nav-toggle__bar"/>
+            <span class="lp-tienda-nav-toggle__bar"/>
+          </button>
         </div>
       </div>
-      <nav class="lp-tienda-nav" aria-label="Navegacion principal de Tienda">
+      <nav id="lp-tienda-nav-panel" class="lp-tienda-nav" aria-label="Navegacion principal de Tienda">
         <div class="lp-tienda-container lp-tienda-nav__inner">
           <t t-foreach="main_menu" t-as="nav_item">
             <t t-if="nav_item.get('children')">
