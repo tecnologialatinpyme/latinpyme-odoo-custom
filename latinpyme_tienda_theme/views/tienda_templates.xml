@@ -469,7 +469,7 @@
                 </div>
                 <div class="lp-tienda-allies__group" aria-hidden="true">
                   <figure class="lp-tienda-ally-card" t-foreach="allies" t-as="ally">
-                    <img t-if="ally.get('logo_url')" t-att-src="ally['logo_url']" t-att-alt="ally['name']" loading="lazy"/>
+                    <img t-if="ally.get('logo_url')" t-att-src="ally['logo_url']" t-att-alt="ally['name']" loading="lazy" example-branc-prod="true"/>
                     <span t-else="" t-out="ally['name']"/>
                   </figure>
                 </div>
