@@ -456,7 +456,7 @@
 
           <section class="lp-tienda-container lp-tienda-block lp-tienda-allies" aria-label="Aliados">
             <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
-              <t t-set="title">Aliados...</t>
+              <t t-set="title">Empresas que confían en nosotros</t>
             </t>
             <div class="lp-tienda-allies__viewport">
               <span class="lp-tienda-allies__control" aria-hidden="true"><i class="fa fa-angle-left"/></span>
