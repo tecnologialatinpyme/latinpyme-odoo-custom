@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- noupdate="1": se aplica una sola vez al instalar/actualizar el modulo.
+         Despues de eso, si alguien ajusta el color/tipografia manualmente desde
+         Ajustes > Configurar plantilla de documento, esa actualizacion de
+         modulo ya no lo vuelve a pisar. -->
+    <data noupdate="1">
+        <record id="base.main_company" model="res.company">
+            <field name="external_report_layout_id" ref="web.external_layout_bold"/>
+            <field name="primary_color">#C8001A</field>
+            <field name="secondary_color">#10141B</field>
+            <field name="font">Montserrat</field>
+        </record>
+    </data>
+</odoo>
