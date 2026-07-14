@@ -27,6 +27,7 @@ mostrar carruseles de productos sin crear modelos nuevos.
         "views/backend_views.xml",
         "views/tienda_templates.xml",
         "views/shop_templates.xml",
+        "views/invoice_templates.xml",
     ],
     "assets": {
         "web.assets_frontend": [
