@@ -17,14 +17,17 @@ mostrar carruseles de productos sin crear modelos nuevos.
     "depends": [
         "website",
         "website_sale",
+        "account",
     ],
     "data": [
         "security/ir.model.access.csv",
         "data/tienda_config.xml",
         "data/tienda_home_blocks.xml",
+        "data/res_company_branding.xml",
         "views/backend_views.xml",
         "views/tienda_templates.xml",
         "views/shop_templates.xml",
+        "views/invoice_templates.xml",
     ],
     "assets": {
         "web.assets_frontend": [
