@@ -5,18 +5,22 @@
              pide ["address", "name"] al widget de contacto: el telefono nunca se
              muestra aunque el contacto lo tenga cargado. Se agrega "phone" a los
              cuatro bloques de direccion (facturacion x3 + envio) sin tocar nada
-             mas del layout. -->
+             mas del layout.
+
+             Nota: el <address> de facturacion vive dentro de un <t t-set="address">
+             (un nivel de mas que la direccion de envio), por eso el xpath usa //
+             (descendiente) en vez de / (hijo directo) para esos tres casos. -->
         <template id="report_invoice_document_show_phone" inherit_id="account.report_invoice_document">
             <xpath expr="//div[@name='shipping_address_block']//div[@t-field='o.partner_shipping_id']" position="attributes">
                 <attribute name="t-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}</attribute>
             </xpath>
-            <xpath expr="//div[@name='address_not_same_as_shipping']/address" position="attributes">
+            <xpath expr="//div[@name='address_not_same_as_shipping']//address" position="attributes">
                 <attribute name="t-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}</attribute>
             </xpath>
-            <xpath expr="//div[@name='address_same_as_shipping']/address" position="attributes">
+            <xpath expr="//div[@name='address_same_as_shipping']//address" position="attributes">
                 <attribute name="t-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}</attribute>
             </xpath>
-            <xpath expr="//div[@name='no_shipping']/address" position="attributes">
+            <xpath expr="//div[@name='no_shipping']//address" position="attributes">
                 <attribute name="t-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}</attribute>
             </xpath>
         </template>
