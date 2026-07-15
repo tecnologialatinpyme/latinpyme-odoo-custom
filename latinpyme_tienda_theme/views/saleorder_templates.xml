@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Mismo gap que en la factura pero en otra plantilla: el bloque de
+             direccion principal de la orden de venta/cotizacion (doc.partner_id)
+             tampoco pide "phone". El bloque alterno (partner_invoice_id /
+             partner_shipping_id, cuando difieren de partner_id) ya lo incluye
+             de forma nativa. -->
+        <template id="report_saleorder_document_show_phone" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//div[@t-field='doc.partner_id']" position="attributes">
+                <attribute name="t-options">{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}</attribute>
+            </xpath>
+        </template>
+    </data>
+</odoo>

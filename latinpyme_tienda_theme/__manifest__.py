@@ -18,6 +18,7 @@ mostrar carruseles de productos sin crear modelos nuevos.
         "website",
         "website_sale",
         "account",
+        "sale",
     ],
     "data": [
         "security/ir.model.access.csv",
@@ -28,6 +29,7 @@ mostrar carruseles de productos sin crear modelos nuevos.
         "views/tienda_templates.xml",
         "views/shop_templates.xml",
         "views/invoice_templates.xml",
+        "views/saleorder_templates.xml",
     ],
     "assets": {
         "web.assets_frontend": [
