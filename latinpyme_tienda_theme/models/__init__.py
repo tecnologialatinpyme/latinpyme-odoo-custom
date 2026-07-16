@@ -2,3 +2,4 @@
 
 from . import tienda_models
 from . import sale_order
+from . import payment_transaction

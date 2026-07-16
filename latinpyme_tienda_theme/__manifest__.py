@@ -19,6 +19,7 @@ mostrar carruseles de productos sin crear modelos nuevos.
         "website_sale",
         "account",
         "sale",
+        "payment_mercado_pago",
     ],
     "data": [
         "security/ir.model.access.csv",
