@@ -582,6 +582,42 @@ function hideObligationsControl(form) {
     });
 }
 
+// Some countries (Colombia among them, via the native base_address_extended
+// module) swap the free-text "Ciudad" input for a <select name="city_id">
+// tied to a res.city catalog. Odoo only copies that selection into the real
+// "city" field (what res.partner.city actually stores) through the backend
+// form's onchange - a mechanism that never fires on the public checkout,
+// which posts the raw form directly. Without this, "city" reaches the
+// server empty no matter what the customer picks, even though "city_id" is
+// submitted alongside it (res.partner has no such field to receive it).
+function syncCityIdField(form) {
+    const cityIdField = form?.elements?.city_id;
+    const cityField = form?.elements?.city;
+    if (!cityIdField || !cityField) {
+        return;
+    }
+    const selectedOption = cityIdField.options?.[cityIdField.selectedIndex];
+    const cityName = cityIdField.value && selectedOption ? selectedOption.textContent.trim() : "";
+    if (cityField.value !== cityName) {
+        cityField.value = cityName;
+        cityField.dispatchEvent(new Event("input", { bubbles: true }));
+        cityField.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+}
+
+// Bound on the <select> element itself (not the form) so that if Odoo
+// replaces it with a new node (e.g. after switching País), the fresh
+// element gets its own listener instead of being skipped as "already bound".
+function bindCityIdSync(form) {
+    const cityIdField = form?.elements?.city_id;
+    if (!cityIdField || cityIdField.dataset.lpTiendaCityIdSyncBound === "1") {
+        return;
+    }
+    cityIdField.dataset.lpTiendaCityIdSyncBound = "1";
+    cityIdField.addEventListener("change", () => syncCityIdField(form), true);
+    syncCityIdField(form);
+}
+
 function applyAddressAdjustments(form) {
     if (!form) {
         return;
@@ -590,6 +626,7 @@ function applyAddressAdjustments(form) {
     makeZipOptional(form);
     hideObligationsControl(form);
     arrangeAddressFields(form);
+    bindCityIdSync(form);
 }
 
 function arrangeAddressFields(form) {
