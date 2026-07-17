@@ -274,46 +274,128 @@
         }
       </style>
       <style t-if="(request.httprequest.path or '').rstrip('/') == '/patrocinio-corporativo'">
+        /* Esta pagina es un bloque de codigo embebido (Website Builder), con su
+           propia paleta via variables CSS cargada en el body, despues del head.
+           Sobreescribimos esas variables (y las reglas que ya venian con el color
+           incorrecto en duro) con !important para que gane sobre el original,
+           y usamos solo los 2 colores reales de marca: rojo #C8001A y tinta #10141B. */
+        #wrapwrap #wrap {
+          --lp-rojo: #C8001A !important;
+          --uni-azul: #10141B !important;
+          --borde: #E7E9EE !important;
+          --gris: #F7F8FA !important;
+        }
+
+        #wrapwrap #wrap .section {
+          padding: 48px 0 !important;
+        }
+
         #wrapwrap #wrap .section,
         #wrapwrap #wrap .section p,
         #wrapwrap #wrap .section li,
         #wrapwrap #wrap .card,
         #wrapwrap #wrap .prog-card,
         #wrapwrap #wrap .prog-content {
-          color: #1a1f2b !important;
-          -webkit-text-fill-color: #1a1f2b !important;
+          color: #10141B !important;
+          -webkit-text-fill-color: #10141B !important;
         }
 
         #wrapwrap #wrap .section h2,
-        #wrapwrap #wrap .section h3,
-        #wrapwrap #wrap .prog-btn,
-        #wrapwrap #wrap .prog-btn .t {
-          color: #1a1f2b !important;
-          -webkit-text-fill-color: #1a1f2b !important;
+        #wrapwrap #wrap .section h3 {
+          color: #10141B !important;
+          -webkit-text-fill-color: #10141B !important;
+          font-weight: 800 !important;
         }
 
-        #wrapwrap #wrap .sub,
-        #wrapwrap #wrap .chip {
-          color: #495163 !important;
-          -webkit-text-fill-color: #495163 !important;
+        #wrapwrap #wrap .sub {
+          color: #5A616C !important;
+          -webkit-text-fill-color: #5A616C !important;
         }
 
-        #wrapwrap #wrap .prog-btn .plus,
-        #wrapwrap #wrap .bullet li .mes {
-          color: #0a4d8c !important;
-          -webkit-text-fill-color: #0a4d8c !important;
+        /* Hero: degrade sutil con el rojo real de marca, mas espacio y esquinas
+           redondeadas abajo para que se sienta menos "banner plano". */
+        #wrapwrap #wrap .hero {
+          background: linear-gradient(135deg, #C8001A 0%, #A5000F 100%) !important;
+          padding: 64px 24px !important;
+          border-radius: 0 0 28px 28px;
         }
-
         #wrapwrap #wrap .hero,
-        #wrapwrap #wrap .hero *,
-        #wrapwrap #wrap .btn.secondary {
+        #wrapwrap #wrap .hero * {
           color: #fff !important;
           -webkit-text-fill-color: #fff !important;
         }
+        #wrapwrap #wrap .hero h1 {
+          font-weight: 800 !important;
+        }
+        #wrapwrap #wrap .hero .eyebrow {
+          background: rgba(255, 255, 255, .12);
+          border-color: rgba(255, 255, 255, .4) !important;
+        }
 
+        #wrapwrap #wrap .btn {
+          transition: transform .18s ease, box-shadow .18s ease;
+          box-shadow: 0 2px 6px rgba(16, 20, 27, .12);
+        }
         #wrapwrap #wrap .btn.primary {
-          color: #e30613 !important;
-          -webkit-text-fill-color: #e30613 !important;
+          color: #C8001A !important;
+          -webkit-text-fill-color: #C8001A !important;
+        }
+        #wrapwrap #wrap .btn.secondary {
+          color: #fff !important;
+          -webkit-text-fill-color: #fff !important;
+          border-width: 2px;
+        }
+        #wrapwrap #wrap .btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(16, 20, 27, .18);
+        }
+        #wrapwrap #wrap .btn.secondary:hover {
+          background: rgba(255, 255, 255, .12) !important;
+        }
+
+        /* Tarjetas: borde suave + sombra en vez del borde negro grueso original,
+           con una leve elevacion al pasar el mouse para que se sienta premium. */
+        #wrapwrap #wrap .card,
+        #wrapwrap #wrap .prog-card,
+        #wrapwrap #wrap .kpi {
+          border: 1px solid #E7E9EE !important;
+          box-shadow: 0 1px 2px rgba(16, 20, 27, .04), 0 6px 16px rgba(16, 20, 27, .05);
+          transition: transform .18s ease, box-shadow .18s ease;
+        }
+        #wrapwrap #wrap .card:hover,
+        #wrapwrap #wrap .prog-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 4px 10px rgba(16, 20, 27, .06), 0 14px 28px rgba(16, 20, 27, .09);
+        }
+
+        #wrapwrap #wrap .kpi {
+          border-left: 4px solid #C8001A !important;
+          font-weight: 700 !important;
+        }
+
+        #wrapwrap #wrap .chip {
+          background: #FDEEEF !important;
+          border: 1px solid #F6D8DB !important;
+          color: #10141B !important;
+          -webkit-text-fill-color: #10141B !important;
+        }
+
+        #wrapwrap #wrap .prog-btn,
+        #wrapwrap #wrap .prog-btn .t {
+          color: #10141B !important;
+          -webkit-text-fill-color: #10141B !important;
+          transition: background .18s ease;
+        }
+        #wrapwrap #wrap .prog-btn:hover {
+          background: #FAFBFC !important;
+        }
+        #wrapwrap #wrap .prog-btn .plus {
+          color: #C8001A !important;
+          -webkit-text-fill-color: #C8001A !important;
+        }
+        #wrapwrap #wrap .bullet li .mes {
+          color: #C8001A !important;
+          -webkit-text-fill-color: #C8001A !important;
         }
 
         #wrapwrap #wrap .cta-sticky .btn,
@@ -322,6 +404,17 @@
         #wrapwrap #wrap .cta-sticky .btn.primary:focus {
           color: #fff !important;
           -webkit-text-fill-color: #fff !important;
+          background: #C8001A !important;
+          border-color: #C8001A !important;
+          box-shadow: 0 8px 20px rgba(200, 0, 26, .28);
+        }
+        #wrapwrap #wrap .cta-sticky .btn:hover {
+          background: #B90012 !important;
+          border-color: #B90012 !important;
+        }
+
+        #wrapwrap #wrap .separator {
+          background: #C8001A !important;
         }
       </style>
     </xpath>
