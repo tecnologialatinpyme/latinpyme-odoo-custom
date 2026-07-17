@@ -267,7 +267,9 @@
         header#top,
         footer#bottom,
         .o_header_standard,
-        .o_footer {
+        .o_footer,
+        header.lp-header,
+        footer#lp-footer-v14 {
           display: none !important;
         }
       </style>
