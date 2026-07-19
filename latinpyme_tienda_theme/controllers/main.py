@@ -616,7 +616,9 @@ class LatinpymeTiendaTermsRedirect(TermsController):
     # own route, unrelated to website.layout, so none of the Tienda header/
     # footer fixes ever reach it) - overriding the endpoint here always wins
     # because it replaces the code behind the existing route instead of
-    # trying to register a second, competing one.
+    # trying to register a second, competing one. Render the same template
+    # /terminos-de-uso uses (not a redirect) so /terms keeps its own URL
+    # while showing identical content and design.
     def terms_conditions(self, **kwargs):
         website = getattr(request, "website", False)
         host = (request.httprequest.host or "").split(":", 1)[0].lower()
@@ -625,5 +627,13 @@ class LatinpymeTiendaTermsRedirect(TermsController):
         is_tienda = host == "tienda.latinpyme.com" or website_domain == "tienda.latinpyme.com"
         is_tienda = is_tienda or ("tienda" in website_name and "latinpyme" in website_name)
         if is_tienda:
-            return request.redirect("/terminos-de-uso", code=301)
+            layout_values = request.env["latinpyme.tienda.config"].sudo().get_layout_context(website)
+            return request.render(
+                "latinpyme_tienda_theme.lp_tienda_terms_page",
+                {
+                    "title": "Términos de uso | Tienda LatinPyme",
+                    "website_meta_description": "Términos de uso de Tienda LatinPyme.",
+                    **layout_values,
+                },
+            )
         return super().terms_conditions(**kwargs)
