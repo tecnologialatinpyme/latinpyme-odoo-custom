@@ -75,5 +75,19 @@
       <field name="url">/terminos-de-uso</field>
       <field name="sequence">30</field>
     </record>
+
+    <!-- /terms actualmente resuelve a una pagina/ruta nativa distinta (sin
+         header/footer de Tienda, titulo en ingles) en vez de nuestro
+         controlador compartido con /terminos-de-uso. Un redirect_type 301/302
+         no alcanza a interceptarla porque esa ruta si hace match (no cae al
+         fallback donde Odoo revisa esos dos tipos); 308 si se registra
+         directo en la tabla de rutas, por eso es el unico tipo que gana. -->
+    <record id="tienda_redirect_terms_to_terminos_de_uso" model="website.rewrite">
+      <field name="name">Redirigir /terms a /terminos-de-uso</field>
+      <field name="url_from">/terms</field>
+      <field name="url_to">/terminos-de-uso</field>
+      <field name="redirect_type">308</field>
+      <field name="website_id" search="[('domain', 'like', 'tienda.latinpyme.com')]"/>
+    </record>
   </data>
 </odoo>
