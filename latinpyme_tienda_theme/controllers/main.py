@@ -5,6 +5,7 @@ import logging
 from pathlib import Path
 
 from odoo import fields, http
+from odoo.addons.account.controllers.terms import TermsController
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 from odoo.addons.website.controllers.main import Website
 from odoo.http import request
@@ -608,3 +609,21 @@ class LatinpymeTiendaController(Website):
     @http.route("/tienda", type="http", auth="public", website=True, sitemap=True)
     def tienda_home(self, **kwargs):
         return self._render_tienda_home()
+
+
+class LatinpymeTiendaTermsRedirect(TermsController):
+    # /terms is natively owned by account/controllers/terms.py (registers its
+    # own route, unrelated to website.layout, so none of the Tienda header/
+    # footer fixes ever reach it) - overriding the endpoint here always wins
+    # because it replaces the code behind the existing route instead of
+    # trying to register a second, competing one.
+    def terms_conditions(self, **kwargs):
+        website = getattr(request, "website", False)
+        host = (request.httprequest.host or "").split(":", 1)[0].lower()
+        website_domain = (getattr(website, "domain", "") or "").split(":", 1)[0].lower()
+        website_name = (getattr(website, "name", "") or "").lower()
+        is_tienda = host == "tienda.latinpyme.com" or website_domain == "tienda.latinpyme.com"
+        is_tienda = is_tienda or ("tienda" in website_name and "latinpyme" in website_name)
+        if is_tienda:
+            return request.redirect("/terminos-de-uso", code=301)
+        return super().terms_conditions(**kwargs)
