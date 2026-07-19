@@ -107,6 +107,7 @@
           </button>
         </form>
         <nav t-if="category" class="lp-shop-catalog-chips lp-category-chips" aria-label="Categorias de tienda">
+          <a href="/shop">Todos</a>
           <a href="/shop/category/talleres-6" t-att-class="'is-active' if category.id == 6 else ''">Talleres</a>
           <a href="/shop/category/1" t-att-class="'is-active' if category.id == 1 else ''">Auditoria</a>
           <a href="/shop/category/2" t-att-class="'is-active' if category.id == 2 else ''">Seguridad Vial</a>
