@@ -57,12 +57,27 @@ function initProductCarousel(section) {
     let dots = [];
 
     function currentPage() {
+        // The last page's scroll offset almost never lines up with
+        // page * pageSize * step (the browser clamps scrollLeft to
+        // scrollWidth - clientWidth, which is rarely an exact multiple of
+        // the slide step) - check the real start/end bounds first instead
+        // of trusting the arithmetic estimate at the edges.
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        if (maxScroll <= 0) {
+            return 0;
+        }
+        if (track.scrollLeft >= maxScroll - 1) {
+            return pageCount - 1;
+        }
+        if (track.scrollLeft <= 1) {
+            return 0;
+        }
         const step = getSlideStep(track);
         if (!step) {
             return 0;
         }
         const approxIndex = Math.round(track.scrollLeft / step);
-        return Math.min(pageCount - 1, Math.round(approxIndex / pageSize));
+        return Math.min(pageCount - 2, Math.max(0, Math.round(approxIndex / pageSize)));
     }
 
     function buildDots() {
@@ -84,13 +99,6 @@ function initProductCarousel(section) {
         dots.forEach((dot, index) => dot.classList.toggle("is-active", index === page));
     }
 
-    function updateArrows() {
-        const atStart = track.scrollLeft <= 1;
-        const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
-        prevBtn.classList.toggle("is-disabled", atStart);
-        nextBtn.classList.toggle("is-disabled", atEnd);
-    }
-
     function refresh() {
         pageSize = getPageSize(track);
         pageCount = getPageCount(track, pageSize);
@@ -99,14 +107,17 @@ function initProductCarousel(section) {
         nextBtn.classList.toggle("lp-tienda-product-carousel__arrow--hidden", !hasOverflow);
         buildDots();
         updateActiveDot();
-        updateArrows();
     }
 
+    // Arrows never disable/hide at the edges - past either end they wrap
+    // around to the opposite end instead, so navigation feels infinite.
     prevBtn.addEventListener("click", () => {
-        scrollToPage(track, Math.max(0, currentPage() - 1), pageSize, !prefersReducedMotion);
+        const page = currentPage();
+        scrollToPage(track, page <= 0 ? pageCount - 1 : page - 1, pageSize, !prefersReducedMotion);
     });
     nextBtn.addEventListener("click", () => {
-        scrollToPage(track, Math.min(pageCount - 1, currentPage() + 1), pageSize, !prefersReducedMotion);
+        const page = currentPage();
+        scrollToPage(track, page >= pageCount - 1 ? 0 : page + 1, pageSize, !prefersReducedMotion);
     });
 
     let scrollTimer = null;
@@ -114,10 +125,7 @@ function initProductCarousel(section) {
         "scroll",
         () => {
             window.clearTimeout(scrollTimer);
-            scrollTimer = window.setTimeout(() => {
-                updateActiveDot();
-                updateArrows();
-            }, 80);
+            scrollTimer = window.setTimeout(updateActiveDot, 80);
         },
         { passive: true }
     );
