@@ -75,5 +75,15 @@
       <field name="url">/terminos-de-uso</field>
       <field name="sequence">30</field>
     </record>
+
+    <!-- El nombre mostrado en el header/breadcrumb/pills de estas categorias
+         ya esta corregido via lp_tienda_display_name (controllers/main.py),
+         pero muchos widgets NATIVOS de website_sale (buscador, "sin
+         resultados", etc.) leen category.name directo, sin pasar por ese
+         override - exponiendo el nombre viejo (ej. "Buscando X en
+         Webinars"). Se corrige el campo real en la fuente para que quede
+         alineado en todos lados, no solo donde nuestro tema lo intercepta. -->
+    <function model="product.public.category" name="write" eval="[[6], {'name': 'Talleres'}]"/>
+    <function model="product.public.category" name="write" eval="[[5], {'name': 'FlashTraining'}]"/>
   </data>
 </odoo>
