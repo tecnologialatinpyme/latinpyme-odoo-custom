@@ -876,12 +876,6 @@
     color: var(--lp-tienda-red);
   }
 
-  &.is-disabled {
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-  }
-
   &.lp-tienda-product-carousel__arrow--hidden {
     display: none;
   }
