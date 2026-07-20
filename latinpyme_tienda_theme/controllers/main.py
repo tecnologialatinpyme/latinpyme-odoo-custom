@@ -670,29 +670,38 @@ class LatinpymeTiendaController(Website):
                 {
                     "icon": "fa-headset",
                     "title": "Soporte",
+                    "summary": "Tu agente responde consultas 24/7 con el tono de tu marca.",
                     "bullets": [
                         "Respuestas precisas y consistentes.",
                         "Escalamiento a humano con contexto.",
                         "Historial y trazabilidad.",
                     ],
+                    "href": "#lp-tienda-agente-ia-agenda",
+                    "button_label": "Agendar cita aquí",
                 },
                 {
                     "icon": "fa-bullseye",
                     "title": "Leads",
+                    "summary": "Convierte visitantes en oportunidades calificadas, sin intervención manual.",
                     "bullets": [
                         "Califica leads con preguntas clave.",
                         "Agenda citas automáticamente.",
                         "Sincroniza con tu CRM o cualquier otra plataforma.",
                     ],
+                    "href": "#lp-tienda-agente-ia-agenda",
+                    "button_label": "Agendar cita aquí",
                 },
                 {
                     "icon": "fa-cogs",
                     "title": "Operación interna",
+                    "summary": "Automatiza tareas repetitivas para que tu equipo se enfoque en lo importante.",
                     "bullets": [
                         "Captura y actualiza registros.",
                         "Orquesta flujos y aprobaciones.",
                         "Reportes automáticos.",
                     ],
+                    "href": "#lp-tienda-agente-ia-agenda",
+                    "button_label": "Agendar cita aquí",
                 },
             ],
             "phases": [

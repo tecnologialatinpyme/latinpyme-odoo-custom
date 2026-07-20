@@ -165,6 +165,22 @@
     </article>
   </template>
 
+  <template id="lp_tienda_step_card" name="Tienda LatinPyme Step Card">
+    <!-- Variante reutilizable de lp_tienda_solution_card para secuencias de
+         pasos/fases (sin icono ni CTA): misma barra superior roja con texto
+         blanco, pero mostrando "01 · Nombre del paso" en vez de un icono, y
+         solo un parrafo de descripcion en el cuerpo. Espera un dict "step"
+         con "label" (texto de la barra) y "text" (descripcion). -->
+    <article class="lp-tienda-step-card">
+      <div class="lp-tienda-step-card__media">
+        <span t-out="step['label']"/>
+      </div>
+      <div class="lp-tienda-step-card__body">
+        <p t-out="step['text']"/>
+      </div>
+    </article>
+  </template>
+
   <template id="lp_tienda_ad_slot" name="Tienda LatinPyme Ad Slot">
     <aside t-attf-class="lp-tienda-ad-slot #{'lp-tienda-ad-slot--side' if banner_position == 'home_side' else ''} #{'lp-tienda-ad-slot--horizontal' if banner_position == 'home_horizontal' else ''}" aria-label="Publicidad">
       <t t-if="banner">

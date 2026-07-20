@@ -49,23 +49,10 @@
               <t t-set="title">¿Qué puedes automatizar con tu Agente IA?</t>
             </t>
             <p class="lp-tienda-landing-section__lead">Casos de uso listos para implementar y personalizar a tu operación.</p>
-            <div class="lp-tienda-feature-grid">
-              <article class="lp-tienda-feature-card" t-foreach="use_cases" t-as="use_case">
-                <span class="lp-tienda-feature-card__icon" aria-hidden="true">
-                  <i t-attf-class="fa #{use_case['icon']}"/>
-                </span>
-                <h3 t-out="use_case['title']"/>
-                <ul>
-                  <li t-foreach="use_case['bullets']" t-as="bullet">
-                    <i class="fa fa-check" aria-hidden="true"/>
-                    <span t-out="bullet"/>
-                  </li>
-                </ul>
-              </article>
-            </div>
-            <div class="lp-tienda-landing-section__cta">
-              <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="appointment_url" t-out="hero['primary_label']"/>
-              <a class="lp-tienda-button lp-tienda-button--secondary" t-att-href="whatsapp_url" target="_blank" rel="noopener" t-out="hero['secondary_label']"/>
+            <div class="lp-tienda-solution-grid lp-tienda-solution-grid--three">
+              <t t-foreach="use_cases" t-as="item">
+                <t t-call="latinpyme_tienda_theme.lp_tienda_solution_card"/>
+              </t>
             </div>
           </section>
 
@@ -74,16 +61,15 @@
               <t t-set="title">Fases de implementación</t>
             </t>
             <div class="lp-tienda-steps">
-              <article class="lp-tienda-steps__item" t-foreach="phases" t-as="phase" t-attf-style="--lp-step: #{phase_index + 1}">
-                <span class="lp-tienda-steps__index" t-out="'%02d' % (phase_index + 1)"/>
-                <h3 t-out="phase['title']"/>
-                <p t-out="phase['text']"/>
-              </article>
+              <t t-foreach="phases" t-as="phase">
+                <t t-set="step" t-value="{'label': '%02d · %s' % (phase_index + 1, phase['title']), 'text': phase['text']}"/>
+                <t t-call="latinpyme_tienda_theme.lp_tienda_step_card"/>
+              </t>
             </div>
           </section>
 
           <section class="lp-tienda-container lp-tienda-block">
-            <div class="lp-tienda-cta-banner">
+            <div class="lp-tienda-cta-banner" id="lp-tienda-agente-ia-agenda">
               <h3>¿Listos para activar tu Agente IA?</h3>
               <div class="lp-tienda-cta-banner__actions">
                 <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="appointment_url" t-out="hero['primary_label']"/>
