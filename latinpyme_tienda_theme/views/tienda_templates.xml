@@ -275,7 +275,7 @@
           display: none !important;
         }
       </style>
-      <style t-if="getattr(request, 'lp_tienda_rendering_error_page', False)">
+      <style t-if="request.env['latinpyme.tienda.config'].sudo().is_current_request_error_page()">
         header#top,
         footer#bottom,
         .o_header_standard,

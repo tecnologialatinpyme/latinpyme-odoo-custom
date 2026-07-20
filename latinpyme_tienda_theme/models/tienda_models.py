@@ -528,10 +528,19 @@ class LatinpymeTiendaConfig(models.Model):
         }
 
     @api.model
+    def is_current_request_error_page(self):
+        # Exposed as a model method (not a raw `getattr(request, ...)` in the
+        # QWeb t-if) because QWeb expressions run without Python builtins -
+        # calling getattr() directly from a template raises KeyError: 'getattr'.
+        from odoo.http import request
+
+        return bool(getattr(request, "lp_tienda_rendering_error_page", False))
+
+    @api.model
     def is_current_request_tienda_shell(self):
         from odoo.http import request
 
-        if getattr(request, "lp_tienda_rendering_error_page", False):
+        if self.is_current_request_error_page():
             # The 404 page (web.frontend_layout) already calls the masthead/
             # footer itself. web.frontend_layout is the shared "primary" QWeb
             # combination root behind website.layout too, so this global
