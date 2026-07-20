@@ -275,6 +275,16 @@
           display: none !important;
         }
       </style>
+      <style t-if="getattr(request, 'lp_tienda_rendering_error_page', False)">
+        header#top,
+        footer#bottom,
+        .o_header_standard,
+        .o_footer,
+        header.lp-header,
+        footer#lp-footer-v14 {
+          display: none !important;
+        }
+      </style>
       <style t-if="(request.httprequest.path or '').rstrip('/') == '/patrocinio-corporativo'">
         /* Esta pagina es un bloque de codigo embebido (Website Builder), con su
            propia paleta via variables CSS cargada en el body, despues del head.
