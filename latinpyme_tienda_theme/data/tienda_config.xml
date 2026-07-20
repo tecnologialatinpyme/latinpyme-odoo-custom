@@ -96,6 +96,6 @@
          sitio), por eso el primer intento con write() directo tampoco se
          reflejaba. fix_legacy_category_names() escribe explicitamente en
          cada idioma instalado. -->
-    <function model="latinpyme.tienda.config" name="fix_legacy_category_names" eval="[[]]"/>
+    <function model="latinpyme.tienda.config" name="fix_legacy_category_names" eval="[]"/>
   </data>
 </odoo>
