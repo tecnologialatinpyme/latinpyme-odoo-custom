@@ -90,9 +90,12 @@
          pero muchos widgets NATIVOS de website_sale (buscador, "sin
          resultados", etc.) leen category.name directo, sin pasar por ese
          override - exponiendo el nombre viejo (ej. "Buscando X en
-         Webinars"). Se corrige el campo real en la fuente para que quede
-         alineado en todos lados, no solo donde nuestro tema lo intercepta. -->
-    <function model="product.public.category" name="write" eval="[[6], {'name': 'Talleres'}]"/>
-    <function model="product.public.category" name="write" eval="[[5], {'name': 'FlashTraining'}]"/>
+         Webinars"). category.name es translate=True (se guarda como jsonb
+         por idioma) - un write() plano solo actualiza el idioma base de
+         la carga de datos, no necesariamente es_419 (el idioma real del
+         sitio), por eso el primer intento con write() directo tampoco se
+         reflejaba. fix_legacy_category_names() escribe explicitamente en
+         cada idioma instalado. -->
+    <function model="latinpyme.tienda.config" name="fix_legacy_category_names" eval="[[]]"/>
   </data>
 </odoo>

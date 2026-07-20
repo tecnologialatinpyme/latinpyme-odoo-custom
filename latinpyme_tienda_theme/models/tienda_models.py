@@ -208,6 +208,25 @@ class LatinpymeTiendaConfig(models.Model):
     brand_label = fields.Char(string="Etiqueta de marca", default="Tienda")
 
     @api.model
+    def fix_legacy_category_names(self):
+        # product.public.category.name is translate=True, stored as jsonb
+        # per language - a plain write() only updates whatever language the
+        # calling context is in (typically the base install language when
+        # run from a data file), not necessarily the language visitors
+        # actually see (es_419 here). Write it under every installed
+        # language explicitly so the real, currently-served translation
+        # always gets corrected too, not just the technical base value.
+        fixes = {6: "Talleres", 5: "FlashTraining"}
+        category_model = self.env["product.public.category"].sudo()
+        lang_codes = self.env["res.lang"].sudo().search([]).mapped("code") or ["en_US"]
+        for category_id, correct_name in fixes.items():
+            category = category_model.browse(category_id)
+            if not category.exists():
+                continue
+            for lang_code in lang_codes:
+                category.with_context(lang=lang_code).write({"name": correct_name})
+
+    @api.model
     def _home_menu_item(self):
         return {
             "name": "Inicio",
