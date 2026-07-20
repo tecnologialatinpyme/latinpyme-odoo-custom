@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Familia de paginas "landing" de Tienda (servicios/soluciones), pensada
+       para reemplazar website.page armadas a mano en el Website Builder por
+       plantillas QWeb consistentes con tienda.scss. /agente-ia es la primera;
+       los componentes de aqui abajo (hero, tarjetas de caso de uso, fases,
+       banner de cierre) estan pensados para reutilizarse en las siguientes. -->
+  <template id="lp_tienda_agente_ia_page" name="Tienda LatinPyme Agente IA">
+    <t t-call="website.layout">
+      <t t-set="no_header" t-value="True"/>
+      <t t-set="no_footer" t-value="True"/>
+      <t t-set="header_visible" t-value="False"/>
+      <t t-set="footer_visible" t-value="False"/>
+      <t t-set="title" t-value="'Agente IA | Tienda LatinPyme'"/>
+      <t t-set="website_meta_description">Atiende, vende y mide 24/7 con un Agente IA para WhatsApp, web y redes sociales.</t>
+      <div id="wrap" class="lp-tienda lp-tienda-landing">
+        <t t-call="latinpyme_tienda_theme.lp_tienda_masthead"/>
+        <main class="lp-tienda-main">
+
+          <section class="lp-tienda-container lp-tienda-landing-hero" aria-label="Agente IA">
+            <div class="lp-tienda-landing-hero__main">
+              <span class="lp-tienda-landing-hero__eyebrow" t-out="hero['eyebrow']"/>
+              <h1>
+                <t t-out="hero['title_lead']"/>
+                <em t-out="hero['title_emphasis']"/>
+              </h1>
+              <p t-out="hero['lead']"/>
+              <div class="lp-tienda-landing-hero__pills">
+                <span t-foreach="hero['pills']" t-as="pill" t-out="pill"/>
+              </div>
+              <div class="lp-tienda-landing-hero__cta">
+                <a class="lp-tienda-button lp-tienda-button--light" t-att-href="hero['primary_url']" t-out="hero['primary_label']"/>
+                <a class="lp-tienda-button lp-tienda-button--outline-light" t-att-href="hero['secondary_url']" target="_blank" rel="noopener" t-out="hero['secondary_label']"/>
+              </div>
+            </div>
+            <div class="lp-tienda-landing-hero__highlights">
+              <div class="lp-tienda-landing-hero__highlight" t-foreach="hero['highlights']" t-as="highlight">
+                <i t-attf-class="fa #{highlight['icon']}" aria-hidden="true"/>
+                <p>
+                  <strong t-out="highlight['strong']"/>
+                  <t t-out="' %s' % highlight['text']"/>
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
+              <t t-set="title">¿Qué puedes automatizar con tu Agente IA?</t>
+            </t>
+            <p class="lp-tienda-landing-section__lead">Casos de uso listos para implementar y personalizar a tu operación.</p>
+            <div class="lp-tienda-feature-grid">
+              <article class="lp-tienda-feature-card" t-foreach="use_cases" t-as="use_case">
+                <span class="lp-tienda-feature-card__icon" aria-hidden="true">
+                  <i t-attf-class="fa #{use_case['icon']}"/>
+                </span>
+                <h3 t-out="use_case['title']"/>
+                <ul>
+                  <li t-foreach="use_case['bullets']" t-as="bullet">
+                    <i class="fa fa-check" aria-hidden="true"/>
+                    <span t-out="bullet"/>
+                  </li>
+                </ul>
+              </article>
+            </div>
+            <div class="lp-tienda-landing-section__cta">
+              <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="appointment_url" t-out="hero['primary_label']"/>
+              <a class="lp-tienda-button lp-tienda-button--secondary" t-att-href="whatsapp_url" target="_blank" rel="noopener" t-out="hero['secondary_label']"/>
+            </div>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
+              <t t-set="title">Fases de implementación</t>
+            </t>
+            <div class="lp-tienda-steps">
+              <article class="lp-tienda-steps__item" t-foreach="phases" t-as="phase" t-attf-style="--lp-step: #{phase_index + 1}">
+                <span class="lp-tienda-steps__index" t-out="'%02d' % (phase_index + 1)"/>
+                <h3 t-out="phase['title']"/>
+                <p t-out="phase['text']"/>
+              </article>
+            </div>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block">
+            <div class="lp-tienda-cta-banner">
+              <h3>¿Listos para activar tu Agente IA?</h3>
+              <div class="lp-tienda-cta-banner__actions">
+                <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="appointment_url" t-out="hero['primary_label']"/>
+                <a class="lp-tienda-button lp-tienda-button--secondary" t-att-href="whatsapp_url" target="_blank" rel="noopener" t-out="hero['secondary_label']"/>
+              </div>
+            </div>
+          </section>
+
+          <section class="lp-tienda-container lp-tienda-block lp-tienda-allies" aria-label="Aliados">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
+              <t t-set="title">Aliados</t>
+            </t>
+            <div class="lp-tienda-allies__viewport">
+              <span class="lp-tienda-allies__control" aria-hidden="true"><i class="fa fa-angle-left"/></span>
+              <div class="lp-tienda-allies__marquee" aria-label="Aliados Agente IA">
+                <div class="lp-tienda-allies__group">
+                  <figure class="lp-tienda-ally-card" t-foreach="allies" t-as="ally">
+                    <img t-if="ally.get('logo_url')" t-att-src="ally['logo_url']" t-att-alt="ally['name']" loading="lazy"/>
+                    <span t-else="" t-out="ally['name']"/>
+                  </figure>
+                </div>
+                <div class="lp-tienda-allies__group" aria-hidden="true">
+                  <figure class="lp-tienda-ally-card" t-foreach="allies" t-as="ally">
+                    <img t-if="ally.get('logo_url')" t-att-src="ally['logo_url']" t-att-alt="ally['name']" loading="lazy"/>
+                    <span t-else="" t-out="ally['name']"/>
+                  </figure>
+                </div>
+              </div>
+              <span class="lp-tienda-allies__control" aria-hidden="true"><i class="fa fa-angle-right"/></span>
+            </div>
+          </section>
+
+        </main>
+        <t t-call="latinpyme_tienda_theme.lp_tienda_footer"/>
+      </div>
+    </t>
+  </template>
+</odoo>

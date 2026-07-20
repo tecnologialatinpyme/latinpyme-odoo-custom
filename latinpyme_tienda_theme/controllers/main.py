@@ -610,6 +610,90 @@ class LatinpymeTiendaController(Website):
     def tienda_home(self, **kwargs):
         return self._render_tienda_home()
 
+    def _agente_ia_values(self):
+        # /agente-ia era una website.page armada a mano en el Website Builder,
+        # con su propio estilo suelto (no pasaba por tienda.scss) - se
+        # reconstruye aqui como plantilla QWeb para que quede consistente con
+        # el resto de Tienda y sea la primera de una familia de paginas
+        # "landing" estandarizadas. El contenido (textos, links de agenda/
+        # WhatsApp, logos de aliados) se preservo tal cual estaba publicado.
+        appointment_url = "/appointment/9"
+        whatsapp_url = "https://wa.link/bmq6tw"
+        layout_values = request.env["latinpyme.tienda.config"].sudo().get_layout_context(getattr(request, "website", False))
+        return {
+            **layout_values,
+            "title": "Agente IA | Tienda LatinPyme",
+            "website_meta_description": "Atiende, vende y mide 24/7 con un Agente IA para WhatsApp, web y redes sociales.",
+            "hero": {
+                "eyebrow": "Agentes IA",
+                "title_lead": "Atiende, vende y mide 24/7 con un ",
+                "title_emphasis": "Agente IA",
+                "lead": "Tu agente IA responde en WhatsApp, web y redes sociales con tu tono y tus reglas.",
+                "pills": ["Soporte", "Agendamiento", "Encuestas", "Integración con CRM"],
+                "primary_label": "Agendar cita aquí",
+                "primary_url": appointment_url,
+                "secondary_label": "Contactar un asesor",
+                "secondary_url": whatsapp_url,
+                "highlights": [
+                    {"icon": "fa-bolt", "strong": "Respuesta inmediata:", "text": "cero esperas para tus clientes."},
+                    {"icon": "fa-comments", "strong": "Marca y tono:", "text": "el agente habla como tu empresa."},
+                    {"icon": "fa-bar-chart", "strong": "Data útil:", "text": "dashboard con métricas para decidir."},
+                    {"icon": "fa-plug", "strong": "Integración:", "text": "CRM/ERP vía API sin fricciones."},
+                ],
+            },
+            "appointment_url": appointment_url,
+            "whatsapp_url": whatsapp_url,
+            "use_cases": [
+                {
+                    "icon": "fa-headset",
+                    "title": "Soporte",
+                    "bullets": [
+                        "Respuestas precisas y consistentes.",
+                        "Escalamiento a humano con contexto.",
+                        "Historial y trazabilidad.",
+                    ],
+                },
+                {
+                    "icon": "fa-bullseye",
+                    "title": "Leads",
+                    "bullets": [
+                        "Califica leads con preguntas clave.",
+                        "Agenda citas automáticamente.",
+                        "Sincroniza con tu CRM o cualquier otra plataforma.",
+                    ],
+                },
+                {
+                    "icon": "fa-cogs",
+                    "title": "Operación interna",
+                    "bullets": [
+                        "Captura y actualiza registros.",
+                        "Orquesta flujos y aprobaciones.",
+                        "Reportes automáticos.",
+                    ],
+                },
+            ],
+            "phases": [
+                {"title": "Diagnóstico", "text": "Revisamos procesos, canales y objetivos para identificar oportunidades y mejoras."},
+                {"title": "Análisis", "text": "Examinamos cómo fluye la información y se ejecutan los procesos."},
+                {"title": "Desarrollo IA", "text": "Estructuramos flujos, documentos y fuentes que alimentan el sistema."},
+                {"title": "Implementación", "text": "Configuramos integraciones y realizamos pruebas funcionales."},
+                {"title": "Capacitación", "text": "Entrenamos al equipo y entregamos guías operativas."},
+                {"title": "Administración", "text": "Monitoreo continuo y mejora basada en datos."},
+            ],
+            "allies": [
+                {"name": "Banco de Occidente", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/GyMmex3WQZm2JalOamZSGgo2b?unique=2b3c040b&v=2"},
+                {"name": "Enlace", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/8k-pLf0nRMyOyIimgTt0awo29?unique=8442d0fc&v=2"},
+                {"name": "Protección", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/YJfXGw8VR-mnb3eyg9bKCgo28?unique=7c525ca1&v=2"},
+                {"name": "Asopagos Jaime Torres", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/rr26jcrBSy2Pcci-R4AqIgo26?unique=a9a715e3&v=2"},
+                {"name": "ACH", "logo_url": "https://tienda.latinpyme.com/web/image/249?filename=enlace.png&model=documents.document"},
+                {"name": "Aporte en Línea", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/qpdl3gIvSlCXux9vfh2Yzgo24?unique=f8021906&v=2"},
+            ],
+        }
+
+    @http.route("/agente-ia", type="http", auth="public", website=True, sitemap=True)
+    def agente_ia_page(self, **kwargs):
+        return request.render("latinpyme_tienda_theme.lp_tienda_agente_ia_page", self._agente_ia_values())
+
 
 class LatinpymeTiendaTermsRedirect(TermsController):
     # /terms is natively owned by account/controllers/terms.py (registers its
