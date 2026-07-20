@@ -4021,6 +4021,14 @@ form.address_autoformat {
     font-size: 18px;
     font-weight: 900;
   }
+
+  p {
+    margin: 4px 0 0;
+    max-width: 52ch;
+    color: var(--lp-tienda-muted);
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
 }
 
 .lp-tienda-cta-banner__actions {
@@ -4029,7 +4037,56 @@ form.address_autoformat {
   gap: 10px;
 }
 
+// Seccion "Beneficios clave": banda roja con tarjetas blancas simples
+// (titulo + descripcion, sin icono). Ver lp_tienda_benefits_section en
+// tienda_templates.xml.
+.lp-tienda-benefits-band {
+  padding: 32px 36px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--lp-tienda-red) 0%, var(--lp-tienda-red-dark) 100%);
+  box-shadow: var(--lp-tienda-shadow);
+}
+
+.lp-tienda-benefits-band__title {
+  margin: 0 0 22px;
+  color: #fff;
+  font-size: 21px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.lp-tienda-benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.lp-tienda-benefit-card {
+  padding: 20px 22px;
+  border-radius: var(--lp-tienda-radius);
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(17, 19, 24, .1);
+
+  h3 {
+    margin: 0 0 6px;
+    color: var(--lp-tienda-red);
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  p {
+    margin: 0;
+    color: var(--lp-tienda-muted);
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+}
+
 @media (max-width: 899px) {
+  .lp-tienda-benefit-grid {
+    grid-template-columns: 1fr;
+  }
+
   .lp-tienda-landing-hero {
     grid-template-columns: 1fr;
     padding: 28px 22px;
@@ -4055,9 +4112,13 @@ form.address_autoformat {
     margin: 48px auto 24px;
   }
 
-  // Rueda solida de 6 gajos de color (conic-gradient), inspirada en el
+  // Rueda solida de N gajos de color (conic-gradient), inspirada en el
   // clasico "wheel infographic" pero con tonos suaves (rosa -> rojo medio)
-  // en vez de colores intensos u oscuros, para que se sienta amigable.
+  // en vez de colores intensos u oscuros, para que se sienta amigable. El
+  // fondo (conic-gradient con N gajos, N = cantidad de fases de cada
+  // pagina) se arma en Python (_lp_tienda_step_wheel_context) y se pasa
+  // via style inline, ya que CSS no puede generar N gajos genericos sin
+  // saber N de antemano.
   // Se dejo mas chica (300px) que el radio de los nodos (300px) a
   // proposito: el texto de cada nodo (titulo + descripcion) es mas alto
   // que ancho, y si la rueda es muy grande su parrafo termina superpuesto
@@ -4071,15 +4132,6 @@ form.address_autoformat {
     height: 300px;
     margin: -150px 0 0 -150px;
     border-radius: 50%;
-    background: conic-gradient(
-      from -30deg,
-      #fbd9df 0deg 60deg,
-      #f5b8c3 60deg 120deg,
-      #ef96a5 120deg 180deg,
-      #e97488 180deg 240deg,
-      #e2536c 240deg 300deg,
-      #d1324f 300deg 360deg
-    );
     box-shadow: 0 18px 40px rgba(200, 0, 26, .16);
   }
 
@@ -4115,14 +4167,21 @@ form.address_autoformat {
   }
 
   // Una flechita por cada tramo entre dos nodos consecutivos (1->2, 2->3,
-  // ..., 6->1 - el circulo completo, ya que el proceso vuelve a empezar en
-  // Diagnostico). No lleva position: relative a proposito (mismo motivo
+  // ..., N->1 - el circulo completo, ya que el proceso vuelve a empezar en
+  // el primer paso). No lleva position: relative a proposito (mismo motivo
   // que .lp-tienda-steps mas abajo), asi sus hijos posicionan contra
   // .lp-tienda-steps-ring directamente.
   .lp-tienda-steps-ring__arrows {
     display: block;
   }
 
+  // El angulo de cada flecha (--lp-step-angle, el punto medio entre dos
+  // nodos consecutivos) se define inline por flecha en landing_templates.xml
+  // (arrow_angles, calculado en Python para cualquier cantidad de pasos).
+  // El segundo rotate() es SIEMPRE 90deg (no el negativo del primero, a
+  // diferencia de los nodos): asi la flecha queda apuntando en la
+  // direccion tangencial del recorrido (sentido horario) en vez de quedar
+  // derecha.
   .lp-tienda-steps-ring__arrows i {
     position: absolute;
     top: 50%;
@@ -4134,19 +4193,8 @@ form.address_autoformat {
     place-items: center;
     color: rgba(200, 0, 26, .4);
     font-size: 18px;
+    transform: rotate(var(--lp-step-angle)) translate(300px) rotate(90deg);
   }
-
-  // Angulo de cada flecha = punto medio entre dos nodos consecutivos,
-  // mismo radio (300px) que los nodos. El segundo rotate() es SIEMPRE
-  // 90deg (no el negativo del primero, a diferencia de los nodos): asi la
-  // flecha queda apuntando en la direccion tangencial del recorrido
-  // (sentido horario 1->2->3->4->5->6->1) en vez de quedar derecha.
-  .lp-tienda-steps-ring__arrows i:nth-child(1) { transform: rotate(-60deg) translate(300px) rotate(90deg); }
-  .lp-tienda-steps-ring__arrows i:nth-child(2) { transform: rotate(0deg) translate(300px) rotate(90deg); }
-  .lp-tienda-steps-ring__arrows i:nth-child(3) { transform: rotate(60deg) translate(300px) rotate(90deg); }
-  .lp-tienda-steps-ring__arrows i:nth-child(4) { transform: rotate(120deg) translate(300px) rotate(90deg); }
-  .lp-tienda-steps-ring__arrows i:nth-child(5) { transform: rotate(180deg) translate(300px) rotate(90deg); }
-  .lp-tienda-steps-ring__arrows i:nth-child(6) { transform: rotate(240deg) translate(300px) rotate(90deg); }
 
   .lp-tienda-steps {
     display: block;
@@ -4158,43 +4206,36 @@ form.address_autoformat {
     // sobre una caja de 0px de alto y todo colapsaba arriba.
   }
 
+  // Nodos flotando fuera de la rueda, repartidos en angulos iguales (ver
+  // --lp-step-angle, inline por nodo en lp_tienda_step_card, calculado en
+  // Python para cualquier cantidad de pasos - no queda fijo a 6). Radio
+  // 300px vs. radio de la rueda (150px): deja ~150px de aire desde el
+  // borde de la rueda hasta el CENTRO de cada nodo, suficiente para que
+  // el bloque de titulo + descripcion (mas alto que ancho) no le pise el
+  // color de fondo. rotate(X) translate(radio) rotate(-X) ubica cada nodo
+  // sobre el circulo sin inclinar el contenido (el segundo rotate cancela
+  // el primero para que el texto quede derecho).
   .lp-tienda-step-flow {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 156px;
     margin: -78px 0 0 -78px;
+    transform: rotate(var(--lp-step-angle)) translate(300px) rotate(calc(var(--lp-step-angle) * -1));
   }
 
   .lp-tienda-step-flow__arrow {
     display: none;
   }
 
-  // 6 nodos flotando fuera de la rueda, cada 60 grados. Radio 300px vs.
-  // radio de la rueda (150px): deja ~150px de aire desde el borde de la
-  // rueda hasta el CENTRO de cada nodo, suficiente para que el bloque de
-  // titulo + descripcion (mas alto que ancho) no le pise el color de
-  // fondo. rotate(X) translate(radio) rotate(-X) ubica cada nodo sobre el
-  // circulo sin inclinar el contenido (el segundo rotate cancela el
-  // primero para que el texto quede derecho). El mismo angulo X, sumandole
-  // 90, es el punto del conic-gradient que le corresponde a cada nodo -
-  // por eso el gradiente empieza en "from -30deg": alinea su primer gajo
-  // (0-60deg) con el nodo 1 (X=-90 -> gajo centrado en 0deg).
-  .lp-tienda-step-flow:nth-child(1) { transform: rotate(-90deg) translate(300px) rotate(90deg); }
-  .lp-tienda-step-flow:nth-child(2) { transform: rotate(-30deg) translate(300px) rotate(30deg); }
-  .lp-tienda-step-flow:nth-child(3) { transform: rotate(30deg) translate(300px) rotate(-30deg); }
-  .lp-tienda-step-flow:nth-child(4) { transform: rotate(90deg) translate(300px) rotate(-90deg); }
-  .lp-tienda-step-flow:nth-child(5) { transform: rotate(150deg) translate(300px) rotate(-150deg); }
-  .lp-tienda-step-flow:nth-child(6) { transform: rotate(210deg) translate(300px) rotate(-210deg); }
-
-  // Circulos numerados: version un poco mas saturada de la misma familia
-  // rosa -> rojo medio que la rueda (necesitan mas contraste para que el
-  // numero en blanco se lea bien), pero sin llegar a los tonos oscuros
-  // que se veian pesados.
-  .lp-tienda-step-flow:nth-child(1) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #ff8fa3 0%, #ef5e77 100%); box-shadow: 0 10px 20px rgba(239, 94, 119, .35); }
-  .lp-tienda-step-flow:nth-child(2) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #ef5e77 0%, #e2455f 100%); box-shadow: 0 10px 20px rgba(226, 69, 95, .35); }
-  .lp-tienda-step-flow:nth-child(3) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #e2455f 0%, #d43655 100%); box-shadow: 0 10px 20px rgba(212, 54, 85, .35); }
-  .lp-tienda-step-flow:nth-child(4) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #d43655 0%, #c8264a 100%); box-shadow: 0 10px 20px rgba(200, 38, 74, .35); }
-  .lp-tienda-step-flow:nth-child(5) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #c8264a 0%, #b81f42 100%); box-shadow: 0 10px 20px rgba(184, 31, 66, .35); }
-  .lp-tienda-step-flow:nth-child(6) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #b81f42 0%, #a51a3a 100%); box-shadow: 0 10px 20px rgba(165, 26, 58, .35); }
+  // Circulo numerado: color ya armado en Python (--lp-step-color,
+  // --lp-step-shadow, inline por nodo) - una version un poco mas saturada
+  // de la misma familia rosa -> rojo medio que la rueda (necesitan mas
+  // contraste para que el numero en blanco se lea bien), pero sin llegar
+  // a tonos oscuros que se vean pesados. Las variables se heredan del
+  // .lp-tienda-step-flow padre (custom properties son heredables).
+  .lp-tienda-step-flow__circle {
+    background: var(--lp-step-color);
+    box-shadow: 0 10px 20px var(--lp-step-shadow);
+  }
 }
