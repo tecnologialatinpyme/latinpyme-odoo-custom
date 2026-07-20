@@ -75,7 +75,16 @@
       <field name="url">/terminos-de-uso</field>
       <field name="sequence">30</field>
     </record>
+  </data>
 
+  <!-- Bloque aparte SIN noupdate: los <function> dentro de <data noupdate="1">
+       solo corren en la instalacion inicial del modulo (Odoo los salta en
+       cualquier actualizacion posterior, sin error - confirmado en
+       odoo/tools/convert.py: "if self.noupdate and self.mode != 'init':
+       return"). Como este modulo ya estaba instalado, la primera version de
+       este fix nunca se ejecuto. Este bloque si se re-aplica en cada
+       actualizacion, que es lo que se necesita para reforzar el nombre real. -->
+  <data>
     <!-- El nombre mostrado en el header/breadcrumb/pills de estas categorias
          ya esta corregido via lp_tienda_display_name (controllers/main.py),
          pero muchos widgets NATIVOS de website_sale (buscador, "sin
