@@ -255,27 +255,7 @@
 
   <template id="lp_tienda_website_layout_shell" inherit_id="website.layout" name="Tienda LatinPyme Website Layout Shell">
     <xpath expr="//head" position="inside">
-      <style t-if="request.env['latinpyme.tienda.config'].sudo().is_current_request_tienda_shell()">
-        header#top,
-        footer#bottom,
-        .o_header_standard,
-        .o_footer,
-        header.lp-header,
-        footer#lp-footer-v14 {
-          display: none !important;
-        }
-      </style>
-      <style t-if="(request.httprequest.path or '').rstrip('/') in ('/terminos-de-uso', '/terms', '/aviso-legal')">
-        header#top,
-        footer#bottom,
-        .o_header_standard,
-        .o_footer,
-        header.lp-header,
-        footer#lp-footer-v14 {
-          display: none !important;
-        }
-      </style>
-      <style t-if="request.env['latinpyme.tienda.config'].sudo().is_current_request_error_page()">
+      <style t-if="request.env['latinpyme.tienda.config'].sudo().lp_tienda_should_hide_legacy_chrome()">
         header#top,
         footer#bottom,
         .o_header_standard,

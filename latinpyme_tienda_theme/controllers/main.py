@@ -208,10 +208,25 @@ class LatinpymeTiendaShopController(WebsiteSale):
 
 
 class LatinpymeTiendaController(Website):
+    def _render_tienda_page(self, template_xmlid, values):
+        # Cualquier pagina "propia" que ya llama su masthead/footer a mano
+        # (en vez de dejar que website.layout se los inyecte) debe pasar por
+        # aca. Marca la request para que is_current_request_tienda_shell()
+        # no vuelva a inyectarlos globalmente - antes esto se resolvia con
+        # una lista fija de rutas excluidas que habia que actualizar a mano
+        # por cada pagina nueva, y era facil de olvidar (paso con
+        # /agente-ia). Con la bandera, toda pagina que use este helper queda
+        # cubierta automaticamente, sin tocar ninguna lista.
+        request.lp_tienda_manual_shell = True
+        try:
+            return request.render(template_xmlid, values)
+        finally:
+            request.lp_tienda_manual_shell = False
+
     @http.route(["/terminos-de-uso", "/terms"], type="http", auth="public", website=True, sitemap=False)
     def tienda_terms_page(self, **kwargs):
         layout_values = request.env["latinpyme.tienda.config"].sudo().get_layout_context(getattr(request, "website", False))
-        return request.render(
+        return self._render_tienda_page(
             "latinpyme_tienda_theme.lp_tienda_terms_page",
             {
                 "title": "Términos de uso | Tienda LatinPyme",
@@ -598,7 +613,7 @@ class LatinpymeTiendaController(Website):
     def _render_tienda_home(self):
         # El Cache-Control ya lo aplica IrHttp._post_dispatch (tienda_models.py)
         # sobre toda respuesta HTML del dominio Tienda, no hace falta repetirlo aqui.
-        return request.render("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
+        return self._render_tienda_page("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
 
     @http.route("/", type="http", auth="public", website=True, sitemap=True)
     def index(self, **kwargs):
@@ -692,7 +707,7 @@ class LatinpymeTiendaController(Website):
 
     @http.route("/agente-ia", type="http", auth="public", website=True, sitemap=True)
     def agente_ia_page(self, **kwargs):
-        return request.render("latinpyme_tienda_theme.lp_tienda_agente_ia_page", self._agente_ia_values())
+        return self._render_tienda_page("latinpyme_tienda_theme.lp_tienda_agente_ia_page", self._agente_ia_values())
 
 
 class LatinpymeTiendaTermsRedirect(TermsController):
