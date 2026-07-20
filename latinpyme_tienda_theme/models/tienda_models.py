@@ -892,3 +892,27 @@ class IrHttp(models.AbstractModel):
             finally:
                 request.lp_tienda_rendering_error_page = False
         return super()._get_error_html(env, code, values)
+
+    @classmethod
+    def _post_dispatch(cls, response):
+        super()._post_dispatch(response)
+        cls._lp_tienda_apply_no_store(response)
+
+    @classmethod
+    def _lp_tienda_apply_no_store(cls, response):
+        # El HTML de las paginas dinamicas de Tienda no debe quedar cacheado
+        # en el navegador ni en proxies intermedios: un cliente comprando
+        # necesita ver siempre precio/stock/contenido actual, no una version
+        # vieja "pegada" de antes del ultimo deploy. Se aplica sobre TODA
+        # respuesta HTML (incluye la pagina 404, via _get_error_html) en vez
+        # de repetirlo por controlador, para que rutas nuevas lo hereden
+        # automaticamente. Los assets con hash (JS/CSS, imagenes con
+        # ?unique=) no pasan por aqui porque no son text/html.
+        if not cls._lp_tienda_is_current_domain():
+            return
+        if not (response.mimetype or "").startswith("text/html"):
+            return
+        path = request.httprequest.path or "/"
+        if path.startswith("/web") or path.startswith("/odoo"):
+            return
+        response.headers["Cache-Control"] = "no-store"
