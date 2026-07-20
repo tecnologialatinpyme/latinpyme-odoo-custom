@@ -3937,8 +3937,9 @@ form.address_autoformat {
   gap: 40px;
 }
 
-.lp-tienda-steps-ring__track,
-.lp-tienda-steps-ring__center {
+.lp-tienda-steps-wheel,
+.lp-tienda-steps-wheel__hole,
+.lp-tienda-steps-ring__arrows {
   display: none;
 }
 
@@ -4109,6 +4110,40 @@ form.address_autoformat {
     font-weight: 900;
     letter-spacing: -.01em;
   }
+
+  // Una flechita por cada tramo entre dos nodos consecutivos (1->2, 2->3,
+  // ..., 6->1 - el circulo completo, ya que el proceso vuelve a empezar en
+  // Diagnostico). No lleva position: relative a proposito (mismo motivo
+  // que .lp-tienda-steps mas abajo), asi sus hijos posicionan contra
+  // .lp-tienda-steps-ring directamente.
+  .lp-tienda-steps-ring__arrows {
+    display: block;
+  }
+
+  .lp-tienda-steps-ring__arrows i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    place-items: center;
+    color: rgba(200, 0, 26, .4);
+    font-size: 18px;
+  }
+
+  // Angulo de cada flecha = punto medio entre dos nodos consecutivos,
+  // mismo radio (300px) que los nodos. El segundo rotate() es SIEMPRE
+  // 90deg (no el negativo del primero, a diferencia de los nodos): asi la
+  // flecha queda apuntando en la direccion tangencial del recorrido
+  // (sentido horario 1->2->3->4->5->6->1) en vez de quedar derecha.
+  .lp-tienda-steps-ring__arrows i:nth-child(1) { transform: rotate(-60deg) translate(300px) rotate(90deg); }
+  .lp-tienda-steps-ring__arrows i:nth-child(2) { transform: rotate(0deg) translate(300px) rotate(90deg); }
+  .lp-tienda-steps-ring__arrows i:nth-child(3) { transform: rotate(60deg) translate(300px) rotate(90deg); }
+  .lp-tienda-steps-ring__arrows i:nth-child(4) { transform: rotate(120deg) translate(300px) rotate(90deg); }
+  .lp-tienda-steps-ring__arrows i:nth-child(5) { transform: rotate(180deg) translate(300px) rotate(90deg); }
+  .lp-tienda-steps-ring__arrows i:nth-child(6) { transform: rotate(240deg) translate(300px) rotate(90deg); }
 
   .lp-tienda-steps {
     display: block;

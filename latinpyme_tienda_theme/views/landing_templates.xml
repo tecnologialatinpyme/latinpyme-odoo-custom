@@ -66,6 +66,14 @@
                 <span class="lp-tienda-steps-wheel__eyebrow">Nuestro</span>
                 <strong class="lp-tienda-steps-wheel__word">Proceso</strong>
               </div>
+              <div class="lp-tienda-steps-ring__arrows" aria-hidden="true">
+                <i class="fa fa-angle-right"/>
+                <i class="fa fa-angle-right"/>
+                <i class="fa fa-angle-right"/>
+                <i class="fa fa-angle-right"/>
+                <i class="fa fa-angle-right"/>
+                <i class="fa fa-angle-right"/>
+              </div>
               <div class="lp-tienda-steps">
                 <t t-foreach="phases" t-as="phase">
                   <t t-set="step" t-value="{'index': phase_index + 1, 'title': phase['title'], 'text': phase['text'], 'is_last': phase_index == len(phases) - 1}"/>
