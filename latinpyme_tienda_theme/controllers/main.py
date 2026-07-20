@@ -596,9 +596,9 @@ class LatinpymeTiendaController(Website):
         return "tienda" in website_name and "latinpyme" in website_name
 
     def _render_tienda_home(self):
-        response = request.render("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
-        response.headers["Cache-Control"] = "no-cache, max-age=0, must-revalidate"
-        return response
+        # El Cache-Control ya lo aplica IrHttp._post_dispatch (tienda_models.py)
+        # sobre toda respuesta HTML del dominio Tienda, no hace falta repetirlo aqui.
+        return request.render("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
 
     @http.route("/", type="http", auth="public", website=True, sitemap=True)
     def index(self, **kwargs):
