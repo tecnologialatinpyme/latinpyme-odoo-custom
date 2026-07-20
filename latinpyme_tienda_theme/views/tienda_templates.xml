@@ -166,19 +166,19 @@
   </template>
 
   <template id="lp_tienda_step_card" name="Tienda LatinPyme Step Card">
-    <!-- Variante reutilizable de lp_tienda_solution_card para secuencias de
-         pasos/fases (sin icono ni CTA): misma barra superior roja con texto
-         blanco, pero mostrando "01 · Nombre del paso" en vez de un icono, y
-         solo un parrafo de descripcion en el cuerpo. Espera un dict "step"
-         con "label" (texto de la barra) y "text" (descripcion). -->
-    <article class="lp-tienda-step-card">
-      <div class="lp-tienda-step-card__media">
-        <span t-out="step['label']"/>
-      </div>
-      <div class="lp-tienda-step-card__body">
-        <p t-out="step['text']"/>
-      </div>
-    </article>
+    <!-- Paso numerado en formato "flujo": circulo con el numero, titulo,
+         descripcion, y una flecha conectora hacia el siguiente paso (la
+         flecha se oculta sola en el ultimo paso de cada fila via CSS, y en
+         el ultimo paso de la secuencia via "is_last"). Reutilizable para
+         cualquier pagina con una secuencia de pasos/fases. Espera un dict
+         "step" con "index" (numero, 1-based), "title", "text" y "is_last"
+         (bool, True solo en el ultimo paso de la secuencia). -->
+    <div class="lp-tienda-step-flow">
+      <span class="lp-tienda-step-flow__circle" t-out="'%02d' % step['index']"/>
+      <h3 t-out="step['title']"/>
+      <p t-out="step['text']"/>
+      <i t-if="not step['is_last']" class="fa fa-long-arrow-right lp-tienda-step-flow__arrow" aria-hidden="true"/>
+    </div>
   </template>
 
   <template id="lp_tienda_ad_slot" name="Tienda LatinPyme Ad Slot">

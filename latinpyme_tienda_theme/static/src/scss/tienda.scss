@@ -3923,55 +3923,68 @@ form.address_autoformat {
 .lp-tienda-steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 36px 24px;
 }
 
-// Mismo lenguaje visual que .lp-tienda-solution-card (barra superior roja
-// solida con texto blanco), pero para secuencias de pasos/fases sin icono
-// ni CTA - ver plantilla lp_tienda_step_card en tienda_templates.xml.
-.lp-tienda-step-card {
+// Secuencia de pasos/fases en formato "flujo": circulo numerado + flecha
+// conectora hacia el siguiente paso, en vez de tarjetas con borde - ver
+// plantilla lp_tienda_step_card en tienda_templates.xml.
+.lp-tienda-step-flow {
+  position: relative;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  border: 1px solid var(--lp-tienda-border);
-  border-radius: var(--lp-tienda-radius);
-  background: #fff;
-  box-shadow: 0 8px 24px rgba(17, 19, 24, .06);
-  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
-
-  &:hover {
-    border-color: rgba(200, 0, 26, .24);
-    box-shadow: var(--lp-tienda-shadow);
-    transform: translateY(-2px);
-  }
-}
-
-.lp-tienda-step-card__media {
-  display: flex;
-  min-height: 42px;
   align-items: center;
-  background: var(--lp-tienda-red);
-  color: #fff !important;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 900;
-  letter-spacing: 0;
-  line-height: 1.14;
-  text-transform: uppercase;
-  -webkit-text-fill-color: #fff;
+  padding: 4px 22px 0;
+  text-align: center;
 }
 
-.lp-tienda-step-card__body {
-  padding: 16px 18px 18px;
-  background: linear-gradient(180deg, #fff, #fff7f8);
+.lp-tienda-step-flow__circle {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--lp-tienda-red) 0%, var(--lp-tienda-red-dark) 100%);
+  box-shadow: 0 10px 22px rgba(200, 0, 26, .3);
+  color: #fff;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -.02em;
+}
 
-  p {
-    margin: 0;
-    color: #303946;
-    font-size: 13.5px;
-    font-weight: 500;
-    line-height: 1.4;
-  }
+.lp-tienda-step-flow h3 {
+  margin: 0 0 6px;
+  color: var(--lp-tienda-ink);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.lp-tienda-step-flow p {
+  margin: 0;
+  max-width: 220px;
+  color: var(--lp-tienda-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.lp-tienda-step-flow__arrow {
+  position: absolute;
+  top: 18px;
+  right: -22px;
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  color: rgba(200, 0, 26, .35);
+  font-size: 20px;
+}
+
+// La flecha se genera siempre salvo en el ultimo paso de la secuencia
+// (is_last en la plantilla); en escritorio ademas se oculta al final de
+// cada fila de 3, porque ahi no hay un siguiente paso a la vista.
+.lp-tienda-steps > .lp-tienda-step-flow:nth-child(3n) .lp-tienda-step-flow__arrow {
+  display: none;
 }
 
 .lp-tienda-cta-banner {
@@ -4011,6 +4024,21 @@ form.address_autoformat {
 
   .lp-tienda-steps {
     grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  // Apiladas en una sola columna, todas menos la ultima necesitan flecha
+  // (no solo las que no son fin de fila de 3), y apuntando hacia abajo.
+  .lp-tienda-steps > .lp-tienda-step-flow:nth-child(3n) .lp-tienda-step-flow__arrow {
+    display: grid;
+  }
+
+  .lp-tienda-step-flow__arrow {
+    top: auto;
+    right: auto;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
   }
 
   .lp-tienda-cta-banner {
