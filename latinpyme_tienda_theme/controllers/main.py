@@ -217,9 +217,17 @@ class LatinpymeTiendaController(Website):
         # por cada pagina nueva, y era facil de olvidar (paso con
         # /agente-ia). Con la bandera, toda pagina que use este helper queda
         # cubierta automaticamente, sin tocar ninguna lista.
+        #
+        # request.render() es LAZY por defecto (el render real ocurre al
+        # final del dispatch, no aca) - si se dejaba lazy, el `finally` de
+        # abajo apagaba la bandera ANTES de que el render real ocurriera,
+        # y is_current_request_tienda_shell() la veia en False de nuevo
+        # (esto fue lo que duplico el masthead/footer en home Y /agente-ia
+        # al desplegar el fix). Se fuerza lazy=False para que el render
+        # ocurra aca mismo, dentro del try/finally.
         request.lp_tienda_manual_shell = True
         try:
-            return request.render(template_xmlid, values)
+            return request.render(template_xmlid, values, lazy=False)
         finally:
             request.lp_tienda_manual_shell = False
 
