@@ -61,8 +61,11 @@
               <t t-set="title">Fases de implementación</t>
             </t>
             <div class="lp-tienda-steps-ring">
-              <div class="lp-tienda-steps-ring__track" aria-hidden="true"/>
-              <i class="fa fa-refresh lp-tienda-steps-ring__center" aria-hidden="true"/>
+              <div class="lp-tienda-steps-wheel" aria-hidden="true"/>
+              <div class="lp-tienda-steps-wheel__hole" aria-hidden="true">
+                <span class="lp-tienda-steps-wheel__eyebrow">Nuestro</span>
+                <strong class="lp-tienda-steps-wheel__word">Proceso</strong>
+              </div>
               <div class="lp-tienda-steps">
                 <t t-foreach="phases" t-as="phase">
                   <t t-set="step" t-value="{'index': phase_index + 1, 'title': phase['title'], 'text': phase['text'], 'is_last': phase_index == len(phases) - 1}"/>
