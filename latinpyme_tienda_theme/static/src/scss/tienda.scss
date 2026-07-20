@@ -2066,7 +2066,11 @@
     gap: 8px;
     min-width: 0;
     overflow-x: auto;
-    padding-bottom: 4px;
+    // overflow-x distinto de visible hace que el navegador calcule
+    // overflow-y como auto tambien, y sin padding-top el borde de arriba
+    // de cada pill quedaba pegado al limite de recorte - el hover (que
+    // sube el pill 1px con translateY) lo cortaba.
+    padding: 4px 0;
     scrollbar-width: thin;
 
     a {
