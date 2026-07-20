@@ -3783,9 +3783,12 @@ form.address_autoformat {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   align-items: center;
-  gap: 32px;
-  margin-top: 24px;
-  padding: 28px 36px;
+  gap: 28px;
+  // Sin margin-top: el banner del home (.lp-tienda-hero) tampoco le agrega
+  // margen propio, se apoya solo en el padding-top de .lp-tienda-main
+  // (20px) - este hero tenia un margin-top: 24px de mas, que sumado a ese
+  // padding dejaba el doble de aire del que tiene el home arriba del todo.
+  padding: 22px 32px;
   border-radius: 16px;
   background: linear-gradient(135deg, var(--lp-tienda-red) 0%, var(--lp-tienda-red-dark) 100%);
   color: #fff;
