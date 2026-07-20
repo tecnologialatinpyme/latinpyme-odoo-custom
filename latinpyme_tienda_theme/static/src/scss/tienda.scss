@@ -4040,36 +4040,38 @@ form.address_autoformat {
 @media (min-width: 900px) {
   .lp-tienda-steps-ring {
     position: relative;
-    width: 720px;
+    width: 780px;
     max-width: 100%;
     aspect-ratio: 1;
     margin: 48px auto 24px;
   }
 
   // Rueda solida de 6 gajos de color (conic-gradient), inspirada en el
-  // clasico "wheel infographic" pero con la paleta roja -> tinta de la
-  // marca en vez de colores sueltos. Los angulos del gradiente se alinean
-  // con la posicion de cada nodo (ver formula en el comentario de abajo)
-  // para que el gajo de color quede detras de su numero correspondiente.
+  // clasico "wheel infographic" pero con tonos suaves (rosa -> rojo medio)
+  // en vez de colores intensos u oscuros, para que se sienta amigable.
+  // Se dejo mas chica (300px) que el radio de los nodos (300px) a
+  // proposito: el texto de cada nodo (titulo + descripcion) es mas alto
+  // que ancho, y si la rueda es muy grande su parrafo termina superpuesto
+  // sobre el color de fondo, ilegible.
   .lp-tienda-steps-wheel {
     display: block;
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 440px;
-    height: 440px;
-    margin: -220px 0 0 -220px;
+    width: 300px;
+    height: 300px;
+    margin: -150px 0 0 -150px;
     border-radius: 50%;
     background: conic-gradient(
       from -30deg,
-      #d81b3a 0deg 60deg,
-      #c8001a 60deg 120deg,
-      #a3081f 120deg 180deg,
-      #7e0f23 180deg 240deg,
-      #591525 240deg 300deg,
-      #3a1620 300deg 360deg
+      #fbd9df 0deg 60deg,
+      #f5b8c3 60deg 120deg,
+      #ef96a5 120deg 180deg,
+      #e97488 180deg 240deg,
+      #e2536c 240deg 300deg,
+      #d1324f 300deg 360deg
     );
-    box-shadow: 0 22px 48px rgba(200, 0, 26, .22);
+    box-shadow: 0 18px 40px rgba(200, 0, 26, .16);
   }
 
   .lp-tienda-steps-wheel__hole {
@@ -4077,9 +4079,9 @@ form.address_autoformat {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 230px;
-    height: 230px;
-    margin: -115px 0 0 -115px;
+    width: 160px;
+    height: 160px;
+    margin: -80px 0 0 -80px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -4090,7 +4092,7 @@ form.address_autoformat {
 
   .lp-tienda-steps-wheel__eyebrow {
     color: var(--lp-tienda-muted);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: .04em;
     text-transform: uppercase;
@@ -4098,7 +4100,7 @@ form.address_autoformat {
 
   .lp-tienda-steps-wheel__word {
     color: var(--lp-tienda-ink);
-    font-size: 23px;
+    font-size: 19px;
     font-weight: 900;
     letter-spacing: -.01em;
   }
@@ -4107,7 +4109,7 @@ form.address_autoformat {
     display: block;
     // Sin position: relative a proposito: .lp-tienda-step-flow (position:
     // absolute mas abajo) necesita que su "containing block" sea
-    // .lp-tienda-steps-ring (720x720, arriba), no este div - si este
+    // .lp-tienda-steps-ring (780x780, arriba), no este div - si este
     // tuviera position:relative, al no tener alto propio (todos sus hijos
     // son position:absolute, no aportan altura), top:50% se calcularia
     // sobre una caja de 0px de alto y todo colapsaba arriba.
@@ -4125,27 +4127,31 @@ form.address_autoformat {
     display: none;
   }
 
-  // 6 nodos flotando fuera de la rueda, cada 60 grados (radio 270px: deja
-  // ~50px de aire desde el borde de la rueda, que mide 220px de radio).
-  // rotate(X) translate(radio) rotate(-X) los ubica sobre el circulo sin
-  // inclinar el contenido (el segundo rotate cancela el primero para que
-  // el texto quede derecho). El mismo angulo X, sumandole 90, es el punto
-  // del conic-gradient (arriba) que le corresponde a cada nodo - por eso
-  // el gradiente empieza en "from -30deg": alinea su primer gajo (0-60deg)
-  // con el nodo 1 (X=-90 -> gajo centrado en 0deg).
-  .lp-tienda-step-flow:nth-child(1) { transform: rotate(-90deg) translate(270px) rotate(90deg); }
-  .lp-tienda-step-flow:nth-child(2) { transform: rotate(-30deg) translate(270px) rotate(30deg); }
-  .lp-tienda-step-flow:nth-child(3) { transform: rotate(30deg) translate(270px) rotate(-30deg); }
-  .lp-tienda-step-flow:nth-child(4) { transform: rotate(90deg) translate(270px) rotate(-90deg); }
-  .lp-tienda-step-flow:nth-child(5) { transform: rotate(150deg) translate(270px) rotate(-150deg); }
-  .lp-tienda-step-flow:nth-child(6) { transform: rotate(210deg) translate(270px) rotate(-210deg); }
+  // 6 nodos flotando fuera de la rueda, cada 60 grados. Radio 300px vs.
+  // radio de la rueda (150px): deja ~150px de aire desde el borde de la
+  // rueda hasta el CENTRO de cada nodo, suficiente para que el bloque de
+  // titulo + descripcion (mas alto que ancho) no le pise el color de
+  // fondo. rotate(X) translate(radio) rotate(-X) ubica cada nodo sobre el
+  // circulo sin inclinar el contenido (el segundo rotate cancela el
+  // primero para que el texto quede derecho). El mismo angulo X, sumandole
+  // 90, es el punto del conic-gradient que le corresponde a cada nodo -
+  // por eso el gradiente empieza en "from -30deg": alinea su primer gajo
+  // (0-60deg) con el nodo 1 (X=-90 -> gajo centrado en 0deg).
+  .lp-tienda-step-flow:nth-child(1) { transform: rotate(-90deg) translate(300px) rotate(90deg); }
+  .lp-tienda-step-flow:nth-child(2) { transform: rotate(-30deg) translate(300px) rotate(30deg); }
+  .lp-tienda-step-flow:nth-child(3) { transform: rotate(30deg) translate(300px) rotate(-30deg); }
+  .lp-tienda-step-flow:nth-child(4) { transform: rotate(90deg) translate(300px) rotate(-90deg); }
+  .lp-tienda-step-flow:nth-child(5) { transform: rotate(150deg) translate(300px) rotate(-150deg); }
+  .lp-tienda-step-flow:nth-child(6) { transform: rotate(210deg) translate(300px) rotate(-210deg); }
 
-  // Mismo degradado de 6 tonos que la rueda, aplicado al circulo numerado
-  // de cada nodo para que se sienta parte del mismo conjunto de colores.
-  .lp-tienda-step-flow:nth-child(1) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #d81b3a 0%, #c8001a 100%); box-shadow: 0 10px 22px rgba(216, 27, 58, .35); }
-  .lp-tienda-step-flow:nth-child(2) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #c8001a 0%, #a3081f 100%); box-shadow: 0 10px 22px rgba(200, 0, 26, .35); }
-  .lp-tienda-step-flow:nth-child(3) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #a3081f 0%, #7e0f23 100%); box-shadow: 0 10px 22px rgba(163, 8, 31, .35); }
-  .lp-tienda-step-flow:nth-child(4) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #7e0f23 0%, #591525 100%); box-shadow: 0 10px 22px rgba(126, 15, 35, .35); }
-  .lp-tienda-step-flow:nth-child(5) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #591525 0%, #3a1620 100%); box-shadow: 0 10px 22px rgba(89, 21, 37, .35); }
-  .lp-tienda-step-flow:nth-child(6) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #3a1620 0%, #10141b 100%); box-shadow: 0 10px 22px rgba(58, 22, 32, .35); }
+  // Circulos numerados: version un poco mas saturada de la misma familia
+  // rosa -> rojo medio que la rueda (necesitan mas contraste para que el
+  // numero en blanco se lea bien), pero sin llegar a los tonos oscuros
+  // que se veian pesados.
+  .lp-tienda-step-flow:nth-child(1) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #ff8fa3 0%, #ef5e77 100%); box-shadow: 0 10px 20px rgba(239, 94, 119, .35); }
+  .lp-tienda-step-flow:nth-child(2) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #ef5e77 0%, #e2455f 100%); box-shadow: 0 10px 20px rgba(226, 69, 95, .35); }
+  .lp-tienda-step-flow:nth-child(3) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #e2455f 0%, #d43655 100%); box-shadow: 0 10px 20px rgba(212, 54, 85, .35); }
+  .lp-tienda-step-flow:nth-child(4) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #d43655 0%, #c8264a 100%); box-shadow: 0 10px 20px rgba(200, 38, 74, .35); }
+  .lp-tienda-step-flow:nth-child(5) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #c8264a 0%, #b81f42 100%); box-shadow: 0 10px 20px rgba(184, 31, 66, .35); }
+  .lp-tienda-step-flow:nth-child(6) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #b81f42 0%, #a51a3a 100%); box-shadow: 0 10px 20px rgba(165, 26, 58, .35); }
 }
