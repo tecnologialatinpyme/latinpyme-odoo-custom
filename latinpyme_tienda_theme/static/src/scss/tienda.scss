@@ -3669,3 +3669,68 @@ form.address_autoformat {
     }
   }
 }
+
+.lp-tienda-404__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 640px;
+  margin-inline: auto;
+  padding-block: 64px 72px;
+  text-align: center;
+}
+
+.lp-tienda-404__code {
+  color: var(--lp-tienda-red);
+  font-size: 88px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.02em;
+  opacity: .16;
+}
+
+.lp-tienda-404__hero h1 {
+  margin: 4px 0 10px;
+  color: var(--lp-tienda-ink);
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.lp-tienda-404__hero > p {
+  margin: 0 0 28px;
+  color: #5a616c;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.lp-tienda-404__search {
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 20px;
+}
+
+.lp-tienda-404__home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: var(--lp-tienda-red);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 850;
+  transition: background .2s ease, transform .2s ease;
+
+  &:hover {
+    background: var(--lp-tienda-red-dark);
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+}
+
+.lp-tienda-404__categories {
+  justify-content: center;
+  overflow: visible;
+}

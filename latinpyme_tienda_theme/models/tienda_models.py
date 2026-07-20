@@ -6,6 +6,7 @@ from pathlib import Path
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.http import request
 
 
 _MODULE_ROOT = Path(__file__).resolve().parents[1]
@@ -836,3 +837,35 @@ class LatinpymeTiendaBanner(models.Model):
     @api.model
     def get_active_banner(self, placement, website=None):
         return self.get_active_banners(placement, website=website, limit=1)
+
+
+class IrHttp(models.AbstractModel):
+    _inherit = "ir.http"
+
+    @classmethod
+    def _lp_tienda_is_current_domain(cls):
+        website = getattr(request, "website", False)
+        host = (request.httprequest.host or "").split(":", 1)[0].lower()
+        website_domain = (getattr(website, "domain", "") or "").split(":", 1)[0].lower()
+        website_name = (getattr(website, "name", "") or "").lower()
+        is_tienda = host == "tienda.latinpyme.com" or website_domain == "tienda.latinpyme.com"
+        return is_tienda or ("tienda" in website_name and "latinpyme" in website_name)
+
+    @classmethod
+    def _get_error_html(cls, env, code, values):
+        # The native http_routing.404 template (web.frontend_layout, not our
+        # website.layout - same reason it never had our header/footer) has
+        # an oe_structure zone that someone customized in the Website
+        # Builder with an unrelated landing page's full content instead of
+        # a real "not found" message. Render our own branded page instead
+        # of fighting that leftover customization's view priority. Wrapped
+        # defensively - if this ever fails, fall back to Odoo's own error
+        # handling rather than let the error handler itself crash.
+        if code == 404 and cls._lp_tienda_is_current_domain():
+            try:
+                return code, env["ir.ui.view"]._render_template(
+                    "latinpyme_tienda_theme.lp_tienda_404_page", values
+                )
+            except Exception:
+                pass
+        return super()._get_error_html(env, code, values)

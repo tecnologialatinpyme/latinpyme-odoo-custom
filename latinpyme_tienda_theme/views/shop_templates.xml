@@ -299,4 +299,61 @@
     </t>
   </template>
 
+  <template id="lp_tienda_404_page" name="Tienda LatinPyme 404 Page">
+    <!-- Rendered directly from IrHttp._get_error_html (see models/tienda_models.py),
+         not through the normal website routing flow - uses web.frontend_layout
+         (like Odoo's own http_routing.404) rather than website.layout, since a 404
+         can happen at any unpredictable path and website.layout's global masthead/
+         footer injection is only excluded for a fixed list of known paths. Calling
+         the masthead/footer manually here, on this layout, avoids that collision
+         without needing to special-case an unknowable path. -->
+    <t t-call="web.frontend_layout">
+      <t t-set="no_header" t-value="True"/>
+      <t t-set="no_footer" t-value="True"/>
+      <t t-set="title" t-value="'Página no encontrada | Tienda LatinPyme'"/>
+      <t t-set="lp_tienda_layout_values" t-value="request.env['latinpyme.tienda.config'].sudo().get_layout_context(request.website)"/>
+      <t t-set="social_links" t-value="lp_tienda_layout_values['social_links']"/>
+      <t t-set="main_menu" t-value="lp_tienda_layout_values['main_menu']"/>
+      <t t-set="footer_columns" t-value="lp_tienda_layout_values['footer_columns']"/>
+      <t t-set="whatsapp_url" t-value="lp_tienda_layout_values['whatsapp_url']"/>
+      <t t-set="current_year" t-value="lp_tienda_layout_values['current_year']"/>
+      <div id="wrap" class="lp-tienda lp-tienda-404">
+        <t t-call="latinpyme_tienda_theme.lp_tienda_masthead"/>
+        <main class="lp-tienda-main">
+          <section class="lp-tienda-container lp-tienda-404__hero">
+            <span class="lp-tienda-404__code" aria-hidden="true">404</span>
+            <h1>Esta página no existe o fue movida</h1>
+            <p>
+              Puede que el enlace esté roto o que la dirección haya cambiado.
+              Busca lo que necesitas o explora una de nuestras categorías.
+            </p>
+            <form class="lp-tienda-search lp-tienda-404__search" action="/shop" method="get" role="search">
+              <label class="visually-hidden" for="lp-tienda-404-search-input">Buscar en Tienda LatinPyme</label>
+              <input
+                id="lp-tienda-404-search-input"
+                name="search"
+                type="search"
+                placeholder="Buscar soluciones, cursos, herramientas y más"/>
+              <button type="submit" aria-label="Buscar">
+                <i class="fa fa-search" aria-hidden="true"/>
+              </button>
+            </form>
+            <a class="lp-tienda-404__home-btn" href="/">
+              Ir al inicio
+              <i class="fa fa-arrow-right" aria-hidden="true"/>
+            </a>
+            <nav class="lp-shop-catalog-chips lp-category-chips lp-tienda-404__categories" aria-label="Categorías de tienda">
+              <a href="/shop/category/talleres-6">Talleres</a>
+              <a href="/shop/category/1">Cursos de Auditoría</a>
+              <a href="/shop/category/2">Cursos de Seguridad Vial</a>
+              <a href="/shop/category/4">Diplomados</a>
+              <a href="/shop/category/flashtraining-5">FlashTraining</a>
+            </nav>
+          </section>
+        </main>
+        <t t-call="latinpyme_tienda_theme.lp_tienda_footer"/>
+      </div>
+    </t>
+  </template>
+
 </odoo>
