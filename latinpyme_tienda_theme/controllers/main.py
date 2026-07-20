@@ -668,7 +668,7 @@ class LatinpymeTiendaController(Website):
             "whatsapp_url": whatsapp_url,
             "use_cases": [
                 {
-                    "icon": "fa-headphones",
+                    "icon": "fa-commenting",
                     "title": "Soporte",
                     "summary": "Tu agente responde consultas 24/7 con el tono de tu marca.",
                     "bullets": [
