@@ -3782,9 +3782,10 @@ form.address_autoformat {
 .lp-tienda-landing-hero {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  align-items: center;
   gap: 32px;
   margin-top: 24px;
-  padding: 40px;
+  padding: 28px 36px;
   border-radius: 16px;
   background: linear-gradient(135deg, var(--lp-tienda-red) 0%, var(--lp-tienda-red-dark) 100%);
   color: #fff;
@@ -3806,8 +3807,8 @@ form.address_autoformat {
 
 .lp-tienda-landing-hero__main {
   h1 {
-    margin: 0 0 12px;
-    font-size: 34px;
+    margin: 0 0 8px;
+    font-size: 30px;
     font-weight: 900;
     line-height: 1.15;
     // em (la parte destacada del titulo) hereda peso/tamaño del h1 sin
@@ -3816,11 +3817,11 @@ form.address_autoformat {
   }
 
   > p {
-    margin: 0 0 20px;
+    margin: 0 0 14px;
     max-width: 44ch;
     color: rgba(255, 255, 255, .88);
-    font-size: 15px;
-    line-height: 1.5;
+    font-size: 14.5px;
+    line-height: 1.45;
   }
 }
 
@@ -3828,10 +3829,10 @@ form.address_autoformat {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 
   span {
-    padding: 6px 14px;
+    padding: 5px 13px;
     border: 1px solid rgba(255, 255, 255, .3);
     border-radius: 999px;
     background: rgba(255, 255, 255, .08);
@@ -3846,17 +3847,21 @@ form.address_autoformat {
   gap: 10px;
 }
 
+// 2x2 en vez de las 4 filas apiladas de antes - la columna de highlights
+// era la que mas alargaba el hero verticalmente; en cuadricula ocupa
+// aprox. la mitad de alto con el mismo contenido.
 .lp-tienda-landing-hero__highlights {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
-  align-content: start;
+  align-content: center;
 }
 
 .lp-tienda-landing-hero__highlight {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 10px;
+  padding: 12px 14px;
   border: 1px solid rgba(255, 255, 255, .18);
   border-radius: 10px;
   background: rgba(255, 255, 255, .08);
@@ -3864,14 +3869,14 @@ form.address_autoformat {
   i {
     margin-top: 2px;
     color: #fff;
-    font-size: 15px;
+    font-size: 14px;
   }
 
   p {
     margin: 0;
     color: rgba(255, 255, 255, .92);
-    font-size: 13.5px;
-    line-height: 1.4;
+    font-size: 12.5px;
+    line-height: 1.35;
   }
 
   strong {
