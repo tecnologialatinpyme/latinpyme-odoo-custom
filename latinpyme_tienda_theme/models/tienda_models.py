@@ -531,6 +531,17 @@ class LatinpymeTiendaConfig(models.Model):
     def is_current_request_tienda_shell(self):
         from odoo.http import request
 
+        if getattr(request, "lp_tienda_rendering_error_page", False):
+            # The 404 page (web.frontend_layout) already calls the masthead/
+            # footer itself. web.frontend_layout is the shared "primary" QWeb
+            # combination root behind website.layout too, so this global
+            # xpath (registered against website.layout) still gets applied
+            # even though we never render website.layout for a 404 - without
+            # this guard it duplicates the masthead/footer on every 404 path,
+            # which can't be excluded by a fixed path list since 404s happen
+            # at unpredictable URLs.
+            return False
+
         website = getattr(request, "website", False)
         host = (request.httprequest.host or "").split(":", 1)[0].lower()
         website_domain = (getattr(website, "domain", "") or "").split(":", 1)[0].lower()
@@ -863,9 +874,12 @@ class IrHttp(models.AbstractModel):
         # handling rather than let the error handler itself crash.
         if code == 404 and cls._lp_tienda_is_current_domain():
             try:
+                request.lp_tienda_rendering_error_page = True
                 return code, env["ir.ui.view"]._render_template(
                     "latinpyme_tienda_theme.lp_tienda_404_page", values
                 )
             except Exception:
                 pass
+            finally:
+                request.lp_tienda_rendering_error_page = False
         return super()._get_error_html(env, code, values)
