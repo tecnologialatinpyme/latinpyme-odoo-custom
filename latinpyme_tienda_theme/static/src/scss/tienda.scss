@@ -3920,15 +3920,23 @@ form.address_autoformat {
   margin-top: 24px;
 }
 
+// Secuencia de pasos/fases en formato "flujo". Por defecto (mobile/tablet,
+// hasta 899px) es una lista vertical con flecha hacia abajo entre pasos;
+// en escritorio (min-width: 900px, mas abajo) se reacomoda en un anillo
+// circular con un icono central que refuerza que es un ciclo continuo
+// (Administracion -> vuelve a Diagnostico). Ver plantilla
+// lp_tienda_step_card en tienda_templates.xml.
 .lp-tienda-steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 36px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
-// Secuencia de pasos/fases en formato "flujo": circulo numerado + flecha
-// conectora hacia el siguiente paso, en vez de tarjetas con borde - ver
-// plantilla lp_tienda_step_card en tienda_templates.xml.
+.lp-tienda-steps-ring__track,
+.lp-tienda-steps-ring__center {
+  display: none;
+}
+
 .lp-tienda-step-flow {
   position: relative;
   display: flex;
@@ -3951,6 +3959,12 @@ form.address_autoformat {
   font-size: 19px;
   font-weight: 900;
   letter-spacing: -.02em;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.lp-tienda-step-flow:hover .lp-tienda-step-flow__circle {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(200, 0, 26, .4);
 }
 
 .lp-tienda-step-flow h3 {
@@ -3970,21 +3984,15 @@ form.address_autoformat {
 
 .lp-tienda-step-flow__arrow {
   position: absolute;
-  top: 18px;
-  right: -22px;
+  bottom: -28px;
+  left: 50%;
   display: grid;
   width: 22px;
   height: 22px;
   place-items: center;
   color: rgba(200, 0, 26, .35);
   font-size: 20px;
-}
-
-// La flecha se genera siempre salvo en el ultimo paso de la secuencia
-// (is_last en la plantilla); en escritorio ademas se oculta al final de
-// cada fila de 3, porque ahi no hay un siguiente paso a la vista.
-.lp-tienda-steps > .lp-tienda-step-flow:nth-child(3n) .lp-tienda-step-flow__arrow {
-  display: none;
+  transform: translateX(-50%) rotate(90deg);
 }
 
 .lp-tienda-cta-banner {
@@ -4022,28 +4030,81 @@ form.address_autoformat {
     font-size: 26px;
   }
 
-  .lp-tienda-steps {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  // Apiladas en una sola columna, todas menos la ultima necesitan flecha
-  // (no solo las que no son fin de fila de 3), y apuntando hacia abajo.
-  .lp-tienda-steps > .lp-tienda-step-flow:nth-child(3n) .lp-tienda-step-flow__arrow {
-    display: grid;
-  }
-
-  .lp-tienda-step-flow__arrow {
-    top: auto;
-    right: auto;
-    bottom: -28px;
-    left: 50%;
-    transform: translateX(-50%) rotate(90deg);
-  }
-
   .lp-tienda-cta-banner {
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
   }
+}
+
+@media (min-width: 900px) {
+  .lp-tienda-steps-ring {
+    position: relative;
+    width: 600px;
+    max-width: 100%;
+    aspect-ratio: 1;
+    margin: 48px auto 24px;
+  }
+
+  .lp-tienda-steps-ring__track {
+    display: block;
+    position: absolute;
+    inset: 70px;
+    border: 2px dashed rgba(200, 0, 26, .22);
+    border-radius: 50%;
+  }
+
+  .lp-tienda-steps-ring__center {
+    display: grid;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 64px;
+    height: 64px;
+    margin: -32px 0 0 -32px;
+    place-items: center;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(17, 19, 24, .1);
+    color: rgba(200, 0, 26, .32);
+    font-size: 26px;
+  }
+
+  .lp-tienda-steps {
+    display: block;
+    position: relative;
+  }
+
+  .lp-tienda-step-flow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 156px;
+    margin: -78px 0 0 -78px;
+  }
+
+  .lp-tienda-step-flow__arrow {
+    display: none;
+  }
+
+  // 6 nodos distribuidos cada 60 grados alrededor del anillo (radio 230px,
+  // igual al radio del track: 300px de mitad de contenedor - 70px de
+  // inset). rotate(X) translate(radio) rotate(-X) los ubica sobre el
+  // circulo sin inclinar el contenido (el segundo rotate cancela el
+  // primero para que el texto quede derecho).
+  .lp-tienda-step-flow:nth-child(1) { transform: rotate(-90deg) translate(230px) rotate(90deg); }
+  .lp-tienda-step-flow:nth-child(2) { transform: rotate(-30deg) translate(230px) rotate(30deg); }
+  .lp-tienda-step-flow:nth-child(3) { transform: rotate(30deg) translate(230px) rotate(-30deg); }
+  .lp-tienda-step-flow:nth-child(4) { transform: rotate(90deg) translate(230px) rotate(-90deg); }
+  .lp-tienda-step-flow:nth-child(5) { transform: rotate(150deg) translate(230px) rotate(-150deg); }
+  .lp-tienda-step-flow:nth-child(6) { transform: rotate(210deg) translate(230px) rotate(-210deg); }
+
+  // Degradado de 6 tonos dentro de la paleta de marca (rojo vivo -> tinta),
+  // para diferenciar cada fase sin salirse del estilo del sitio.
+  .lp-tienda-step-flow:nth-child(1) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #d81b3a 0%, #c8001a 100%); }
+  .lp-tienda-step-flow:nth-child(2) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #c8001a 0%, #a3081f 100%); }
+  .lp-tienda-step-flow:nth-child(3) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #a3081f 0%, #7e0f23 100%); }
+  .lp-tienda-step-flow:nth-child(4) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #7e0f23 0%, #591525 100%); }
+  .lp-tienda-step-flow:nth-child(5) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #591525 0%, #3a1620 100%); }
+  .lp-tienda-step-flow:nth-child(6) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #3a1620 0%, #10141b 100%); }
 }

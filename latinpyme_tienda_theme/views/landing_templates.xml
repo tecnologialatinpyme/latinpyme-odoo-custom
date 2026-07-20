@@ -60,11 +60,15 @@
             <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
               <t t-set="title">Fases de implementación</t>
             </t>
-            <div class="lp-tienda-steps">
-              <t t-foreach="phases" t-as="phase">
-                <t t-set="step" t-value="{'index': phase_index + 1, 'title': phase['title'], 'text': phase['text'], 'is_last': phase_index == len(phases) - 1}"/>
-                <t t-call="latinpyme_tienda_theme.lp_tienda_step_card"/>
-              </t>
+            <div class="lp-tienda-steps-ring">
+              <div class="lp-tienda-steps-ring__track" aria-hidden="true"/>
+              <i class="fa fa-refresh lp-tienda-steps-ring__center" aria-hidden="true"/>
+              <div class="lp-tienda-steps">
+                <t t-foreach="phases" t-as="phase">
+                  <t t-set="step" t-value="{'index': phase_index + 1, 'title': phase['title'], 'text': phase['text'], 'is_last': phase_index == len(phases) - 1}"/>
+                  <t t-call="latinpyme_tienda_theme.lp_tienda_step_card"/>
+                </t>
+              </div>
             </div>
           </section>
 
