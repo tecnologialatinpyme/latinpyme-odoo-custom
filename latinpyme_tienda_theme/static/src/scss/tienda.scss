@@ -4072,7 +4072,12 @@ form.address_autoformat {
 
   .lp-tienda-steps {
     display: block;
-    position: relative;
+    // Sin position: relative a proposito: .lp-tienda-step-flow (position:
+    // absolute mas abajo) necesita que su "containing block" sea
+    // .lp-tienda-steps-ring (600x600, arriba), no este div - si este
+    // tuviera position:relative, al no tener alto propio (todos sus hijos
+    // son position:absolute, no aportan altura), top:50% se calcularia
+    // sobre una caja de 0px de alto y todo colapsaba arriba.
   }
 
   .lp-tienda-step-flow {
