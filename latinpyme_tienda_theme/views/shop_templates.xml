@@ -342,13 +342,56 @@
               Ir al inicio
               <i class="fa fa-arrow-right" aria-hidden="true"/>
             </a>
-            <nav class="lp-shop-catalog-chips lp-category-chips lp-tienda-404__categories" aria-label="Categorías de tienda">
-              <a href="/shop/category/talleres-6">Talleres</a>
-              <a href="/shop/category/1">Cursos de Auditoría</a>
-              <a href="/shop/category/2">Cursos de Seguridad Vial</a>
-              <a href="/shop/category/4">Diplomados</a>
-              <a href="/shop/category/flashtraining-5">FlashTraining</a>
-            </nav>
+            <div class="lp-tienda-404__categories">
+              <h2 class="lp-tienda-404__categories-title">Explora nuestras categorías</h2>
+              <div class="lp-tienda-404__categories-grid">
+                <a class="lp-tienda-category-card" href="/shop/category/talleres-6">
+                  <span class="lp-tienda-category-card__icon">
+                    <img src="/latinpyme_tienda_theme/static/src/img/talleres-icon.png" alt="" loading="lazy"/>
+                  </span>
+                  <span class="lp-tienda-category-card__body">
+                    <strong>Talleres</strong>
+                    <span>Formación práctica y aplicable para tu equipo.</span>
+                  </span>
+                </a>
+                <a class="lp-tienda-category-card" href="/shop/category/1">
+                  <span class="lp-tienda-category-card__icon">
+                    <img src="/latinpyme_tienda_theme/static/src/img/icon-auditoria.png" alt="" loading="lazy"/>
+                  </span>
+                  <span class="lp-tienda-category-card__body">
+                    <strong>Cursos de Auditoría</strong>
+                    <span>Prepárate y certifícate como auditor interno.</span>
+                  </span>
+                </a>
+                <a class="lp-tienda-category-card" href="/shop/category/2">
+                  <span class="lp-tienda-category-card__icon">
+                    <img src="/latinpyme_tienda_theme/static/src/img/icon-seguridad-vial.png" alt="" loading="lazy"/>
+                  </span>
+                  <span class="lp-tienda-category-card__body">
+                    <strong>Cursos de Seguridad Vial</strong>
+                    <span>Cumplimiento y cultura vial para tu empresa.</span>
+                  </span>
+                </a>
+                <a class="lp-tienda-category-card" href="/shop/category/4">
+                  <span class="lp-tienda-category-card__icon">
+                    <img src="/latinpyme_tienda_theme/static/src/img/icon-diplomado.png" alt="" loading="lazy"/>
+                  </span>
+                  <span class="lp-tienda-category-card__body">
+                    <strong>Diplomados</strong>
+                    <span>Programas a fondo para crecer profesionalmente.</span>
+                  </span>
+                </a>
+                <a class="lp-tienda-category-card" href="/shop/category/flashtraining-5">
+                  <span class="lp-tienda-category-card__icon">
+                    <img src="/latinpyme_tienda_theme/static/src/img/icon-flashtraining.png" alt="" loading="lazy"/>
+                  </span>
+                  <span class="lp-tienda-category-card__body">
+                    <strong>FlashTraining</strong>
+                    <span>Capacitación exprés lista para aplicar ya.</span>
+                  </span>
+                </a>
+              </div>
+            </div>
           </section>
         </main>
         <t t-call="latinpyme_tienda_theme.lp_tienda_footer"/>

@@ -3709,11 +3709,14 @@ form.address_autoformat {
   margin-bottom: 20px;
 }
 
-.lp-tienda-404__home-btn {
+// Especificidad extra (.lp-tienda-404__hero antepuesto) necesaria para ganarle
+// a la regla global ".lp-tienda a { color: inherit; }", que si no queda con
+// mas peso y el boton se ve con el texto oscuro en vez de blanco.
+.lp-tienda-404__hero .lp-tienda-404__home-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
   padding: 11px 22px;
   border-radius: 999px;
   background: var(--lp-tienda-red);
@@ -3731,6 +3734,41 @@ form.address_autoformat {
 }
 
 .lp-tienda-404__categories {
-  justify-content: center;
-  overflow: visible;
+  width: 100%;
+}
+
+.lp-tienda-404__categories-title {
+  margin: 0 0 16px;
+  color: var(--lp-tienda-ink);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  text-align: center;
+}
+
+.lp-tienda-404__categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  text-align: left;
+
+  .lp-tienda-category-card {
+    min-height: 96px;
+    padding: 16px;
+  }
+
+  .lp-tienda-category-card__icon img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+
+  .lp-tienda-category-card__body strong {
+    font-size: 14px;
+  }
+
+  .lp-tienda-category-card__body span {
+    font-size: 13px;
+  }
 }
