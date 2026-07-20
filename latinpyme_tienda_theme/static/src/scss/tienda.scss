@@ -3772,3 +3772,429 @@ form.address_autoformat {
     font-size: 13px;
   }
 }
+
+// =====================================================================
+// Paginas "landing" de Tienda (servicios/soluciones) - primera: /agente-ia.
+// Componentes genericos pensados para reutilizarse en las siguientes
+// paginas que reemplacen website.page armadas en el Website Builder.
+// =====================================================================
+
+.lp-tienda-landing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 28px;
+  // Sin margin-top: el banner del home (.lp-tienda-hero) tampoco le agrega
+  // margen propio, se apoya solo en el padding-top de .lp-tienda-main
+  // (20px) - este hero tenia un margin-top: 24px de mas, que sumado a ese
+  // padding dejaba el doble de aire del que tiene el home arriba del todo.
+  padding: 22px 32px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--lp-tienda-red) 0%, var(--lp-tienda-red-dark) 100%);
+  color: #fff;
+  box-shadow: var(--lp-tienda-shadow);
+}
+
+.lp-tienda-landing-hero__eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 4px 12px;
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .1);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.lp-tienda-landing-hero__main {
+  h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 900;
+    line-height: 1.15;
+    // em (la parte destacada del titulo) hereda peso/tamaño del h1 sin
+    // itálica, para sentirse de la misma familia tipografica que el resto
+    // del sitio (ej. lp_tienda_section_heading, tambien font-weight: 900).
+  }
+
+  > p {
+    margin: 0 0 14px;
+    max-width: 44ch;
+    color: rgba(255, 255, 255, .88);
+    font-size: 14.5px;
+    line-height: 1.45;
+  }
+}
+
+.lp-tienda-landing-hero__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  span {
+    padding: 5px 13px;
+    border: 1px solid rgba(255, 255, 255, .3);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .08);
+    font-size: 12px;
+    font-weight: 800;
+  }
+}
+
+.lp-tienda-landing-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+// 2x2 en vez de las 4 filas apiladas de antes - la columna de highlights
+// era la que mas alargaba el hero verticalmente; en cuadricula ocupa
+// aprox. la mitad de alto con el mismo contenido.
+.lp-tienda-landing-hero__highlights {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-content: center;
+}
+
+.lp-tienda-landing-hero__highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .08);
+
+  i {
+    margin-top: 2px;
+    color: #fff;
+    font-size: 14px;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(255, 255, 255, .92);
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+
+  strong {
+    color: #fff;
+  }
+}
+
+.lp-tienda-button--light {
+  background: #fff;
+  color: var(--lp-tienda-red) !important;
+  -webkit-text-fill-color: var(--lp-tienda-red);
+
+  &:hover {
+    background: rgba(255, 255, 255, .9);
+    color: var(--lp-tienda-red-dark) !important;
+    -webkit-text-fill-color: var(--lp-tienda-red-dark);
+  }
+}
+
+.lp-tienda-button--outline-light {
+  border-color: rgba(255, 255, 255, .55);
+  background: transparent;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff;
+
+  &:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, .1);
+    color: #fff !important;
+    -webkit-text-fill-color: #fff;
+  }
+}
+
+.lp-tienda-landing-section__lead {
+  margin: 0 0 20px;
+  color: var(--lp-tienda-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.lp-tienda-landing-section__cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+// Secuencia de pasos/fases en formato "flujo". Por defecto (mobile/tablet,
+// hasta 899px) es una lista vertical con flecha hacia abajo entre pasos;
+// en escritorio (min-width: 900px, mas abajo) se reacomoda en un anillo
+// circular con un icono central que refuerza que es un ciclo continuo
+// (Administracion -> vuelve a Diagnostico). Ver plantilla
+// lp_tienda_step_card en tienda_templates.xml.
+.lp-tienda-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.lp-tienda-steps-wheel,
+.lp-tienda-steps-wheel__hole,
+.lp-tienda-steps-ring__arrows {
+  display: none;
+}
+
+.lp-tienda-step-flow {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 22px 0;
+  text-align: center;
+}
+
+.lp-tienda-step-flow__circle {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--lp-tienda-red) 0%, var(--lp-tienda-red-dark) 100%);
+  box-shadow: 0 10px 22px rgba(200, 0, 26, .3);
+  color: #fff;
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -.02em;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.lp-tienda-step-flow:hover .lp-tienda-step-flow__circle {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(200, 0, 26, .4);
+}
+
+.lp-tienda-step-flow h3 {
+  margin: 0 0 6px;
+  color: var(--lp-tienda-ink);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.lp-tienda-step-flow p {
+  margin: 0;
+  max-width: 220px;
+  color: var(--lp-tienda-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.lp-tienda-step-flow__arrow {
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  color: rgba(200, 0, 26, .35);
+  font-size: 20px;
+  transform: translateX(-50%) rotate(90deg);
+}
+
+.lp-tienda-cta-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px 32px;
+  border: 1px solid var(--lp-tienda-border);
+  border-radius: 14px;
+  background: var(--lp-tienda-soft);
+
+  h3 {
+    margin: 0;
+    color: var(--lp-tienda-ink);
+    font-size: 18px;
+    font-weight: 900;
+  }
+}
+
+.lp-tienda-cta-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 899px) {
+  .lp-tienda-landing-hero {
+    grid-template-columns: 1fr;
+    padding: 28px 22px;
+  }
+
+  .lp-tienda-landing-hero__main h1 {
+    font-size: 26px;
+  }
+
+  .lp-tienda-cta-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+@media (min-width: 900px) {
+  .lp-tienda-steps-ring {
+    position: relative;
+    width: 780px;
+    max-width: 100%;
+    aspect-ratio: 1;
+    margin: 48px auto 24px;
+  }
+
+  // Rueda solida de 6 gajos de color (conic-gradient), inspirada en el
+  // clasico "wheel infographic" pero con tonos suaves (rosa -> rojo medio)
+  // en vez de colores intensos u oscuros, para que se sienta amigable.
+  // Se dejo mas chica (300px) que el radio de los nodos (300px) a
+  // proposito: el texto de cada nodo (titulo + descripcion) es mas alto
+  // que ancho, y si la rueda es muy grande su parrafo termina superpuesto
+  // sobre el color de fondo, ilegible.
+  .lp-tienda-steps-wheel {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    margin: -150px 0 0 -150px;
+    border-radius: 50%;
+    background: conic-gradient(
+      from -30deg,
+      #fbd9df 0deg 60deg,
+      #f5b8c3 60deg 120deg,
+      #ef96a5 120deg 180deg,
+      #e97488 180deg 240deg,
+      #e2536c 240deg 300deg,
+      #d1324f 300deg 360deg
+    );
+    box-shadow: 0 18px 40px rgba(200, 0, 26, .16);
+  }
+
+  .lp-tienda-steps-wheel__hole {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 160px;
+    height: 160px;
+    margin: -80px 0 0 -80px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--lp-tienda-border), 0 8px 20px rgba(17, 19, 24, .08);
+  }
+
+  .lp-tienda-steps-wheel__eyebrow {
+    color: var(--lp-tienda-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .lp-tienda-steps-wheel__word {
+    color: var(--lp-tienda-ink);
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: -.01em;
+  }
+
+  // Una flechita por cada tramo entre dos nodos consecutivos (1->2, 2->3,
+  // ..., 6->1 - el circulo completo, ya que el proceso vuelve a empezar en
+  // Diagnostico). No lleva position: relative a proposito (mismo motivo
+  // que .lp-tienda-steps mas abajo), asi sus hijos posicionan contra
+  // .lp-tienda-steps-ring directamente.
+  .lp-tienda-steps-ring__arrows {
+    display: block;
+  }
+
+  .lp-tienda-steps-ring__arrows i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    place-items: center;
+    color: rgba(200, 0, 26, .4);
+    font-size: 18px;
+  }
+
+  // Angulo de cada flecha = punto medio entre dos nodos consecutivos,
+  // mismo radio (300px) que los nodos. El segundo rotate() es SIEMPRE
+  // 90deg (no el negativo del primero, a diferencia de los nodos): asi la
+  // flecha queda apuntando en la direccion tangencial del recorrido
+  // (sentido horario 1->2->3->4->5->6->1) en vez de quedar derecha.
+  .lp-tienda-steps-ring__arrows i:nth-child(1) { transform: rotate(-60deg) translate(300px) rotate(90deg); }
+  .lp-tienda-steps-ring__arrows i:nth-child(2) { transform: rotate(0deg) translate(300px) rotate(90deg); }
+  .lp-tienda-steps-ring__arrows i:nth-child(3) { transform: rotate(60deg) translate(300px) rotate(90deg); }
+  .lp-tienda-steps-ring__arrows i:nth-child(4) { transform: rotate(120deg) translate(300px) rotate(90deg); }
+  .lp-tienda-steps-ring__arrows i:nth-child(5) { transform: rotate(180deg) translate(300px) rotate(90deg); }
+  .lp-tienda-steps-ring__arrows i:nth-child(6) { transform: rotate(240deg) translate(300px) rotate(90deg); }
+
+  .lp-tienda-steps {
+    display: block;
+    // Sin position: relative a proposito: .lp-tienda-step-flow (position:
+    // absolute mas abajo) necesita que su "containing block" sea
+    // .lp-tienda-steps-ring (780x780, arriba), no este div - si este
+    // tuviera position:relative, al no tener alto propio (todos sus hijos
+    // son position:absolute, no aportan altura), top:50% se calcularia
+    // sobre una caja de 0px de alto y todo colapsaba arriba.
+  }
+
+  .lp-tienda-step-flow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 156px;
+    margin: -78px 0 0 -78px;
+  }
+
+  .lp-tienda-step-flow__arrow {
+    display: none;
+  }
+
+  // 6 nodos flotando fuera de la rueda, cada 60 grados. Radio 300px vs.
+  // radio de la rueda (150px): deja ~150px de aire desde el borde de la
+  // rueda hasta el CENTRO de cada nodo, suficiente para que el bloque de
+  // titulo + descripcion (mas alto que ancho) no le pise el color de
+  // fondo. rotate(X) translate(radio) rotate(-X) ubica cada nodo sobre el
+  // circulo sin inclinar el contenido (el segundo rotate cancela el
+  // primero para que el texto quede derecho). El mismo angulo X, sumandole
+  // 90, es el punto del conic-gradient que le corresponde a cada nodo -
+  // por eso el gradiente empieza en "from -30deg": alinea su primer gajo
+  // (0-60deg) con el nodo 1 (X=-90 -> gajo centrado en 0deg).
+  .lp-tienda-step-flow:nth-child(1) { transform: rotate(-90deg) translate(300px) rotate(90deg); }
+  .lp-tienda-step-flow:nth-child(2) { transform: rotate(-30deg) translate(300px) rotate(30deg); }
+  .lp-tienda-step-flow:nth-child(3) { transform: rotate(30deg) translate(300px) rotate(-30deg); }
+  .lp-tienda-step-flow:nth-child(4) { transform: rotate(90deg) translate(300px) rotate(-90deg); }
+  .lp-tienda-step-flow:nth-child(5) { transform: rotate(150deg) translate(300px) rotate(-150deg); }
+  .lp-tienda-step-flow:nth-child(6) { transform: rotate(210deg) translate(300px) rotate(-210deg); }
+
+  // Circulos numerados: version un poco mas saturada de la misma familia
+  // rosa -> rojo medio que la rueda (necesitan mas contraste para que el
+  // numero en blanco se lea bien), pero sin llegar a los tonos oscuros
+  // que se veian pesados.
+  .lp-tienda-step-flow:nth-child(1) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #ff8fa3 0%, #ef5e77 100%); box-shadow: 0 10px 20px rgba(239, 94, 119, .35); }
+  .lp-tienda-step-flow:nth-child(2) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #ef5e77 0%, #e2455f 100%); box-shadow: 0 10px 20px rgba(226, 69, 95, .35); }
+  .lp-tienda-step-flow:nth-child(3) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #e2455f 0%, #d43655 100%); box-shadow: 0 10px 20px rgba(212, 54, 85, .35); }
+  .lp-tienda-step-flow:nth-child(4) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #d43655 0%, #c8264a 100%); box-shadow: 0 10px 20px rgba(200, 38, 74, .35); }
+  .lp-tienda-step-flow:nth-child(5) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #c8264a 0%, #b81f42 100%); box-shadow: 0 10px 20px rgba(184, 31, 66, .35); }
+  .lp-tienda-step-flow:nth-child(6) .lp-tienda-step-flow__circle { background: linear-gradient(135deg, #b81f42 0%, #a51a3a 100%); box-shadow: 0 10px 20px rgba(165, 26, 58, .35); }
+}

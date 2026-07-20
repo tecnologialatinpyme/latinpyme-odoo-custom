@@ -567,18 +567,31 @@ class LatinpymeTiendaConfig(models.Model):
         return bool(getattr(request, "lp_tienda_rendering_error_page", False))
 
     @api.model
+    def is_current_request_manual_shell(self):
+        # True cuando el controlador que esta renderizando la respuesta ya
+        # llamo el masthead/footer el mismo (ver _render_tienda_page en
+        # controllers/main.py). Reemplaza la lista fija de rutas excluidas
+        # que se usaba antes (home, /terminos-de-uso, ...): esa lista se
+        # tenia que actualizar a mano por cada pagina nueva que arma su
+        # propio masthead/footer, y es facil de olvidar (paso exactamente
+        # eso con /agente-ia). Con la bandera, cualquier pagina nueva que
+        # pase por _render_tienda_page queda cubierta automaticamente, sin
+        # tocar esta lista.
+        from odoo.http import request
+
+        return bool(getattr(request, "lp_tienda_manual_shell", False))
+
+    @api.model
     def is_current_request_tienda_shell(self):
         from odoo.http import request
 
-        if self.is_current_request_error_page():
-            # The 404 page (web.frontend_layout) already calls the masthead/
-            # footer itself. web.frontend_layout is the shared "primary" QWeb
-            # combination root behind website.layout too, so this global
-            # xpath (registered against website.layout) still gets applied
-            # even though we never render website.layout for a 404 - without
-            # this guard it duplicates the masthead/footer on every 404 path,
-            # which can't be excluded by a fixed path list since 404s happen
-            # at unpredictable URLs.
+        if self.is_current_request_error_page() or self.is_current_request_manual_shell():
+            # El 404 (web.frontend_layout) y las paginas "propias" renderizadas
+            # via _render_tienda_page ya llaman su masthead/footer ellas mismas.
+            # web.frontend_layout es la raiz "primary" de combinacion QWeb
+            # detras de website.layout tambien, asi que este xpath global
+            # (registrado sobre website.layout) igual se aplicaria sin este
+            # guard, aunque esas paginas nunca rendericen website.layout.
             return False
 
         website = getattr(request, "website", False)
@@ -591,9 +604,6 @@ class LatinpymeTiendaConfig(models.Model):
             return False
 
         path = request.httprequest.path or "/"
-        normalized_path = path.rstrip("/") or "/"
-        if normalized_path in ("/", "/tienda", "/terminos-de-uso", "/terms"):
-            return False
 
         if "/survey" in path:
             return False
@@ -603,6 +613,28 @@ class LatinpymeTiendaConfig(models.Model):
             "/odoo",
         )
         return not any(path.startswith(prefix) for prefix in blocked_prefixes)
+
+    @api.model
+    def lp_tienda_should_hide_legacy_chrome(self):
+        # Punto unico para decidir si se oculta el header/footer nativo o
+        # heredado (header#top, footer#bottom, header.lp-header,
+        # footer#lp-footer-v14): cubre tanto las paginas con inyeccion
+        # global de masthead/footer (is_current_request_tienda_shell) como
+        # las paginas "propias" que ya llaman su masthead/footer a mano
+        # (is_current_request_manual_shell, is_current_request_error_page).
+        # /aviso-legal es un caso especial: SI quiere la inyeccion global,
+        # pero igual necesita ocultar el chrome heredado. Antes esto eran 3
+        # bloques de <style> separados en tienda_templates.xml, cada uno con
+        # su propia condicion - se unifica aca para que una pagina nueva no
+        # necesite acordarse de sumarse a ninguna lista.
+        from odoo.http import request
+
+        if self.is_current_request_tienda_shell():
+            return True
+        if self.is_current_request_manual_shell() or self.is_current_request_error_page():
+            return True
+        path = (request.httprequest.path or "").rstrip("/")
+        return path == "/aviso-legal"
 
     @api.model
     def is_current_request_shop_catalog(self):

@@ -165,6 +165,22 @@
     </article>
   </template>
 
+  <template id="lp_tienda_step_card" name="Tienda LatinPyme Step Card">
+    <!-- Paso numerado en formato "flujo": circulo con el numero, titulo,
+         descripcion, y una flecha conectora hacia el siguiente paso (la
+         flecha se oculta sola en el ultimo paso de cada fila via CSS, y en
+         el ultimo paso de la secuencia via "is_last"). Reutilizable para
+         cualquier pagina con una secuencia de pasos/fases. Espera un dict
+         "step" con "index" (numero, 1-based), "title", "text" y "is_last"
+         (bool, True solo en el ultimo paso de la secuencia). -->
+    <div class="lp-tienda-step-flow">
+      <span class="lp-tienda-step-flow__circle" t-out="'%02d' % step['index']"/>
+      <h3 t-out="step['title']"/>
+      <p t-out="step['text']"/>
+      <i t-if="not step['is_last']" class="fa fa-long-arrow-right lp-tienda-step-flow__arrow" aria-hidden="true"/>
+    </div>
+  </template>
+
   <template id="lp_tienda_ad_slot" name="Tienda LatinPyme Ad Slot">
     <aside t-attf-class="lp-tienda-ad-slot #{'lp-tienda-ad-slot--side' if banner_position == 'home_side' else ''} #{'lp-tienda-ad-slot--horizontal' if banner_position == 'home_horizontal' else ''}" aria-label="Publicidad">
       <t t-if="banner">
@@ -255,27 +271,7 @@
 
   <template id="lp_tienda_website_layout_shell" inherit_id="website.layout" name="Tienda LatinPyme Website Layout Shell">
     <xpath expr="//head" position="inside">
-      <style t-if="request.env['latinpyme.tienda.config'].sudo().is_current_request_tienda_shell()">
-        header#top,
-        footer#bottom,
-        .o_header_standard,
-        .o_footer,
-        header.lp-header,
-        footer#lp-footer-v14 {
-          display: none !important;
-        }
-      </style>
-      <style t-if="(request.httprequest.path or '').rstrip('/') in ('/terminos-de-uso', '/terms', '/aviso-legal')">
-        header#top,
-        footer#bottom,
-        .o_header_standard,
-        .o_footer,
-        header.lp-header,
-        footer#lp-footer-v14 {
-          display: none !important;
-        }
-      </style>
-      <style t-if="request.env['latinpyme.tienda.config'].sudo().is_current_request_error_page()">
+      <style t-if="request.env['latinpyme.tienda.config'].sudo().lp_tienda_should_hide_legacy_chrome()">
         header#top,
         footer#bottom,
         .o_header_standard,

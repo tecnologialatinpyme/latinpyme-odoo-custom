@@ -208,10 +208,33 @@ class LatinpymeTiendaShopController(WebsiteSale):
 
 
 class LatinpymeTiendaController(Website):
+    def _render_tienda_page(self, template_xmlid, values):
+        # Cualquier pagina "propia" que ya llama su masthead/footer a mano
+        # (en vez de dejar que website.layout se los inyecte) debe pasar por
+        # aca. Marca la request para que is_current_request_tienda_shell()
+        # no vuelva a inyectarlos globalmente - antes esto se resolvia con
+        # una lista fija de rutas excluidas que habia que actualizar a mano
+        # por cada pagina nueva, y era facil de olvidar (paso con
+        # /agente-ia). Con la bandera, toda pagina que use este helper queda
+        # cubierta automaticamente, sin tocar ninguna lista.
+        #
+        # request.render() es LAZY por defecto (el render real ocurre al
+        # final del dispatch, no aca) - si se dejaba lazy, el `finally` de
+        # abajo apagaba la bandera ANTES de que el render real ocurriera,
+        # y is_current_request_tienda_shell() la veia en False de nuevo
+        # (esto fue lo que duplico el masthead/footer en home Y /agente-ia
+        # al desplegar el fix). Se fuerza lazy=False para que el render
+        # ocurra aca mismo, dentro del try/finally.
+        request.lp_tienda_manual_shell = True
+        try:
+            return request.render(template_xmlid, values, lazy=False)
+        finally:
+            request.lp_tienda_manual_shell = False
+
     @http.route(["/terminos-de-uso", "/terms"], type="http", auth="public", website=True, sitemap=False)
     def tienda_terms_page(self, **kwargs):
         layout_values = request.env["latinpyme.tienda.config"].sudo().get_layout_context(getattr(request, "website", False))
-        return request.render(
+        return self._render_tienda_page(
             "latinpyme_tienda_theme.lp_tienda_terms_page",
             {
                 "title": "Términos de uso | Tienda LatinPyme",
@@ -598,7 +621,7 @@ class LatinpymeTiendaController(Website):
     def _render_tienda_home(self):
         # El Cache-Control ya lo aplica IrHttp._post_dispatch (tienda_models.py)
         # sobre toda respuesta HTML del dominio Tienda, no hace falta repetirlo aqui.
-        return request.render("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
+        return self._render_tienda_page("latinpyme_tienda_theme.lp_tienda_home_page", self._home_values())
 
     @http.route("/", type="http", auth="public", website=True, sitemap=True)
     def index(self, **kwargs):
@@ -609,6 +632,99 @@ class LatinpymeTiendaController(Website):
     @http.route("/tienda", type="http", auth="public", website=True, sitemap=True)
     def tienda_home(self, **kwargs):
         return self._render_tienda_home()
+
+    def _agente_ia_values(self):
+        # /agente-ia era una website.page armada a mano en el Website Builder,
+        # con su propio estilo suelto (no pasaba por tienda.scss) - se
+        # reconstruye aqui como plantilla QWeb para que quede consistente con
+        # el resto de Tienda y sea la primera de una familia de paginas
+        # "landing" estandarizadas. El contenido (textos, links de agenda/
+        # WhatsApp, logos de aliados) se preservo tal cual estaba publicado.
+        appointment_url = "/appointment/9"
+        whatsapp_url = "https://wa.link/bmq6tw"
+        layout_values = request.env["latinpyme.tienda.config"].sudo().get_layout_context(getattr(request, "website", False))
+        return {
+            **layout_values,
+            "title": "Agente IA | Tienda LatinPyme",
+            "website_meta_description": "Atiende, vende y mide 24/7 con un Agente IA para WhatsApp, web y redes sociales.",
+            "hero": {
+                "eyebrow": "Agentes IA",
+                "title_lead": "Atiende, vende y mide 24/7 con un ",
+                "title_emphasis": "Agente IA",
+                "lead": "Tu agente IA responde en WhatsApp, web y redes sociales con tu tono y tus reglas.",
+                "pills": ["Soporte", "Agendamiento", "Encuestas", "Integración con CRM"],
+                "primary_label": "Agendar cita aquí",
+                "primary_url": appointment_url,
+                "secondary_label": "Contactar un asesor",
+                "secondary_url": whatsapp_url,
+                "highlights": [
+                    {"icon": "fa-bolt", "strong": "Respuesta inmediata:", "text": "cero esperas para tus clientes."},
+                    {"icon": "fa-comments", "strong": "Marca y tono:", "text": "el agente habla como tu empresa."},
+                    {"icon": "fa-bar-chart", "strong": "Data útil:", "text": "dashboard con métricas para decidir."},
+                    {"icon": "fa-plug", "strong": "Integración:", "text": "CRM/ERP vía API sin fricciones."},
+                ],
+            },
+            "appointment_url": appointment_url,
+            "whatsapp_url": whatsapp_url,
+            "use_cases": [
+                {
+                    "icon": "fa-commenting",
+                    "title": "Soporte",
+                    "summary": "Tu agente responde consultas 24/7 con el tono de tu marca.",
+                    "bullets": [
+                        "Respuestas precisas y consistentes.",
+                        "Escalamiento a humano con contexto.",
+                        "Historial y trazabilidad.",
+                    ],
+                    "href": "#lp-tienda-agente-ia-agenda",
+                    "button_label": "Agendar cita aquí",
+                },
+                {
+                    "icon": "fa-bullseye",
+                    "title": "Leads",
+                    "summary": "Convierte visitantes en oportunidades calificadas, sin intervención manual.",
+                    "bullets": [
+                        "Califica leads con preguntas clave.",
+                        "Agenda citas automáticamente.",
+                        "Sincroniza con tu CRM o cualquier otra plataforma.",
+                    ],
+                    "href": "#lp-tienda-agente-ia-agenda",
+                    "button_label": "Agendar cita aquí",
+                },
+                {
+                    "icon": "fa-cogs",
+                    "title": "Operación interna",
+                    "summary": "Automatiza tareas repetitivas para que tu equipo se enfoque en lo importante.",
+                    "bullets": [
+                        "Captura y actualiza registros.",
+                        "Orquesta flujos y aprobaciones.",
+                        "Reportes automáticos.",
+                    ],
+                    "href": "#lp-tienda-agente-ia-agenda",
+                    "button_label": "Agendar cita aquí",
+                },
+            ],
+            "phases": [
+                {"title": "Diagnóstico", "text": "Revisamos procesos, canales y objetivos para identificar oportunidades y mejoras."},
+                {"title": "Análisis", "text": "Examinamos cómo fluye la información y se ejecutan los procesos."},
+                {"title": "Desarrollo IA", "text": "Estructuramos flujos, documentos y fuentes que alimentan el sistema."},
+                {"title": "Implementación", "text": "Configuramos integraciones y realizamos pruebas funcionales."},
+                {"title": "Capacitación", "text": "Entrenamos al equipo y entregamos guías operativas."},
+                {"title": "Administración", "text": "Monitoreo continuo y mejora basada en datos."},
+            ],
+            "allies": [
+                {"name": "Banco de Occidente", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/GyMmex3WQZm2JalOamZSGgo2b?unique=2b3c040b&v=2"},
+                {"name": "Enlace", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/8k-pLf0nRMyOyIimgTt0awo29?unique=8442d0fc&v=2"},
+                {"name": "Protección", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/YJfXGw8VR-mnb3eyg9bKCgo28?unique=7c525ca1&v=2"},
+                {"name": "Asopagos Jaime Torres", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/rr26jcrBSy2Pcci-R4AqIgo26?unique=a9a715e3&v=2"},
+                {"name": "ACH", "logo_url": "https://tienda.latinpyme.com/web/image/249?filename=enlace.png&model=documents.document"},
+                {"name": "Aporte en Línea", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/qpdl3gIvSlCXux9vfh2Yzgo24?unique=f8021906&v=2"},
+            ],
+        }
+
+    @http.route("/agente-ia", type="http", auth="public", website=True, sitemap=True)
+    def agente_ia_page(self, **kwargs):
+        return self._render_tienda_page("latinpyme_tienda_theme.lp_tienda_agente_ia_page", self._agente_ia_values())
 
 
 class LatinpymeTiendaTermsRedirect(TermsController):
