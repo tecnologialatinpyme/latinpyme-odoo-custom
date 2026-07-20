@@ -97,5 +97,13 @@
          reflejaba. fix_legacy_category_names() escribe explicitamente en
          cada idioma instalado. -->
     <function model="latinpyme.tienda.config" name="fix_legacy_category_names" eval="[]"/>
+
+    <!-- Precalienta los bundles JS/CSS del frontend en el momento del
+         deploy (cada actualizacion del modulo), en vez de dejar que la
+         regeneracion la dispare el primer visitante real - ver
+         warm_up_frontend_assets() en tienda_models.py para el detalle
+         completo de por que esto reduce el "Internal Server Error"
+         intermitente que reportan algunos clientes tras un deploy. -->
+    <function model="latinpyme.tienda.config" name="warm_up_frontend_assets" eval="[]"/>
   </data>
 </odoo>

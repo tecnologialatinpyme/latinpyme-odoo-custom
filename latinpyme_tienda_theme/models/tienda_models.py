@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import base64
+import logging
 from datetime import date
 from pathlib import Path
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.http import request
+
+_logger = logging.getLogger(__name__)
 
 
 _MODULE_ROOT = Path(__file__).resolve().parents[1]
@@ -226,6 +229,33 @@ class LatinpymeTiendaConfig(models.Model):
                 continue
             for lang_code in lang_codes:
                 category.with_context(lang=lang_code).write({"name": correct_name})
+
+    @api.model
+    def warm_up_frontend_assets(self):
+        # Fuerza la regeneracion sincronica de los bundles JS/CSS del
+        # frontend justo al actualizar el modulo (cada deploy), en vez de
+        # dejar que la dispare el primer visitante real. Odoo borra el
+        # ir.attachment (y el archivo del filestore) del bundle viejo apenas
+        # se genera el nuevo (assetsbundle.py: _clean_attachments) - si esa
+        # regeneracion la dispara un visitante con pestañas de antes del
+        # deploy todavia abiertas, esas pestañas pueden pedir despues un
+        # bundle ya reciclado y recibir un error en vez de un 404 limpio.
+        # Correr esto en el momento del deploy reduce esa ventana.
+        #
+        # Se arma assets_params a mano (en vez de dejar que
+        # ir.asset._get_asset_params() use website.get_current_website())
+        # porque este metodo corre desde un <function> de datos al
+        # actualizar el modulo, sin un request HTTP activo de por medio.
+        config = self.sudo().search([("website_id", "!=", False)], limit=1)
+        website_id = config.website_id.id if config else False
+        assets_params = {"website_id": website_id} if website_id else {}
+        for bundle_xmlid in ("web.assets_frontend", "web.assets_frontend_lazy"):
+            try:
+                bundle = self.env["ir.qweb"]._get_asset_bundle(bundle_xmlid, assets_params=assets_params)
+                bundle.js()
+                bundle.css()
+            except Exception:
+                _logger.exception("No se pudo precalentar el bundle %s", bundle_xmlid)
 
     @api.model
     def _home_menu_item(self):
