@@ -168,17 +168,141 @@
   <template id="lp_tienda_step_card" name="Tienda LatinPyme Step Card">
     <!-- Paso numerado en formato "flujo": circulo con el numero, titulo,
          descripcion, y una flecha conectora hacia el siguiente paso (la
-         flecha se oculta sola en el ultimo paso de cada fila via CSS, y en
-         el ultimo paso de la secuencia via "is_last"). Reutilizable para
-         cualquier pagina con una secuencia de pasos/fases. Espera un dict
-         "step" con "index" (numero, 1-based), "title", "text" y "is_last"
-         (bool, True solo en el ultimo paso de la secuencia). -->
-    <div class="lp-tienda-step-flow">
+         flecha se oculta sola en el ultimo paso de la secuencia via
+         "is_last"; en escritorio ademas se oculta siempre, ver
+         .lp-tienda-step-flow__arrow en tienda.scss). Reutilizable para
+         cualquier pagina con una secuencia de pasos/fases, con cualquier
+         cantidad de pasos: el angulo y el color de cada uno ya vienen
+         calculados desde Python (_lp_tienda_step_wheel_context en
+         controllers/main.py) y se pasan como variables CSS, en vez de
+         depender de reglas :nth-child fijas a una cantidad de pasos.
+         Espera un dict "step" con "index" (numero, 1-based), "title",
+         "text", "is_last" (bool), "angle" (grados) y "circle_gradient"/
+         "circle_shadow" (valores CSS ya armados). -->
+    <div
+      class="lp-tienda-step-flow"
+      t-attf-style="--lp-step-angle: #{step['angle']}deg; --lp-step-color: #{step['circle_gradient']}; --lp-step-shadow: #{step['circle_shadow']};">
       <span class="lp-tienda-step-flow__circle" t-out="'%02d' % step['index']"/>
       <h3 t-out="step['title']"/>
       <p t-out="step['text']"/>
       <i t-if="not step['is_last']" class="fa fa-long-arrow-right lp-tienda-step-flow__arrow" aria-hidden="true"/>
     </div>
+  </template>
+
+  <template id="lp_tienda_steps_section" name="Tienda LatinPyme Steps Section">
+    <!-- Seccion completa de "Fases de implementacion": encabezado + rueda
+         circular + flechas de flujo + nodos flotantes. Reutilizable para
+         cualquier pagina landing con una secuencia de pasos, sin importar
+         cuantos - todo el calculo de angulos/colores ya viene resuelto
+         desde _lp_tienda_step_wheel_context (controllers/main.py) en el
+         contexto de la pagina. Espera "steps_title" (t-set del llamador),
+         "steps", "wheel_gradient" y "arrow_angles". -->
+    <section class="lp-tienda-container lp-tienda-block">
+      <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
+        <t t-set="title" t-value="steps_title"/>
+      </t>
+      <div class="lp-tienda-steps-ring">
+        <div class="lp-tienda-steps-wheel" aria-hidden="true" t-attf-style="background: #{wheel_gradient};"/>
+        <div class="lp-tienda-steps-wheel__hole" aria-hidden="true">
+          <span class="lp-tienda-steps-wheel__eyebrow">Nuestro</span>
+          <strong class="lp-tienda-steps-wheel__word">Proceso</strong>
+        </div>
+        <div class="lp-tienda-steps-ring__arrows" aria-hidden="true">
+          <i
+            t-foreach="arrow_angles"
+            t-as="arrow_angle"
+            class="fa fa-angle-right"
+            t-attf-style="--lp-step-angle: #{arrow_angle}deg;"/>
+        </div>
+        <div class="lp-tienda-steps">
+          <t t-foreach="steps" t-as="step">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_step_card"/>
+          </t>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="lp_tienda_benefit_card" name="Tienda LatinPyme Benefit Card">
+    <!-- Tarjeta simple para secciones de "beneficios": solo titulo +
+         descripcion, sin icono ni boton (a diferencia de
+         lp_tienda_solution_card). Espera un dict "item" con "title" y
+         "text". -->
+    <article class="lp-tienda-benefit-card">
+      <h3 t-out="item['title']"/>
+      <p t-out="item['text']"/>
+    </article>
+  </template>
+
+  <template id="lp_tienda_benefits_section" name="Tienda LatinPyme Benefits Section">
+    <!-- Seccion "Beneficios clave": banda de fondo rojo con encabezado en
+         blanco y una grilla de tarjetas blancas simples. Reutilizable
+         para cualquier pagina landing. Espera "benefits_title" (t-set del
+         llamador) y "benefits" (lista de {title, text}). -->
+    <section class="lp-tienda-container lp-tienda-block">
+      <div class="lp-tienda-benefits-band">
+        <h2 class="lp-tienda-benefits-band__title" t-out="benefits_title"/>
+        <div class="lp-tienda-benefit-grid">
+          <t t-foreach="benefits" t-as="item">
+            <t t-call="latinpyme_tienda_theme.lp_tienda_benefit_card"/>
+          </t>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="lp_tienda_cta_banner_section" name="Tienda LatinPyme CTA Banner Section">
+    <!-- Banner de cierre con titulo + 2 botones (agendar cita / hablar por
+         WhatsApp). Reutilizable para cualquier pagina landing. Espera
+         "final_cta" (dict con "title" y "lead" opcional), "appointment_url",
+         "whatsapp_url" y "hero" (para las etiquetas de los botones, ya
+         viene en el contexto de cualquier pagina landing). "cta_anchor_id"
+         es opcional (t-set del llamador): otras secciones de la misma
+         pagina pueden anclar un boton "Agendar cita" hacia aca con
+         href="#ese-id". -->
+    <section class="lp-tienda-container lp-tienda-block">
+      <div class="lp-tienda-cta-banner" t-att-id="cta_anchor_id or None">
+        <div class="lp-tienda-cta-banner__copy">
+          <h3 t-out="final_cta['title']"/>
+          <p t-if="final_cta.get('lead')" t-out="final_cta['lead']"/>
+        </div>
+        <div class="lp-tienda-cta-banner__actions">
+          <a class="lp-tienda-button lp-tienda-button--primary" t-att-href="appointment_url" t-out="hero['primary_label']"/>
+          <a class="lp-tienda-button lp-tienda-button--secondary" t-att-href="whatsapp_url" target="_blank" rel="noopener" t-out="hero['secondary_label']"/>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template id="lp_tienda_allies_section" name="Tienda LatinPyme Allies Section">
+    <!-- Seccion "Aliados": carrusel horizontal de logos. Compartida por
+         todas las paginas landing (mismo encabezado y logos en todas, por
+         eso no toma "allies_title" por parametro). Espera "allies" (lista
+         de {name, logo_url}) en el contexto. Siempre va justo antes del
+         footer, nunca despues de un CTA. -->
+    <section class="lp-tienda-container lp-tienda-block lp-tienda-allies" aria-label="Aliados">
+      <t t-call="latinpyme_tienda_theme.lp_tienda_section_heading">
+        <t t-set="title">Aliados</t>
+      </t>
+      <div class="lp-tienda-allies__viewport">
+        <span class="lp-tienda-allies__control" aria-hidden="true"><i class="fa fa-angle-left"/></span>
+        <div class="lp-tienda-allies__marquee" aria-label="Aliados Tienda LatinPyme">
+          <div class="lp-tienda-allies__group">
+            <figure class="lp-tienda-ally-card" t-foreach="allies" t-as="ally">
+              <img t-if="ally.get('logo_url')" t-att-src="ally['logo_url']" t-att-alt="ally['name']" loading="lazy"/>
+              <span t-else="" t-out="ally['name']"/>
+            </figure>
+          </div>
+          <div class="lp-tienda-allies__group" aria-hidden="true">
+            <figure class="lp-tienda-ally-card" t-foreach="allies" t-as="ally">
+              <img t-if="ally.get('logo_url')" t-att-src="ally['logo_url']" t-att-alt="ally['name']" loading="lazy"/>
+              <span t-else="" t-out="ally['name']"/>
+            </figure>
+          </div>
+        </div>
+        <span class="lp-tienda-allies__control" aria-hidden="true"><i class="fa fa-angle-right"/></span>
+      </div>
+    </section>
   </template>
 
   <template id="lp_tienda_ad_slot" name="Tienda LatinPyme Ad Slot">

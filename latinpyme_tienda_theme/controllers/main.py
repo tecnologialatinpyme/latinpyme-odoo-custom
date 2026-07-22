@@ -101,6 +101,55 @@ def _fallback_icon_data(category_id):
         return b""
 
 
+# Paleta de la rueda circular de "Fases de implementacion" (paginas landing):
+# degradado rosa claro -> rojo medio, dentro de la familia de marca. Se
+# interpola en Python (no queda fija a 6 tonos) para que la rueda funcione
+# con cualquier cantidad de fases, no solo las 6 de /agente-ia.
+_LP_STEP_WHEEL_LIGHT = (0xFB, 0xD9, 0xDF)
+_LP_STEP_WHEEL_DARK = (0xD1, 0x32, 0x4F)
+_LP_STEP_CIRCLE_LIGHT = (0xFF, 0x8F, 0xA3)
+_LP_STEP_CIRCLE_DARK = (0xA5, 0x1A, 0x3A)
+
+
+def _lp_tienda_lerp_hex(start_rgb, end_rgb, t):
+    mixed = tuple(round(start_rgb[c] + (end_rgb[c] - start_rgb[c]) * t) for c in range(3))
+    return "#%02x%02x%02x" % mixed
+
+
+def _lp_tienda_step_wheel_context(phases):
+    # Arma angulo, color y gajo de conic-gradient por fase, para cualquier
+    # cantidad de fases (no solo 6) - pensado para reutilizarse en todas
+    # las paginas "landing" que tengan una secuencia de pasos. Los nodos
+    # se reparten cada (360/N) grados empezando arriba (-90deg) y
+    # avanzando en sentido horario; el gajo de color de cada uno en la
+    # rueda queda centrado exactamente detras de su circulo numerado.
+    count = len(phases)
+    segment = 360.0 / count
+    gradient_stops = []
+    steps = []
+    for i, phase in enumerate(phases):
+        t = i / (count - 1) if count > 1 else 0.0
+        wheel_color = _lp_tienda_lerp_hex(_LP_STEP_WHEEL_LIGHT, _LP_STEP_WHEEL_DARK, t)
+        circle_from = _lp_tienda_lerp_hex(_LP_STEP_CIRCLE_LIGHT, _LP_STEP_CIRCLE_DARK, t)
+        circle_to_t = min(1.0, t + 0.18)
+        circle_to = _lp_tienda_lerp_hex(_LP_STEP_CIRCLE_LIGHT, _LP_STEP_CIRCLE_DARK, circle_to_t)
+        circle_to_rgb = tuple(int(circle_to[c:c + 2], 16) for c in (1, 3, 5))
+        angle = -90 + segment * i
+        gradient_stops.append("%s %sdeg %sdeg" % (wheel_color, round(i * segment, 2), round((i + 1) * segment, 2)))
+        steps.append({
+            "index": i + 1,
+            "title": phase["title"],
+            "text": phase["text"],
+            "is_last": i == count - 1,
+            "angle": round(angle, 2),
+            "circle_gradient": "linear-gradient(135deg, %s 0%%, %s 100%%)" % (circle_from, circle_to),
+            "circle_shadow": "rgba(%s, %s, %s, .35)" % circle_to_rgb,
+        })
+    wheel_gradient = "conic-gradient(from %sdeg, %s)" % (round(-segment / 2, 2), ", ".join(gradient_stops))
+    arrow_angles = [round(-90 + segment * (i + 0.5), 2) for i in range(count)]
+    return {"steps": steps, "wheel_gradient": wheel_gradient, "arrow_angles": arrow_angles}
+
+
 class LatinpymeTiendaShopController(WebsiteSale):
     def _get_shop_path(self, category=None, page=0):
         category_id = getattr(category, "id", category)
@@ -643,8 +692,17 @@ class LatinpymeTiendaController(Website):
         appointment_url = "/appointment/9"
         whatsapp_url = "https://wa.link/bmq6tw"
         layout_values = request.env["latinpyme.tienda.config"].sudo().get_layout_context(getattr(request, "website", False))
+        step_wheel = _lp_tienda_step_wheel_context([
+            {"title": "Diagnóstico", "text": "Revisamos procesos, canales y objetivos para identificar oportunidades y mejoras."},
+            {"title": "Análisis", "text": "Examinamos cómo fluye la información y se ejecutan los procesos."},
+            {"title": "Desarrollo IA", "text": "Estructuramos flujos, documentos y fuentes que alimentan el sistema."},
+            {"title": "Implementación", "text": "Configuramos integraciones y realizamos pruebas funcionales."},
+            {"title": "Capacitación", "text": "Entrenamos al equipo y entregamos guías operativas."},
+            {"title": "Administración", "text": "Monitoreo continuo y mejora basada en datos."},
+        ])
         return {
             **layout_values,
+            **step_wheel,
             "title": "Agente IA | Tienda LatinPyme",
             "website_meta_description": "Atiende, vende y mide 24/7 con un Agente IA para WhatsApp, web y redes sociales.",
             "hero": {
@@ -704,14 +762,10 @@ class LatinpymeTiendaController(Website):
                     "button_label": "Agendar cita aquí",
                 },
             ],
-            "phases": [
-                {"title": "Diagnóstico", "text": "Revisamos procesos, canales y objetivos para identificar oportunidades y mejoras."},
-                {"title": "Análisis", "text": "Examinamos cómo fluye la información y se ejecutan los procesos."},
-                {"title": "Desarrollo IA", "text": "Estructuramos flujos, documentos y fuentes que alimentan el sistema."},
-                {"title": "Implementación", "text": "Configuramos integraciones y realizamos pruebas funcionales."},
-                {"title": "Capacitación", "text": "Entrenamos al equipo y entregamos guías operativas."},
-                {"title": "Administración", "text": "Monitoreo continuo y mejora basada en datos."},
-            ],
+            "final_cta": {
+                "title": "¿Listos para activar tu Agente IA?",
+            },
+            "cta_anchor_id": "lp-tienda-agente-ia-agenda",
             "allies": [
                 {"name": "Banco de Occidente", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/GyMmex3WQZm2JalOamZSGgo2b?unique=2b3c040b&v=2"},
                 {"name": "Enlace", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/8k-pLf0nRMyOyIimgTt0awo29?unique=8442d0fc&v=2"},
@@ -725,6 +779,73 @@ class LatinpymeTiendaController(Website):
     @http.route("/agente-ia", type="http", auth="public", website=True, sitemap=True)
     def agente_ia_page(self, **kwargs):
         return self._render_tienda_page("latinpyme_tienda_theme.lp_tienda_agente_ia_page", self._agente_ia_values())
+
+    def _telefonia_ia_values(self):
+        # Segunda pagina de la familia "landing" (la primera fue
+        # /agente-ia) - tambien era una website.page armada a mano en el
+        # Website Builder. Contenido preservado tal cual estaba publicado;
+        # "Fases de implementacion" usa el mismo componente de rueda
+        # circular que /agente-ia (ahora generico, no fijo a 6 pasos) y se
+        # suma "Beneficios clave", una seccion que /agente-ia no tenia.
+        appointment_url = "/appointment/12"
+        whatsapp_url = "https://wa.link/sjzepd"
+        layout_values = request.env["latinpyme.tienda.config"].sudo().get_layout_context(getattr(request, "website", False))
+        step_wheel = _lp_tienda_step_wheel_context([
+            {"title": "Diagnóstico", "text": "Analizamos canales, volumen y objetivos."},
+            {"title": "Configuración", "text": "Integramos líneas, extensiones y CRM."},
+            {"title": "Capacitación", "text": "Entrenamos a tu equipo para gestionar el agente IA."},
+        ])
+        return {
+            **layout_values,
+            **step_wheel,
+            "title": "Telefonía IA | Tienda LatinPyme",
+            "website_meta_description": "Centraliza llamadas, automatiza la atención y conecta tu empresa con inteligencia artificial.",
+            "hero": {
+                "eyebrow": "Telefonía IA",
+                "title_lead": "Transforma tu comunicación con ",
+                "title_emphasis": "Telefonía IA Latinpyme",
+                "lead": "Centraliza llamadas, automatiza la atención y conecta tu empresa con inteligencia artificial.",
+                "pills": ["Llamadas entrantes y salientes", "Menú telefónico con IA", "Reconocimiento de voz", "Integración CRM"],
+                "primary_label": "Agendar cita aquí",
+                "primary_url": appointment_url,
+                "secondary_label": "Contactar un asesor",
+                "secondary_url": whatsapp_url,
+                "highlights": [
+                    {"icon": "fa-bolt", "strong": "Respuesta inmediata:", "text": "reduce tiempos y cuellos de botella en llamadas."},
+                    {"icon": "fa-random", "strong": "IVR inteligente:", "text": "enruta por intención y prioriza casos críticos."},
+                    {"icon": "fa-bar-chart", "strong": "Métricas útiles:", "text": "reportes de volumen, tiempos y satisfacción."},
+                    {"icon": "fa-plug", "strong": "Integración:", "text": "registra leads y tickets en tu CRM automáticamente."},
+                ],
+            },
+            "appointment_url": appointment_url,
+            "whatsapp_url": whatsapp_url,
+            "benefits_title": "Beneficios clave",
+            "benefits": [
+                {"title": "Atención 24/7 automatizada", "text": "Responde sin interrupciones ni horarios."},
+                {"title": "Reducción de costos", "text": "Disminuye gastos en infraestructura y personal."},
+                {"title": "Integración con CRM", "text": "Centraliza información de clientes y llamadas."},
+                {"title": "Reportes y análisis", "text": "Transcribe, analiza y genera insights accionables."},
+                {"title": "Escalamiento automático", "text": "Detecta casos críticos y deriva al equipo adecuado."},
+                {"title": "Supervisión inteligente", "text": "Monitorea calidad y tiempos en tiempo real."},
+            ],
+            "final_cta": {
+                "title": "Conecta tu empresa con la nueva era de comunicación inteligente",
+                "lead": "Descubre cómo la Telefonía IA Latinpyme mejora la atención, reduce costos y optimiza tu productividad.",
+            },
+            "cta_anchor_id": False,
+            "allies": [
+                {"name": "Banco de Occidente", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/GyMmex3WQZm2JalOamZSGgo2b?unique=2b3c040b&v=2"},
+                {"name": "Enlace", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/8k-pLf0nRMyOyIimgTt0awo29?unique=8442d0fc&v=2"},
+                {"name": "Protección", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/YJfXGw8VR-mnb3eyg9bKCgo28?unique=7c525ca1&v=2"},
+                {"name": "Asopagos Jaime Torres", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/rr26jcrBSy2Pcci-R4AqIgo26?unique=a9a715e3&v=2"},
+                {"name": "ACH", "logo_url": "https://tienda.latinpyme.com/web/image/249?filename=enlace.png&model=documents.document"},
+                {"name": "Aporte en Línea", "logo_url": "https://tienda.latinpyme.com/documents/thumbnail/qpdl3gIvSlCXux9vfh2Yzgo24?unique=f8021906&v=2"},
+            ],
+        }
+
+    @http.route("/telefonia-ia", type="http", auth="public", website=True, sitemap=True)
+    def telefonia_ia_page(self, **kwargs):
+        return self._render_tienda_page("latinpyme_tienda_theme.lp_tienda_telefonia_ia_page", self._telefonia_ia_values())
 
 
 class LatinpymeTiendaTermsRedirect(TermsController):
